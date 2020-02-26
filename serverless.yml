@@ -5,7 +5,7 @@ org: superduper8989
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: stage
+  stage: prod
   region: ap-northeast-2
   cfnRole: arn:aws:iam::821343553435:role/artongApiCloudFormationProd
   environment:
