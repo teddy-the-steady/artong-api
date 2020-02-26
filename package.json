@@ -1,0 +1,22 @@
+{
+  "name": "serverlessapi",
+  "version": "1.0.0",
+  "description": "serverless api",
+  "main": "handler.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "serverless-iam-roles-per-function": "^2.0.2"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/serverlessApi"
+  },
+  "author": "jeonth",
+  "license": "ISC"
+}
