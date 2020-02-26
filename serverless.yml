@@ -7,7 +7,7 @@ provider:
   runtime: nodejs12.x
   stage: prod
   region: ap-northeast-2
-  # cfnRole: arn:aws:iam::821343553435:role/artongApiCFProd
+  cfnRole: arn:aws:iam::821343553435:role/artongApiCFProd
   environment:
     NODE_PATH: "./:/opt/node_modules"
 
