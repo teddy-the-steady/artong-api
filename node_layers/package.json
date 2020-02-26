@@ -1,0 +1,17 @@
+{
+  "name": "node_layers",
+  "version": "1.0.0",
+  "description": "node package for serverless api layers",
+  "main": "index.js",
+  "dependencies": {
+    "@hapi/joi": "^17.1.0",
+    "handlebars": "^4.7.3",
+    "mysql2": "^2.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test"
+  },
+  "author": "jeonth",
+  "license": "ISC"
+}
