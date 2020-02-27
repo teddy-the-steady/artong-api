@@ -20,6 +20,9 @@ layers:
     path: node_layers
     description: "includes mysql2, handlebars, joi"
 
+plugins:
+  - serverless-iam-roles-per-function
+
 # you can add statements to the Lambda function's IAM Role here
 #  iamRoleStatements:
 #    - Effect: "Allow"
@@ -51,13 +54,11 @@ functions:
      - http:
         path: test/product/{id}
         method: get
-        cors: true
-        # authorizer: arn:aws:lambda:ap-northeast-2:073465099406:function:authorizer
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
      - http:
         path: test/product
         method: post
-        cors: true
-        # authorizer: arn:aws:lambda:ap-northeast-2:073465099406:function:authorizer
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
     layers:
      - {Ref: NodeModulesLambdaLayer} 
     environment:
@@ -77,6 +78,3 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
-
-plugins:
-  - serverless-iam-roles-per-function
