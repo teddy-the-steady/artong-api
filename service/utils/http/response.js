@@ -1,8 +1,23 @@
-const corsHeaders = {
-    'Access-Control-Allow-Origin': '*'
+const setCorsHeader = (event, ALLOWED_ORIGINS) => {
+    const origin = event.headers.origin;
+    let headers;
+  
+    if (ALLOWED_ORIGINS.includes(origin)) {
+        headers = {
+            'Access-Control-Allow-Origin': origin,
+            'Access-Control-Allow-Credentials': true
+        }
+    } else {
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true
+        }
+    };
+    return headers
 };
 
-module.exports.successResponse = (obj, callback) => {
+module.exports.successResponse = (event, ALLOWED_ORIGINS, obj, callback) => {
+    const corsHeaders = setCorsHeader(event, ALLOWED_ORIGINS);
     callback(null, {
         statusCode: 200,
         headers: corsHeaders,
@@ -10,7 +25,8 @@ module.exports.successResponse = (obj, callback) => {
     });
 };
 
-module.exports.errorResponse = (error, callback) => {
+module.exports.errorResponse = (event, ALLOWED_ORIGINS, error, callback) => {
+    const corsHeaders = setCorsHeader(event, ALLOWED_ORIGINS);
     callback(null, {
         statusCode: error.statusCode,
         headers: corsHeaders,
