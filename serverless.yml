@@ -51,30 +51,33 @@ functions:
      - http:
         path: test/product
         method: get
+        cors: true
      - http:
         path: test/product/{id}
         method: get
+        cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
      - http:
         path: test/product
         method: post
+        cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
     layers:
      - {Ref: NodeModulesLambdaLayer} 
     environment:
-      DB_HOST: database-1-instance-1.cwciwhxt0anw.ap-northeast-2.rds.amazonaws.com
+      DB_HOST: refdm-database-1-instance-1.cwciwhxt0anw.ap-northeast-2.rds.amazonaws.com
       DB_DATABASE: test
-      DB_USER: jeonth
-      DB_PASSWORD: abc12345@
+      DB_USER: sm
+      DB_PASSWORD: rlatkdrl1!
 
-# you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'

@@ -37,8 +37,8 @@ module.exports.test = async (event, context, callback) => {
     }
   } catch (error) {
     console.log(error);
-    httpResponse.errorResponse(error, callback);
+    httpResponse.errorResponse(event, ALLOWED_ORIGINS, error, callback);
   }
 
-  httpResponse.successResponse(res, callback);
+  httpResponse.successResponse(event, ALLOWED_ORIGINS, res, callback);
 };
