@@ -12,6 +12,11 @@ const pool = mysql.createPool({
   database: process.env.DB_DATABASE
 });
 
+const ALLOWED_ORIGINS = [
+	'https://myfirstorigin.com',
+	'https://mysecondorigin.com'
+];
+
 module.exports.test = async (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
