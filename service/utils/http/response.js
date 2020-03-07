@@ -6,20 +6,25 @@ const setCorsHeader = (event, ALLOWED_ORIGINS) => {
   
     if (ALLOWED_ORIGINS.includes(origin)) {
         headers = {
+            'X-Requested-With': '*',
             'Access-Control-Allow-Origin': origin,
+            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,x-requested-with',
+            'Access-Control-Allow-Methods': 'POST,GET,OPTIONS',
             'Access-Control-Allow-Credentials': true
         }
     } else {
         headers = {
+            'X-Requested-With': '*',
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': true
+            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,x-requested-with',
+            'Access-Control-Allow-Methods': 'POST,GET,OPTIONS'
         }
     };
     return headers
 };
 
 module.exports.successResponse = (event, obj, callback) => {
-    const corsHeaders = setCorsHeader(event, init.ALLOWED_ORIGINS);
+    const corsHeaders = setCorsHeader(event, init.ALLOWED_ORIGINS)
     callback(null, {
         statusCode: 200,
         headers: corsHeaders,
@@ -28,7 +33,7 @@ module.exports.successResponse = (event, obj, callback) => {
 };
 
 module.exports.errorResponse = (event, error, callback) => {
-    const corsHeaders = setCorsHeader(event, init.ALLOWED_ORIGINS);
+    const corsHeaders = setCorsHeader(event, init.ALLOWED_ORIGINS)
     callback(null, {
         statusCode: error.statusCode,
         headers: corsHeaders,
@@ -38,13 +43,3 @@ module.exports.errorResponse = (event, error, callback) => {
     });
 };
 
-module.exports.optionsResponse = (callback) => {
-    callback(null, {
-        statusCode: 200,
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers' : 'Accept, Content-Type, Origin'
-        }
-    });
-};
