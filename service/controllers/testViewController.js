@@ -5,12 +5,12 @@ const testSchema = require('../utils/validation/schema').testSchema;
 
 const control = async function (queryParameters, pathParameters) {
   let result = {};
-  let params = queryParameters
-  params['id'] = pathParameters.id
-
+  let params = pathParameters
+  
   try {
-    if (params !== null) {
-      params = await testSchema.validateAsync(params);
+    if (queryParameters !== null) {
+      queryParameters = await testSchema.validateAsync(queryParameters);
+      params['query'] = queryParameters
     }
   } catch (error) {
     throw new errors.BadRequest(error.details[0].message, 400)

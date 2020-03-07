@@ -5,12 +5,12 @@ const productSchema = require('../../utils/validation/schema').productSchema;
 
 const control = async function (queryParameters, pathParameters) {
   let result = {};
-  let params = queryParameters
-  params['barcode'] = pathParameters.barcode
-
+  let params = pathParameters;
+  
   try {
-    if (params !== null) {
-      params = await productSchema.validateAsync(params);
+    if (queryParameters !== null) {
+      queryParameters = await productSchema.validateAsync(queryParameters);
+      params['query'] = queryParameters
     }
   } catch (error) {
     throw new errors.BadRequest(error.details[0].message, 400)
