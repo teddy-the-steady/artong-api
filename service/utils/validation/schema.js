@@ -7,16 +7,9 @@ module.exports.testSchema = Joi.object({
 });
 
 module.exports.productSchema = Joi.object({
-    productName: Joi.string().min(1).max(50).required(),
-    price: Joi.number().positive(). required(),
-    categoryId: Joi.number().positive().required()
-});
-
-module.exports.productViewSchema = Joi.object({
-    productName: Joi.string().min(1).max(50).required(),
-    price: Joi.number().positive().required(),
-    categoryId: Joi.number().positive().required(),
-    barcode: Joi.string().required()
+    productName: Joi.string().min(1).max(50),
+    price: Joi.number().positive(),
+    categoryId: Joi.number().positive()
 });
 
 module.exports.productListSchema = Joi.object({
