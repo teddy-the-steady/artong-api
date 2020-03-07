@@ -28,6 +28,24 @@ const execute = async function (conn, model, params) {
     return result[0]
 };
 
+const reduceOp = function(args, reducer){
+    args = Array.from(args);
+    args.pop();
+    var first = args.shift();
+    return args.reduce(reducer, first);
+};
+
+handlebars.registerHelper({
+    eq  : function(){ return reduceOp(arguments, (a,b) => a === b); },
+    ne  : function(){ return reduceOp(arguments, (a,b) => a !== b); },
+    lt  : function(){ return reduceOp(arguments, (a,b) => a  <  b); },
+    gt  : function(){ return reduceOp(arguments, (a,b) => a  >  b); },
+    lte : function(){ return reduceOp(arguments, (a,b) => a  <= b); },
+    gte : function(){ return reduceOp(arguments, (a,b) => a  >= b); },
+    and : function(){ return reduceOp(arguments, (a,b) => a  && b); },
+    or  : function(){ return reduceOp(arguments, (a,b) => a  || b); },
+}); 
+
 module.exports.getConnection = getConnection;
 module.exports.release = release;
 module.exports.execute = execute;
