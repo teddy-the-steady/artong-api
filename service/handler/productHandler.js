@@ -8,7 +8,7 @@ module.exports.test = async (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const requestInfo = httpRequest.init(event);
-
+  
   let res = {};
 
   try {
@@ -16,7 +16,7 @@ module.exports.test = async (event, context, callback) => {
       case 'GET':
         if (requestInfo.path === '/artong/v1/product' || requestInfo.path === '/artong/v1/product/')
           res = await productListController.control(requestInfo.queryStringParameters);
-        else if (requestInfo.path.startsWith('/refdm/v1/product/') && requestInfo.pathParameters)
+        else if (requestInfo.path.startsWith('/artong/v1/product/') && requestInfo.pathParameters)
           res = await productViewController.control(requestInfo.queryStringParameters, requestInfo.pathParameters);
         break;
       case 'POST':
