@@ -1,4 +1,4 @@
-const init = require('../../init');
+const { pool } = require('../../init');
 const db = require('../../utils/db/db');
 const errors = require('../../utils/error/errors');
 const productSchema = require('../../utils/validation/schema').productSchema;
@@ -16,7 +16,7 @@ const control = async function (user, body) {
     throw new errors.BadRequest(error.details[0].message, 400)
   }
 
-  const conn = await db.getConnection(init.pool);
+  const conn = await db.getConnection(pool);
 
   try {
     await conn.beginTransaction();
