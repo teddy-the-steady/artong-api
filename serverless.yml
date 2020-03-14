@@ -66,10 +66,10 @@ functions:
     layers:
      - {Ref: NodeModulesLambdaLayer} 
     environment:
-      DB_HOST: refdm-database-1-instance-1.cwciwhxt0anw.ap-northeast-2.rds.amazonaws.com
+      DB_HOST: kcmta.czl2qpvgencs.ap-northeast-2.rds.amazonaws.com
       DB_DATABASE: test
-      DB_USER: sm
-      DB_PASSWORD: rlatkdrl1!
+      DB_USER: test_user
+      DB_PASSWORD: xogh891115@
   product:
     handler: service/handler/productHandler.test
     events:
