@@ -1,4 +1,4 @@
-const init = require('../../init');
+const { ALLOWED_ORIGINS } = require('../../init');
 
 const setCorsHeader = (event, ALLOWED_ORIGINS) => {
     const origin = event.headers.origin;
@@ -24,7 +24,7 @@ const setCorsHeader = (event, ALLOWED_ORIGINS) => {
 };
 
 module.exports.successResponse = (event, obj, callback) => {
-    const corsHeaders = setCorsHeader(event, init.ALLOWED_ORIGINS)
+    const corsHeaders = setCorsHeader(event, ALLOWED_ORIGINS)
     callback(null, {
         statusCode: 200,
         headers: corsHeaders,
@@ -33,7 +33,7 @@ module.exports.successResponse = (event, obj, callback) => {
 };
 
 module.exports.errorResponse = (event, error, callback) => {
-    const corsHeaders = setCorsHeader(event, init.ALLOWED_ORIGINS)
+    const corsHeaders = setCorsHeader(event, ALLOWED_ORIGINS)
     callback(null, {
         statusCode: error.statusCode,
         headers: corsHeaders,

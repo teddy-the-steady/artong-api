@@ -1,4 +1,4 @@
-const init = require('../../init');
+const { pool } = require('../../init');
 const db = require('../../utils/db/db');
 const errors = require('../../utils/error/errors');
 const productListSchema = require('../../utils/validation/schema').productListSchema;
@@ -15,7 +15,7 @@ const control = async function (queryParameters) {
     throw new errors.BadRequest(error.details[0].message, 400)
   }
 
-  const conn = await db.getConnection(init.pool);
+  const conn = await db.getConnection(pool);
 
   try {
     result = await db.execute(conn, 'productModels.selectProductList', params);
