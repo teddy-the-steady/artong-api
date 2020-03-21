@@ -5,11 +5,14 @@ const testSchema = require('../utils/validation/schema').testSchema;
 
 const control = async function (queryParameters) {
   let result = {};
-  let params = queryParameters
+  let params = {};
 
   try {
-    if (params !== null) {
-      params = await testSchema.validateAsync(params);
+    if (queryParameters) {
+      queryParameters = await testSchema.validateAsync(queryParameters);
+      params = queryParameters;
+    } else {
+      return []
     }
   } catch (error) {
     throw new errors.BadRequest(error.details[0].message, 400)
@@ -26,7 +29,7 @@ const control = async function (queryParameters) {
     db.release(conn);
   }
 
-  return result
+  return {"data": result}
 };
 
 module.exports.control = control;

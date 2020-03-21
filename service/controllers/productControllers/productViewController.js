@@ -8,7 +8,7 @@ const control = async function (queryParameters, pathParameters) {
   let params = pathParameters;
   
   try {
-    if (queryParameters !== null) {
+    if (queryParameters) {
       queryParameters = await productSchema.validateAsync(queryParameters);
       params['query'] = queryParameters
     }

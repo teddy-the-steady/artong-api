@@ -4,7 +4,7 @@ const productListController = require('../controllers/productControllers/product
 const productViewController = require('../controllers/productControllers/productViewController');
 const productCreateController = require('../controllers/productControllers/productCreateController');
 
-module.exports.test = async (event, context, callback) => {
+module.exports.handler = async (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const requestInfo = httpRequest.init(event);

@@ -5,12 +5,13 @@ const productSchema = require('../../utils/validation/schema').productSchema;
 
 const control = async function (user, body) {
   let result = {};
-  let params = body;
+  let params = {};
   params['userId'] = user.sub;
 
   try {
-    if (params !== null) {
-      params = await productSchema.validateAsync(params);
+    if (body) {
+      body = await productSchema.validateAsync(body);
+      params = body;
     }
   } catch (error) {
     throw new errors.BadRequest(error.details[0].message, 400)

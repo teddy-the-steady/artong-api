@@ -3,7 +3,7 @@ SELECT sm_barcode AS "id"
     ,item_prod_amt AS "productAmount"
     ,item_cate_nm1 AS "categoryName1"
     ,item_cate_nm2 AS "categoryName2"
-    ,item_cate_nm2 AS "categoryName3"
+    ,item_cate_nm3 AS "categoryName3"
 FROM t_item_info
 
 {{#if (or barcode name)}}
