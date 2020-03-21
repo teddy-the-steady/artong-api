@@ -4,7 +4,7 @@ const testListController = require('../controllers/testListController');
 const testViewController = require('../controllers/testViewController');
 const testCreateController = require('../controllers/testCreateController');
 
-module.exports.test = async (event, context, callback) => {
+module.exports.handler = async (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const requestInfo = httpRequest.init(event);

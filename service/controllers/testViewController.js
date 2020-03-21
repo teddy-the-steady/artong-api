@@ -8,7 +8,7 @@ const control = async function (queryParameters, pathParameters) {
   let params = pathParameters
   
   try {
-    if (queryParameters !== null) {
+    if (queryParameters) {
       queryParameters = await testSchema.validateAsync(queryParameters);
       params['query'] = queryParameters
     }
@@ -27,7 +27,7 @@ const control = async function (queryParameters, pathParameters) {
     db.release(conn);
   }
 
-  return result[0]
+  return {"data": result[0]}
 };
 
 module.exports.control = control;
