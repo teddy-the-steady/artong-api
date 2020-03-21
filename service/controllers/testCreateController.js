@@ -5,11 +5,12 @@ const testSchema = require('../utils/validation/schema').testSchema;
 
 const control = async function (body) {
   let result = {};
-  const params = body;
+  let params = {};
 
   try {
-    if (params !== null) {
-      params = await testSchema.validateAsync(params);
+    if (body) {
+      body = await testSchema.validateAsync(body);
+      params = body;
     }
   } catch (error) {
     throw new errors.BadRequest(error.details[0].message, 400)
