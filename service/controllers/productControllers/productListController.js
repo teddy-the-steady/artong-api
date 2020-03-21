@@ -5,11 +5,14 @@ const productListSchema = require('../../utils/validation/schema').productListSc
 
 const control = async function (queryParameters) {
   let result = {};
-  let params = queryParameters;
+  let params = {};
 
   try {
-    if (params !== null) {
-      params = await productListSchema.validateAsync(params);
+    if (queryParameters) {
+      queryParameters = await productListSchema.validateAsync(queryParameters);
+      params = queryParameters;
+    } else {
+      return []
     }
   } catch (error) {
     throw new errors.BadRequest(error.details[0].message, 400)

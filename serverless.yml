@@ -46,7 +46,7 @@ functions:
     events:
      - http: GET users/hello
   test:
-    handler: service/handler/testHandler.test
+    handler: service/handler/test.handler
     events:
      - http:
         path: test/product
@@ -71,7 +71,7 @@ functions:
       DB_USER: test_user
       DB_PASSWORD: xogh891115@
   product:
-    handler: service/handler/productHandler.test
+    handler: service/handler/product.handler
     events:
      - http:
         path: artong/v1/product
