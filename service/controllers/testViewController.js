@@ -5,7 +5,7 @@ const testSchema = require('../utils/validation/schema').testSchema;
 
 const control = async function (queryParameters, pathParameters) {
   let result = {};
-  let params = pathParameters
+  let params = {id: pathParameters.id}
   
   try {
     if (queryParameters) {
