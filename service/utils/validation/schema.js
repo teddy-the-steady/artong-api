@@ -18,5 +18,5 @@ module.exports.productListSchema = Joi.object({
 });
 
 module.exports.userSchema = Joi.object({
-    loginId: Joi.string().min(1).max(20).required()
+    principalId: Joi.string().min(1).max(50).required()
 });

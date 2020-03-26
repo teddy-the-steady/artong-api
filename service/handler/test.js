@@ -22,7 +22,7 @@ module.exports.handler = async (event, context, callback) => {
       case 'POST':
         requestInfo.body = JSON.parse(requestInfo.body);
         if (requestInfo.path === '/test/product' || requestInfo.path === '/test/product/')
-          res = await testCreateController.control(requestInfo.body);
+          res = await testCreateController.control(requestInfo.userId, requestInfo.body);
         break;
       default:
         break;

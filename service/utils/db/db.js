@@ -23,6 +23,8 @@ const execute = async function (conn, model, params) {
     let result = null;
     const preCompiledModel = sqlLoader(model);
     const compiledModel = preCompiledModel(params);
+    /* 쿼리 debug시 주석 해제 */
+    // console.log(compiledModel);
     result = await conn.query(compiledModel);
 
     return result[0]

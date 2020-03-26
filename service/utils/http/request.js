@@ -6,8 +6,8 @@ const init = (event) => {
   result['queryStringParameters'] = event['queryStringParameters'];
   result['pathParameters'] = event['pathParameters']
   result['body'] = event['body']
-  if (event.requestContext.authorizer && event.requestContext.authorizer.claims) {
-    result['cognitoUser'] = event.requestContext.authorizer.claims
+  if (event['requestContext']['authorizer'] && event['requestContext']['authorizer']['principalId']) {
+    result['userId'] = event['requestContext']['authorizer']['principalId'];
   }
 
   return result
