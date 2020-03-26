@@ -29,7 +29,7 @@ const control = async function (queryParameters) {
     db.release(conn);
   }
 
-  return result
+  return {"data": result}
 };
 
 module.exports.control = control;

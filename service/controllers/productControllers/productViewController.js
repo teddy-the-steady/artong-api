@@ -5,16 +5,7 @@ const productSchema = require('../../utils/validation/schema').productSchema;
 
 const control = async function (queryParameters, pathParameters) {
   let result = {};
-  let params = pathParameters;
-  
-  try {
-    if (queryParameters) {
-      queryParameters = await productSchema.validateAsync(queryParameters);
-      params['query'] = queryParameters
-    }
-  } catch (error) {
-    throw new errors.BadRequest(error.details[0].message, 400)
-  }
+  let params = {barcode: pathParameters.barcode};
 
   const conn = await db.getConnection(pool);
   
@@ -27,7 +18,7 @@ const control = async function (queryParameters, pathParameters) {
     db.release(conn);
   }
 
-  return result[0]
+  return {"data": result[0]}
 };
 
 module.exports.control = control;
