@@ -22,7 +22,7 @@ module.exports.handler = async (event, context, callback) => {
       case 'POST':
         requestInfo.body = JSON.parse(requestInfo.body);
         if (requestInfo.path === '/artong/v1/product' || requestInfo.path === '/artong/v1/product/')
-          res = await productCreateController.control(requestInfo.cognitoUser, requestInfo.body);
+          res = await productCreateController.control(requestInfo.userId, requestInfo.body);
         break;
       default:
         break;
