@@ -1,6 +1,7 @@
-const { pool } = require('../init');
+const {pool} = require('../init');
 const db = require('../utils/db/db');
-const errors = require('../utils/error/errors');
+const {BadRequest, InternalServerError} = require('../../utils/error/errors');
+const {MissingRequiredData} = require('../../utils/error/errorCodes');
 const testSchema = require('../utils/validation/schema').testSchema;
 const userSchema = require('../utils/validation/schema').userSchema;
 
@@ -16,9 +17,15 @@ const control = async function (userId, body) {
       let principalId = {'principalId': userId}
       principalId = await userSchema.validateAsync(principalId);
       params['userId'] = userId;
+    } else {
+      throw new BadRequest("userId or request body can't be null")
     }
   } catch (error) {
-    throw new errors.BadRequest(error.details[0].message, 400)
+    if (error instanceof BadRequest) {
+      throw new BadRequest(error['errorMessage'])
+    } else {
+      throw new BadRequest(error, MissingRequiredData)
+    }
   }
 
   const conn = await db.getConnection(pool);
@@ -30,7 +37,7 @@ const control = async function (userId, body) {
   } catch (error) {
     await conn.rollback();
     console.log(error);
-    throw new errors.InternalServerError()
+    throw new InternalServerError()
   } finally {
     db.release(conn);
   }
