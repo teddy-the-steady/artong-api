@@ -1,7 +1,7 @@
 const {pool} = require('../init');
 const db = require('../utils/db/db');
-const {BadRequest, InternalServerError} = require('../../utils/error/errors');
-const {MissingRequiredData} = require('../../utils/error/errorCodes');
+const {BadRequest, InternalServerError} = require('../utils/error/errors');
+const {MissingRequiredData} = require('../utils/error/errorCodes');
 const testSchema = require('../utils/validation/schema').testSchema;
 const userSchema = require('../utils/validation/schema').userSchema;
 
