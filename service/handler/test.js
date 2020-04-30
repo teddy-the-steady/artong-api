@@ -8,12 +8,13 @@ module.exports.handler = async (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const requestInfo = httpRequest.init(event);
-
+  console.log(requestInfo);
   let res = {};
 
   try {
     switch (requestInfo.httpMethod) {
       case 'GET':
+        /* /test */
         if (requestInfo.path === '/test/product' || requestInfo.path === '/test/product/')
           res = await testListController.control(requestInfo.queryStringParameters);
         else if (requestInfo.path.startsWith('/test/product/') && requestInfo.pathParameters)
@@ -21,6 +22,7 @@ module.exports.handler = async (event, context, callback) => {
         break;
       case 'POST':
         requestInfo.body = JSON.parse(requestInfo.body);
+        /* /test */
         if (requestInfo.path === '/test/product' || requestInfo.path === '/test/product/')
           res = await testCreateController.control(requestInfo.userId, requestInfo.body);
         break;

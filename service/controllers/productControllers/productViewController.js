@@ -1,7 +1,6 @@
-const { pool } = require('../../init');
+const {pool} = require('../../init');
 const db = require('../../utils/db/db');
-const errors = require('../../utils/error/errors');
-const productSchema = require('../../utils/validation/schema').productSchema;
+const {InternalServerError} = require('../../utils/error/errors');
 
 const control = async function (queryParameters, pathParameters) {
   let result = {};
@@ -13,7 +12,7 @@ const control = async function (queryParameters, pathParameters) {
     result = await db.execute(conn, 'productModels.selectProduct', params);
   } catch (error) {
     console.log(error);
-    throw new errors.InternalServerError()
+    throw new InternalServerError()
   } finally {
     db.release(conn);
   }
