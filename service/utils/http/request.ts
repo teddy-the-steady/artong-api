@@ -1,5 +1,5 @@
-const init = (event) => {
-  let result = {};
+const init = (event: any) => {
+  let result: any = {};
   
   result['httpMethod'] = event['httpMethod'];
   result['path'] = event['path'];

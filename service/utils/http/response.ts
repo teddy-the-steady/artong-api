@@ -1,10 +1,11 @@
+export {};
 const {ALLOWED_ORIGINS} = require('../../init');
 
-const setCorsHeader = (event, ALLOWED_ORIGINS) => {
+const setCorsHeader = (event: any, allowedOrigins: string[]) => {
     const origin = event.headers.origin;
     let headers;
   
-    if (ALLOWED_ORIGINS.includes(origin)) {
+    if (allowedOrigins.includes(origin)) {
         headers = {
             'X-Requested-With': '*',
             'Access-Control-Allow-Origin': origin,
@@ -23,7 +24,7 @@ const setCorsHeader = (event, ALLOWED_ORIGINS) => {
     return headers
 };
 
-module.exports.successResponse = (event, obj, callback) => {
+module.exports.successResponse = (event: any, obj: any, callback: any) => {
     const corsHeaders = setCorsHeader(event, ALLOWED_ORIGINS)
     callback(null, {
         statusCode: 200,
@@ -32,8 +33,8 @@ module.exports.successResponse = (event, obj, callback) => {
     });
 };
 
-module.exports.errorResponse = (event, error, callback) => {
-    const corsHeaders = setCorsHeader(event, ALLOWED_ORIGINS)
+module.exports.errorResponse = (event: any, error: any, callback: any) => {
+    let corsHeaders = {}
     if (event !== null) {
         corsHeaders = setCorsHeader(event, ALLOWED_ORIGINS)
     }
