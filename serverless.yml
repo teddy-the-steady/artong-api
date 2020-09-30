@@ -1,6 +1,6 @@
 service: artong-api
 app: artong-api
-org: superduper8989
+# org: superduper8989
 
 provider:
   name: aws
