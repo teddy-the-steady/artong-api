@@ -144,6 +144,7 @@ functions:
       DB_DATABASE: DEV_REFDM
       DB_USER: sm
       DB_PASSWORD: rlatkdrl1!
+      EX_SSM_VAL: ${ssm:refdm-dev-db-pw~true}
 
 resources:
   Resources:
