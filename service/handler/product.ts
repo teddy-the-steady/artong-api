@@ -1,10 +1,12 @@
+export {};
+const init = require('../inits');
 const httpRequest = require('../utils/http/request');
 const httpResponse = require('../utils/http/response');
 const productListController = require('../controllers/productControllers/productListController');
 const productViewController = require('../controllers/productControllers/productViewController');
 const productCreateController = require('../controllers/productControllers/productCreateController');
 
-module.exports.handler = async (event, context, callback) => {
+module.exports.handler = async (event: any, context: any, callback: any) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const requestInfo = httpRequest.init(event);
@@ -37,7 +39,6 @@ module.exports.handler = async (event, context, callback) => {
         break;
     }
   } catch (error) {
-    console.log(error);
     httpResponse.errorResponse(event, error, callback);
   }
 

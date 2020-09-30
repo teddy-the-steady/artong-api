@@ -5,6 +5,10 @@ phases:
       - npm install
       - npm install -g serverless
       - cd ./node_layers && npm install && cd ..
+  pre_build:
+    commands:
+      - npx tsc
+      - find ./service -name "*.ts" -exec rm -rf {} \;
   build:
     commands:
       - serverless deploy
