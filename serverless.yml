@@ -7,9 +7,42 @@ provider:
   runtime: nodejs12.x
   stage: stage
   region: ap-northeast-2
-  # cfnRole: arn:aws:iam::821343553435:role/artongApiCFProd
+  # resourcePolicy:
+  #   - Effect: Allow
+  #     Principal: "*"
+  #     Action: execute-api:Invoke
+  #     Resource:
+  #       - execute-api:/*/GET/api/v1/imageUpUrl
+  #       - execute-api:/*/OPTIONS/api/v1/imageUpUrl
+  #       - execute-api:/*/GET/api/v1/naverOcr
+  #       - execute-api:/*/OPTIONS/api/v1/naverOcr
+  #     Condition:
+  #       IpAddress:
+  #         aws:SourceIp:
+  #           - '61.98.131.200'
+  #           - '61.98.131.205'
+  #   - Effect: Allow
+  #     Principal: "*"
+  #     Action: execute-api:Invoke
+  #     Resource:
+  #       - execute-api:/*/*/*
+  #     Condition:
+  #       StringLike:
+  #         aws:Referer:
+  #           - 'http://artong.com/*'
+  #           - 'http://www.artong.com/*'
   environment:
     NODE_PATH: "./:/opt/node_modules"
+  # apiKeys:
+  #   - artongApiKey
+  # usagePlan:
+  #   quota:
+  #     limit: 30000
+  #     offset: 0
+  #     period: MONTH
+  #   throttle:
+  #     burstLimit: 5000
+  #     rateLimit: 10000
 
 package:
  exclude:
@@ -23,28 +56,44 @@ layers:
 plugins:
   - serverless-iam-roles-per-function
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+custom:
+  cors:
+    origins:
+      - 'http://localhost:3000'
+      - 'http://localhost:8080'
+      - 'http://*.amazonaws.com'
+    headers:
+      - Content-Type
+      - X-Amz-Date
+      - Authorization
+      - X-Api-Key
+      - X-Amz-Security-Token
+      - X-Amz-User-Agent
+    allowCredentials: false
+# cors: ${self:custom.cors} 로 설정
+# Api Gateway 콘솔 options 통합응답에서 Access-Control-Allow-Origin: '*' 이면 매핑 템플릿에 else문 추가
+# #else #set($context.responseOverride.header.Access-Control-Allow-Origin = "")
 
 functions:
   hello:
     handler: handler.hello
-    iamRoleStatements: []
+    # iamRoleStatements:
+    #   - Effect: 'Allow'
+    #     Action:
+    #       - 's3:PutObject'
+    #       - 's3:GetObject'
+    #       - 's3:ListBucket'
+    #     Resource:
+    #       - 'arn:aws:s3:::refdm-excel'
+    #       - 'arn:aws:s3:::refdm-excel/*'
+    # vpc:
+    #   securityGroupIds:
+    #     - sg-0cadc6e28196dd89e
+    #   subnetIds:
+    #     - subnet-0994b73fe5ef30dd0
     events:
      - http: GET users/hello
+        # private: true
   test:
     handler: service/handler/test.handler
     events:
@@ -105,5 +154,14 @@ resources:
           gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
           gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
         ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+    GatewayResponseDefault5XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_5XX
         RestApiId:
           Ref: 'ApiGatewayRestApi'
