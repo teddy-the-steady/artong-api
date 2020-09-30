@@ -10,8 +10,9 @@ module.exports.handler = async (event: any, context: any, callback: any) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
   const requestInfo = httpRequest.init(event);
-  console.log(requestInfo);
   let res = {};
+  console.log(requestInfo);
+  console.info('ssm_key: ' + process.env.EX_SSM_VAL);
 
   try {
     switch (requestInfo.httpMethod) {
