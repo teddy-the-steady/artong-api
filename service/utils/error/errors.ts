@@ -1,3 +1,4 @@
+export {};
 class ExtendableError extends Error {
   errorMessage: string;
   statusCode: number;
