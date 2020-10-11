@@ -1,3 +1,4 @@
+export{};
 const mysql = require('mysql2/promise');
 const handlebars = require('handlebars');
 
