@@ -8,12 +8,12 @@ const testCreateController = require('../controllers/testCreateController');
 
 module.exports.handler = async (event: any, context: any, callback: any) => {
   context.callbackWaitsForEmptyEventLoop = false;
-
-  const requestInfo = httpRequest.init(event);
-  console.log(requestInfo);
   let res = {};
 
   try {
+    const requestInfo = httpRequest.init(event);
+    console.log(requestInfo);
+
     switch (requestInfo.httpMethod) {
       case 'GET':
         /* /test */
@@ -23,7 +23,6 @@ module.exports.handler = async (event: any, context: any, callback: any) => {
           res = await testViewController.control(requestInfo.queryStringParameters, requestInfo.pathParameters);
         break;
       case 'POST':
-        requestInfo.body = JSON.parse(requestInfo.body);
         /* /test */
         if (requestInfo.path === '/test/product' || requestInfo.path === '/test/product/')
           res = await testCreateController.control(requestInfo.userId, requestInfo.body);

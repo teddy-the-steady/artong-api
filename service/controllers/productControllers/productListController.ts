@@ -14,7 +14,7 @@ const control = async function (queryParameters: any) {
       queryParameters = await productListSchema.validateAsync(queryParameters);
       params = queryParameters;
     } else {
-      throw new BadRequest('request body cannot be null', MissingRequiredData)
+      throw new BadRequest(MissingRequiredData.message, MissingRequiredData.code)
     }
   } catch (error) {
     if (error instanceof BadRequest) {
