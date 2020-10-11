@@ -1,5 +1,5 @@
 export {};
-const init = require('../inits');
+const init = require('../init');
 const httpRequest = require('../utils/http/request');
 const httpResponse = require('../utils/http/response');
 const testListController = require('../controllers/testListController');
