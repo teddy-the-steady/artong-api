@@ -1,4 +1,4 @@
-const getTotalRows = function (list: any[]) {
+module.exports.getTotalRows = function (list: any[]) {
     if (typeof list !== 'undefined' && list.length > 0) {
         return list[0].TotalRows
     } else {
@@ -6,7 +6,7 @@ const getTotalRows = function (list: any[]) {
     }
 };
 
-const extractTotalRows = function (list: any[]) {
+module.exports.extractTotalRows = function (list: any[]) {
     if (typeof list !== 'undefined' && list.length > 0) {
         for (let i in list) {
             if (list[i].hasOwnProperty('TotalRows')) {
@@ -18,5 +18,3 @@ const extractTotalRows = function (list: any[]) {
         return {}
     }
 };
-
-export {getTotalRows, extractTotalRows}

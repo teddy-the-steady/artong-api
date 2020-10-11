@@ -1,8 +1,9 @@
-import init from '../../init'
-import {getConnection, release, execute} from '../../utils/db/db'
-import {BadRequest, InternalServerError} from '../../utils/error/errors'
-import {MissingQueryParameter, MissingRequiredData, ValidationError} from '../../utils/error/errorCodes'
-import schema from '../../utils/validation/schema'
+export {};
+const {pool} = require('../../init');
+const db = require('../../utils/db/db');
+const {BadRequest, InternalServerError} = require('../../utils/error/errors');
+const {MissingQueryParameter, MissingRequiredData, ValidationError} = require('../../utils/error/errorCodes');
+const productListSchema = require('../../utils/validation/schema').productListSchema;
 
 const control = async function (queryParameters: any) {
   let result = {};
@@ -10,7 +11,7 @@ const control = async function (queryParameters: any) {
 
   try {
     if (queryParameters) {
-      queryParameters = await schema.productListSchema.validateAsync(queryParameters);
+      queryParameters = await productListSchema.validateAsync(queryParameters);
       params = queryParameters;
     } else {
       throw new BadRequest(MissingRequiredData.message, MissingRequiredData.code)
@@ -25,10 +26,10 @@ const control = async function (queryParameters: any) {
     }
   }
 
-  const conn = await getConnection(init.pool);
+  const conn = await db.getConnection(pool);
 
   try {
-    result = await execute(conn, 'productModels.selectProductList', params);
+    result = await db.execute(conn, 'productModels.selectProductList', params);
   } catch (error) {
     console.error(error);
     if (error instanceof InternalServerError) {
@@ -36,10 +37,10 @@ const control = async function (queryParameters: any) {
     } else if (error instanceof BadRequest) {
       throw new BadRequest(error['errorMessage'], error['errorCode'])
     } else {
-      throw new InternalServerError('', null)
+      throw new InternalServerError()
     }
   } finally {
-    release(conn);
+    db.release(conn);
   }
 
   return {'data': result}

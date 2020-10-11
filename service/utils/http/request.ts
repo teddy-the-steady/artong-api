@@ -1,7 +1,8 @@
-import {BadRequest} from '../../utils/error/errors'
-import {SyntaxError} from '../../utils/error/errorCodes'
+export {};
+const {BadRequest} = require('../../utils/error/errors');
+const {SyntaxError} = require('../../utils/error/errorCodes');
 
-const request = (event: any) => {
+const init = (event: any) => {
   let result: any = {};
   
   result['httpMethod'] = event['httpMethod'];
@@ -22,4 +23,4 @@ const request = (event: any) => {
   return result
 };
 
-export {request};
+module.exports.init = init;
