@@ -1,6 +1,7 @@
-import init from '../init' // TODO] handler 이전 선언이 최초 이후 인스턴스 호출에도 유효한지 확인
-import {request} from '../utils/http/request'
-import {successResponse, errorResponse} from '../utils/http/response'
+export {};
+const init = require('../init'); // TODO] handler 이전 선언이 최초 이후 인스턴스 호출에도 유효한지 확인
+const httpRequest = require('../utils/http/request');
+const httpResponse = require('../utils/http/response');
 const productListController = require('../controllers/productControllers/productListController');
 const productViewController = require('../controllers/productControllers/productViewController');
 const productCreateController = require('../controllers/productControllers/productCreateController');
@@ -10,7 +11,7 @@ module.exports.handler = async (event: any, context: any, callback: any) => {
   let res = {};
 
   try {
-    const requestInfo = request(event);
+    const requestInfo = httpRequest.init(event);
     console.log(requestInfo);
 
     switch (requestInfo.httpMethod) {
@@ -37,8 +38,8 @@ module.exports.handler = async (event: any, context: any, callback: any) => {
         break;
     }
   } catch (error) {
-    errorResponse(event, error, callback);
+    httpResponse.errorResponse(event, error, callback);
   }
 
-  successResponse(event, res, callback);
+  httpResponse.successResponse(event, res, callback);
 };
