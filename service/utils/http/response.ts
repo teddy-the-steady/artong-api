@@ -1,5 +1,5 @@
 export {};
-const {ALLOWED_ORIGINS} = require('../../inits');
+const {ALLOWED_ORIGINS} = require('../../init');
 
 const setCorsHeader = (event: any, allowedOrigins: string[]) => {
     const origin = event.headers.origin;
