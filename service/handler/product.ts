@@ -1,5 +1,5 @@
 export {};
-const init = require('../inits'); // TODO] handler 이전 선언이 최초 이후 인스턴스 호출에도 유효한지 확인
+const init = require('../init'); // TODO] handler 이전 선언이 최초 이후 인스턴스 호출에도 유효한지 확인
 const httpRequest = require('../utils/http/request');
 const httpResponse = require('../utils/http/response');
 const productListController = require('../controllers/productControllers/productListController');
