@@ -1,5 +1,5 @@
 export {};
-const init = require('../inits');
+const init = require('../inits'); // TODO] handler 이전 선언이 최초 이후 인스턴스 호출에도 유효한지 확인
 const httpRequest = require('../utils/http/request');
 const httpResponse = require('../utils/http/response');
 const productListController = require('../controllers/productControllers/productListController');
@@ -8,13 +8,12 @@ const productCreateController = require('../controllers/productControllers/produ
 
 module.exports.handler = async (event: any, context: any, callback: any) => {
   context.callbackWaitsForEmptyEventLoop = false;
-
-  const requestInfo = httpRequest.init(event);
   let res = {};
-  console.log(requestInfo);
-  console.info('ssm_key: ' + process.env.EX_SSM_VAL);
 
   try {
+    const requestInfo = httpRequest.init(event);
+    console.log(requestInfo);
+
     switch (requestInfo.httpMethod) {
       case 'GET':
         /* /product */
@@ -31,7 +30,6 @@ module.exports.handler = async (event: any, context: any, callback: any) => {
         //   res = await orderProductListController.control(requestInfo.queryStringParameters, requestInfo.pathParameters);
         break;
       case 'POST':
-        requestInfo.body = JSON.parse(requestInfo.body);
         /* /product */
         if (requestInfo.path === '/artong/v1/product' || requestInfo.path === '/artong/v1/product/')
           res = await productCreateController.control(requestInfo.userId, requestInfo.body);

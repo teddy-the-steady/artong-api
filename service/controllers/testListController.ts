@@ -2,7 +2,7 @@ export {};
 const {pool} = require('../init');
 const db = require('../utils/db/db');
 const {BadRequest, InternalServerError} = require('../utils/error/errors');
-const {MissingQueryParameter, ValidationError} = require('../utils/error/errorCodes');
+const {MissingQueryParameter, MissingRequiredData, ValidationError} = require('../utils/error/errorCodes');
 const testSchema = require('../utils/validation/schema').testSchema;
 
 const control = async function (queryParameters: any) {
@@ -14,7 +14,7 @@ const control = async function (queryParameters: any) {
       queryParameters = await testSchema.validateAsync(queryParameters);
       params = queryParameters;
     } else {
-      throw new BadRequest('request body cannot be null', MissingRequiredData)
+      throw new BadRequest(MissingRequiredData.message, MissingRequiredData.code)
     }
   } catch (error) {
     if (error instanceof BadRequest) {
