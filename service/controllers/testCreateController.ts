@@ -19,7 +19,7 @@ const control = async function (userId: string, body: any) {
       principalId = await userSchema.validateAsync(principalId);
       params['userId'] = userId;
     } else {
-      throw new BadRequest('userId or request body cannot be null', MissingRequiredData)
+      throw new BadRequest(MissingRequiredData.message, MissingRequiredData.code)
     }
   } catch (error) {
     if (error instanceof BadRequest) {
