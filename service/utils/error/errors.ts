@@ -1,4 +1,3 @@
-export {};
 class ExtendableError extends Error {
   errorMessage: string;
   statusCode: number;
@@ -16,87 +15,52 @@ class ExtendableError extends Error {
 }
 
 class BadRequest extends ExtendableError {
-  constructor(message: string, errorCode: number) {
-    if (arguments.length === 0)
-      super('Bad Request', 400, null);
-    else if (arguments.length === 1)
-      super(message, 400, null);
-    else
-      super(message, 400, errorCode);
+  constructor(message: string, errorCode: number | null) {
+    if (!message) message = 'Bad Request'
+    super(message, 400, errorCode);
   }
 }
 
 class Unauthorized extends ExtendableError {
-  constructor(message: string, errorCode: number) {
-    if (arguments.length === 0)
-      super('Unauthorized', 401, null);
-    else if (arguments.length === 1)
-      super(message, 401, null);
-    else
-      super(message, 401, errorCode);
+  constructor(message: string, errorCode: number | null) {
+    if (!message) message = 'Unauthorized'
+    super(message, 401, errorCode);
   }
 }
 
 class Forbidden extends ExtendableError {
-  constructor(message: string, errorCode: number) {
-    if (arguments.length === 0)
-      super('Forbidden', 403, null);
-    else if (arguments.length === 1)
-      super(message, 403, null);
-    else
-      super(message, 403, errorCode);
+  constructor(message: string, errorCode: number | null) {
+    if (!message) message = 'Forbidden'
+    super(message, 403, errorCode);
   }
 }
 
 class NotFound extends ExtendableError {
-  constructor(message: string, errorCode: number) {
-    if (arguments.length === 0)
-      super('Not Found', 404, null);
-    else if (arguments.length === 1)
-      super(message, 404, null);
-    else
-      super(message, 404, errorCode);
+  constructor(message: string, errorCode: number | null) {
+    if (!message) message = 'Not Found'
+    super(message, 404, errorCode);
   }
 }
 
 class Conflict extends ExtendableError {
-  constructor(message: string, errorCode: number) {
-    if (arguments.length === 0)
-      super('Conflict', 409, null);
-    else if (arguments.length === 1)
-      super(message, 409, null);
-    else
-      super(message, 409, errorCode);
+  constructor(message: string, errorCode: number | null) {
+    if (!message) message = 'Conflict'
+    super(message, 409, errorCode);
   }
 }
 
 class UnprocessableEntity extends ExtendableError {
-  constructor(message: string, errorCode: number) {
-    if (arguments.length === 0)
-      super('Unprocessable Entity', 422, null);
-    else if (arguments.length === 1)
-      super(message, 422, null);
-    else
-      super(message, 422, errorCode);
+  constructor(message: string, errorCode: number | null) {
+    if (!message) message = 'Unprocessable Entity'
+    super(message, 422, errorCode);
   }
 }
 
 class InternalServerError extends ExtendableError {
-  constructor(message: string, errorCode: number) {
-    if (arguments.length === 0)
-      super('Internal Server Error', 500, null);
-    else if (arguments.length === 1)
-      super(message, 500, null);
-    else
-      super(message, 500, errorCode);
+  constructor(message: string, errorCode: number | null) {
+    if (!message) message = 'Internal Server Error'
+    super(message, 500, errorCode);
   }
 }
 
-
-module.exports.BadRequest = BadRequest;
-module.exports.Unauthorized = Unauthorized;
-module.exports.Forbidden = Forbidden;
-module.exports.NotFound = NotFound;
-module.exports.Conflict = Conflict;
-module.exports.UnprocessableEntity = UnprocessableEntity;
-module.exports.InternalServerError = InternalServerError;
+export {BadRequest, Unauthorized, Forbidden, NotFound, Conflict, UnprocessableEntity, InternalServerError}
