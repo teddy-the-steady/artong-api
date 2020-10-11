@@ -1,16 +1,17 @@
-import init from '../init'
-import {getConnection, release, execute} from '../utils/db/db'
-import {BadRequest, InternalServerError} from '../utils/error/errors'
-import {MissingQueryParameter, ValidationError} from '../utils/error/errorCodes'
-import schema from '../utils/validation/schema'
+export {};
+const {pool} = require('../init');
+const db = require('../utils/db/db');
+const {BadRequest, InternalServerError} = require('../utils/error/errors');
+const {MissingQueryParameter, ValidationError} = require('../utils/error/errorCodes');
+const testSchema = require('../utils/validation/schema').testSchema;
 
-const testViewController = async function (queryParameters: any, pathParameters: {id: number}) {
+const control = async function (queryParameters: any, pathParameters: {id: number}) {
   let result: any = {};
   let params: any = {id: pathParameters.id}
   
   try {
     if (queryParameters) {
-      queryParameters = await schema.testSchema.validateAsync(queryParameters);
+      queryParameters = await testSchema.validateAsync(queryParameters);
       params['query'] = queryParameters
     }
   } catch (error) {
@@ -23,10 +24,10 @@ const testViewController = async function (queryParameters: any, pathParameters:
     }
   }
 
-  const conn = await getConnection(init.pool);
+  const conn = await db.getConnection(pool);
   
   try {
-    result = await execute(conn, 'selectTest', params);
+    result = await db.execute(conn, 'selectTest', params);
   } catch (error) {
     console.error(error);
     if (error instanceof InternalServerError) {
@@ -34,13 +35,13 @@ const testViewController = async function (queryParameters: any, pathParameters:
     } else if (error instanceof BadRequest) {
       throw new BadRequest(error['errorMessage'], error['errorCode'])
     } else {
-      throw new InternalServerError('', null)
+      throw new InternalServerError()
     }
   } finally {
-    release(conn);
+    db.release(conn);
   }
 
   return {'data': result[0]}
 };
 
-export {testViewController}
+module.exports.control = control;
