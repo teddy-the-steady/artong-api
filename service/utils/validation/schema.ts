@@ -1,3 +1,4 @@
+export {};
 const Joi = require('@hapi/joi');
 
 module.exports.testSchema = Joi.object({
