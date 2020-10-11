@@ -1,4 +1,3 @@
-export {};
 const fs = require('fs');
 const handlebars = require('handlebars');
 
@@ -31,6 +30,4 @@ const execute = async function (conn: any, model: string, params: any) {
     return result[0]
 };
 
-module.exports.getConnection = getConnection;
-module.exports.release = release;
-module.exports.execute = execute;
+export {getConnection, release, execute}
