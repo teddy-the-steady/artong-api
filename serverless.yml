@@ -57,6 +57,7 @@ plugins:
   - serverless-iam-roles-per-function
 
 custom:
+  DB_CONFIG: ${file(./config.js):DB_CONFIG}
   cors:
     origins:
       - 'http://localhost:3000'
@@ -115,10 +116,10 @@ functions:
     layers:
      - {Ref: NodeModulesLambdaLayer} 
     environment:
-      DB_HOST: kcmta.czl2qpvgencs.ap-northeast-2.rds.amazonaws.com
-      DB_DATABASE: test
-      DB_USER: test_user
-      DB_PASSWORD: xogh891115@
+      DB_HOST: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_HOST}
+      DB_DATABASE: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_DATABASE}
+      DB_USER: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_USER}
+      DB_PASSWORD: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_PASSWORD}
   product:
     handler: service/handler/product.handler
     events:
@@ -140,11 +141,10 @@ functions:
     layers:
      - {Ref: NodeModulesLambdaLayer} 
     environment:
-      DB_HOST: refdm-database-1-instance-1.cwciwhxt0anw.ap-northeast-2.rds.amazonaws.com
-      DB_DATABASE: DEV_REFDM
-      DB_USER: sm
-      DB_PASSWORD: rlatkdrl1!
-      EX_SSM_VAL: ${ssm:refdm-dev-db-pw~true}
+      DB_HOST: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_HOST}
+      DB_DATABASE: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_DATABASE}
+      DB_USER: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_USER}
+      DB_PASSWORD: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_PASSWORD}
 
 resources:
   Resources:
