@@ -1,47 +1,26 @@
 export {};
 const {pool} = require('../init');
 const db = require('../utils/db/db');
-const {BadRequest, InternalServerError} = require('../utils/error/errors');
-const {MissingQueryParameter, ValidationError} = require('../utils/error/errorCodes');
-const testSchema = require('../utils/validation/schema').testSchema;
+const {controllerErrorWrapper} = require('../utils/error/errorWrapper');
+const {validate}  = require('../validators/common');
+const {testSchema} = require('../validators/schema/schema');
 
-const control = async function (queryParameters: any, pathParameters: {id: number}) {
-  let result: any = {};
+module.exports.control = async function (pathParameters: {id: string}, queryParameters: any) {
+  let result: any;
   let params: any = {id: pathParameters.id}
-  
+  let conn: any;
+    
   try {
-    if (queryParameters) {
-      queryParameters = await testSchema.validateAsync(queryParameters);
-      params['query'] = queryParameters
-    }
-  } catch (error) {
-    if (error instanceof BadRequest) {
-      throw new BadRequest(error['errorMessage'], error['errorCode'])
-    } else if (error['details'] && error['details'][0]['message']) {
-      throw new BadRequest(error['details'][0]['message'], MissingQueryParameter)
-    } else {
-      throw new BadRequest(error, ValidationError)
-    }
-  }
+    params = await validate(queryParameters, testSchema);
 
-  const conn = await db.getConnection(pool);
-  
-  try {
-    result = await db.execute(conn, 'selectTest', params);
+    conn = await db.getConnection(pool);
+
+    result = await db.execute(conn, 'test.selectTest', params);
   } catch (error) {
-    console.error(error);
-    if (error instanceof InternalServerError) {
-      throw new InternalServerError(error['errorMessage'], error['errorCode'])
-    } else if (error instanceof BadRequest) {
-      throw new BadRequest(error['errorMessage'], error['errorCode'])
-    } else {
-      throw new InternalServerError()
-    }
+    controllerErrorWrapper(error);
   } finally {
-    db.release(conn);
+    if (conn) db.release(conn);
   }
 
   return {'data': result[0]}
 };
-
-module.exports.control = control;
