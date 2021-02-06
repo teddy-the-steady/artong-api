@@ -18,3 +18,12 @@ module.exports.extractTotalRows = function (list: any[]) {
         return {}
     }
 };
+
+module.exports.hasPermission = function(userGroup: Array<string>) {
+    const permissionGroups = ['manager'];
+    if (userGroup) {
+        return permissionGroups.some(r => userGroup.includes(r));
+    } else {
+        return false
+    }
+};

@@ -11,7 +11,7 @@ module.exports.handler = async (event: any, context: any, callback: any) => {
   let res = {};
 
   try {
-    const requestInfo = httpRequest.init(event);
+    const requestInfo = httpRequest.requestInit(event);
     console.log(requestInfo);
 
     switch (requestInfo.httpMethod) {
@@ -20,12 +20,12 @@ module.exports.handler = async (event: any, context: any, callback: any) => {
         if (requestInfo.path === '/test/product' || requestInfo.path === '/test/product/')
           res = await testListController.control(requestInfo.queryStringParameters);
         else if (requestInfo.path.startsWith('/test/product/') && requestInfo.pathParameters)
-          res = await testViewController.control(requestInfo.queryStringParameters, requestInfo.pathParameters);
+          res = await testViewController.control(requestInfo.pathParameters, requestInfo.queryStringParameters);
         break;
       case 'POST':
         /* /test */
         if (requestInfo.path === '/test/product' || requestInfo.path === '/test/product/')
-          res = await testCreateController.control(requestInfo.userId, requestInfo.body);
+          res = await testCreateController.control(requestInfo.userId, requestInfo.userGroups, requestInfo.body);
         break;
       default:
         break;
