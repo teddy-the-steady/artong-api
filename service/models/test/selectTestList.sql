@@ -1,1 +1,1 @@
-SELECT * FROM test.product;
+SELECT * FROM test.member_master;
