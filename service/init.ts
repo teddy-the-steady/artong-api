@@ -33,5 +33,7 @@ handlebars.registerHelper({
   or  : function(){ return reduceOp(arguments, (a: string, b: string) => a  || b); },
 }); 
 
-module.exports.pool = pool;
-module.exports.ALLOWED_ORIGINS = ALLOWED_ORIGINS;
+module.exports = {
+  pool,
+  ALLOWED_ORIGINS,
+}
