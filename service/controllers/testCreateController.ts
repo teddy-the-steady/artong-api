@@ -1,57 +1,38 @@
 export {};
 const {pool} = require('../init');
 const db = require('../utils/db/db');
-const {BadRequest, InternalServerError} = require('../utils/error/errors');
-const {MissingRequiredData, ValidationError} = require('../utils/error/errorCodes');
-const testSchema = require('../utils/validation/schema').testSchema;
-const userSchema = require('../utils/validation/schema').userSchema;
+const {Forbidden} = require('../utils/error/errors');
+const {NoPermission} = require('../utils/error/errorCodes');
+const {controllerErrorWrapper} = require('../utils/error/errorWrapper');
+const {hasPermission} = require('../utils/common/commonFunc');
+const {validate, validateUser}  = require('../validators/common');
+const {testSchema, userSchema} = require('../validators/schema/schema');
 
-const control = async function (userId: string, body: any) {
-  let result = {};
+module.exports.control = async function (userId: string, userGroups: Array<string>, body: any) {
+  let result: any;
   let params: any = {};
+  let conn: any;
 
   try {
-    if (userId && body) {
-      body = await testSchema.validateAsync(body);
-      params = body;
-
-      let principalId = {'principalId': userId}
-      principalId = await userSchema.validateAsync(principalId);
-      params['userId'] = userId;
-    } else {
-      throw new BadRequest(MissingRequiredData.message, MissingRequiredData.code)
+    if (!hasPermission(userGroups)) {
+      throw new Forbidden(NoPermission.message, NoPermission.code)
     }
-  } catch (error) {
-    if (error instanceof BadRequest) {
-      throw new BadRequest(error['errorMessage'], error['errorCode'])
-    } else if (error['details'] && error['details'][0]['message']) {
-      throw new BadRequest(error['details'][0]['message'], MissingRequiredData)
-    } else {
-      throw new BadRequest(error, ValidationError)
-    }
-  }
 
-  const conn = await db.getConnection(pool);
-
-  try {
+    params = await validate(body, testSchema);
+    params['userId'] = await validateUser(userId, userSchema);
+    
+    conn = await db.getConnection(pool);
     await conn.beginTransaction();
-    result = await db.execute(conn, 'insertTest', params);
+    
+    result = await db.execute(conn, 'test.insertTest', params);
+
     await conn.commit();
   } catch (error) {
-    await conn.rollback();
-    console.error(error);
-    if (error instanceof InternalServerError) {
-      throw new InternalServerError(error['errorMessage'], error['errorCode'])
-    } else if (error instanceof BadRequest) {
-      throw new BadRequest(error['errorMessage'], error['errorCode'])
-    } else {
-      throw new InternalServerError()
-    }
+    if (conn) await conn.rollback();
+    controllerErrorWrapper(error);
   } finally {
-    db.release(conn);
+    if (conn) db.release(conn);
   }
 
   return {'data': 'Success'}
 };
-
-module.exports.control = control;
