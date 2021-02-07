@@ -1,2 +1,2 @@
-SELECT * FROM artong.test
+SELECT * FROM test
 WHERE id = {{id}};
