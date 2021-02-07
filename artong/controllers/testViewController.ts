@@ -1,5 +1,4 @@
 export {};
-const {pool} = require('../init');
 const db = require('../utils/db/db');
 const {controllerErrorWrapper} = require('../utils/error/errorWrapper');
 const {validate}  = require('../utils/validators/common');
@@ -13,7 +12,7 @@ module.exports.control = async function (pathParameters: {id: string}, queryPara
   try {
     params = await validate(queryParameters, testSchema);
 
-    conn = await db.getConnection(pool);
+    conn = await db.getConnection();
 
     result = await db.execute(conn, 'test.selectTest', params);
   } catch (error) {
