@@ -1,5 +1,4 @@
 export {};
-const {pool} = require('../init');
 const db = require('../utils/db/db');
 const {Forbidden} = require('../utils/error/errors');
 const {NoPermission} = require('../utils/error/errorCodes');
@@ -21,7 +20,7 @@ module.exports.control = async function (userId: string, userGroups: Array<strin
     params = await validate(body, testSchema);
     params['userId'] = await validateUser(userId, userSchema);
     
-    conn = await db.getConnection(pool);
+    conn = await db.getConnection();
     await conn.beginTransaction();
     
     result = await db.execute(conn, 'test.insertTest', params);
