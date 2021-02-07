@@ -97,6 +97,8 @@ functions:
         # private: true
   artong:
     handler: artong/handler/test.handler
+    iamManagedPolicies:
+      - 'arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole'
     vpc:
       subnetIds:
         - subnet-a8a74fc3
