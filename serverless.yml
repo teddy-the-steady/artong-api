@@ -99,12 +99,12 @@ functions:
     handler: artong/handler/test.handler
     iamManagedPolicies:
       - 'arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole'
-    vpc:
-      subnetIds:
-        - subnet-a8a74fc3
-        - subnet-2efd5855
-      securityGroupIds:
-        - sg-c514feab
+    # vpc:
+    #   securityGroupIds:
+    #     - sg-c514feab
+    #   subnetIds:
+    #     - subnet-a8a74fc3
+    #     - subnet-2efd5855
     events:
      - http:
         path: test/product
