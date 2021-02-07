@@ -9,9 +9,23 @@ module.exports.control = async function (queryParameters: any) {
   let conn: any;
 
   try {
-    conn = await db.getConnection(pool);
+    // conn = await db.getConnection(pool);
 
-    result = await db.execute(conn, 'test.selectTestList', params);
+    pool.connect((err: any , client: any, done: any) => {
+      if (err) throw err;
+      client.query('SELECT * FROM artong.test', (err: any, res: any) => {
+          done();
+          if (err) {
+              console.log(err.stack);
+          } else {
+              for (let row of res.rows) {
+                  console.log(row);
+              }
+          }
+      });
+    });
+
+    // result = await db.execute(conn, 'test.selectTestList', params);
   } catch (error) {
     controllerErrorWrapper(error);
   } finally {
