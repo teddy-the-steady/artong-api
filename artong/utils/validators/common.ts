@@ -1,6 +1,6 @@
 export {};
-const {BadRequest} = require('../utils/error/errors');
-const {MissingRequiredData} = require('../utils/error/errorCodes');
+const {BadRequest} = require('../error/errors');
+const {MissingRequiredData} = require('../error/errorCodes');
 
 module.exports.validate = async function (params: any, schema: any) {
   if (params) {
