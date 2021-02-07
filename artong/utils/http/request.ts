@@ -1,6 +1,6 @@
 export {};
-const {BadRequest} = require('../../utils/error/errors');
-const {SyntaxError} = require('../../utils/error/errorCodes');
+const {BadRequest} = require('../error/errors');
+const {SyntaxError} = require('../error/errorCodes');
 
 module.exports.requestInit = (event: any) => {
   let result: any = {};
@@ -24,8 +24,10 @@ module.exports.requestInit = (event: any) => {
   }
 
   const jwtToken = event['headers']['Authorization'];
-  const payload = parseJwt(jwtToken);
-  result['userGroups'] = payload['cognito:groups'];
+  if (jwtToken) {
+    const payload = parseJwt(jwtToken);
+    result['userGroups'] = payload['cognito:groups'];
+  }
 
   return result
 };

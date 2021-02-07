@@ -3,6 +3,7 @@ const {BadRequest, InternalServerError, Forbidden} = require('./errors');
 const errorCodes = require('./errorCodes');
 
 module.exports.controllerErrorWrapper = function(error: any) {
+    console.log(error)
     if (error instanceof BadRequest) {
         throw new BadRequest(error['errorMessage'], error['errorCode'])
     } else if (error instanceof InternalServerError) {
