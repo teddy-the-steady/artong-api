@@ -105,12 +105,12 @@ functions:
         # private: true
   artong:
     handler: artong/handler/test.handler
-    # vpc:
-    #   securityGroupIds:
-    #     - sg-c514feab
-    #   subnetIds:
-    #     - subnet-a8a74fc3
-    #     - subnet-2efd5855
+    vpc:
+      securityGroupIds:
+        - sg-c514feab
+      subnetIds:
+        - subnet-a8a74fc3
+        - subnet-2efd5855
     events:
      - http:
         path: test/product
