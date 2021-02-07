@@ -7,8 +7,6 @@ provider:
   runtime: nodejs12.x
   stage: stage
   region: ap-northeast-2
-  iamManagedPolicies:
-    - 'arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole'
   # resourcePolicy:
   #   - Effect: Allow
   #     Principal: "*"
@@ -99,12 +97,12 @@ functions:
         # private: true
   artong:
     handler: artong/handler/test.handler
-    vpc:
-      securityGroupIds:
-        - sg-c514feab
-      subnetIds:
-        - subnet-a8a74fc3
-        - subnet-2efd5855
+    # vpc:
+    #   securityGroupIds:
+    #     - sg-c514feab
+    #   subnetIds:
+    #     - subnet-a8a74fc3
+    #     - subnet-2efd5855
     events:
      - http:
         path: test/product
