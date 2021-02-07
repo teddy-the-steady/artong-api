@@ -7,9 +7,8 @@ const testViewController = require('../controllers/testViewController');
 const testCreateController = require('../controllers/testCreateController');
 
 module.exports.handler = async (event: any, context: any, callback: any) => {
-  console.log(event)
   context.callbackWaitsForEmptyEventLoop = false;
-  let res = {};
+  let res: any = {};
 
   try {
     const requestInfo = httpRequest.requestInit(event);
@@ -32,6 +31,7 @@ module.exports.handler = async (event: any, context: any, callback: any) => {
         break;
     }
   } catch (error) {
+    console.log(error);
     httpResponse.errorResponse(event, error, callback);
   }
 
