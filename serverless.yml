@@ -97,7 +97,6 @@ functions:
         # private: true
   artong:
     handler: artong/handler/test.handler
-    iamRoleStatements: []
     vpc:
       subnetIds:
         - subnet-a8a74fc3
