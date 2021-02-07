@@ -2,8 +2,8 @@ export {};
 const {pool} = require('../init');
 const db = require('../utils/db/db');
 const {controllerErrorWrapper} = require('../utils/error/errorWrapper');
-const {validate}  = require('../validators/common');
-const {testSchema} = require('../validators/schema/schema');
+const {validate}  = require('../utils/validators/common');
+const {testSchema} = require('../utils/validators/schema/schema');
 
 module.exports.control = async function (pathParameters: {id: string}, queryParameters: any) {
   let result: any;
