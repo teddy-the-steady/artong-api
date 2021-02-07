@@ -96,7 +96,7 @@ functions:
      - http: GET users/hello
         # private: true
   test:
-    handler: service/handler/test.handler
+    handler: artong/handler/test.handler
     events:
      - http:
         path: test/product
