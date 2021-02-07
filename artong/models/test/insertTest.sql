@@ -1,2 +1,2 @@
-INSERT INTO artong.test(name, created_at, value)
+INSERT INTO test(name, created_at, value)
 VALUES('{{name}}', '{{createdAt}}', {{value}})
