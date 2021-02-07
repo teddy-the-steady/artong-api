@@ -7,6 +7,7 @@ const testViewController = require('../controllers/testViewController');
 const testCreateController = require('../controllers/testCreateController');
 
 module.exports.handler = async (event: any, context: any, callback: any) => {
+  console.log(event)
   context.callbackWaitsForEmptyEventLoop = false;
   let res = {};
 
