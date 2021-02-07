@@ -1,1 +1,1 @@
-SELECT * FROM test.member_master;
+SELECT * FROM artong.test;

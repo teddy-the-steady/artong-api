@@ -5,8 +5,8 @@ const {Forbidden} = require('../utils/error/errors');
 const {NoPermission} = require('../utils/error/errorCodes');
 const {controllerErrorWrapper} = require('../utils/error/errorWrapper');
 const {hasPermission} = require('../utils/common/commonFunc');
-const {validate, validateUser}  = require('../validators/common');
-const {testSchema, userSchema} = require('../validators/schema/schema');
+const {validate, validateUser}  = require('../utils/validators/common');
+const {testSchema, userSchema} = require('../utils/validators/schema/schema');
 
 module.exports.control = async function (userId: string, userGroups: Array<string>, body: any) {
   let result: any;
