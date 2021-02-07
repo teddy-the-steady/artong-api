@@ -1,8 +1,9 @@
 export {};
 const fs = require('fs');
 const handlebars = require('handlebars');
+const {pool} = require('../../init');
 
-const getConnection = async function (pool: any) {
+const getConnection = async function() {
   const conn = await pool.connect();
   return conn
 };
@@ -13,7 +14,7 @@ const release = function (conn: any): void {
 
 const sqlLoader = function (model: string) {
   const base = process.env.PWD;
-  const modelUri = base + '/service/models/' + model.replace('.', '/') + '.sql';
+  const modelUri = base + '/artong/models/' + model.replace('.', '/') + '.sql';
   const sql = fs.readFileSync(modelUri).toString();
   const preCompiledModel = handlebars.compile(sql);
 
