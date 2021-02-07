@@ -1,1 +1,1 @@
-SELECT * FROM artong.test;
+SELECT * FROM test;
