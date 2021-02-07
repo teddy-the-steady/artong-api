@@ -7,14 +7,6 @@ provider:
   runtime: nodejs12.x
   stage: stage
   region: ap-northeast-2
-  iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - "ec2:CreateNetworkInterface"
-        - "ec2:DescribeNetworkInterfaces"
-        - "ec2:DetachNetworkInterface"
-        - "ec2:DeleteNetworkInterface"
-      Resource: "*"
   # resourcePolicy:
   #   - Effect: Allow
   #     Principal: "*"
@@ -105,12 +97,14 @@ functions:
         # private: true
   artong:
     handler: artong/handler/test.handler
-    vpc:
-      securityGroupIds:
-        - sg-c514feab
-      subnetIds:
-        - subnet-a8a74fc3
-        - subnet-2efd5855
+    iamManagedPolicies:
+      - 'arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole'
+    # vpc:
+    #   securityGroupIds:
+    #     - sg-c514feab
+    #   subnetIds:
+    #     - subnet-a8a74fc3
+    #     - subnet-2efd5855
     events:
      - http:
         path: test/product
