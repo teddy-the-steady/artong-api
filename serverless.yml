@@ -95,8 +95,15 @@ functions:
     events:
      - http: GET users/hello
         # private: true
-  test:
+  artong:
     handler: artong/handler/test.handler
+    iamRoleStatements: []
+    vpc:
+      subnetIds:
+        - subnet-a8a74fc3
+        - subnet-2efd5855
+      securityGroupIds:
+        - sg-c514feab
     events:
      - http:
         path: test/product
