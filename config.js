@@ -1,8 +1,8 @@
 module.exports.DB_CONFIG = (serverless) => ({
     stage: {
-        DB_HOST: 'artong-stg.c0ttxdhzwvfd.ap-northeast-2.rds.amazonaws.com'
+        DB_HOST: 'artong-staging.cbicx7dyouhk.ap-northeast-2.rds.amazonaws.com'
         ,DB_DATABASE: 'artong'
-        ,DB_USER: 'postgres'
+        ,DB_USER: 'artong'
         ,DB_PASSWORD: 'wjsxu8989!'
     },
     prod: {
