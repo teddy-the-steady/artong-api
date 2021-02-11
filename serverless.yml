@@ -7,12 +7,6 @@ provider:
   runtime: nodejs12.x
   stage: stage
   region: ap-northeast-2
-  vpc:
-    securityGroupIds:
-      - sg-c514feab
-    subnetIds:
-      - subnet-a8a74fc3
-      - subnet-2efd5855
   # resourcePolicy:
   #   - Effect: Allow
   #     Principal: "*"
@@ -103,6 +97,12 @@ functions:
         # private: true
   artong:
     handler: artong/handler/test.handler
+    vpc:
+    securityGroupIds:
+      - sg-c514feab
+    subnetIds:
+      - subnet-a8a74fc3
+      - subnet-2efd5855
     events:
      - http:
         path: test/product
@@ -147,3 +147,5 @@ resources:
         ResponseType: DEFAULT_5XX
         RestApiId:
           Ref: 'ApiGatewayRestApi'
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
