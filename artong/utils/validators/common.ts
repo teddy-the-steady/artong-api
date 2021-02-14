@@ -2,16 +2,15 @@ export {};
 const {BadRequest} = require('../error/errors');
 const {MissingRequiredData} = require('../error/errorCodes');
 
-module.exports.validate = async function (params: any, schema: any) {
+module.exports.validate = async function(params: any, schema: any) {
   if (params) {
-    params = await schema.validateAsync(params);
-    return params
+    await schema.validateAsync(params);
   } else {
     throw new BadRequest(MissingRequiredData.message, MissingRequiredData.code)
   }
 }
 
-module.exports.validateUser = async function (principalId: string, schema: any) {
+module.exports.validateUser = async function(principalId: string, schema: any) {
   if (principalId) {    
     let userId = {principalId: principalId}
     userId = await schema.validateAsync(userId);
