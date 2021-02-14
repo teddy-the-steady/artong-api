@@ -1,2 +1,2 @@
-INSERT INTO test(name, created_at, value)
-VALUES('{{name}}', '{{createdAt}}', {{value}})
+INSERT INTO test(name, value)
+VALUES({{name}}, {{value}})
