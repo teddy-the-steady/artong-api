@@ -30,7 +30,7 @@ functions:
     events:
      - http: GET users/hello
   artong:
-    handler: artong/handler/test.handler
+    handler: artong/handler/artong.handler
     events:
      - http:
         path: test/product
