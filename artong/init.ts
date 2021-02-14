@@ -15,7 +15,7 @@ const ALLOWED_ORIGINS: string[] = [
   'https://mysecondorigin.com'
 ];
 
-const reduceOp = function (args: any, reducer: (a: string, b: string) => any) {
+const reduceOp = function(args: any, reducer: (a: string, b: string) => any) {
   args = Array.from(args);
   args.pop();
   var first = args.shift();
