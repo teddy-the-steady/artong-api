@@ -3,6 +3,7 @@ const init = require('../init');
 const httpRequest = require('../utils/http/request');
 const httpResponse = require('../utils/http/response');
 const {testListController, testViewController, testCreateController} = require('../controllers/test');
+const {createMember} = require('../controllers/member');
 
 module.exports.handler = async (event: any, context: any, callback: any) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -24,6 +25,9 @@ module.exports.handler = async (event: any, context: any, callback: any) => {
         /* /test */
         if (req.path === '/test/product' || req.path === '/test/product/')
           res = await testCreateController.control(req.body);
+        /* /member */
+        else if (req.path === '/member' || req.path === '/member/')
+          res = await createMember.control(req.body);
         break;
       default:
         break;

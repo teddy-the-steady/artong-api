@@ -1,5 +1,5 @@
 export {};
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 
 const pagingSchema = Joi.object({
     page_no: Joi.number().positive().required(),
