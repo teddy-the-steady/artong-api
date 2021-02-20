@@ -47,6 +47,11 @@ functions:
         method: post
         cors: true
         # authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+     - http:
+        path: artong/v1/member
+        method: POST
+        cors: true
+        # authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
     layers:
      - {Ref: NodeModulesLambdaLayer} 
     environment:
