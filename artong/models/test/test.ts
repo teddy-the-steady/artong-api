@@ -12,11 +12,11 @@ class Test {
 		this.value = obj.value;
 		this.created_at = obj.created_at;
 	}
-
+	
 	static testSchema = Joi.object({
 		name: Joi.string().required(),
 		value: Joi.number().required()
 	});
 }
 
-module.exports.Test = Test;
+module.exports = Test;
