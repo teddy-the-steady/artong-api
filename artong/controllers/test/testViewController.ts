@@ -1,7 +1,7 @@
 export {};
 const db = require('../../utils/db/db');
 const {controllerErrorWrapper} = require('../../utils/error/errorWrapper');
-const {Test} = require('../../models/test');
+const {Test} = require('../../models');
 
 module.exports.control = async function(pathParameters: {id: number}, queryParameters: any) {
   let result: any;
