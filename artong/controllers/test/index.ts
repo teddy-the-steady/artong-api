@@ -1,5 +1,5 @@
 module.exports = {
-    testCreateController: require('../test/testCreateController'),
-    testListController: require('../test/testListController'),
-    testViewController: require('../test/testViewController')
+	testCreateController: require('./testCreateController'),
+	testListController: require('./testListController'),
+	testViewController: require('./testViewController'),
 }
