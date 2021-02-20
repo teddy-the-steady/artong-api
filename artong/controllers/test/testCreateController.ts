@@ -2,7 +2,7 @@ export {};
 const db = require('../../utils/db/db');
 const {controllerErrorWrapper} = require('../../utils/error/errorWrapper');
 const {validate} = require('../../utils/validators/common');
-const {Test} = require('../../models/test');
+const {Test} = require('../../models');
 
 module.exports.control = async function(body: any) {
   let result: any;
