@@ -1,5 +1,3 @@
-const Joi = require('joi');
-
 class Test {
 	id: number;
 	name: string;
@@ -12,11 +10,6 @@ class Test {
 		this.value = obj.value;
 		this.created_at = obj.created_at;
 	}
-	
-	static testSchema = Joi.object({
-		name: Joi.string().required(),
-		value: Joi.number().required()
-	});
 }
 
 export = Test;
