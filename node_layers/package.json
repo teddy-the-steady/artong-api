@@ -4,8 +4,8 @@
   "description": "node package for serverless api layers",
   "main": "index.js",
   "dependencies": {
+    "class-validator": "^0.13.1",
     "handlebars": "^4.7.3",
-    "joi": "^17.4.0",
     "pg": "^8.2.2"
   },
   "devDependencies": {},
