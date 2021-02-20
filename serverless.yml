@@ -16,7 +16,7 @@ package:
 layers:
   NodeModules:
     path: node_layers
-    description: "includes pq, handlebars, joi"
+    description: "includes pq, handlebars, class-validator"
 
 plugins:
   - serverless-iam-roles-per-function
