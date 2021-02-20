@@ -19,4 +19,4 @@ class Test {
 	});
 }
 
-module.exports = Test;
+export = Test;
