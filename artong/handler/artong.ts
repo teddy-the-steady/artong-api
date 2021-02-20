@@ -2,8 +2,7 @@ export {};
 const init = require('../init');
 const httpRequest = require('../utils/http/request');
 const httpResponse = require('../utils/http/response');
-const {testListController, testViewController, testCreateController} = require('../controllers/test');
-const {createMember} = require('../controllers/member');
+const {test, member} = require('../controllers');
 
 module.exports.handler = async (event: any, context: any, callback: any) => {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -17,17 +16,17 @@ module.exports.handler = async (event: any, context: any, callback: any) => {
       case 'GET':
         /* /test */
         if (req.path === '/test/product' || req.path === '/test/product/')
-          res = await testListController.control(req.queryStringParameters);
+          res = await test.getTests(req.queryStringParameters);
         else if (req.path.startsWith('/test/product/') && req.pathParameters)
-          res = await testViewController.control(req.pathParameters, req.queryStringParameters);
+          res = await test.getTest(req.pathParameters, req.queryStringParameters);
         break;
       case 'POST':
         /* /test */
         if (req.path === '/test/product' || req.path === '/test/product/')
-          res = await testCreateController.control(req.body);
+          res = await test.createTest(req.body);
         /* /member */
-        else if (req.path === '/member' || req.path === '/member/')
-          res = await createMember.control(req.body);
+        else if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
+          res = await member.createMember(req.body);
         break;
       default:
         break;
