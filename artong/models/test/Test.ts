@@ -1,4 +1,4 @@
-class Test {
+export default class Test {
 	id: number;
 	name: string;
 	value: number;
@@ -11,5 +11,3 @@ class Test {
 		this.created_at = obj.created_at;
 	}
 }
-
-export = Test;

@@ -20,6 +20,8 @@ layers:
 
 plugins:
   - serverless-iam-roles-per-function
+  - serverless-webpack
+  - serverless-offline
 
 custom:
   DB_CONFIG: ${file(./config.js):DB_CONFIG}

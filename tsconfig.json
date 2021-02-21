@@ -2,11 +2,12 @@
   "compilerOptions": {
 		"experimentalDecorators": true,
     "target": "es6",
-    "module": "CommonJS",
+    "module": "es6",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": false,
-    "noEmitOnError": true
+    "noEmitOnError": true,
+    "moduleResolution": "node"
   }
 }
