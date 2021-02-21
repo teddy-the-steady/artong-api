@@ -18,7 +18,7 @@ module.exports = {
     ]
   },
 	resolve: {
-    extensions: [".tsx", ".ts", ".js"]
+    extensions: [".tsx", ".ts", ".js", ".sql"]
   },
   plugins: [new IgnorePlugin({resourceRegExp: /^pg-native$/})],
 }
