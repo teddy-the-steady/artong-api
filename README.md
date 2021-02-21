@@ -20,3 +20,4 @@ etc
 ## Before git push
 
 ### `find ./<service> -name "*.js" -exec rm -rf {} \;`
+### `ex) <service> = artong`

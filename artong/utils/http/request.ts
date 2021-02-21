@@ -1,8 +1,7 @@
-export {};
-const {BadRequest} = require('../error/errors');
-const {SyntaxError} = require('../error/errorCodes');
+import { BadRequest } from '../error/errors';
+import { SyntaxError } from '../error/errorCodes';
 
-module.exports.requestInit = (event: any) => {
+const requestInit = (event: any) => {
   let result: any = {};
   
   result['httpMethod'] = event['httpMethod'];
@@ -41,3 +40,5 @@ const parseJwt = (token: any) => {
 
   return JSON.parse(jsonPayload);
 }
+
+export default requestInit;

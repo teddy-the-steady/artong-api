@@ -1,15 +1,12 @@
-export {};
-const db = require('../utils/db/db');
-const {controllerErrorWrapper} = require('../utils/error/errorWrapper');
-const {validate} = require('../utils/validators/common');
-const {Test} = require('../models');
+import * as db from '../utils/db/db';
+import controllerErrorWrapper from '../utils/error/errorWrapper';
+import { Test } from '../models/index';
 
 const createTest = async function(body: any) {
   let result: any;
   let conn: any;
 
   try {
-    await validate(body, Test.testSchema);
     const test = new Test({name: body.name, value: body.value});
     
     conn = await db.getConnection();
@@ -58,8 +55,8 @@ const getTest = async function(pathParameters: {id: number}, queryParameters: an
   return {'data': result[0]}
 };
 
-module.exports = {
+export {
 	createTest,
 	getTests,
 	getTest,
-}
+};

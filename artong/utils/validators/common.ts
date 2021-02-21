@@ -1,8 +1,7 @@
-export {};
-const {BadRequest} = require('../error/errors');
-const {MissingRequiredData} = require('../error/errorCodes');
+import { BadRequest } from '../error/errors';
+import { MissingRequiredData } from '../error/errorCodes';
 
-module.exports.validate = async function(params: any, schema: any) {
+const  validate = async function(params: any, schema: any) {
   if (params) {
     await schema.validateAsync(params);
   } else {
@@ -10,12 +9,4 @@ module.exports.validate = async function(params: any, schema: any) {
   }
 }
 
-module.exports.validateUser = async function(principalId: string, schema: any) {
-  if (principalId) {    
-    let userId = {principalId: principalId}
-    userId = await schema.validateAsync(userId);
-    return userId['principalId']
-  } else {
-    throw new BadRequest(MissingRequiredData.message, MissingRequiredData.code)
-  }
-}
+export default validate;
