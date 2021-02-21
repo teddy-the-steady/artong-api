@@ -1,4 +1,4 @@
-const {
+import {
   validate,
   validateOrReject,
   Contains,
@@ -9,9 +9,9 @@ const {
   IsDate,
   Min,
   Max,
-} = require('class-validator');
+} from 'class-validator';
 
-class Member {
+export default class Member {
 	id: number;
 	@IsEmail()
 	email: string;
@@ -61,5 +61,3 @@ class Member {
 		this.updated_at = obj.updated_at;
 	}
 }
-
-export = Member;

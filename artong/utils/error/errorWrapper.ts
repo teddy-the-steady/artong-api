@@ -1,8 +1,7 @@
-export {};
-const {BadRequest, InternalServerError, Forbidden} = require('./errors');
-const errorCodes = require('./errorCodes');
+import { BadRequest, InternalServerError, Forbidden } from './errors';
+import * as errorCodes from './errorCodes';
 
-module.exports.controllerErrorWrapper = function(error: any) {
+const controllerErrorWrapper = function(error: any) {
     console.log(error)
     if (error instanceof BadRequest) {
         throw new BadRequest(error['errorMessage'], error['errorCode'])
@@ -14,3 +13,5 @@ module.exports.controllerErrorWrapper = function(error: any) {
         throw new InternalServerError(errorCodes.UnknownError.message, errorCodes.UnknownError.code)
     }
 }
+
+export default controllerErrorWrapper;

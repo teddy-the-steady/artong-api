@@ -1,6 +1,5 @@
-export{};
-const { Pool } = require('pg');
-const handlebars = require('handlebars');
+import { Pool } from 'pg';
+import handlebars from 'handlebars';
 
 const pool = new Pool({
   host: process.env.DB_HOST,
@@ -33,7 +32,7 @@ handlebars.registerHelper({
   or  : function(){ return reduceOp(arguments, (a: string, b: string) => a  || b); },
 }); 
 
-module.exports = {
+export {
   pool,
   ALLOWED_ORIGINS,
-}
+};
