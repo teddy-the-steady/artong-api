@@ -1,15 +1,14 @@
-export {};
-const init = require('../init');
-const httpRequest = require('../utils/http/request');
-const httpResponse = require('../utils/http/response');
-const {test, member} = require('../controllers');
+import * as init from '../init';
+import requestInit  from '../utils/http/request';
+import { successResponse, errorResponse } from '../utils/http/response'
+import { test, member } from '../controllers/index';
 
-module.exports.handler = async (event: any, context: any, callback: any) => {
+export async function handler(event: any, context: any, callback: any) {
   context.callbackWaitsForEmptyEventLoop = false;
   let res: any = {};
 
   try {
-    const req = httpRequest.requestInit(event);
+    const req = requestInit(event);
     console.log(req);
 
     switch (req.httpMethod) {
@@ -33,8 +32,8 @@ module.exports.handler = async (event: any, context: any, callback: any) => {
     }
   } catch (error) {
     console.log(error);
-    httpResponse.errorResponse(event, error, callback);
+    errorResponse(event, error, callback);
   }
 
-  httpResponse.successResponse(event, res, callback);
+  successResponse(event, res, callback);
 };

@@ -1,4 +1,7 @@
-module.exports = {
-	test: require('./test'),
-	member: require('./member'),
-}
+import * as test from './test';
+import * as member from './member';
+
+export {
+	test,
+	member,
+};

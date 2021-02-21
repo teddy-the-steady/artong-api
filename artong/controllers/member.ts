@@ -1,7 +1,6 @@
-export {};
-const db = require('../utils/db/db');
-const {controllerErrorWrapper} = require('../utils/error/errorWrapper');
-const {Member} = require('../models');
+import * as db from '../utils/db/db';
+import controllerErrorWrapper from '../utils/error/errorWrapper';
+import { Member } from '../models/index';
 
 const createMember = async function(body: any) {
   let result: any;
@@ -20,6 +19,6 @@ const createMember = async function(body: any) {
   return {'data': 'Success'}
 };
 
-module.exports = {
+export {
 	createMember,
-}
+};

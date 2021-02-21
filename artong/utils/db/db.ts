@@ -1,7 +1,6 @@
-export {};
-const fs = require('fs');
-const handlebars = require('handlebars');
-const {pool} = require('../../init');
+import fs from 'fs'
+import handlebars from 'handlebars';
+import { pool } from '../../init';
 
 const getConnection = async function() {
   const conn = await pool.connect();
@@ -43,11 +42,11 @@ const rollBack = async function(conn: any) {
   conn.query('ROLLBACK');
 }
 
-module.exports = {
+export {
   getConnection,
   release,
   execute,
   beginTransaction,
   commit,
   rollBack,
-}
+};
