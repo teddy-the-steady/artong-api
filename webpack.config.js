@@ -14,11 +14,15 @@ module.exports = {
         test: /\.tsx?$/,
         loader: "ts-loader",
         exclude: /node_modules/
-      }
+      },
+      {
+        test: /\.sql$/i,
+        use: 'raw-loader',
+      },
     ]
   },
 	resolve: {
-    extensions: [".tsx", ".ts", ".js", ".sql"]
+    extensions: [".tsx", ".ts", ".js"]
   },
   plugins: [new IgnorePlugin({resourceRegExp: /^pg-native$/})],
 }
