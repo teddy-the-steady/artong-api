@@ -2,6 +2,7 @@ const path = require("path");
 const { IgnorePlugin } = require('webpack');
 
 module.exports = {
+  mode: 'production',
 	entry: path.join(__dirname, "artong/handler/artong.ts"),
   output: {
     libraryTarget: "commonjs",
@@ -17,7 +18,14 @@ module.exports = {
       },
       {
         test: /\.sql$/i,
-        use: 'raw-loader',
+        use: [
+          {
+            loader: 'raw-loader',
+            options: {
+              esModule: false,
+            },
+          },
+        ],
       },
     ]
   },

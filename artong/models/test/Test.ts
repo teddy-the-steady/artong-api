@@ -1,7 +1,3 @@
-import './insertTest.sql';
-import './selectTest.sql';
-import './selectTestList.sql';
-
 export default class Test {
 	id: number;
 	name: string;
