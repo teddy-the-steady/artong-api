@@ -1,6 +1,9 @@
 import * as db from '../utils/db/db';
 import controllerErrorWrapper from '../utils/error/errorWrapper';
 import { Test } from '../models/index';
+const insertTest = require('../models/test/insertTest.sql');
+const selectTest = require('../models/test/selectTest.sql');
+const selectTestList = require('../models/test/selectTestList.sql');
 
 const createTest = async function(body: any) {
   let result: any;
@@ -11,7 +14,7 @@ const createTest = async function(body: any) {
     
     conn = await db.getConnection();
     await db.beginTransaction(conn);
-    result = await db.execute(conn, 'test.insertTest', test);
+    result = await db.execute(conn, insertTest, test);
     await db.commit(conn);
   } catch (error) {
     if (conn) await db.rollBack(conn);
@@ -22,7 +25,6 @@ const createTest = async function(body: any) {
   return {'data': 'Success'}
 };
 
-
 const getTests = async function(queryParameters: any) {
 	let result: any;
 	let params: any = {};
@@ -30,7 +32,7 @@ const getTests = async function(queryParameters: any) {
 
 	try {
 		conn = await db.getConnection();
-		result = await db.execute(conn, 'test.selectTestList', params);
+		result = await db.execute(conn, selectTestList, params);
 	} catch (error) {
 		controllerErrorWrapper(error);
 	} finally {
@@ -46,7 +48,7 @@ const getTest = async function(pathParameters: {id: number}, queryParameters: an
   try {
     const test = new Test({id: pathParameters.id});
     conn = await db.getConnection();
-    result = await db.execute(conn, 'test.selectTest', test);
+    result = await db.execute(conn, selectTest, test);
   } catch (error) {
     controllerErrorWrapper(error);
   } finally {
