@@ -11,22 +11,17 @@ const release = function(conn: any): void {
   conn.release();
 };
 
-const sqlLoader = function(model: string) {
-  const base = process.env.PWD;
-  const modelUri = base + '/artong/models/' + model.replace('.', '/') + '.sql';
-  const sql = fs.readFileSync(modelUri).toString();
+const compileSQL = function(sql: string) {
   const preCompiledModel = handlebars.compile(sql);
-
   return preCompiledModel
-};
+}
 
-const execute = async function(conn: any, model: string, params: any) {
-  let result = null;
-  const preCompiledModel = sqlLoader(model);
+const execute = async function(conn: any, sql: string, params: any) {
+  const preCompiledModel = compileSQL(sql);
   const compiledModel = preCompiledModel(params);
   /* 쿼리 debug시 주석 해제 */
   // console.log(compiledModel);
-  result = await conn.query(compiledModel);
+  const result = await conn.query(compiledModel);
   return result['rows']
 };
 
