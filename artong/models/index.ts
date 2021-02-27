@@ -1,7 +1,9 @@
 import Test from './test/Test';
-import Member from './member/Member';
+import MemberMaster from './member/MemberMaster';
+import MemberDetail from './member/MemberDetail';
 
 export {
 	Test,
-	Member,
+	MemberMaster,
+	MemberDetail,
 };

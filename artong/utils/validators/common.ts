@@ -1,12 +1,13 @@
 import { BadRequest } from '../error/errors';
 import { MissingRequiredData } from '../error/errorCodes';
+import { validateOrReject } from 'class-validator';
 
-const  validate = async function(params: any, schema: any) {
-  if (params) {
-    await schema.validateAsync(params);
+const validator = async function(input: any) {
+  if (input) {
+    await validateOrReject(input);
   } else {
-    throw new BadRequest(MissingRequiredData.message, MissingRequiredData.code)
+    throw new BadRequest(MissingRequiredData.message, MissingRequiredData.code);
   }
 }
 
-export default validate;
+export default validator;

@@ -1,22 +1,32 @@
 import * as db from '../utils/db/db';
 import controllerErrorWrapper from '../utils/error/errorWrapper';
-import { Member } from '../models/index';
+import validator from '../utils/validators/common';
+import { MemberMaster } from '../models/index';
+const insertMemberMaster = require('../models/member/insertMemberMaster.sql');
 
 const createMember = async function(body: any) {
   let result: any;
   let conn: any;
 
   try {
-    const member = new Member({email: body.email});
-    member.email = 'hello';
-    console.log(member.email);
+    const member = new MemberMaster({
+      email: body.email,
+      auth_id: body.auth_id,
+    });
+    await validator(member);
+    member.username = member.email.split('@')[0];
+
+    conn = await db.getConnection();
+    await db.beginTransaction(conn);
+    result = await db.execute(conn, insertMemberMaster, member);
+    await db.commit(conn);
   } catch (error) {
     if (conn) await db.rollBack(conn);
     controllerErrorWrapper(error);
   } finally {
     if (conn) db.release(conn);
   }
-  return {'data': 'Success'}
+  return {'data': 'success'}
 };
 
 export {

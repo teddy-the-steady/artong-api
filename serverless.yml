@@ -38,22 +38,21 @@ functions:
         path: test/product
         method: get
         cors: true
-        # authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
      - http:
         path: test/product/{id}
         method: get
         cors: true
-        # authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
      - http:
         path: test/product
         method: post
         cors: true
-        # authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
      - http:
-        path: artong/v1/member
+        path: artong/v1/memberMaster
         method: POST
         cors: true
-        # authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
     layers:
      - {Ref: NodeModulesLambdaLayer} 
     environment:

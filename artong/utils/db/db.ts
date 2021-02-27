@@ -7,7 +7,7 @@ const getConnection = async function() {
   return conn
 };
 
-const release = function(conn: any): void {
+const release = function(conn: any) {
   conn.release();
 };
 
