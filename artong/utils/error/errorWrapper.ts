@@ -9,8 +9,10 @@ const controllerErrorWrapper = function(error: any) {
         throw new InternalServerError(error['errorMessage'], error['errorCode'])
     } else if (error instanceof Forbidden) {
         throw new Forbidden(error['errorMessage'], error['errorCode'])
-    } else {
+    } else { ///// for production
         throw new InternalServerError(errorCodes.UnknownError.message, errorCodes.UnknownError.code)
+    // } else { ///// for development
+    //     throw new InternalServerError(error, errorCodes.UnknownError.code);
     }
 }
 
