@@ -1,25 +1,10 @@
 import {
-  validate,
-  validateOrReject,
-  Contains,
-  IsInt,
-  Length,
   IsEmail,
-  IsFQDN,
-  IsDate,
-  Min,
-  Max,
+  IsUUID,
 } from 'class-validator';
 
 export default class Member {
 	id: number;
-	@IsEmail()
-	email: string;
-	username: string;
-	auth_id: string;
-	status_code: string;
-	last_activity_at: Date = new Date();
-
 	member_id: number;
 	given_name: string;
 	family_name: string;
@@ -38,12 +23,6 @@ export default class Member {
 
 	constructor(obj: any) {
 		this.id = obj.id;
-		this.email = obj.email;
-		this.username = obj.username;
-		this.auth_id = obj.auth_id;
-		this.status_code = obj.status_code;
-		this.last_activity_at = obj.last_activity_at;
-
 		this.member_id = obj.member_id;
 		this.given_name = obj.given_name;
 		this.family_name = obj.family_name;

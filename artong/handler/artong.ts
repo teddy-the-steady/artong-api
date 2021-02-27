@@ -24,7 +24,7 @@ export async function handler(event: any, context: any, callback: any) {
         if (req.path === '/test/product' || req.path === '/test/product/')
           res = await test.createTest(req.body);
         /* /member */
-        else if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
+        else if (req.path === '/artong/v1/memberMaster' || req.path === '/artong/v1/memberMaster/')
           res = await member.createMember(req.body);
         break;
       default:
