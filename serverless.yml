@@ -7,6 +7,7 @@ provider:
   stage: stage #prod
   region: ap-northeast-2
   environment:
+    ENVIRONMENT: "STAGE" #PROD
     NODE_PATH: "./:/opt/node_modules"
 
 package:
@@ -51,6 +52,11 @@ functions:
      - http:
         path: artong/v1/status/{id}
         method: PUT
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+     - http:
+        path: artong/v1/country
+        method: POST
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
     layers:
