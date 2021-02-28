@@ -1,11 +1,12 @@
 import * as db from '../utils/db/db';
 import controllerErrorWrapper from '../utils/error/errorWrapper';
 import { Status } from '../models/index';
-import { InternalServerError } from '../utils/error/errors';
-import { UpdateFailed } from '../utils/error/errorCodes';
+import { BadRequest, InternalServerError } from '../utils/error/errors';
+import { UniqueValueDuplicated, UpdateFailed } from '../utils/error/errorCodes';
 const insertStatus = require('../models/status/insertStatus.sql');
 const updateStatus = require('../models/status/updateStatus.sql');
-const selectStatusList = require('../models/status/selectStatusList.sql')
+const selectStatusList = require('../models/status/selectStatusList.sql');
+const selectStatus = require('../models/status/selectStatus.sql');
 
 const createStatus = async function(body: any) {
   let conn: any;
@@ -18,7 +19,12 @@ const createStatus = async function(body: any) {
 
     conn = await db.getConnection();
     await db.beginTransaction(conn);
-    await db.execute(conn, insertStatus, status);
+
+    const result = await db.execute(conn, selectStatus, status);
+    if (result.length) {
+      throw new BadRequest(UniqueValueDuplicated.message + ': status.code', UniqueValueDuplicated.code);
+    } else await db.execute(conn, insertStatus, status);
+
     await db.commit(conn);
   } catch (error) {
     if (conn) await db.rollBack(conn);
