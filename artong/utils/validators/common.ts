@@ -1,12 +1,12 @@
 import { BadRequest } from '../error/errors';
-import { MissingRequiredData } from '../error/errorCodes';
+import { ValidationError } from '../error/errorCodes';
 import { validateOrReject } from 'class-validator';
 
 const validator = async function(input: any) {
-  if (input) {
+  try {
     await validateOrReject(input);
-  } else {
-    throw new BadRequest(MissingRequiredData.message, MissingRequiredData.code);
+  } catch (error) {
+    throw new BadRequest(error, ValidationError.code);
   }
 }
 
