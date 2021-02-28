@@ -1,7 +1,7 @@
 import * as init from '../init';
 import requestInit  from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response'
-import { test, member } from '../controllers/index';
+import { member, status } from '../controllers/index';
 
 export async function handler(event: any, context: any, callback: any) {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -13,19 +13,22 @@ export async function handler(event: any, context: any, callback: any) {
 
     switch (req.httpMethod) {
       case 'GET':
-        /* /test */
-        if (req.path === '/test/product' || req.path === '/test/product/')
-          res = await test.getTests(req.queryStringParameters);
-        else if (req.path.startsWith('/test/product/') && req.pathParameters)
-          res = await test.getTest(req.pathParameters, req.queryStringParameters);
+        /* /status */
+        if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
+          res = await status.getStatusList(req.queryStringParameters);
         break;
       case 'POST':
-        /* /test */
-        if (req.path === '/test/product' || req.path === '/test/product/')
-          res = await test.createTest(req.body);
         /* /member */
-        else if (req.path === '/artong/v1/memberMaster' || req.path === '/artong/v1/memberMaster/')
-          res = await member.createMember(req.body);
+        if (req.path === '/artong/v1/memberMaster' || req.path === '/artong/v1/memberMaster/')
+          res = await member.createMemberMaster(req.body);
+        /* /status */
+        else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
+          res = await status.createStatus(req.body);
+        break;
+      case 'PUT':
+        /* /status */
+        if (req.pathParameters && req.path.startsWith('/artong/v1/status/'))
+          res = await status.putStatus(req.pathParameters, req.body);
         break;
       default:
         break;
