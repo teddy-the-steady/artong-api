@@ -4,8 +4,7 @@ import validator from '../utils/validators/common';
 import { MemberMaster } from '../models/index';
 const insertMemberMaster = require('../models/member/insertMemberMaster.sql');
 
-const createMember = async function(body: any) {
-  let result: any;
+const createMemberMaster = async function(body: any) {
   let conn: any;
 
   try {
@@ -18,7 +17,7 @@ const createMember = async function(body: any) {
 
     conn = await db.getConnection();
     await db.beginTransaction(conn);
-    result = await db.execute(conn, insertMemberMaster, member);
+    await db.execute(conn, insertMemberMaster, member);
     await db.commit(conn);
   } catch (error) {
     if (conn) await db.rollBack(conn);
@@ -30,5 +29,5 @@ const createMember = async function(body: any) {
 };
 
 export {
-	createMember,
+	createMemberMaster,
 };
