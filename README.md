@@ -14,10 +14,4 @@ etc
 
 ## Dev commands
 
-### `npx tsc`
-### `serverless deploy function -f <functionName>`
-
-## Before git push
-
-### `find ./<service> -name "*.js" -exec rm -rf {} \;`
-### `ex) <service> = artong`
+### `sls offline --noAuth`

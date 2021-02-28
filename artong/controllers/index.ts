@@ -1,7 +1,7 @@
-import * as test from './test';
 import * as member from './member';
+import * as status from './status';
 
 export {
-	test,
 	member,
+	status,
 };
