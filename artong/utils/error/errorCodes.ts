@@ -6,6 +6,7 @@ const SyntaxError: number = 4004; // Syntax 에러
 const PositiveValueRequired = {code: 4005, message: '수량 0 변경시 삭제 버튼을 눌러주세요'}; // 양의 정수 오류
 const AWSError = 5000; // AWS 관련 에러
 const NoPermission = {code: 5001, message: 'No permission to perform this action'}; // 권한 에러
+const UpdateFailed = {code: 5002, message: 'Update failed'}; // db 업데이트 실패
 
 export {
     UnknownError,
@@ -16,4 +17,5 @@ export {
     PositiveValueRequired,
     AWSError,
     NoPermission,
+    UpdateFailed,
 };

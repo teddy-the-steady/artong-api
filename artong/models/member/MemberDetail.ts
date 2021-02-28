@@ -15,8 +15,9 @@ export default class Member {
 	introduction: string;
 	profile_pic: string;
 	phone_number: string;
-	country_iso_code: string;
-	language: string;
+	country_id: number;
+	language_id: number;
+	is_email_verified: boolean;
 
 	created_at: Date = new Date();
 	updated_at: Date = new Date();
@@ -33,8 +34,9 @@ export default class Member {
 		this.introduction = obj.introduction;
 		this.profile_pic = obj.profile_pic;
 		this.phone_number = obj.phone_number;
-		this.country_iso_code = obj.country_iso_code;
-		this.language = obj.language;
+		this.country_id = obj.country_id;
+		this.language_id = obj.language_id;
+		this.is_email_verified = obj.is_email_verified;
 
 		this.created_at = obj.created_at;
 		this.updated_at = obj.updated_at;
