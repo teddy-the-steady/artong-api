@@ -11,10 +11,10 @@ export default class Member {
 	@IsUUID('all')
 	auth_id: string;
 	status_id: number;
-	last_activity_at: Date = new Date();
+	is_email_verified: boolean;
 
-	created_at: Date = new Date();
-	updated_at: Date = new Date();
+	created_at: Date;
+	updated_at: Date;
 
 	constructor(obj: any) {
 		this.id = obj.id;
@@ -22,7 +22,7 @@ export default class Member {
 		this.username = obj.username;
 		this.auth_id = obj.auth_id;
 		this.status_id = obj.status_id;
-		this.last_activity_at = obj.last_activity_at;
+		this.is_email_verified = obj.is_email_verified;
 
 		this.created_at = obj.created_at;
 		this.updated_at = obj.updated_at;
