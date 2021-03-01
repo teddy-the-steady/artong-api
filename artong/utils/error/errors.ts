@@ -1,5 +1,5 @@
 class ExtendableError extends Error {
-  errorMessage: string;
+  errorMessage: string | any;
   statusCode: number;
   errorCode: number | null;
   constructor(message: string, statusCode: number, errorCode: number | null) {

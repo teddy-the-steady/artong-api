@@ -14,7 +14,7 @@ const requestInit = (event: any) => {
     try {
       result.body = JSON.parse(result.body);
     } catch(error){
-      throw new BadRequest(error.toString(), SyntaxError)
+      throw new BadRequest(error.toString(), SyntaxError);
     }
   }
 

@@ -20,8 +20,8 @@ const createStatus = async function(body: any) {
     conn = await db.getConnection();
     await db.beginTransaction(conn);
 
-    const result = await db.execute(conn, selectStatus, status);
-    if (result.length) {
+    const statusId = await db.execute(conn, selectStatus, status);
+    if (statusId.length) {
       throw new BadRequest(UniqueValueDuplicated.message + ': status.code', UniqueValueDuplicated.code);
     } else await db.execute(conn, insertStatus, status);
 
@@ -48,8 +48,8 @@ const putStatus = async function(pathParameters: {id: number}, body: any) {
     conn = await db.getConnection();
     await db.beginTransaction(conn);
 
-    const result = await db.execute(conn, updateStatus, status);
-    if (result.length) await db.execute(conn, insertStatus, status);
+    const updatedId = await db.execute(conn, updateStatus, status);
+    if (updatedId.length) await db.execute(conn, insertStatus, status);
     else throw new InternalServerError(UpdateFailed.message, UpdateFailed.code);
 
     await db.commit(conn);
@@ -76,7 +76,7 @@ const getStatusList = async function(queryStringParameters: any) {
     if (conn) db.release(conn);
   }
   return {'data': result}
-}
+};
 
 export {
 	createStatus,
