@@ -4,6 +4,7 @@ import validator from '../utils/validators/common';
 import { MemberMaster, MemberDetail } from '../models/index';
 const insertMemberMaster = require('../models/member/insertMemberMaster.sql');
 const insertMemberDetail = require('../models/member/insertMemberDetail.sql');
+const updateMemberMaster = require('../models/member/updateMemberMaster.sql');
 
 const createMember = async function(body: any) {
   let conn: any;
@@ -36,6 +37,33 @@ const createMember = async function(body: any) {
   return {'data': 'success'}
 };
 
+const patchMemberMaster = async function(pathParameters: any, body: any) {
+  let conn: any;
+  
+  try {
+    const memberMaster = new MemberMaster({
+      id: pathParameters.id,
+      username: body.username,
+      status_id: body.status_id,
+      is_email_verified: body.is_email_verified,
+    });
+
+    conn = await db.getConnection();
+    await db.beginTransaction(conn);
+
+    await db.execute(conn, updateMemberMaster, memberMaster);
+
+    await db.commit(conn);
+  } catch (error) {
+    if (conn) await db.rollBack(conn);
+    controllerErrorWrapper(error);
+  } finally {
+    if (conn) db.release(conn);
+  }
+  return {'data': 'success'}
+}
+
 export {
 	createMember,
+  patchMemberMaster,
 };

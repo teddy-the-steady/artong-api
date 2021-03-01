@@ -3,8 +3,8 @@ export default class Status {
     code: string;
     description: string;
 
-    created_at: Date = new Date();
-    updated_at: Date = new Date();
+    created_at: Date;
+    updated_at: Date;
 
     constructor(obj: any) {
         this.id = obj.id;

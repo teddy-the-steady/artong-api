@@ -1,8 +1,3 @@
-import {
-  IsEmail,
-  IsUUID,
-} from 'class-validator';
-
 export default class Member {
 	id: number;
 	member_id: number;
@@ -17,10 +12,10 @@ export default class Member {
 	phone_number: string;
 	country_id: number;
 	language_id: number;
-	is_email_verified: boolean;
+	last_activity_at: Date;
 
-	created_at: Date = new Date();
-	updated_at: Date = new Date();
+	created_at: Date;
+	updated_at: Date;
 
 	constructor(obj: any) {
 		this.id = obj.id;
@@ -36,7 +31,7 @@ export default class Member {
 		this.phone_number = obj.phone_number;
 		this.country_id = obj.country_id;
 		this.language_id = obj.language_id;
-		this.is_email_verified = obj.is_email_verified;
+		this.last_activity_at = obj.last_activity_at;
 
 		this.created_at = obj.created_at;
 		this.updated_at = obj.updated_at;
