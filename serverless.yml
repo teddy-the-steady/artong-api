@@ -7,8 +7,8 @@ provider:
   stage: stage #prod
   region: ap-northeast-2
   environment:
-    ENVIRONMENT: "STAGE" #PROD
-    NODE_PATH: "./:/opt/node_modules"
+    ENV: ${self:provider.stage}
+    NODE_PATH: './:/opt/node_modules'
 
 package:
  exclude:
@@ -17,7 +17,7 @@ package:
 layers:
   NodeModules:
     path: node_layers
-    description: "includes pq, handlebars, class-validator"
+    description: 'includes pq, handlebars, class-validator'
 
 plugins:
   - serverless-iam-roles-per-function
