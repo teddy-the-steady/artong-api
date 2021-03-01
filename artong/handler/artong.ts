@@ -20,7 +20,7 @@ export async function handler(event: any, context: any, callback: any) {
       case 'POST':
         /* /member */
         if (req.path === '/artong/v1/memberMaster' || req.path === '/artong/v1/memberMaster/')
-          res = await member.createMemberMaster(req.body);
+          res = await member.createMember(req.body);
         /* /status */
         else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
           res = await status.createStatus(req.body);
@@ -34,10 +34,10 @@ export async function handler(event: any, context: any, callback: any) {
           res = await status.putStatus(req.pathParameters, req.body);
         break;
       default:
+        console.log('METHOD undefined');
         break;
     }
   } catch (error) {
-    console.log(error);
     errorResponse(event, error, callback);
   }
 

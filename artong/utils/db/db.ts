@@ -1,6 +1,8 @@
 import fs from 'fs'
 import handlebars from 'handlebars';
 import { pool } from '../../init';
+import { InternalServerError } from '../error/errors';
+import { DBError } from '../error/errorCodes';
 
 const getConnection = async function() {
   const conn = await pool.connect();
@@ -21,8 +23,12 @@ const execute = async function(conn: any, sql: string, params: any) {
   const compiledModel = preCompiledModel(params);
   /* 쿼리 debug시 주석 해제 */
   // console.log(compiledModel);
-  const result = await conn.query(compiledModel);
-  return result['rows']
+  try {
+    const result = await conn.query(compiledModel);
+    return result['rows']
+  } catch (error) {
+    throw new InternalServerError(error, DBError.code);
+  }
 };
 
 const beginTransaction = async function(conn: any) {
