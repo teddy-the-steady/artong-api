@@ -13,25 +13,24 @@ export async function handler(event: any, context: any, callback: any) {
 
     switch (req.httpMethod) {
       case 'GET':
-        /* /status */
         if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
           res = await status.getStatusList(req.queryStringParameters);
         break;
       case 'POST':
-        /* /member */
-        if (req.path === '/artong/v1/memberMaster' || req.path === '/artong/v1/memberMaster/')
+        if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
           res = await member.createMember(req.body);
-        /* /status */
         else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
           res = await status.createStatus(req.body);
-        /* /country */
         else if (req.path === '/artong/v1/country' || req.path === '/artong/v1/country/')
-        res = await country.createCountry(req.body);
+          res = await country.createCountry(req.body);
         break;
       case 'PUT':
-        /* /status */
         if (req.pathParameters && req.path.startsWith('/artong/v1/status/'))
           res = await status.putStatus(req.pathParameters, req.body);
+        break;
+      case 'PATCH':
+        if (req.pathParameters && req.path.startsWith('/artong/v1/memberMaster/'))
+          res = await member.patchMemberMaster(req.pathParameters, req.body);
         break;
       default:
         console.log('METHOD undefined');
