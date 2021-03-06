@@ -7,6 +7,18 @@ const insertMemberDetail = require('../models/member/insertMemberDetail.sql');
 const updateMemberMaster = require('../models/member/updateMemberMaster.sql');
 const updateMemberDetail = require('../models/member/updateMemberDetail.sql');
 
+const getMember = async function(pathParameters: any) {
+  let conn: any;
+
+  try {
+    
+  } catch (error) {
+    
+  } finally {
+    
+  }
+}
+
 const createMember = async function(body: any) {
   let conn: any;
 
@@ -100,6 +112,7 @@ const patchMemberDetail = async function(pathParameters: any, body: any) {
 }
 
 export {
+  getMember,
 	createMember,
   patchMemberMaster,
   patchMemberDetail,

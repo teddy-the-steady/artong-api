@@ -13,20 +13,22 @@ export async function handler(event: any, context: any, callback: any) {
 
     switch (req.httpMethod) {
       case 'GET':
-        if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
-          res = await status.getStatusList(req.queryStringParameters);
+        if (req.pathParameters && req.path.startsWith('/artong/v1/member/'))
+          res = member.getMember(req.pathParameters)
+        else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
+          res = await status.getStatusList(req.queryStringParameters, req.userGroups);
         break;
       case 'POST':
         if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
           res = await member.createMember(req.body);
         else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
-          res = await status.createStatus(req.body);
+          res = await status.createStatus(req.body, req.userGroups);
         else if (req.path === '/artong/v1/country' || req.path === '/artong/v1/country/')
-          res = await country.createCountry(req.body);
+          res = await country.createCountry(req.body, req.userGroups);
         break;
       case 'PUT':
         if (req.pathParameters && req.path.startsWith('/artong/v1/status/'))
-          res = await status.putStatus(req.pathParameters, req.body);
+          res = await status.putStatus(req.pathParameters, req.body, req.userGroups);
         break;
       case 'PATCH':
         if (req.pathParameters && req.path.startsWith('/artong/v1/memberMaster/'))

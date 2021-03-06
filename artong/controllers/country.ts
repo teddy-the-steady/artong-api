@@ -1,15 +1,20 @@
 import * as db from '../utils/db/db';
 import controllerErrorWrapper from '../utils/error/errorWrapper';
 import { Country } from '../models/index';
-import { BadRequest } from '../utils/error/errors';
-import { UniqueValueDuplicated } from '../utils/error/errorCodes';
+import { BadRequest, Forbidden } from '../utils/error/errors';
+import { NoPermission, UniqueValueDuplicated } from '../utils/error/errorCodes';
+import { hasPermission } from '../utils/common/commonFunc';
 const insertCountry = require('../models/country/insertCountry.sql');
 const selectCountry = require('../models/country/selectCountry.sql');
 
-const createCountry = async function(body: any) {
+const createCountry = async function(body: any, userGroups: Array<string>) {
   let conn: any;
 
   try {
+    if (!hasPermission(userGroups)) {
+      throw new Forbidden(NoPermission.message, NoPermission.code)
+    }
+    
     const country = new Country({
 			iso_code_3: body.iso_code_3,
       iso_code_2: body.iso_code_2,
