@@ -5,6 +5,7 @@ import { MemberMaster, MemberDetail } from '../models/index';
 const insertMemberMaster = require('../models/member/insertMemberMaster.sql');
 const insertMemberDetail = require('../models/member/insertMemberDetail.sql');
 const updateMemberMaster = require('../models/member/updateMemberMaster.sql');
+const updateMemberDetail = require('../models/member/updateMemberDetail.sql');
 
 const createMember = async function(body: any) {
   let conn: any;
@@ -63,7 +64,43 @@ const patchMemberMaster = async function(pathParameters: any, body: any) {
   return {'data': 'success'}
 }
 
+const patchMemberDetail = async function(pathParameters: any, body: any) {
+  let conn: any;
+  
+  try {
+    const memberDetail = new MemberDetail({
+      member_id: pathParameters.member_id,
+      given_name: body.given_name,
+      family_name: body.family_name,
+      zip_code: body.zip_code,
+      address: body.address,
+      address_detail: body.address_detail,
+      birthday: body.birthday,
+      introduction: body.introduction,
+      profile_pic: body.profile_pic,
+      language_id: body.language_id,
+      last_activity_at: body.last_activity_at,
+      phone_number: body.phone_number,
+      country_id: body.country_id,
+    });
+
+    conn = await db.getConnection();
+    await db.beginTransaction(conn);
+
+    await db.execute(conn, updateMemberDetail, memberDetail);
+
+    await db.commit(conn);
+  } catch (error) {
+    if (conn) await db.rollBack(conn);
+    controllerErrorWrapper(error);
+  } finally {
+    if (conn) db.release(conn);
+  }
+  return {'data': 'success'}
+}
+
 export {
 	createMember,
   patchMemberMaster,
+  patchMemberDetail,
 };

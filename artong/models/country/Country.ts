@@ -3,7 +3,7 @@ export default class Country {
     iso_code_3: string;
     iso_code_2: string;
     name: string;
-    number_code: number;
+    number_code: string;
 
     created_at: Date;
     updated_at: Date;
