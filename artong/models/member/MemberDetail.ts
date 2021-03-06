@@ -1,4 +1,4 @@
-export default class Member {
+export default class MemberDetail {
 	id: number;
 	member_id: number;
 	given_name: string;
