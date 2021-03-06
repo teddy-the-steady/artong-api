@@ -1,17 +1,22 @@
 import * as db from '../utils/db/db';
 import controllerErrorWrapper from '../utils/error/errorWrapper';
 import { Status } from '../models/index';
-import { BadRequest, InternalServerError } from '../utils/error/errors';
-import { UniqueValueDuplicated, UpdateFailed } from '../utils/error/errorCodes';
+import { BadRequest, Forbidden, InternalServerError } from '../utils/error/errors';
+import { NoPermission, UniqueValueDuplicated, UpdateFailed } from '../utils/error/errorCodes';
+import { hasPermission } from '../utils/common/commonFunc';
 const insertStatus = require('../models/status/insertStatus.sql');
 const updateStatus = require('../models/status/updateStatus.sql');
 const selectStatusList = require('../models/status/selectStatusList.sql');
 const selectStatus = require('../models/status/selectStatus.sql');
 
-const createStatus = async function(body: any) {
+const createStatus = async function(body: any, userGroups: Array<string>) {
   let conn: any;
 
   try {
+    if (!hasPermission(userGroups)) {
+      throw new Forbidden(NoPermission.message, NoPermission.code)
+    }
+    
     const status = new Status({
       code: body.code,
       description: body.description,
@@ -35,10 +40,14 @@ const createStatus = async function(body: any) {
   return {'data': 'success'}
 };
 
-const putStatus = async function(pathParameters: any, body: any) {
+const putStatus = async function(pathParameters: any, body: any, userGroups: Array<string>) {
   let conn: any;
 
   try {
+    if (!hasPermission(userGroups)) {
+      throw new Forbidden(NoPermission.message, NoPermission.code)
+    }
+    
     const status = new Status({
       id: pathParameters.id,
       code: body.code,
@@ -62,15 +71,18 @@ const putStatus = async function(pathParameters: any, body: any) {
   return {'data': 'success'}
 };
 
-const getStatusList = async function(queryStringParameters: any) {
+const getStatusList = async function(queryStringParameters: any, userGroups: Array<string>) {
   let result: any;
   let conn: any;
 
   try {
+    if (!hasPermission(userGroups)) {
+      throw new Forbidden(NoPermission.message, NoPermission.code)
+    }
+
     conn = await db.getConnection();
     result = await db.execute(conn, selectStatusList, queryStringParameters);
   } catch (error) {
-    if (conn) await db.rollBack(conn);
     controllerErrorWrapper(error);
   } finally {
     if (conn) db.release(conn);
