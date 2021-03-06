@@ -11,9 +11,7 @@ const createCountry = async function(body: any, userGroups: Array<string>) {
   let conn: any;
 
   try {
-    if (!hasPermission(userGroups)) {
-      throw new Forbidden(NoPermission.message, NoPermission.code)
-    }
+    if (!hasPermission(userGroups)) throw new Forbidden(NoPermission.message, NoPermission.code);
     
     const country = new Country({
 			iso_code_3: body.iso_code_3,
@@ -27,7 +25,7 @@ const createCountry = async function(body: any, userGroups: Array<string>) {
 
     const result = await db.execute(conn, selectCountry, country);
     if (result.length) {
-      throw new BadRequest(UniqueValueDuplicated.message + ': country.iso_code', UniqueValueDuplicated.code);
+      throw new BadRequest(`${UniqueValueDuplicated.message}: country.iso_code`, UniqueValueDuplicated.code);
     } else await db.execute(conn, insertCountry, country);
 
     await db.commit(conn);

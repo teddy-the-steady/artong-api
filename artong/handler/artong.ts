@@ -14,7 +14,7 @@ export async function handler(event: any, context: any, callback: any) {
     switch (req.httpMethod) {
       case 'GET':
         if (req.pathParameters && req.path.startsWith('/artong/v1/member/'))
-          res = member.getMember(req.pathParameters)
+          res = member.getMember(req.pathParameters);
         else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
           res = await status.getStatusList(req.queryStringParameters, req.userGroups);
         break;
@@ -32,9 +32,9 @@ export async function handler(event: any, context: any, callback: any) {
         break;
       case 'PATCH':
         if (req.pathParameters && req.path.startsWith('/artong/v1/memberMaster/'))
-          res = await member.patchMemberMaster(req.pathParameters, req.body);
+          res = await member.patchMemberMaster(req.pathParameters, req.body, req.userId);
         else if (req.pathParameters && req.path.startsWith('/artong/v1/memberDetail/'))
-          res = await member.patchMemberDetail(req.pathParameters, req.body);
+          res = await member.patchMemberDetail(req.pathParameters, req.body, req.userId);
         break;
       default:
         console.log('METHOD undefined');
