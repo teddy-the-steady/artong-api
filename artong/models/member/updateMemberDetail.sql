@@ -13,4 +13,5 @@ SET
     ,last_activity_at = {{#if last_activity_at}} now() {{else}} last_activity_at {{/if}}
     ,phone_number = {{#if phone_number}} '{{phone_number}}' {{else if (or (eq phone_number null) (eq phone_number ''))}} NULL {{else}} phone_number {{/if}}
     ,country_id = {{#if country_id}} {{country_id}} {{else if (eq country_id null)}} NULL {{else}} country_id {{/if}}
-WHERE member_id = {{member_id}}
+WHERE member_id = {{member_id}} AND {{member_id}} = (SELECT id FROM member_master WHERE auth_id = '{{auth_id}}')
+RETURNING id

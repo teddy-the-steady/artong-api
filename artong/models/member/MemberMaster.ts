@@ -2,8 +2,9 @@ import {
   IsEmail,
   IsUUID,
 } from 'class-validator';
+import MemberDetail from '../member/MemberDetail';
 
-export default class Member {
+export default class MemberMaster {
 	id: number;
 	@IsEmail()
 	email: string;
@@ -26,5 +27,9 @@ export default class Member {
 
 		this.created_at = obj.created_at;
 		this.updated_at = obj.updated_at;
+	}
+
+	pourObjectIntoMemberMaster(object: any) {
+		return Object.assign(this, object);
 	}
 }
