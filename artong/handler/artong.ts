@@ -31,6 +31,8 @@ export async function handler(event: any, context: any, callback: any) {
       case 'PATCH':
         if (req.pathParameters && req.path.startsWith('/artong/v1/memberMaster/'))
           res = await member.patchMemberMaster(req.pathParameters, req.body);
+        else if (req.pathParameters && req.path.startsWith('/artong/v1/memberDetail/'))
+          res = await member.patchMemberDetail(req.pathParameters, req.body);
         break;
       default:
         console.log('METHOD undefined');
