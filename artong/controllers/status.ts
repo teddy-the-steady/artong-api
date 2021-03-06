@@ -35,7 +35,7 @@ const createStatus = async function(body: any) {
   return {'data': 'success'}
 };
 
-const putStatus = async function(pathParameters: {id: number}, body: any) {
+const putStatus = async function(pathParameters: any, body: any) {
   let conn: any;
 
   try {
