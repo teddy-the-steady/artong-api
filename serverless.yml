@@ -36,6 +36,10 @@ functions:
     handler: artong/handler/artong.handler
     events:
      - http:
+        path: artong/v1/member/{id}
+        method: GET
+        cors: true
+     - http:
         path: artong/v1/member
         method: POST
         cors: true
