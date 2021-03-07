@@ -19,17 +19,16 @@ const extractTotalRows = function(list: any[]) {
     }
 };
 
-const hasPermission = function(userGroup: Array<string>) {
+const hasBOPermission = function(userGroup: Array<string>) {
     const permissionGroups = ['manager'];
     if (userGroup) {
         return permissionGroups.some(r => userGroup.includes(r));
-    } else {
-        return false
     }
+    return false
 };
 
 export {
     getTotalRows,
     extractTotalRows,
-    hasPermission,
+    hasBOPermission,
 };
