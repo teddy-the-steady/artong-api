@@ -4,39 +4,47 @@ import validator from '../utils/validators/common';
 import { MemberMaster, MemberDetail } from '../models/index';
 import { Forbidden } from '../utils/error/errors';
 import { NoPermission } from '../utils/error/errorCodes';
+import { plainToClass } from 'class-transformer';
 const insertMemberMaster = require('../models/member/insertMemberMaster.sql');
 const insertMemberDetail = require('../models/member/insertMemberDetail.sql');
 const updateMemberMaster = require('../models/member/updateMemberMaster.sql');
 const updateMemberDetail = require('../models/member/updateMemberDetail.sql');
+const selectMember = require('../models/member/selectMember.sql');
 
 const getMember = async function(pathParameters: any) {
+  let result: any;
   let conn: any;
 
   try {
-    
+    const member = plainToClass(MemberMaster, pathParameters);
+    await validator(member);
+
+    conn = await db.getConnection();
+    result = await db.execute(conn, selectMember, member);
   } catch (error) {
-    
+    controllerErrorWrapper(error);
   } finally {
-    
+    if (conn) db.release(conn);
   }
+  return {'data': result[0]}
 }
 
 const createMember = async function(body: any) {
   let conn: any;
 
   try {
-    const memberMaster = new MemberMaster({
+    const memberMaster = plainToClass(MemberMaster, {
       email: body.email,
       auth_id: body.auth_id,
-    });
+      username: body.email.split('@')[0]
+    })
     await validator(memberMaster);
-    memberMaster.username = memberMaster.email.split('@')[0];
 
     conn = await db.getConnection();
     await db.beginTransaction(conn);
 
     const insertedId = await db.execute(conn, insertMemberMaster, memberMaster);
-    const memberDetail = new MemberDetail({
+    const memberDetail = plainToClass(MemberDetail, {
       member_id: insertedId[0].id,
       language_id: body.language_id || 1, // FE가 파악후 전달(기본값 1)
     });
@@ -56,13 +64,14 @@ const patchMemberMaster = async function(pathParameters: any, body: any, userId:
   let conn: any;
   
   try {
-    const memberMaster = new MemberMaster({
+    const memberMaster = plainToClass(MemberMaster, {
       id: pathParameters.id,
       auth_id: userId,
       username: body.username,
       status_id: body.status_id,
       is_email_verified: body.is_email_verified,
     });
+    await validator(memberMaster);
 
     conn = await db.getConnection();
     await db.beginTransaction(conn);
@@ -84,7 +93,7 @@ const patchMemberDetail = async function(pathParameters: any, body: any, userId:
   let conn: any;
   
   try {
-    const memberDetail = new MemberDetail({
+    const memberDetail = plainToClass(MemberDetail, {
       member_id: pathParameters.member_id,
       given_name: body.given_name,
       family_name: body.family_name,
@@ -99,15 +108,17 @@ const patchMemberDetail = async function(pathParameters: any, body: any, userId:
       phone_number: body.phone_number,
       country_id: body.country_id,
     });
-    let memberMaster = new MemberMaster({
-      auth_id: userId,
+    const memberMaster = plainToClass(MemberMaster, {
+      auth_id: userId
     });
-    memberMaster = memberMaster.pourObjectIntoMemberMaster(memberDetail);
+    await validator(memberDetail);
+    await validator(memberMaster);
+    const memberMasterAndDetail = memberMaster.pourObjectIntoMemberMaster(memberDetail);
 
     conn = await db.getConnection();
     await db.beginTransaction(conn);
 
-    const updatedId = await db.execute(conn, updateMemberDetail, memberMaster);
+    const updatedId = await db.execute(conn, updateMemberDetail, memberMasterAndDetail);
     if (!updatedId.length) throw new Forbidden(NoPermission.message, NoPermission.code);
 
     await db.commit(conn);
