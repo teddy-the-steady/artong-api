@@ -10,10 +10,12 @@
   "devDependencies": {
     "@types/node": "^12.12.41",
     "@types/pg": "^7.14.10",
+    "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "handlebars": "^4.7.7",
     "pg": "^8.5.1",
     "raw-loader": "^4.0.2",
+    "reflect-metadata": "^0.1.13",
     "serverless-iam-roles-per-function": "^3.1.0",
     "serverless-offline": "^6.8.0",
     "serverless-webpack": "^5.3.5",
