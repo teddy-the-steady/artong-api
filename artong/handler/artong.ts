@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import * as init from '../init';
 import requestInit  from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response'
@@ -14,7 +15,7 @@ export async function handler(event: any, context: any, callback: any) {
     switch (req.httpMethod) {
       case 'GET':
         if (req.pathParameters && req.path.startsWith('/artong/v1/member/'))
-          res = member.getMember(req.pathParameters);
+          res = await member.getMember(req.pathParameters);
         else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
           res = await status.getStatusList(req.queryStringParameters, req.userGroups);
         break;
