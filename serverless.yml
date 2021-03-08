@@ -9,10 +9,16 @@ provider:
   environment:
     ENV: ${self:provider.stage}
     NODE_PATH: './:/opt/node_modules'
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - ssm:GetParameter
+      Resource:
+        !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/test/*'
 
 package:
- exclude:
-   - node_layers/**
+  exclude:
+    - node_layers/**
 
 layers:
   NodeModules:
