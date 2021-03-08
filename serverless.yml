@@ -14,10 +14,10 @@ package:
  exclude:
    - node_layers/**
 
-# layers:
-#   NodeModules:
-#     path: node_layers
-#     description: 'includes pq, handlebars'
+layers:
+  NodeModules:
+    path: node_layers
+    description: 'includes pq, handlebars'
 
 plugins:
   - serverless-iam-roles-per-function
