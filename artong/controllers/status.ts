@@ -1,8 +1,8 @@
 import * as db from '../utils/db/db';
 import controllerErrorWrapper from '../utils/error/errorWrapper';
 import { Status } from '../models/index';
-import { BadRequest, Forbidden } from '../utils/error/errors';
-import { NoPermission, UniqueValueDuplicated } from '../utils/error/errorCodes';
+import { BadRequest, Forbidden, InternalServerError } from '../utils/error/errors';
+import { NoPermission, UniqueValueDuplicated, UpdateFailed } from '../utils/error/errorCodes';
 import { hasBOPermission } from '../utils/common/commonFunc';
 import { plainToClass } from 'class-transformer';
 import validator from '../utils/validators/common';
@@ -58,7 +58,7 @@ const putStatus = async function(pathParameters: any, body: any, userGroups: Arr
 
     const updatedId = await db.execute(conn, updateStatus, status);
     if (updatedId.length) await db.execute(conn, insertStatus, status);
-    else throw new Forbidden(NoPermission.message, NoPermission.code);
+    else throw new InternalServerError(UpdateFailed.message, UpdateFailed.code);
 
     await db.commit(conn);
   } catch (error) {
