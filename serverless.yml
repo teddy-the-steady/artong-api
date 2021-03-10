@@ -14,7 +14,7 @@ provider:
       Action:
         - ssm:GetParameter
       Resource:
-        !Sub 'arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/test/*'
+        'arn:aws:ssm:ap-northeast-2:821343553435:parameter/db/*'
 
 package:
   exclude:
@@ -30,8 +30,8 @@ plugins:
   - serverless-webpack
   - serverless-offline
 
-custom:
-  DB_CONFIG: ${file(./config.js):DB_CONFIG}
+# custom:
+#   DB_CONFIG: ${file(./config.js):DB_CONFIG}
 
 functions:
   hello:
@@ -80,12 +80,17 @@ functions:
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
     layers:
-     - {Ref: NodeModulesLambdaLayer} 
+     - {Ref: NodeModulesLambdaLayer}
     environment:
-      DB_HOST: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_HOST}
-      DB_DATABASE: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_DATABASE}
-      DB_USER: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_USER}
-      DB_PASSWORD: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_PASSWORD}
+      DB_HOST: ${ssm:/db/host~true}
+      DB_DATABASE: ${ssm:/db/stage/database~true}
+      DB_USER: ${ssm:/db/user~true}
+      DB_PASSWORD: ${ssm:/db/password~true}
+    # environment:
+    #   DB_HOST: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_HOST}
+    #   DB_DATABASE: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_DATABASE}
+    #   DB_USER: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_USER}
+    #   DB_PASSWORD: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_PASSWORD}
 
 resources:
   Resources:
