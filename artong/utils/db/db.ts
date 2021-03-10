@@ -1,9 +1,10 @@
 import handlebars from 'handlebars';
-import { pool } from '../../init';
+import { getPool } from '../../init';
 import { InternalServerError } from '../error/errors';
 import { DBError } from '../error/errorCodes';
 
 const getConnection = async function() {
+  const pool = await getPool();
   const conn = await pool.connect();
   return conn
 };
