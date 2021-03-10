@@ -1,5 +1,21 @@
 import { Pool } from 'pg';
 import handlebars from 'handlebars';
+// const AWS = require('aws-sdk');
+
+// const ssm = new AWS.SSM();
+// const secretKeyPromise = ssm.getParameters({
+//   Names: [
+//     '/db/host',
+//     '/db/stage/database',
+//     '/db/user',
+//     '/db/password',
+//   ],
+//   WithDecryption: true
+// }).promise();
+
+// const secretKey = async function() {
+//   return await secretKeyPromise;
+// }
 
 const pool = new Pool({
   host: process.env.DB_HOST,
@@ -35,4 +51,5 @@ handlebars.registerHelper({
 export {
   pool,
   ALLOWED_ORIGINS,
+  // secretKey,
 };

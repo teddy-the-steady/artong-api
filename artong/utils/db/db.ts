@@ -21,7 +21,7 @@ const execute = async function(conn: any, sql: string, params: any) {
   const preCompiledModel = compileSQL(sql);
   const compiledModel = preCompiledModel(params);
   /* 쿼리 debug시 주석 해제 */
-  console.log(compiledModel);
+  // console.log(compiledModel);
   try {
     const result = await conn.query(compiledModel);
     return result['rows']
