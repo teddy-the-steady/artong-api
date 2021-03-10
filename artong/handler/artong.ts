@@ -4,23 +4,11 @@ import requestInit  from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response'
 import { member, status, country } from '../controllers/index';
 
-const AWS = require('aws-sdk');
-const ssm = new AWS.SSM();
-const secretKeyPromise = ssm
-  .getParameter({
-    Name: '/test/secretKey',
-    WithDecryption: true
-  })
-  .promise();
-
 export async function handler(event: any, context: any, callback: any) {
   context.callbackWaitsForEmptyEventLoop = false;
   let res: any = {};
 
   try {
-    const secretKey = await secretKeyPromise;
-    console.log(secretKey);
-
     const req = requestInit(event);
     console.log(req);
 
