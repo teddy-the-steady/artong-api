@@ -12,9 +12,9 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - ssm:GetParameter
+        - 'ssm:GetParameter'
       Resource:
-        'arn:aws:ssm:ap-northeast-2:821343553435:parameter/db/*'
+        - 'arn:aws:ssm:ap-northeast-2:821343553435:parameter/db/*'
 
 package:
   exclude:
