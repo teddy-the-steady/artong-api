@@ -19,7 +19,10 @@ const secretKey = async function() {
 }
 
 const formatKeys = function(keys: Array<any>) {
-  return keys.reduce((acc, cur) => (acc[cur.Name] = cur.Value, acc), {});
+  return keys.reduce((acc, cur) => {
+    acc[cur.Name] = cur.Value;
+    return acc;
+  }, {});
 }
 
 const getPool = async function() {
