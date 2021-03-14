@@ -16,7 +16,10 @@ const getMember = async function(pathParameters: any) {
   let conn: any;
 
   try {
-    const member = plainToClass(MemberMaster, pathParameters);
+    const member = plainToClass(MemberMaster, {
+      id: pathParameters.id.length < 36? pathParameters.id : null,
+      auth_id: pathParameters.id.length === 36? pathParameters.id : null,
+    });
     await validator(member);
 
     conn = await db.getConnection();
