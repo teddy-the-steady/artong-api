@@ -29,7 +29,7 @@ const getMember = async function(pathParameters: any) {
   } finally {
     if (conn) db.release(conn);
   }
-  return result[0]
+  return {'data': result[0]}
 }
 
 const createMember = async function(body: any) {
