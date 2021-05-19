@@ -4,7 +4,7 @@ import { InternalServerError } from '../error/errors';
 import { DBError } from '../error/errorCodes';
 
 const getConnection = async function() {
-  const pool = await getPool();
+  const pool: any = await getPool();
   const conn = await pool.connect();
   return conn
 };
