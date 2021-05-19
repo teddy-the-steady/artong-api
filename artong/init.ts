@@ -2,6 +2,21 @@ import { Pool } from 'pg';
 import handlebars from 'handlebars';
 const AWS = require('aws-sdk');
 
+const getPool = async function() {
+  try {
+    const keys = await secretKey();
+    return new Pool({
+      host: keys['/db/host'],
+      user: keys['/db/user'],
+      password: keys['/db/password'],
+      database: keys['/db/stage/database'],
+      port: 5432
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 const ssm = new AWS.SSM();
 const secretKeyPromise = ssm.getParameters({
   Names: [
@@ -23,17 +38,6 @@ const formatKeys = function(keys: Array<any>) {
     acc[cur.Name] = cur.Value;
     return acc;
   }, {});
-}
-
-const getPool = async function() {
-  const keys = await secretKey();
-  return new Pool({
-    host: keys['/db/host'],
-    user: keys['/db/user'],
-    password: keys['/db/password'],
-    database: keys['/db/stage/database'],
-    port: 5432
-  });
 }
 
 const ALLOWED_ORIGINS: string[] = [
