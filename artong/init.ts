@@ -5,27 +5,40 @@ const ssm = new AWS.SSM();
 
 const getPool = async function() {
   try {
-    let keys = await ssm.getParameters({
-      Names: [
-        '/db/host',
-        '/db/stage/database',
-        '/db/user',
-        '/db/password',
-      ],
-      WithDecryption: true
-    }).promise();
-    keys = formatKeys(keys.Parameters);
+    const keys = await secretKey();
     return new Pool({
       host: keys['/db/host'],
       user: keys['/db/user'],
       password: keys['/db/password'],
       database: keys['/db/stage/database'],
-      port: 5432
+      port: 5432,
+      max: 20,
+      idleTimeoutMillis: 1000,
+      connectionTimeoutMillis: 1000,
     });
   } catch (error) {
     console.error(error);
   }
 }
+
+const secretKey = async function(){
+  try {
+    const keys = await secretKeyPromise.promise();
+    return formatKeys(keys.Parameters);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const secretKeyPromise = ssm.getParameters({
+  Names: [
+    '/db/host',
+    '/db/stage/database',
+    '/db/user',
+    '/db/password',
+  ],
+  WithDecryption: true
+});
 
 const formatKeys = function(keys: Array<any>) {
   return keys.reduce((acc, cur) => {
