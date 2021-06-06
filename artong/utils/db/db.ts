@@ -32,15 +32,15 @@ const execute = async function(conn: any, sql: string, params: any) {
 };
 
 const beginTransaction = async function(conn: any) {
-  conn.query('BEGIN');
+  await conn.query('BEGIN');
 }
 
 const commit = async function(conn: any) {
-  conn.query('COMMIT');
+  await conn.query('COMMIT');
 }
 
 const rollBack = async function(conn: any) {
-  conn.query('ROLLBACK');
+  await conn.query('ROLLBACK');
 }
 
 export {
