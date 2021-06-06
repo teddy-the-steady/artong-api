@@ -2,7 +2,7 @@ import { BadRequest, InternalServerError, Forbidden } from './errors';
 import { DBError, UniqueConstraint, UnknownError, ValidationError, DBSyntaxError } from './errorCodes';
 
 const controllerErrorWrapper = function(error: any) {
-	console.log(error)
+	console.error(error)
 	if (error instanceof BadRequest) {
 		switch (error.errorCode) {
 			case ValidationError.code:
