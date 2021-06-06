@@ -17,20 +17,18 @@ const getPool = async function() {
   }
 }
 
-const ssm = new AWS.SSM();
-const secretKeyPromise = ssm.getParameters({
-  Names: [
-    '/db/host',
-    '/db/stage/database',
-    '/db/user',
-    '/db/password',
-  ],
-  WithDecryption: true
-});
-
 const secretKey = async function() {
   try {
-    const keys = await secretKeyPromise.promise();
+    const ssm = new AWS.SSM();
+    const keys = await ssm.getParameters({
+      Names: [
+        '/db/host',
+        '/db/stage/database',
+        '/db/user',
+        '/db/password',
+      ],
+      WithDecryption: true
+    }).promise();
     return formatKeys(keys.Parameters);
   } catch (error) {
     console.error(error);
