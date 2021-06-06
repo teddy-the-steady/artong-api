@@ -1,10 +1,20 @@
 import { Pool } from 'pg';
 import handlebars from 'handlebars';
 const AWS = require('aws-sdk');
+const ssm = new AWS.SSM();
 
-const getPool = async () => {
+const getPool = async function() {
   try {
-    const keys = await secretKey();
+    let keys = await ssm.getParameters({
+      Names: [
+        '/db/host',
+        '/db/stage/database',
+        '/db/user',
+        '/db/password',
+      ],
+      WithDecryption: true
+    }).promise();
+    keys = formatKeys(keys.Parameters);
     return new Pool({
       host: keys['/db/host'],
       user: keys['/db/user'],
@@ -12,26 +22,6 @@ const getPool = async () => {
       database: keys['/db/stage/database'],
       port: 5432
     });
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-const ssm = new AWS.SSM();
-const secretKeyPromise = ssm.getParameters({
-  Names: [
-    '/db/host',
-    '/db/stage/database',
-    '/db/user',
-    '/db/password',
-  ],
-  WithDecryption: true
-});
-
-const secretKey = async () => {
-  try {
-    const keys = await secretKeyPromise.promise();
-    return formatKeys(keys.Parameters);
   } catch (error) {
     console.error(error);
   }
