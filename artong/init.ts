@@ -13,7 +13,7 @@ const getPool = async function() {
       port: 5432
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -29,8 +29,12 @@ const secretKeyPromise = ssm.getParameters({
 }).promise();
 
 const secretKey = async function() {
-  const keys = await secretKeyPromise;
-  return formatKeys(keys.Parameters);
+  try {
+    const keys = await secretKeyPromise;
+    return formatKeys(keys.Parameters);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 const formatKeys = function(keys: Array<any>) {

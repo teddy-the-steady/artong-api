@@ -38,7 +38,7 @@ export async function handler(event: any, context: any, callback: any) {
           res = await member.patchMemberDetail(req.pathParameters, req.body, req.userId);
         break;
       default:
-        console.log('METHOD undefined');
+        console.error('METHOD undefined');
         break;
     }
   } catch (error) {
