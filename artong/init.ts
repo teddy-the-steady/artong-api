@@ -26,11 +26,11 @@ const secretKeyPromise = ssm.getParameters({
     '/db/password',
   ],
   WithDecryption: true
-}).promise();
+});
 
 const secretKey = async function() {
   try {
-    const keys = await secretKeyPromise;
+    const keys = await secretKeyPromise.promise();
     return formatKeys(keys.Parameters);
   } catch (error) {
     console.error(error);
