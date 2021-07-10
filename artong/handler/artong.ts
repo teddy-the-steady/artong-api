@@ -14,8 +14,10 @@ export async function handler(event: any, context: any, callback: any) {
 
     switch (req.httpMethod) {
       case 'GET':
-        if (req.pathParameters && req.path.startsWith('/artong/v1/member/'))
-          res = await member.getMember(req.pathParameters);
+        if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
+          res = await member.getMember(req.queryStringParameters);
+        else if (req.pathParameters && req.path.startsWith('/artong/v1/member/'))
+          res = await member.getMemberSecure(req.pathParameters);
         else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
           res = await status.getStatusList(req.queryStringParameters, req.userGroups);
         break;
