@@ -9,9 +9,25 @@ const insertMemberMaster = require('../models/member/insertMemberMaster.sql');
 const insertMemberDetail = require('../models/member/insertMemberDetail.sql');
 const updateMemberMaster = require('../models/member/updateMemberMaster.sql');
 const updateMemberDetail = require('../models/member/updateMemberDetail.sql');
+const selectMemberSecure = require('../models/member/selectMemberSecure.sql');
 const selectMember = require('../models/member/selectMember.sql');
 
-const getMember = async function(pathParameters: any) {
+const getMember = async function(queryStringParameters: any) {
+  let result: any;
+  let conn: any;
+
+  try {
+    conn = await db.getConnection();
+    result = await db.execute(conn, selectMember, queryStringParameters);
+  } catch (error) {
+    controllerErrorWrapper(error);
+  } finally {
+    if (conn) db.release(conn);
+  }
+  return {'data': result[0]}
+}
+
+const getMemberSecure = async function(pathParameters: any) {
   let result: any;
   let conn: any;
 
@@ -23,7 +39,7 @@ const getMember = async function(pathParameters: any) {
     await validator(member);
 
     conn = await db.getConnection();
-    result = await db.execute(conn, selectMember, member);
+    result = await db.execute(conn, selectMemberSecure, member);
   } catch (error) {
     controllerErrorWrapper(error);
   } finally {
@@ -136,6 +152,7 @@ const patchMemberDetail = async function(pathParameters: any, body: any, userId:
 
 export {
   getMember,
+  getMemberSecure,
 	createMember,
   patchMemberMaster,
   patchMemberDetail,
