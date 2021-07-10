@@ -39,13 +39,18 @@ functions:
     handler: artong/handler/artong.handler
     events:
      - http:
-        path: artong/v1/member/{id}
+        path: artong/v1/member
         method: GET
         cors: true
      - http:
         path: artong/v1/member
         method: POST
         cors: true
+     - http:
+        path: artong/v1/member/{id}
+        method: GET
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
      - http:
         path: artong/v1/memberMaster/{id}
         method: PATCH
