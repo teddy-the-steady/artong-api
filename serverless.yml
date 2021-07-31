@@ -31,10 +31,6 @@ plugins:
   - serverless-offline
 
 functions:
-  hello:
-    handler: handler.hello
-    events:
-      - http: GET users/hello
   artong:
     handler: artong/handler/artong.handler
     events:
@@ -83,15 +79,15 @@ functions:
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
     layers:
      - {Ref: NodeModulesLambdaLayer}
-  # photo:
-  #   handler: artong/handler/photo.handler
-  #   events:
-  #     - s3:
-  #       bucket: 4rtong-staging-imagesartongvue-artongvue
-  #       event: s3:ObjectCreated:*
-  #       rules:
-  #         - prefix: public/
-  #       existing: true
+  photo:
+    handler: artong/handler/photo.handler
+    events:
+     - s3:
+        bucket: 4rtong-staging-imagesartongvue-artongvue
+        event: s3:ObjectCreated:*
+        rules:
+          - prefix: public/
+        existing: true
 
 resources:
   Resources:
