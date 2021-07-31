@@ -9,7 +9,6 @@ export async function handler(event: any, context: any, callback: any) {
   let res: any = {};
 
   try {
-    console.log('checkEvent:',event);
     const req = requestInit(event);
     console.log(req);
 
