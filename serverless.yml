@@ -81,6 +81,12 @@ functions:
         method: POST
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+     - s3:
+        bucket: 4rtong-staging-imagesartongvue-artongvue
+        event: s3:ObjectCreated:*
+        rules:
+          - prefix: public/
+        existing: true
     layers:
      - {Ref: NodeModulesLambdaLayer}
 
