@@ -34,53 +34,56 @@ functions:
   hello:
     handler: handler.hello
     events:
-     - http: GET users/hello
+      - http: GET users/hello
   artong:
     handler: artong/handler/artong.handler
     events:
-     - http:
+      - http:
         path: artong/v1/member
         method: GET
         cors: true
-     - http:
+      - http:
         path: artong/v1/member
         method: POST
         cors: true
-     - http:
+      - http:
         path: artong/v1/member/{id}
         method: GET
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-     - http:
+      - http:
         path: artong/v1/memberMaster/{id}
         method: PATCH
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-     - http:
+      - http:
         path: artong/v1/memberDetail/{member_id}
         method: PATCH
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-     - http:
+      - http:
         path: artong/v1/status
         method: GET
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-     - http:
+      - http:
         path: artong/v1/status
         method: POST
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-     - http:
+      - http:
         path: artong/v1/status/{id}
         method: PUT
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-     - http:
+      - http:
         path: artong/v1/country
         method: POST
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+  photo:
+    handler: artong/handler/photo.handler
+    events:
      - s3:
         bucket: 4rtong-staging-imagesartongvue-artongvue
         event: s3:ObjectCreated:*
