@@ -1,20 +1,23 @@
-const path = require("path");
+const path = require('path');
 const slsw = require('serverless-webpack');
 const { IgnorePlugin } = require('webpack');
 
 module.exports = {
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
-	entry: path.join(__dirname, "artong/handler/artong.ts"),
+	entry: {
+    artong: path.join(__dirname, 'artong/handler/artong.ts'),
+    photo: path.join(__dirname, 'artong/handler/photo.ts'),
+  },
   output: {
-    libraryTarget: "commonjs",
-    filename: "artong/handler/artong.js",
-    path: path.resolve(__dirname, "dist")
+    libraryTarget: 'commonjs',
+    filename: 'artong/handler/[name].js',
+    path: path.resolve(__dirname, 'dist')
   },
 	module: {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: "ts-loader",
+        loader: 'ts-loader',
         exclude: /node_modules/
       },
       {
@@ -31,7 +34,7 @@ module.exports = {
     ]
   },
 	resolve: {
-    extensions: [".tsx", ".ts", ".js"]
+    extensions: ['.tsx', '.ts', '.js']
   },
   plugins: [new IgnorePlugin({resourceRegExp: /^pg-native$/})],
 }
