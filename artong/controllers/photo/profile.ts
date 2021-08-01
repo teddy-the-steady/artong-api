@@ -12,7 +12,7 @@ const updateProfilePic = async function(s3: any) {
 
     const config = {
       headers: {
-        'x-api-key': 'KElcrjWSUR42A0zxhkUmP3UqGaJxQ8b2GlsuCOTa',
+        'x-api-key': 'KElcrjWSUR42A0zxhkUmP3UqGaJxQ8b2GlsuCOTa1',
       }
     }
     
