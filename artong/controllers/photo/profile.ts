@@ -10,17 +10,12 @@ const updateProfilePic = async function(s3: any) {
     const username = key.split('/')[1];
     const size = s3.object.size;
 
-    console.log('first call')
-    await axios.patch(`/member/${username}/profilePic`, {
-      profile_pic: key
-    });
-
     const config = {
       headers: {
         'x-api-key': 'KElcrjWSUR42A0zxhkUmP3UqGaJxQ8b2GlsuCOTa',
       }
     }
-    console.log('second call')
+    
     const member = await axios.patch(`/member/${username}/profilePic`, {
       profile_pic: key
     }, config);
