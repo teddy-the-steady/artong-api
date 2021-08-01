@@ -17,7 +17,7 @@ const updateProfilePic = async function(s3: any) {
     }
     
     const member = await axios.patch(`/member/${username}/profilePic`, {
-      profile_pic: key
+      profile_pic: `${bucket}/${key}`
     }, config);
     console.log('PATCH /member/:username/profilePic', member);
   } catch (error) {
