@@ -51,6 +51,11 @@ functions:
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
      - http:
+        path: artong/v1/member/{username}/profilePic
+        method: PATCH
+        cors: true
+        private: true
+     - http:
         path: artong/v1/memberMaster/{id}
         method: PATCH
         cors: true
@@ -60,11 +65,6 @@ functions:
         method: PATCH
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-     - http:
-        path: artong/v1/memberDetail/{username}/profilePic
-        method: PATCH
-        cors: true
-        private: true
      - http:
         path: artong/v1/status
         method: GET
