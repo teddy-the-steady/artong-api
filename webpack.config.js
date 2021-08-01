@@ -4,15 +4,6 @@ const { IgnorePlugin } = require('webpack');
 
 module.exports = {
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
-	// entry: {
-  //   artong: path.join(__dirname, 'artong/handler/artong.ts'),
-  //   photo: path.join(__dirname, 'artong/handler/photo.ts'),
-  // },
-  // output: {
-  //   libraryTarget: 'commonjs',
-  //   filename: 'artong/handler/[name].js',
-  //   path: path.resolve(__dirname, 'dist')
-  // },
 	module: {
     rules: [
       {
