@@ -156,7 +156,7 @@ const patchMemberProfilePic = async function(pathParameters: any, body: any) {
 
   try {
     const memberMaster = plainToClass(MemberMaster, {
-      username: pathParameters.username,
+      username: pathParameters.id,
     });    
     const memberDetail = plainToClass(MemberDetail, {
       profile_pic: body.profile_pic,

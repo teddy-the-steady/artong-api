@@ -51,7 +51,7 @@ functions:
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
      - http:
-        path: artong/v1/member/{username}/profilePic
+        path: artong/v1/member/{id}/profilePic
         method: PATCH
         cors: true
         private: true
@@ -105,6 +105,8 @@ functions:
         rules:
           - prefix: public/
         existing: true
+    layers:
+     - {Ref: NodeModulesLambdaLayer}
 
 resources:
   Resources:
