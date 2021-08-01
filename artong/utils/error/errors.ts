@@ -2,7 +2,7 @@ class ExtendableError extends Error {
   errorMessage: string | any;
   statusCode: number;
   errorCode: number | null;
-  constructor(message: string, statusCode: number, errorCode: number | null) {
+  constructor(message: string | any, statusCode: number, errorCode: number | null) {
     if (new.target === ExtendableError)
       throw new TypeError('Abstract class "ExtendableError" cannot be instantiated directly.');
     super(message);
@@ -81,7 +81,7 @@ class UnprocessableEntity extends ExtendableError {
 }
 
 class InternalServerError extends ExtendableError {
-  constructor(message: string, errorCode: number | null) {
+  constructor(message: string | any, errorCode: number | null) {
     if (arguments.length === 0)
       super('Internal Server Error', 500, null);
     else if (arguments.length === 1)
