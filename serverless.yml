@@ -81,6 +81,15 @@ functions:
      - {Ref: NodeModulesLambdaLayer}
   photo:
     handler: artong/handler/photo.handler
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "s3:PutObject"
+          - "s3:GetObject"
+          - "s3:ListBucket"
+        Resource:
+          - "arn:aws:s3:::4rtong-staging-imagesartongvue-artongvue"
+          - "arn:aws:s3:::4rtong-staging-imagesartongvue-artongvue/*"
     events:
      - s3:
         bucket: 4rtong-staging-imagesartongvue-artongvue
