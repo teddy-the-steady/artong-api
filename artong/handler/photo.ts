@@ -1,4 +1,5 @@
 import { profile } from '../controllers/photo/index';
+import { InternalServerError } from '../utils/error/errors';
 
 export async function handler(event: any, context: any, callback: any) {
   try {
@@ -13,8 +14,8 @@ export async function handler(event: any, context: any, callback: any) {
         break;
     }
     return {'data': 'success'};
-  } catch (err: any) {
+  } catch (err) {
     console.log(err);
-    throw new Error(err);
+    throw new InternalServerError(err, null);
   }
 };
