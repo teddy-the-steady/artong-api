@@ -15,15 +15,18 @@ provider:
         - 'ssm:GetParameters'
       Resource:
         - 'arn:aws:ssm:ap-northeast-2:821343553435:parameter/db/*'
+  apiKeys:
+    - artongApiKeyStage
 
 package:
+  individually: true
   exclude:
     - node_layers/**
 
 layers:
   NodeModules:
     path: node_layers
-    description: 'includes pq, handlebars'
+    description: 'includes pq, handlebars, axios'
 
 plugins:
   - serverless-iam-roles-per-function
@@ -57,6 +60,11 @@ functions:
         method: PATCH
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+     - http:
+        path: artong/v1/memberDetail/{username}/profilePic
+        method: PATCH
+        cors: true
+        private: true
      - http:
         path: artong/v1/status
         method: GET

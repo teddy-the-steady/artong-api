@@ -4,6 +4,7 @@
   "description": "node package for serverless api layers",
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.21.1",
     "handlebars": "^4.7.3",
     "pg": "^8.2.2"
   },
