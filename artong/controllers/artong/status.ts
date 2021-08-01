@@ -1,15 +1,15 @@
-import * as db from '../utils/db/db';
-import controllerErrorWrapper from '../utils/error/errorWrapper';
-import { Status } from '../models/index';
-import { BadRequest, Forbidden, InternalServerError } from '../utils/error/errors';
-import { NoPermission, UniqueValueDuplicated, UpdateFailed } from '../utils/error/errorCodes';
-import { hasBOPermission } from '../utils/common/commonFunc';
+import * as db from '../../utils/db/db';
+import controllerErrorWrapper from '../../utils/error/errorWrapper';
+import { Status } from '../../models/index';
+import { BadRequest, Forbidden, InternalServerError } from '../../utils/error/errors';
+import { NoPermission, UniqueValueDuplicated, UpdateFailed } from '../../utils/error/errorCodes';
+import { hasBOPermission } from '../../utils/common/commonFunc';
+import validator from '../../utils/validators/common';
+const insertStatus = require('../../models/status/insertStatus.sql');
+const updateStatus = require('../../models/status/updateStatus.sql');
+const selectStatusList = require('../../models/status/selectStatusList.sql');
+const selectStatus = require('../../models/status/selectStatus.sql');
 import { plainToClass } from 'class-transformer';
-import validator from '../utils/validators/common';
-const insertStatus = require('../models/status/insertStatus.sql');
-const updateStatus = require('../models/status/updateStatus.sql');
-const selectStatusList = require('../models/status/selectStatusList.sql');
-const selectStatus = require('../models/status/selectStatus.sql');
 
 const createStatus = async function(body: any, userGroups: Array<string>) {
   let conn: any;

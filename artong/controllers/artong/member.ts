@@ -1,16 +1,17 @@
-import * as db from '../utils/db/db';
-import controllerErrorWrapper from '../utils/error/errorWrapper';
-import validator from '../utils/validators/common';
-import { MemberMaster, MemberDetail } from '../models/index';
-import { Forbidden } from '../utils/error/errors';
-import { NoPermission } from '../utils/error/errorCodes';
+import * as db from '../../utils/db/db';
+import controllerErrorWrapper from '../../utils/error/errorWrapper';
+import validator from '../../utils/validators/common';
+import { MemberMaster, MemberDetail } from '../../models/index';
+import { Forbidden } from '../../utils/error/errors';
+import { NoPermission } from '../../utils/error/errorCodes';
+const insertMemberMaster = require('../../models/member/insertMemberMaster.sql');
+const insertMemberDetail = require('../../models/member/insertMemberDetail.sql');
+const updateMemberMaster = require('../../models/member/updateMemberMaster.sql');
+const updateMemberDetail = require('../../models/member/updateMemberDetail.sql');
+const updateMemberProfilePic = require('../../models/member/updateMemberProfilePic.sql');
+const selectMemberSecure = require('../../models/member/selectMemberSecure.sql');
+const selectMember = require('../../models/member/selectMember.sql');
 import { plainToClass } from 'class-transformer';
-const insertMemberMaster = require('../models/member/insertMemberMaster.sql');
-const insertMemberDetail = require('../models/member/insertMemberDetail.sql');
-const updateMemberMaster = require('../models/member/updateMemberMaster.sql');
-const updateMemberDetail = require('../models/member/updateMemberDetail.sql');
-const selectMemberSecure = require('../models/member/selectMemberSecure.sql');
-const selectMember = require('../models/member/selectMember.sql');
 
 const getMember = async function(queryStringParameters: any) {
   let result: any;
@@ -25,7 +26,7 @@ const getMember = async function(queryStringParameters: any) {
     if (conn) db.release(conn);
   }
   return {'data': result[0]}
-}
+};
 
 const getMemberSecure = async function(pathParameters: any) {
   let result: any;
@@ -46,7 +47,7 @@ const getMemberSecure = async function(pathParameters: any) {
     if (conn) db.release(conn);
   }
   return {'data': result[0]}
-}
+};
 
 const createMember = async function(body: any) {
   let conn: any;
@@ -55,7 +56,7 @@ const createMember = async function(body: any) {
     const memberMaster = plainToClass(MemberMaster, {
       email: body.email,
       auth_id: body.auth_id,
-      username: body.email.split('@')[0]
+      username: body.email.split('@')[0],
     })
     await validator(memberMaster);
 
@@ -106,7 +107,7 @@ const patchMemberMaster = async function(pathParameters: any, body: any, userId:
     if (conn) db.release(conn);
   }
   return {'data': 'success'}
-}
+};
 
 const patchMemberDetail = async function(pathParameters: any, body: any, userId: string) {
   let conn: any;
@@ -123,12 +124,12 @@ const patchMemberDetail = async function(pathParameters: any, body: any, userId:
       introduction: body.introduction,
       profile_pic: body.profile_pic,
       language_id: body.language_id,
-      last_activity_at: body.last_activity_at,
+      last_activity_at: new Date(),
       phone_number: body.phone_number,
       country_id: body.country_id,
     });
     const memberMaster = plainToClass(MemberMaster, {
-      auth_id: userId
+      auth_id: userId, 
     });
     await validator(memberDetail);
     await validator(memberMaster);
@@ -148,7 +149,37 @@ const patchMemberDetail = async function(pathParameters: any, body: any, userId:
     if (conn) db.release(conn);
   }
   return {'data': 'success'}
-}
+};
+
+const patchMemberProfilePic = async function(pathParameters: any, body: any) {
+  let conn: any;
+
+  try {
+    const memberMaster = plainToClass(MemberMaster, {
+      username: pathParameters.username,
+    });    
+    const memberDetail = plainToClass(MemberDetail, {
+      profile_pic: body.profile_pic,
+      last_activity_at: new Date(),
+    });
+    await validator(memberMaster);
+    await validator(memberDetail);
+    const memberMasterAndDetail = memberMaster.pourObjectIntoMemberMaster(memberDetail);
+
+    conn = await db.getConnection();
+    await db.beginTransaction(conn);
+
+    await db.execute(conn, updateMemberProfilePic, memberMasterAndDetail);
+
+    await db.commit(conn);
+  } catch (error) {
+    if (conn) await db.rollBack(conn);
+    controllerErrorWrapper(error);
+  } finally {
+    if (conn) db.release(conn);
+  }
+  return {'data': 'success'}
+};
 
 export {
   getMember,
@@ -156,4 +187,5 @@ export {
 	createMember,
   patchMemberMaster,
   patchMemberDetail,
+  patchMemberProfilePic,
 };

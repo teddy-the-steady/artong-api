@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import * as init from '../init';
 import requestInit  from '../utils/http/request';
-import { successResponse, errorResponse } from '../utils/http/response'
-import { member, status, country } from '../controllers/index';
+import { successResponse, errorResponse } from '../utils/http/response';
+import { member, status, country } from '../controllers/artong/index';
 
 export async function handler(event: any, context: any, callback: any) {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -37,7 +37,10 @@ export async function handler(event: any, context: any, callback: any) {
         if (req.pathParameters && req.path.startsWith('/artong/v1/memberMaster/'))
           res = await member.patchMemberMaster(req.pathParameters, req.body, req.userId);
         else if (req.pathParameters && req.path.startsWith('/artong/v1/memberDetail/'))
-          res = await member.patchMemberDetail(req.pathParameters, req.body, req.userId);
+          if (req.path.indexOf('/profilePic') !== -1)
+            res = await member.patchMemberProfilePic(req.pathParameters, req.body);
+          else
+            res = await member.patchMemberDetail(req.pathParameters, req.body, req.userId);
         break;
       default:
         console.error('METHOD undefined');
