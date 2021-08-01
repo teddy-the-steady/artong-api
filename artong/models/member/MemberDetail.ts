@@ -1,10 +1,11 @@
 import { Type } from 'class-transformer';
-import { IsNumber } from 'class-validator';
+import { IsNumber, IsOptional } from 'class-validator';
 
 export default class MemberDetail {
 	id: number;
 	@Type(() => Number)
 	@IsNumber()
+	@IsOptional()
 	member_id: number;
 	given_name: string;
 	family_name: string;
