@@ -1,6 +1,6 @@
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
-// import axios from 'axios';
-// axios.defaults.baseURL = 'https://6tz1h3qch8.execute-api.ap-northeast-2.amazonaws.com/stage/artong/v1';
+import axios from 'axios';
+axios.defaults.baseURL = 'https://6tz1h3qch8.execute-api.ap-northeast-2.amazonaws.com/stage/artong/v1';
 
 const updateProfilePic = async function(s3: any) {
   try {    
@@ -9,8 +9,8 @@ const updateProfilePic = async function(s3: any) {
     const username = key.split('/')[1];
     const size = s3.object.size;
 
-    // const member = await axios.get(`/member?username=${username}`);
-    // console.log('GET /member?username', member);
+    const member = await axios.get(`/member?username=${username}`);
+    console.log('GET /member?username', member);
   } catch (error) {
     controllerErrorWrapper(error);
   }

@@ -37,10 +37,9 @@ export async function handler(event: any, context: any, callback: any) {
         if (req.pathParameters && req.path.startsWith('/artong/v1/memberMaster/'))
           res = await member.patchMemberMaster(req.pathParameters, req.body, req.userId);
         else if (req.pathParameters && req.path.startsWith('/artong/v1/memberDetail/'))
-          if (req.path.indexOf('/profilePic') !== -1)
+          res = await member.patchMemberDetail(req.pathParameters, req.body, req.userId);
+        else if (req.pathParameters && req.path.startsWith('/artong/v1/member/'))
             res = await member.patchMemberProfilePic(req.pathParameters, req.body);
-          else
-            res = await member.patchMemberDetail(req.pathParameters, req.body, req.userId);
         break;
       default:
         console.error('METHOD undefined');
