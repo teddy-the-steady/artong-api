@@ -4,7 +4,6 @@ axios.defaults.baseURL = 'https://6tz1h3qch8.execute-api.ap-northeast-2.amazonaw
 
 const updateProfilePic = async function(s3: any) {
   try {
-    console.log('in updateProfilePic:', s3)
     const bucket = s3.bucket.name;
     const key = decodeURIComponent(s3.object.key);
     const username = key.split('/')[1];
@@ -17,7 +16,7 @@ const updateProfilePic = async function(s3: any) {
     }
     
     const member = await axios.patch(`/member/${username}/profilePic`, {
-      profile_pic: `${bucket}/${key}`
+      profile_pic: `${key}`
     }, config);
     console.log('PATCH /member/:username/profilePic', member);
   } catch (error) {
