@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import * as init from '../init';
 import requestInit  from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response';
-import { member, status, country } from '../controllers/artong/index';
+import { member, status, country, contents } from '../controllers/artong/index';
 
 export async function handler(event: any, context: any, callback: any) {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -28,6 +28,8 @@ export async function handler(event: any, context: any, callback: any) {
           res = await status.createStatus(req.body, req.userGroups);
         else if (req.path === '/artong/v1/country' || req.path === '/artong/v1/country/')
           res = await country.createCountry(req.body, req.userGroups);
+          else if (req.path === '/artong/v1/contents' || req.path === '/artong/v1/contents/')
+          res = await contents.createContent(req.body);
         break;
       case 'PUT':
         if (req.pathParameters && req.path.startsWith('/artong/v1/status/'))
