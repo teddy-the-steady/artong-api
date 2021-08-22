@@ -8,7 +8,7 @@ const uploadContent = async function(s3: any) {
     const username = key.split('/')[1];
     const size = s3.object.size;
 
-    await axios.post(`/content`, {
+    await axios.post(`/contents`, {
       username: username,
       content_url: key,
       thumbnail_url: key,
