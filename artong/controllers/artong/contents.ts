@@ -20,7 +20,7 @@ const createContent = async function(body: any) {
     const content = new Contents({
       content_url: body.content_url,
       thumbnail_url: body.thumbnail_url, // TODO] 파일 리사이징 모듈(람다?) 만들기 
-      upload_id: insertedId,
+      upload_id: insertedId[0].id,
     });
     await db.execute(conn, insertContent, content);
 
