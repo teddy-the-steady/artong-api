@@ -1,8 +1,10 @@
-import { profile } from '../controllers/photo/index';
+import { profile, contents } from '../controllers/photo/index';
 import { InternalServerError } from '../utils/error/errors';
+import axios from 'axios';
 
-// TODO] axios baseUrl setting 여기서?
-// x-api-key ssm에서 가져오기?
+axios.defaults.baseURL = 'https://6tz1h3qch8.execute-api.ap-northeast-2.amazonaws.com/stage/artong/v1';
+axios.defaults.headers.common['x-api-key'] = 'KElcrjWSUR42A0zxhkUmP3UqGaJxQ8b2GlsuCOTa';
+
 export async function handler(event: any, context: any, callback: any) {
   console.log(event);
 
@@ -13,6 +15,9 @@ export async function handler(event: any, context: any, callback: any) {
     switch (type) {
       case 'profile':
         await profile.updateProfilePic(event.Records[0].s3);
+        break;
+      case 'contents':
+        await contents.uploadContent(event.Records[0].s3);
         break;
       default:
         break;

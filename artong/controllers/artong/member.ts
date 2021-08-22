@@ -56,7 +56,7 @@ const createMember = async function(body: any) {
     const memberMaster = plainToClass(MemberMaster, {
       email: body.email,
       auth_id: body.auth_id,
-      username: body.email.split('@')[0],
+      username: body.email.split('@')[0], // TODO] username 중복시에 뒤에 sequence 붙여주자
     })
     await validator(memberMaster);
 
