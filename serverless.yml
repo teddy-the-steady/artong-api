@@ -87,6 +87,10 @@ functions:
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
      - http:
         path: artong/v1/contents
+        method: GET
+        cors: true
+     - http:
+        path: artong/v1/contents
         method: POST
         cors: true
         private: true
