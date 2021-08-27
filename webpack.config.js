@@ -4,7 +4,7 @@ const { IgnorePlugin } = require('webpack');
 
 module.exports = {
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
-  /* [IMPORTANT] local 테스트시 주석 해제 */
+  /* [IMPORTANT] local 테스트시 주석 해제.. TODO] env로 쪼개자*/
   // entry: {
   //   artong: path.join(__dirname, 'artong/handler/artong.ts'),
   // },

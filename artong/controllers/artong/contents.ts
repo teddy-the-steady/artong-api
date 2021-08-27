@@ -3,6 +3,22 @@ import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import { Contents, Uploads } from '../../models/index';
 const insertUpload = require('../../models/uploads/insertUpload.sql');
 const insertContent = require('../../models/contents/insertContent.sql');
+const selectContents = require('../../models/contents/selectContents.sql');
+
+const getContentsList = async function(queryStringParameters: any) {
+  let result: any;
+  let conn: any;
+
+  try {
+    conn = await db.getConnection();
+    result = await db.execute(conn, selectContents, queryStringParameters);
+  } catch (error) {
+    controllerErrorWrapper(error);
+  } finally {
+    if (conn) db.release(conn);
+  }
+  return {'data': JSON.parse(result[0].result)}
+}
 
 const createContent = async function(body: any) {
   let conn: any;
@@ -35,5 +51,6 @@ const createContent = async function(body: any) {
 };
 
 export {
+  getContentsList,
 	createContent,
 };
