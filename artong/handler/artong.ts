@@ -20,6 +20,8 @@ export async function handler(event: any, context: any, callback: any) {
           res = await member.getMemberSecure(req.pathParameters);
         else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
           res = await status.getStatusList(req.queryStringParameters, req.userGroups);
+        else if (req.path === '/artong/v1/contents' || req.path === '/artong/v1/contents/')
+          res = await contents.getContentsList(req.queryStringParameters)
         break;
       case 'POST':
         if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
