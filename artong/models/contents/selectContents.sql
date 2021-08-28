@@ -31,7 +31,7 @@
 -- ) a;
 SELECT * FROM uploads
 {{#if member_id}}
-    WHERE u.member_id = {{member_id}}
+    WHERE member_id = {{member_id}}
 {{else if username}}
-    WHERE u.member_id = (SELECT id FROM member_master WHERE username = '{{username}}')
+    WHERE member_id = (SELECT id FROM member_master WHERE username = '{{username}}')
 {{/if}}
