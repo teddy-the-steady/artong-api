@@ -17,7 +17,7 @@ const getContentsList = async function(queryStringParameters: any) {
   } finally {
     if (conn) db.release(conn);
   }
-  return {'data': JSON.parse(result[0].result)}
+  return {'data': result}
 }
 
 const createContent = async function(body: any) {
@@ -27,6 +27,7 @@ const createContent = async function(body: any) {
     const upload = new Uploads({
       username: body.username,
       description: body.description, // TODO] #단어 파싱해서 태그에 넘기자
+      thumbnail_url: body.thumbnail_url, // TODO] 파일 리사이징 모듈(람다?) 만들기 
     });
 
     conn = await db.getConnection();
@@ -35,7 +36,6 @@ const createContent = async function(body: any) {
     const insertedId = await db.execute(conn, insertUpload, upload);
     const content = new Contents({
       content_url: body.content_url,
-      thumbnail_url: body.thumbnail_url, // TODO] 파일 리사이징 모듈(람다?) 만들기 
       upload_id: insertedId[0].id,
     });
     await db.execute(conn, insertContent, content);
