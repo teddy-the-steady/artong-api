@@ -1,7 +1,6 @@
 export default class Contents {
     id: number;
     content_url: string;
-    thumbnail_url: string;
     upload_id: number;
 
     created_at: Date;
@@ -10,7 +9,6 @@ export default class Contents {
     constructor(obj: any) {
         this.id = obj.id;
         this.content_url = obj.content_url;
-        this.thumbnail_url = obj.thumbnail_url;
         this.upload_id = obj.upload_id;
 
         this.created_at = obj.created_at;
