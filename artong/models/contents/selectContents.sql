@@ -1,3 +1,19 @@
+/*+ IndexScan(uploads uploads_pkey) */
+SELECT * FROM uploads
+{{#if member_id}}
+    WHERE member_id = {{member_id}} AND
+{{else if username}}
+    WHERE member_id = (SELECT id FROM member_master WHERE username = '{{username}}') AND
+{{else}}
+    WHERE
+{{/if}}
+{{#if lastId}}
+    id < {{lastId}} AND
+{{/if}}
+1 = 1
+ORDER BY id DESC
+LIMIT {{pageSize}}
+
 -- SELECT jsonb_pretty(jsonb_agg(js_object)) result
 -- FROM (
 --     SELECT 
@@ -29,9 +45,3 @@
 --     ) a
 --     GROUP BY id, member_id, status_id, privacy_bound_id, description, created_at, updated_at
 -- ) a;
-SELECT * FROM uploads
-{{#if member_id}}
-    WHERE member_id = {{member_id}}
-{{else if username}}
-    WHERE member_id = (SELECT id FROM member_master WHERE username = '{{username}}')
-{{/if}}
