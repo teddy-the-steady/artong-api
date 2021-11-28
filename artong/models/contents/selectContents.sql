@@ -4,7 +4,7 @@ LEFT OUTER JOIN member_master m ON u.member_id = m.id
 {{#if member_id}}
     WHERE u.member_id = {{member_id}} AND
 {{else if username}}
-    WHERE u.member_id = (SELECT m.id FROM member_master WHERE m.username = '{{username}}') AND
+    WHERE u.member_id = (SELECT m.id FROM member_master WHERE m.username = '{{username}}' LIMIT 1) AND
 {{else}}
     WHERE
 {{/if}}
