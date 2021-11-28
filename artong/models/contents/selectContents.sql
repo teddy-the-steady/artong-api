@@ -1,17 +1,18 @@
 /*+ IndexScan(uploads uploads_pkey) */
-SELECT * FROM uploads
+SELECT u.*, m.username FROM uploads u
+LEFT OUTER JOIN member_master m ON u.member_id = m.id
 {{#if member_id}}
-    WHERE member_id = {{member_id}} AND
+    WHERE u.member_id = {{member_id}} AND
 {{else if username}}
-    WHERE member_id = (SELECT id FROM member_master WHERE username = '{{username}}') AND
+    WHERE u.member_id = (SELECT m.id FROM member_master WHERE m.username = '{{username}}') AND
 {{else}}
     WHERE
 {{/if}}
 {{#if lastId}}
-    id < {{lastId}} AND
+    u.id < {{lastId}} AND
 {{/if}}
 1 = 1
-ORDER BY id DESC
+ORDER BY u.id DESC
 LIMIT {{pageSize}}
 
 -- SELECT jsonb_pretty(jsonb_agg(js_object)) result
