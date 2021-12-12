@@ -1,5 +1,6 @@
 /*+ IndexScan(uploads uploads_pkey) */
-SELECT u.*, d.profile_pic FROM uploads u
+SELECT u.*, d.profile_pic, m.username FROM uploads u
+LEFT OUTER JOIN member_master m ON u.member_id = m. id
 LEFT OUTER JOIN member_detail d ON u.member_id = d.member_id
 {{#if member_id}}
     WHERE u.member_id = {{member_id}} AND
