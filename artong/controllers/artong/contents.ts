@@ -1,6 +1,7 @@
 import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import { Contents, Uploads } from '../../models/index';
+import validator from '../../utils/validators/common';
 const insertUpload = require('../../models/uploads/insertUpload.sql');
 const insertContent = require('../../models/contents/insertContent.sql');
 const selectContents = require('../../models/contents/selectContents.sql');
@@ -29,6 +30,7 @@ const createContent = async function(body: any) {
       description: body.description, // TODO] #단어 파싱해서 태그에 넘기자
       thumbnail_url: body.thumbnail_url, // TODO] 파일 리사이징 모듈(람다?) 만들기 
     });
+    await validator(upload);
 
     conn = await db.getConnection();
     await db.beginTransaction(conn);
