@@ -1,11 +1,17 @@
+import {
+    IsString,
+  } from 'class-validator';
+
 export default class Uploads {
     id: number;
     status_id: number;
     privacy_bound_id: number;
     member_id: number;
     description: string;
+    @IsString()
     thumbnail_url: string;
 
+    @IsString()
     username: string;
 
     created_at: Date;
