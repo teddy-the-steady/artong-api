@@ -3,15 +3,15 @@ import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import { Contents, Uploads } from '../../models/index';
 import validator from '../../utils/validators/common';
 const insertUploadAndContents = require('../../models/uploads/insertUploadAndContents.sql');
-const selectContents = require('../../models/contents/selectContents.sql');
+const selectUploads = require('../../models/uploads/selectUploads.sql');
 
-const getContentsList = async function(queryStringParameters: any) {
+const getUploadsList = async function(queryStringParameters: any) {
   let result: any;
   let conn: any;
 
   try {
     conn = await db.getConnection();
-    result = await db.execute(conn, selectContents, queryStringParameters);
+    result = await db.execute(conn, selectUploads, queryStringParameters);
   } catch (error) {
     controllerErrorWrapper(error);
   } finally {
@@ -20,7 +20,7 @@ const getContentsList = async function(queryStringParameters: any) {
   return {'data': result}
 }
 
-const createContent = async function(body: any) {
+const createUpload = async function(body: any) {
   let conn: any;
 
   try {   
@@ -53,6 +53,6 @@ const createContent = async function(body: any) {
 };
 
 export {
-  getContentsList,
-	createContent,
+  getUploadsList,
+	createUpload,
 };
