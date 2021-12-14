@@ -30,4 +30,8 @@ export default class Uploads {
         this.created_at = obj.created_at;
         this.updated_at = obj.updated_at;
     }
+
+    pourObjectIntoUploads(object: any) {
+		return Object.assign(this, object);
+	}
 }
