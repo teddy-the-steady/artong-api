@@ -2,8 +2,7 @@ import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import { Contents, Uploads } from '../../models/index';
 import validator from '../../utils/validators/common';
-const insertUpload = require('../../models/uploads/insertUpload.sql');
-const insertContent = require('../../models/contents/insertContent.sql');
+const insertUploadAndContents = require('../../models/uploads/insertUploadAndContents.sql');
 const selectContents = require('../../models/contents/selectContents.sql');
 
 const getContentsList = async function(queryStringParameters: any) {
@@ -32,15 +31,16 @@ const createContent = async function(body: any) {
     });
     await validator(upload);
 
+    const content = new Contents({
+      content_url: body.content_url
+    });
+
+    const uploadAndcontent = upload.pourObjectIntoUploads(content);
+
     conn = await db.getConnection();
     await db.beginTransaction(conn);
 
-    const insertedId = await db.execute(conn, insertUpload, upload);
-    const content = new Contents({
-      content_url: body.content_url,
-      upload_id: insertedId[0].id,
-    });
-    await db.execute(conn, insertContent, content);
+    await db.execute(conn, insertUploadAndContents, uploadAndcontent);
 
     await db.commit(conn);
   } catch (error) {
