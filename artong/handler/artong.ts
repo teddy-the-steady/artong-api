@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import * as init from '../init';
 import requestInit  from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response';
-import { member, status, country, contents } from '../controllers/artong/index';
+import { member, status, country, uploads } from '../controllers/artong/index';
 
 export async function handler(event: any, context: any, callback: any) {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -21,7 +21,7 @@ export async function handler(event: any, context: any, callback: any) {
         else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
           res = await status.getStatusList(req.queryStringParameters, req.userGroups);
         else if (req.path === '/artong/v1/uploads' || req.path === '/artong/v1/uploads/')
-          res = await contents.getUploadsList(req.queryStringParameters)
+          res = await uploads.getUploadsList(req.queryStringParameters)
         break;
       case 'POST':
         if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
@@ -31,7 +31,9 @@ export async function handler(event: any, context: any, callback: any) {
         else if (req.path === '/artong/v1/country' || req.path === '/artong/v1/country/')
           res = await country.createCountry(req.body, req.userGroups);
         else if (req.path === '/artong/v1/uploads' || req.path === '/artong/v1/uploads/')
-          res = await contents.createUpload(req.body);
+          res = await uploads.createUpload(req.body);
+        else if (req.pathParameters && req.path.startsWith('/artong/v1/uploads/'))
+          res = await uploads.createUploadAction(req.pathParameters,req.body);
         break;
       case 'PUT':
         if (req.pathParameters && req.path.startsWith('/artong/v1/status/'))

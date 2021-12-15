@@ -94,6 +94,11 @@ functions:
         method: POST
         cors: true
         private: true
+     - http:
+        path: artong/v1/uploads/{id}/actions
+        method: POST
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
     layers:
      - {Ref: NodeModulesLambdaLayer}
   photo:

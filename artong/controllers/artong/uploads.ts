@@ -1,9 +1,10 @@
 import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
-import { Contents, Uploads } from '../../models/index';
+import { Contents, Uploads, UploadActions } from '../../models/index';
 import validator from '../../utils/validators/common';
 const insertUploadAndContents = require('../../models/uploads/insertUploadAndContents.sql');
 const selectUploads = require('../../models/uploads/selectUploads.sql');
+const insertUploadActions = require('../../models/actions/insertUploadActions.sql')
 
 const getUploadsList = async function(queryStringParameters: any) {
   let result: any;
@@ -52,7 +53,33 @@ const createUpload = async function(body: any) {
   return {'data': 'success'}
 };
 
+const createUploadAction = async function(pathParameters: any, body: any) {
+  let conn: any;
+  
+  try {
+    const action = new UploadActions({
+      action_id: body.action_code,
+      upload_id: pathParameters.id,
+      member_id: body.username
+    });
+
+    conn = await db.getConnection();
+    await db.beginTransaction(conn);
+
+    await db.execute(conn, insertUploadActions, action);
+
+    await db.commit(conn);
+  } catch (error) {
+    if (conn) await db.rollBack(conn);
+    controllerErrorWrapper(error);
+  } finally {
+    if (conn) db.release(conn);
+  }
+  return {'data': 'success'}
+}
+
 export {
   getUploadsList,
 	createUpload,
+  createUploadAction,
 };
