@@ -17,7 +17,7 @@ export async function handler(event: any, context: any, callback: any) {
         await profile.updateProfilePic(event.Records[0].s3);
         break;
       case 'contents':
-        await contents.uploadContent(event.Records[0].s3);
+        await contents.createUploadAndContent(event.Records[0].s3);
         break;
       default:
         break;

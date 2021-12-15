@@ -4,6 +4,7 @@ import Status from './status/Status';
 import Country from './country/Country';
 import Contents from './contents/Contents';
 import Uploads from './uploads/Uploads';
+import UploadActions from './actions/UploadActions'
 
 export {
 	MemberMaster,
@@ -12,4 +13,5 @@ export {
 	Country,
 	Contents,
 	Uploads,
+	UploadActions,
 };
