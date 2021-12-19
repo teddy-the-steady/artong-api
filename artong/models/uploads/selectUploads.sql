@@ -1,6 +1,11 @@
 /*+ IndexScan(uploads uploads_pkey) */
-SELECT u.*, d.profile_pic, m.username FROM uploads u
-LEFT OUTER JOIN member_master m ON u.member_id = m. id
+SELECT
+    u.*, d.profile_pic, m.username,
+    (SELECT TRUE FROM upload_actions ua
+    WHERE ua.upload_id = u.id AND ua.action_id = 1
+    AND ua.member_id = (SELECT id FROM member_master WHERE username = '{{username}}' LIMIT 1)) AS "like"
+FROM uploads u
+LEFT OUTER JOIN member_master m ON u.member_id = m.id
 LEFT OUTER JOIN member_detail d ON u.member_id = d.member_id
 {{#if member_id}}
     WHERE u.member_id = {{member_id}} AND
