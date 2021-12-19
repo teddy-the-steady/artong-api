@@ -5,7 +5,7 @@ SELECT
 	CASE WHEN action_id = 1 THEN true ELSE NULL END
     FROM upload_actions ua
     WHERE ua.upload_id = u.id 
-	AND ua.member_id = (SELECT id FROM member_master WHERE username = 'superduper8989' LIMIT 1)
+	AND ua.member_id = (SELECT id FROM member_master WHERE auth_id = '{{userId}}' LIMIT 1)
     ORDER BY updated_at DESC LIMIT 1) AS "like"
 FROM uploads u
 LEFT OUTER JOIN member_master m ON u.member_id = m.id
