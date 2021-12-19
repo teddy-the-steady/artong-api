@@ -6,11 +6,13 @@ const insertUploadAndContents = require('../../models/uploads/insertUploadAndCon
 const selectUploads = require('../../models/uploads/selectUploads.sql');
 const insertUploadActions = require('../../models/actions/insertUploadActions.sql')
 
-const getUploadsList = async function(queryStringParameters: any) {
+const getUploadsList = async function(queryStringParameters: any, userId: string) {
   let result: any;
   let conn: any;
 
   try {
+    queryStringParameters['userId'] = userId;
+    
     conn = await db.getConnection();
     result = await db.execute(conn, selectUploads, queryStringParameters);
   } catch (error) {
