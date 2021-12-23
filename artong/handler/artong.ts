@@ -35,7 +35,7 @@ export async function handler(event: any, context: any, callback: any) {
         else if (req.path === '/artong/v1/uploads' || req.path === '/artong/v1/uploads/')
           res = await uploads.createUpload(req.body);
         else if (req.pathParameters && req.path.startsWith('/artong/v1/uploads/'))
-          res = await uploads.createUploadAction(req.pathParameters,req.body);
+          res = await uploads.createUploadAction(req.pathParameters, req.body, req.userId);
         break;
       case 'PUT':
         if (req.pathParameters && req.path.startsWith('/artong/v1/status/'))
