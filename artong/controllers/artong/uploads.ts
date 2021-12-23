@@ -73,14 +73,14 @@ const createUpload = async function(body: any) {
   return {'data': 'success'}
 };
 
-const createUploadAction = async function(pathParameters: any, body: any) {
+const createUploadAction = async function(pathParameters: any, body: any, userId: string) {
   let conn: any;
   
   try {
     const action = new UploadActions({
       action_id: body.action_code,
       upload_id: pathParameters.id,
-      member_id: body.username
+      auth_id: userId
     });
 
     conn = await db.getConnection();
