@@ -4,17 +4,35 @@ import { Contents, Uploads, UploadActions } from '../../models/index';
 import validator from '../../utils/validators/common';
 const insertUploadAndContents = require('../../models/uploads/insertUploadAndContents.sql');
 const selectUploads = require('../../models/uploads/selectUploads.sql');
+const selectAuthUserUploads = require('../../models/uploads/selectAuthUserUploads.sql');
 const insertUploadActions = require('../../models/actions/insertUploadActions.sql')
 
-const getUploadsList = async function(queryStringParameters: any, userId: string) {
+const getUploadsList = async function(queryStringParameters: any) {
   let result: any;
   let conn: any;
 
   try {
-    queryStringParameters['userId'] = userId;
-    
     conn = await db.getConnection();
     result = await db.execute(conn, selectUploads, queryStringParameters);
+  } catch (error) {
+    controllerErrorWrapper(error);
+  } finally {
+    if (conn) db.release(conn);
+  }
+  return {'data': result}
+}
+
+const getAuthUserUploadsList = async function(queryStringParameters: any, userId: string) {
+  let result: any;
+  let conn: any;
+  let params: any;
+
+  try {
+    params = queryStringParameters;
+    params['userId'] = userId;
+
+    conn = await db.getConnection();
+    result = await db.execute(conn, selectAuthUserUploads, params);
   } catch (error) {
     controllerErrorWrapper(error);
   } finally {
@@ -82,6 +100,7 @@ const createUploadAction = async function(pathParameters: any, body: any) {
 
 export {
   getUploadsList,
+  getAuthUserUploadsList,
 	createUpload,
   createUploadAction,
 };
