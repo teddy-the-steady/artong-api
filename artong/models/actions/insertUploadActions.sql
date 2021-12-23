@@ -3,7 +3,7 @@ INSERT INTO
 VALUES(
 	(SELECT id FROM actions WHERE code = UPPER('{{action_id}}')),
 	{{upload_id}},
-	(SELECT id FROM member_master WHERE auth_id = '{{auth_id}}')
+	(SELECT id FROM member_master WHERE auth_id = '{{member_id}}')
 ) ON CONFLICT (action_id, upload_id, member_id) DO
 UPDATE SET
 	action_id = (SELECT id FROM actions WHERE code = UPPER('{{action_id}}')),

@@ -80,7 +80,7 @@ const createUploadAction = async function(pathParameters: any, body: any, userId
     const action = new UploadActions({
       action_id: body.action_code,
       upload_id: pathParameters.id,
-      auth_id: userId
+      member_id: userId
     });
 
     conn = await db.getConnection();
