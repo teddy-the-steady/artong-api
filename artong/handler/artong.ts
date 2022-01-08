@@ -3,26 +3,6 @@ import * as init from '../init';
 import requestInit  from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response';
 import { member, status, country, uploads } from '../controllers/artong/index';
-const AWS = require('aws-sdk');
-const ssm = new AWS.SSM();
-
-const secretKey = async function(){
-  try {
-    console.log('secretKey!')
-    const keys = await ssm.getParameters({
-      Names: [
-        '/db/host',
-        '/db/stage/database',
-        '/db/user',
-        '/db/password',
-      ],
-      WithDecryption: true
-    }).promise();
-    console.log('keys::::', keys)
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 export async function handler(event: any, context: any, callback: any) {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -31,7 +11,6 @@ export async function handler(event: any, context: any, callback: any) {
   try {
     const req = requestInit(event);
     console.log(req);
-    await secretKey();
 
     switch (req.httpMethod) {
       case 'GET':
