@@ -6,7 +6,6 @@ const ssm = new AWS.SSM();
 const getPool = async function() {
   try {
     const keys = await secretKey();
-    console.log(keys)
     return new Pool({
       host: keys['/db/host'],
       user: keys['/db/user'],
