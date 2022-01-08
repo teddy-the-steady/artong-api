@@ -25,11 +25,6 @@ provider:
         - 'ssm:GetParameters'
       Resource:
         - 'arn:aws:ssm:ap-northeast-2:821343553435:parameter/db/*'
-  vpc:
-    securityGroupIds:
-      - sg-c514feab
-    subnetIds:
-      - subnet-a8a74fc3
 
 package:
   individually: true
