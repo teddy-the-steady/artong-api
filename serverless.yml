@@ -29,8 +29,9 @@ provider:
     securityGroupIds:
       - sg-07149fcb367dc482b
     subnetIds:
-      - subnet-a8a74fc3
-      - subnet-2efd5855
+      - subnet-0c0f8755936ae2b35
+      - subnet-029e8bc65534c9544
+      - subnet-029e8bc65534c9544
 
 package:
   individually: true
