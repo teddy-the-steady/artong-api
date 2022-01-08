@@ -27,9 +27,10 @@ provider:
         - 'arn:aws:ssm:ap-northeast-2:821343553435:parameter/db/*'
   vpc:
     securityGroupIds:
-      - sg-c514feab
+      - sg-07149fcb367dc482b
     subnetIds:
       - subnet-a8a74fc3
+      - subnet-2efd5855
 
 package:
   individually: true
