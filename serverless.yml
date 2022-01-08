@@ -17,7 +17,7 @@ provider:
             - 'ssm:GetParameters'
           Resource:
             - 'arn:aws:ssm:ap-northeast-2:821343553435:parameter/db/*'
-      arn:aws:iam::821343553435:role/lambda-vpc-access-role
+      - arn:aws:iam::821343553435:role/lambda-vpc-access-role
   apiKeys:
     - artongApiKeyStage
   vpc:
