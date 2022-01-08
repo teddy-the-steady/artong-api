@@ -11,6 +11,20 @@ provider:
     NODE_PATH: './:/opt/node_modules'
   apiKeys:
     - artongApiKeyStage
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 's3:PutObject'
+        - 's3:GetObject'
+        - 's3:ListBucket'
+      Resource:
+        - 'arn:aws:s3:::4rtong-staging-imagesartongvue-artongvue'
+        - 'arn:aws:s3:::4rtong-staging-imagesartongvue-artongvue/*'
+    - Effect: Allow
+      Action:
+        - 'ssm:GetParameters'
+      Resource:
+        - 'arn:aws:ssm:ap-northeast-2:821343553435:parameter/db/*'
   vpc:
     securityGroupIds:
       - sg-c514feab
@@ -28,19 +42,12 @@ layers:
     description: 'includes pq, handlebars, axios'
 
 plugins:
-  - serverless-iam-roles-per-function
   - serverless-webpack
   - serverless-offline
 
 functions:
   artong:
     handler: artong/handler/artong.handler
-    iamRoleStatements:
-      - Effect: Allow
-        Action:
-          - 'ssm:GetParameters'
-        Resource:
-          - 'arn:aws:ssm:ap-northeast-2:821343553435:parameter/db/*'
     events:
      - http:
         path: artong/v1/member
@@ -113,15 +120,6 @@ functions:
      - {Ref: NodeModulesLambdaLayer}
   photo:
     handler: artong/handler/photo.handler
-    iamRoleStatements:
-      - Effect: "Allow"
-        Action:
-          - "s3:PutObject"
-          - "s3:GetObject"
-          - "s3:ListBucket"
-        Resource:
-          - "arn:aws:s3:::4rtong-staging-imagesartongvue-artongvue"
-          - "arn:aws:s3:::4rtong-staging-imagesartongvue-artongvue/*"
     events:
      - s3:
         bucket: 4rtong-staging-imagesartongvue-artongvue
