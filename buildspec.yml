@@ -7,4 +7,4 @@ phases:
       - cd ./node_layers && npm install && cd ..
   build:
     commands:
-      - serverless deploy
+      - serverless deploy --force
