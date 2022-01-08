@@ -20,7 +20,7 @@ provider:
       Resource:
         - 'arn:aws:s3:::4rtong-staging-imagesartongvue-artongvue'
         - 'arn:aws:s3:::4rtong-staging-imagesartongvue-artongvue/*'
-    - Effect: Allow
+    - Effect: 'Allow'
       Action:
         - 'ssm:GetParameters'
       Resource:
