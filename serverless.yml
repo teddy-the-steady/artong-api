@@ -9,14 +9,13 @@ provider:
   environment:
     ENV: ${self:provider.stage}
     NODE_PATH: './:/opt/node_modules'
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - 'ssm:GetParameters'
-      Resource:
-        - 'arn:aws:ssm:ap-northeast-2:821343553435:parameter/db/*'
   apiKeys:
     - artongApiKeyStage
+  vpc:
+    securityGroupIds:
+      - sg-c514feab
+    subnetIds:
+      - subnet-a8a74fc3
 
 package:
   individually: true
@@ -36,11 +35,12 @@ plugins:
 functions:
   artong:
     handler: artong/handler/artong.handler
-    vpc:
-      securityGroupIds:
-        - sg-c514feab
-      subnetIds:
-        - subnet-a8a74fc3
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - 'ssm:GetParameters'
+        Resource:
+          - 'arn:aws:ssm:ap-northeast-2:821343553435:parameter/db/*'
     events:
      - http:
         path: artong/v1/member
@@ -113,11 +113,6 @@ functions:
      - {Ref: NodeModulesLambdaLayer}
   photo:
     handler: artong/handler/photo.handler
-    vpc:
-      securityGroupIds:
-        - sg-c514feab
-      subnetIds:
-        - subnet-a8a74fc3
     iamRoleStatements:
       - Effect: "Allow"
         Action:
