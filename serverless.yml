@@ -9,7 +9,6 @@ provider:
   environment:
     ENV: ${self:provider.stage}
     NODE_PATH: './:/opt/node_modules'
-  role: arn:aws:iam::821343553435:role/lambda-vpc-access-role
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -42,6 +41,7 @@ plugins:
 functions:
   artong:
     handler: artong/handler/artong.handler
+    role: arn:aws:iam::821343553435:role/lambda-vpc-access-role
     events:
      - http:
         path: artong/v1/member
@@ -114,6 +114,7 @@ functions:
      - {Ref: NodeModulesLambdaLayer}
   photo:
     handler: artong/handler/photo.handler
+    role: arn:aws:iam::821343553435:role/lambda-vpc-access-role
     iamRoleStatements:
       - Effect: "Allow"
         Action:
