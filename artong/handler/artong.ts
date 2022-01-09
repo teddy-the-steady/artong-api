@@ -16,7 +16,7 @@ export async function handler(event: any, context: any, callback: any) {
       case 'GET':
         if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
           res = await member.getMember(req.queryStringParameters);
-        else if (req.pathParameters && req.path.startsWith('/artong/v1/member/'))
+        else if (req.path.startsWith('/artong/v1/member/') && req.pathParameters)
           res = await member.getMemberSecure(req.pathParameters);
         else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
           res = await status.getStatusList(req.queryStringParameters, req.userGroups);
@@ -34,19 +34,19 @@ export async function handler(event: any, context: any, callback: any) {
           res = await country.createCountry(req.body, req.userGroups);
         else if (req.path === '/artong/v1/uploads' || req.path === '/artong/v1/uploads/')
           res = await uploads.createUpload(req.body);
-        else if (req.pathParameters && req.path.startsWith('/artong/v1/uploads/'))
+        else if (req.path.startsWith('/artong/v1/uploads/') && req.pathParameters && req.path.includes('/actions'))
           res = await uploads.createUploadAction(req.pathParameters, req.body, req.userId);
         break;
       case 'PUT':
-        if (req.pathParameters && req.path.startsWith('/artong/v1/status/'))
+        if (req.path.startsWith('/artong/v1/status/') && req.pathParameters)
           res = await status.putStatus(req.pathParameters, req.body, req.userGroups);
         break;
       case 'PATCH':
-        if (req.pathParameters && req.path.startsWith('/artong/v1/memberMaster/'))
+        if (req.path.startsWith('/artong/v1/memberMaster/') && req.pathParameters)
           res = await member.patchMemberMaster(req.pathParameters, req.body, req.userId);
-        else if (req.pathParameters && req.path.startsWith('/artong/v1/memberDetail/'))
+        else if (req.path.startsWith('/artong/v1/memberDetail/') && req.pathParameters)
           res = await member.patchMemberDetail(req.pathParameters, req.body, req.userId);
-        else if (req.pathParameters && req.path.startsWith('/artong/v1/member/'))
+        else if (req.path.startsWith('/artong/v1/member/') && req.pathParameters && req.path.includes('/profilePic'))
             res = await member.patchMemberProfilePic(req.pathParameters, req.body);
         break;
       default:

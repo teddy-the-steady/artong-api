@@ -124,7 +124,6 @@ const patchMemberDetail = async function(pathParameters: any, body: any, userId:
       introduction: body.introduction,
       profile_pic: body.profile_pic,
       language_id: body.language_id,
-      last_activity_at: new Date(),
       phone_number: body.phone_number,
       country_id: body.country_id,
     });
@@ -160,7 +159,6 @@ const patchMemberProfilePic = async function(pathParameters: any, body: any) {
     });    
     const memberDetail = plainToClass(MemberDetail, {
       profile_pic: body.profile_pic,
-      last_activity_at: new Date(),
     });
     await validator(memberMaster);
     await validator(memberDetail);
