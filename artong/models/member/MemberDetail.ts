@@ -18,7 +18,6 @@ export default class MemberDetail {
 	phone_number: string;
 	country_id: number;
 	language_id: number;
-	last_activity_at: Date;
 
 	created_at: Date;
 	updated_at: Date;
@@ -37,7 +36,6 @@ export default class MemberDetail {
 		phone_number: string,
 		country_id: number,
 		language_id: number,
-		last_activity_at: Date,
 		created_at: Date,
 		updated_at: Date,
 	) {
@@ -54,7 +52,6 @@ export default class MemberDetail {
 		this.phone_number = phone_number;
 		this.country_id = country_id;
 		this.language_id = language_id;
-		this.last_activity_at = last_activity_at;
 
 		this.created_at = created_at;
 		this.updated_at = updated_at;
