@@ -11,6 +11,7 @@ export async function handler(event: any, context: any, callback: any) {
   try {
     const req = requestInit(event);
     console.log(req);
+    console.log(process.env.IS_OFFLINE)
 
     switch (req.httpMethod) {
       case 'GET':
