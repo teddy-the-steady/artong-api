@@ -4,9 +4,13 @@ import { InternalServerError } from '../error/errors';
 import { DBError } from '../error/errorCodes';
 
 const getConnection = async function() {
-  const pool: any = await getPool();
-  const conn = await pool.connect();
-  return conn
+  try {
+    const pool: any = await getPool();
+    const conn = await pool.connect();
+    return conn
+  } catch (error) {
+    throw new InternalServerError(error, DBError.code);
+  }
 };
 
 const release = function(conn: any) {

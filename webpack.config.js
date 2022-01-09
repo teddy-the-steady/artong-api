@@ -4,15 +4,14 @@ const { IgnorePlugin } = require('webpack');
 
 module.exports = {
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
-  /* [IMPORTANT] local 테스트시 entry, output 주석 해제.. TODO] env로 쪼개자*/
-  // entry: {
-  //   artong: path.join(__dirname, 'artong/handler/artong.ts'),
-  // },
-  // output: {
-  //   libraryTarget: 'commonjs',
-  //   filename: 'artong/handler/[name].js',
-  //   path: path.resolve(__dirname, 'dist')
-  // },
+  entry: slsw.lib.webpack.isLocal ? {
+    artong: path.join(__dirname, 'artong/handler/artong.ts'),
+  } : null,
+  output: slsw.lib.webpack.isLocal ? {
+    libraryTarget: 'commonjs',
+    filename: 'artong/handler/[name].js',
+    path: path.resolve(__dirname, 'dist')
+  } : null,
 	module: {
     rules: [
       {

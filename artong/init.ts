@@ -7,7 +7,7 @@ const getPool = async function() {
   try {
     const keys = await secretKey();
     return new Pool({
-      host: keys['/db/host'],
+      host: process.env.IS_OFFLINE? 'localhost' : keys['/db/host'],
       user: keys['/db/user'],
       password: keys['/db/password'],
       database: keys['/db/stage/database'],
