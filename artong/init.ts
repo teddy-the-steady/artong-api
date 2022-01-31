@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 import handlebars from 'handlebars';
-import { getSecretKeys } from './utils/common/ssmKeys';
+import getSecretKeys from './utils/common/ssmKeys';
 
 const getPool = async function() {
   try {

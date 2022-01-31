@@ -28,6 +28,4 @@ const formatKeys = function(keys: Array<any>) {
   }, {});
 }
 
-export {
-  getSecretKeys,
-};
+export default getSecretKeys;
