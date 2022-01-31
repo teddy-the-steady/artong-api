@@ -67,7 +67,7 @@ functions:
         path: artong/v1/member/{id}/profilePic
         method: PATCH
         cors: true
-        private: true
+        # private: true
      - http:
         path: artong/v1/memberMaster/{id}
         method: PATCH
@@ -91,7 +91,7 @@ functions:
         path: artong/v1/uploads
         method: POST
         cors: true
-        private: true
+        # private: true
      - http:
         path: artong/v1/uploads/{id}/actions
         method: POST
