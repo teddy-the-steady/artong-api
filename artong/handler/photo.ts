@@ -1,6 +1,6 @@
 import { profile, contents } from '../controllers/photo/index';
 import { InternalServerError } from '../utils/error/errors';
-import { getSecretKeys } from '../utils/common/ssmKeys';
+import getSecretKeys from '../utils/common/ssmKeys';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'https://6tz1h3qch8.execute-api.ap-northeast-2.amazonaws.com/stage/artong/v1';
