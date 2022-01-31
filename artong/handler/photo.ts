@@ -5,11 +5,9 @@ import axios from 'axios';
 
 axios.defaults.baseURL = 'https://6tz1h3qch8.execute-api.ap-northeast-2.amazonaws.com/stage/artong/v1';
 axios.defaults.headers.common['x-api-key'] = async function() {
-  console.log('keys');
   const keys = await getSecretKeys();
-  console.log(keys);
   return keys['/apikey/artongApiKeyStage'];
-}
+}();
 
 export async function handler(event: any, context: any, callback: any) {
   console.log(event);
