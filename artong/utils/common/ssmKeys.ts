@@ -3,6 +3,7 @@ const ssm = new AWS.SSM();
 
 const getSecretKeys = async function(){
   try {
+    console.log('getSecretKeys')
     const keys = await secretKeyPromise.promise();
     return formatKeys(keys.Parameters);
   } catch (error) {
