@@ -5,7 +5,6 @@ import getSecretKeys from './utils/common/ssmKeys';
 const getPool = async function() {
   try {
     const keys = await getSecretKeys();
-    console.log('getPool:', keys)
     return new Pool({
       host: process.env.IS_OFFLINE? 'localhost' : keys['/db/host'],
       user: keys['/db/user'],
