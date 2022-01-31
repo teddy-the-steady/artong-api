@@ -1,9 +1,13 @@
 import { profile, contents } from '../controllers/photo/index';
 import { InternalServerError } from '../utils/error/errors';
+import { getSecretKeys } from '../utils/common/ssmKeys';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'https://6tz1h3qch8.execute-api.ap-northeast-2.amazonaws.com/stage/artong/v1';
-axios.defaults.headers.common['x-api-key'] = 'KElcrjWSUR42A0zxhkUmP3UqGaJxQ8b2GlsuCOTa';
+axios.defaults.headers.common['x-api-key'] = async () => {
+  const keys = await getSecretKeys();
+  return keys['/apikey/artongApiKeyStage']
+}
 
 export async function handler(event: any, context: any, callback: any) {
   console.log(event);
