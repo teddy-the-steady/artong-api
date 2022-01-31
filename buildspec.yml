@@ -3,7 +3,7 @@ phases:
   install:
     commands:
       - npm install
-      - npm install -g serverless
+      - npm install -g serverless@2
       - cd ./node_layers && npm install && cd ..
   build:
     commands:
