@@ -1,6 +1,5 @@
 import 'reflect-metadata';
-import * as init from '../init';
-import requestInit  from '../utils/http/request';
+import requestInit from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response';
 import { member, status, country, uploads } from '../controllers/artong/index';
 
