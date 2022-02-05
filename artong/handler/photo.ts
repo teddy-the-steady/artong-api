@@ -8,7 +8,7 @@ const setApiKey = async function() {
   const keys = await getSecretKeys();
   axios.defaults.headers.common['x-api-key'] = keys['/apikey/artongApiKeyStage'];
 };
-var initKeys: any = null;
+let initKeys: any = null;
 
 export async function handler(event: any, context: any, callback: any) {
   console.log(event);
