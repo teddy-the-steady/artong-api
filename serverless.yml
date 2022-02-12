@@ -18,8 +18,8 @@ provider:
         - 's3:GetObject'
         - 's3:ListBucket'
       Resource:
-        - 'arn:aws:s3:::4rtong-staging-imagesartongvue-artongvue'
-        - 'arn:aws:s3:::4rtong-staging-imagesartongvue-artongvue/*'
+        - 'arn:aws:s3:::artong-stage-image163347-stage'
+        - 'arn:aws:s3:::artong-stage-image163347-stage/*'
     - Effect: 'Allow'
       Action:
         - 'ssm:GetParameters'
@@ -128,7 +128,7 @@ functions:
     handler: artong/handler/photo.handler
     events:
      - s3:
-        bucket: 4rtong-staging-imagesartongvue-artongvue
+        bucket: artong-stage-image163347-stage
         event: s3:ObjectCreated:*
         rules:
           - prefix: public/
