@@ -18,8 +18,8 @@ provider:
         - 's3:GetObject'
         - 's3:ListBucket'
       Resource:
-        - 'arn:aws:s3:::4rtong-staging-imagesartongvue-artongvue'
-        - 'arn:aws:s3:::4rtong-staging-imagesartongvue-artongvue/*'
+        - 'arn:aws:s3:::artong-prod-image213636-prod'
+        - 'arn:aws:s3:::artong-prod-image213636-prod/*'
     - Effect: 'Allow'
       Action:
         - 'ssm:GetParameters'
@@ -124,17 +124,17 @@ functions:
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
     layers:
      - {Ref: NodeModulesLambdaLayer}
-  photo:
-    handler: artong/handler/photo.handler
-    events:
-     - s3:
-        bucket: 4rtong-staging-imagesartongvue-artongvue
-        event: s3:ObjectCreated:*
-        rules:
-          - prefix: public/
-        existing: true
-    layers:
-     - {Ref: NodeModulesLambdaLayer}
+  # photo:
+  #   handler: artong/handler/photo.handler
+  #   events:
+  #    - s3:
+  #       bucket: artong-prod-image213636-prod
+  #       event: s3:ObjectCreated:*
+  #       rules:
+  #         - prefix: public/
+  #       existing: true
+  #   layers:
+  #    - {Ref: NodeModulesLambdaLayer}
 
 resources:
   Resources:
