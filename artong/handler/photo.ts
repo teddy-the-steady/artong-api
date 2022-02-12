@@ -3,10 +3,10 @@ import { InternalServerError } from '../utils/error/errors';
 import getSecretKeys from '../utils/common/ssmKeys';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://6tz1h3qch8.execute-api.ap-northeast-2.amazonaws.com/stage/artong/v1';
+axios.defaults.baseURL = 'https://3tgb7ur43g.execute-api.ap-northeast-2.amazonaws.com/prod/artong/v1';
 const setApiKey = async function() {
   const keys = await getSecretKeys();
-  axios.defaults.headers.common['x-api-key'] = keys['/apikey/artongApiKeyStage'];
+  axios.defaults.headers.common['x-api-key'] = keys['/apikey/artongApiKeyProd'];
 };
 let initKeys: any = null; // TODO] 핸들러 밖에서 초기화가 잘 안되는듯.. 핸들러 밖에 변수 선언했음에도 매 요청마다 if(!initKeys) 타는 이슈
 
