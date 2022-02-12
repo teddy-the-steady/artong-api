@@ -1,150 +1,140 @@
 service: artong-api
 app: artong-api
-# org: superduper8989
 
 provider:
   name: aws
   runtime: nodejs12.x
   stage: prod
   region: ap-northeast-2
-  # resourcePolicy:
-  #   - Effect: Allow
-  #     Principal: "*"
-  #     Action: execute-api:Invoke
-  #     Resource:
-  #       - execute-api:/*/GET/api/v1/imageUpUrl
-  #       - execute-api:/*/OPTIONS/api/v1/imageUpUrl
-  #       - execute-api:/*/GET/api/v1/naverOcr
-  #       - execute-api:/*/OPTIONS/api/v1/naverOcr
-  #     Condition:
-  #       IpAddress:
-  #         aws:SourceIp:
-  #           - '61.98.131.200'
-  #           - '61.98.131.205'
-  #   - Effect: Allow
-  #     Principal: "*"
-  #     Action: execute-api:Invoke
-  #     Resource:
-  #       - execute-api:/*/*/*
-  #     Condition:
-  #       StringLike:
-  #         aws:Referer:
-  #           - 'http://artong.com/*'
-  #           - 'http://www.artong.com/*'
   environment:
-    NODE_PATH: "./:/opt/node_modules"
-  # apiKeys:
-  #   - artongApiKey
-  # usagePlan:
-  #   quota:
-  #     limit: 30000
-  #     offset: 0
-  #     period: MONTH
-  #   throttle:
-  #     burstLimit: 5000
-  #     rateLimit: 10000
+    ENV: ${self:provider.stage}
+    NODE_PATH: './:/opt/node_modules'
+  apiKeys:
+    - artongApiKeyStage
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 's3:PutObject'
+        - 's3:GetObject'
+        - 's3:ListBucket'
+      Resource:
+        - 'arn:aws:s3:::4rtong-staging-imagesartongvue-artongvue'
+        - 'arn:aws:s3:::4rtong-staging-imagesartongvue-artongvue/*'
+    - Effect: 'Allow'
+      Action:
+        - 'ssm:GetParameters'
+      Resource:
+        - 'arn:aws:ssm:ap-northeast-2:821343553435:parameter/*'
+  vpc:
+    securityGroupIds:
+      - sg-07149fcb367dc482b
+    subnetIds:
+      - subnet-0285f180e2f0c6ec0
+      - subnet-091d67b7e5ec421bb
 
 package:
- exclude:
-   - node_layers/**
+  individually: true
+  exclude:
+    - node_layers/**
 
 layers:
   NodeModules:
     path: node_layers
-    description: "includes mysql2, handlebars, joi"
+    description: 'includes pg, handlebars, axios'
 
 plugins:
-  - serverless-iam-roles-per-function
-
-custom:
-  DB_CONFIG: ${file(./config.js):DB_CONFIG}
-  cors:
-    origins:
-      - 'http://localhost:3000'
-      - 'http://localhost:8080'
-      - 'http://*.amazonaws.com'
-    headers:
-      - Content-Type
-      - X-Amz-Date
-      - Authorization
-      - X-Api-Key
-      - X-Amz-Security-Token
-      - X-Amz-User-Agent
-    allowCredentials: false
-# cors: ${self:custom.cors} 로 설정
-# Api Gateway 콘솔 options 통합응답에서 Access-Control-Allow-Origin: '*' 이면 매핑 템플릿에 else문 추가
-# #else #set($context.responseOverride.header.Access-Control-Allow-Origin = "")
+  - serverless-webpack
+  - serverless-offline
 
 functions:
-  hello:
-    handler: handler.hello
-    # iamRoleStatements:
-    #   - Effect: 'Allow'
-    #     Action:
-    #       - 's3:PutObject'
-    #       - 's3:GetObject'
-    #       - 's3:ListBucket'
-    #     Resource:
-    #       - 'arn:aws:s3:::refdm-excel'
-    #       - 'arn:aws:s3:::refdm-excel/*'
-    # vpc:
-    #   securityGroupIds:
-    #     - sg-0cadc6e28196dd89e
-    #   subnetIds:
-    #     - subnet-0994b73fe5ef30dd0
-    events:
-     - http: GET users/hello
-        # private: true
-  test:
-    handler: service/handler/test.handler
+  artong:
+    handler: artong/handler/artong.handler
     events:
      - http:
-        path: test/product
-        method: get
+        path: artong/v1/member
+        method: GET
+        cors: true
+     - http:
+        path: artong/v1/member
+        method: POST
+        cors: true
+     - http:
+        path: artong/v1/member/{id}
+        method: GET
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
      - http:
-        path: test/product/{id}
-        method: get
+        path: artong/v1/member/{id}/profilePic
+        method: PATCH
+        cors: true
+        private: true
+     - http:
+        path: artong/v1/memberMaster/{id}
+        method: PATCH
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
      - http:
-        path: test/product
-        method: post
+        path: artong/v1/memberDetail/{member_id}
+        method: PATCH
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+     - http:
+        path: artong/v1/uploads
+        method: GET
+        cors: true
+     - http:
+        path: artong/v1/auth/uploads
+        method: GET
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+     - http:
+        path: artong/v1/uploads
+        method: POST
+        cors: true
+        private: true
+     - http:
+        path: artong/v1/uploads/{id}/actions
+        method: POST
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
     layers:
-     - {Ref: NodeModulesLambdaLayer} 
-    environment:
-      DB_HOST: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_HOST}
-      DB_DATABASE: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_DATABASE}
-      DB_USER: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_USER}
-      DB_PASSWORD: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_PASSWORD}
-  product:
-    handler: service/handler/product.handler
+     - {Ref: NodeModulesLambdaLayer}
+  artong-admin:
+    handler: artong/handler/artong.handler
     events:
      - http:
-        path: artong/v1/product
-        method: get
+        path: artong/v1/status
+        method: GET
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
      - http:
-        path: artong/v1/product/{barcode}
-        method: get
+        path: artong/v1/status
+        method: POST
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
      - http:
-        path: artong/v1/product
-        method: post
+        path: artong/v1/status/{id}
+        method: PUT
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+     - http:
+        path: artong/v1/country
+        method: POST
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
     layers:
-     - {Ref: NodeModulesLambdaLayer} 
-    environment:
-      DB_HOST: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_HOST}
-      DB_DATABASE: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_DATABASE}
-      DB_USER: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_USER}
-      DB_PASSWORD: ${self:custom.DB_CONFIG.${self:provider.stage}.DB_PASSWORD}
+     - {Ref: NodeModulesLambdaLayer}
+  photo:
+    handler: artong/handler/photo.handler
+    events:
+     - s3:
+        bucket: 4rtong-staging-imagesartongvue-artongvue
+        event: s3:ObjectCreated:*
+        rules:
+          - prefix: public/
+        existing: true
+    layers:
+     - {Ref: NodeModulesLambdaLayer}
 
 resources:
   Resources:
