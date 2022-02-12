@@ -8,7 +8,7 @@ const setApiKey = async function() {
   const keys = await getSecretKeys();
   axios.defaults.headers.common['x-api-key'] = keys['/apikey/artongApiKeyStage'];
 };
-let initKeys: any = null;
+let initKeys: any = null; // TODO] 핸들러 밖에서 초기화가 잘 안되는듯.. 핸들러 밖에 변수 선언했음에도 매 요청마다 if(!initKeys) 타는 이슈
 
 export async function handler(event: any, context: any, callback: any) {
   console.log(event);
