@@ -40,7 +40,7 @@ package:
 layers:
   NodeModules:
     path: node_layers
-    description: 'includes pq, handlebars, axios'
+    description: 'includes pg, handlebars, axios'
 
 plugins:
   - serverless-webpack
