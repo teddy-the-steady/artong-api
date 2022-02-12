@@ -28,7 +28,7 @@ const execute = async function(conn: any, sql: string, params: any) {
   /* 쿼리 debug시 주석 해제 */
   // console.log(compiledModel);
   try {
-    const result = await conn.query(compiledModel);
+    const result = await conn.query(compiledModel); // TODO] SQL인젝션 방지목적 preparedStatement 필요
     return result['rows']
   } catch (error) {
     throw new InternalServerError(error, DBError.code);
