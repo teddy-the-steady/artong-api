@@ -16,7 +16,7 @@ const secretKeyPromise = ssm.getParameters({
     '/db/stage/database',
     '/db/user',
     '/db/password',
-    '/apikey/artongApiKeyStage',
+    '/apikey/artongApiKeyProd',
   ],
   WithDecryption: true
 });
