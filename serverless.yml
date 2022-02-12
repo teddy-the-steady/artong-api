@@ -10,7 +10,7 @@ provider:
     ENV: ${self:provider.stage}
     NODE_PATH: './:/opt/node_modules'
   apiKeys:
-    - artongApiKeyStage
+    - artongApiKeyProd
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
