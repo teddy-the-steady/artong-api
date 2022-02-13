@@ -49,14 +49,13 @@ plugins:
 
 custom:
   customDomain:
-    rest:
-      domainName: api.4rtong.com
-      stage: ${self:provider.stage}
-      basePath: ${self:provider.stage}
-      certificateName: '*.4rtong.com'
-      createRoute53Record: true
-      endpointType: 'edge'
-      securityPolicy: tls_1_2
+    domainName: api.4rtong.com
+    stage: ${self:provider.stage}
+    basePath: ${self:provider.stage}
+    certificateName: '*.4rtong.com'
+    createRoute53Record: true
+    endpointType: 'edge'
+    securityPolicy: tls_1_2
 
 functions:
   artong:
