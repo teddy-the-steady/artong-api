@@ -45,6 +45,14 @@ layers:
 plugins:
   - serverless-webpack
   - serverless-offline
+  - serverless-domain-manager
+
+custom:
+  customDomain:
+    domainName: api.4rtong.com
+    basePath: ${self:provider.stage}
+    stage: ${self:provider.stage}
+    createRoute53Record: true
 
 functions:
   artong:
