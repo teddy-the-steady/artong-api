@@ -12,11 +12,11 @@ const getSecretKeys = async function(){
 
 const secretKeyPromise = ssm.getParameters({
   Names: [
-    '/db/host',
-    '/db/stage/database',
-    '/db/user',
-    '/db/password',
-    '/apikey/artongApiKeyProd',
+    `/db/${process.env.ENV}/host`,
+    `/db/${process.env.ENV}/database`,
+    `/db/${process.env.ENV}/user`,
+    `/db/${process.env.ENV}/password`,
+    `/apikey/${process.env.ENV}/artong`,
   ],
   WithDecryption: true
 });
