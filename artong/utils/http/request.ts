@@ -5,7 +5,7 @@ const requestInit = (event: any) => {
   let result: any = {};
   
   result['httpMethod'] = event['httpMethod'];
-  result['path'] = event['path'];
+  result['path'] = event['path'].substring(event['path'].indexOf('/artong'));
   result['queryStringParameters'] = event['queryStringParameters'];
   result['pathParameters'] = event['pathParameters'];
 
