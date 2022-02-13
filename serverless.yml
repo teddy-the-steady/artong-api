@@ -10,7 +10,7 @@ provider:
     ENV: ${self:provider.stage}
     NODE_PATH: './:/opt/node_modules'
   apiKeys:
-    - artongApiKeyProd
+    - artongApiKey-${self:provider.stage}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -45,6 +45,17 @@ layers:
 plugins:
   - serverless-webpack
   - serverless-offline
+  - serverless-domain-manager
+
+custom:
+  customDomain:
+    domainName: api.4rtong.com
+    stage: ${self:provider.stage}
+    basePath: ${self:provider.stage}
+    certificateName: '*.4rtong.com'
+    createRoute53Record: true
+    endpointType: 'edge'
+    securityPolicy: tls_1_2
 
 functions:
   artong:
