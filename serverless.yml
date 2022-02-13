@@ -4,13 +4,13 @@ app: artong-api
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: stage #prod
+  stage: stage
   region: ap-northeast-2
   environment:
     ENV: ${self:provider.stage}
     NODE_PATH: './:/opt/node_modules'
   apiKeys:
-    - artongApiKeyStage
+    - artongApiKey-${self:provider.stage}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:

@@ -6,10 +6,10 @@ const getPool = async function() {
   try {
     const keys = await getSecretKeys();
     return new Pool({
-      host: process.env.IS_OFFLINE? 'localhost' : keys['/db/host'],
-      user: keys['/db/user'],
-      password: keys['/db/password'],
-      database: keys['/db/stage/database'],
+      host: process.env.IS_OFFLINE? 'localhost' : keys[`/db/${process.env.ENV}/host`],
+      user: keys[`/db/${process.env.ENV}/user`],
+      password: keys[`/db/${process.env.ENV}/password`],
+      database: keys[`/db/${process.env.ENV}/database`],
       port: 5432,
       max: 20,
       idleTimeoutMillis: 1000,
