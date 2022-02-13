@@ -16,7 +16,7 @@ const secretKeyPromise = ssm.getParameters({
     `/db/${process.env.ENV}/database`,
     `/db/${process.env.ENV}/user`,
     `/db/${process.env.ENV}/password`,
-    `/apikey/${process.env.ENV}/artongApiKey`,
+    `/apikey/${process.env.ENV}/artong`,
   ],
   WithDecryption: true
 });
