@@ -25,15 +25,33 @@ const compileSQL = function(sql: string) {
 const execute = async function(conn: any, sql: string, params: any) {
   const preCompiledModel = compileSQL(sql);
   const compiledModel = preCompiledModel(params);
+  const convertedSql = queryConverter(compiledModel, params);
   /* 쿼리 debug시 주석 해제 */
   // console.log(compiledModel);
+  console.log(convertedSql);
   try {
-    const result = await conn.query(compiledModel); // TODO] SQL인젝션 방지목적 preparedStatement 필요
+    const result = await conn.query(convertedSql); // TODO] SQL인젝션 방지목적 preparedStatement 필요
     return result['rows']
   } catch (error) {
     throw new InternalServerError(error, DBError.code);
   }
 };
+
+type QueryReducerArray = [string, any[], number];
+const queryConverter = function(parameterizedSql: string, params: any) {
+  const [text, values] = Object.entries(params).reduce(
+    ([sql, array, index], [key, value]) => {
+      sql = sql.replace(`\${${key}}`, `$${index}`);
+      if (value !== undefined) {
+        array.push(value);
+        index += 1;
+      }
+      return [sql, array, index] as QueryReducerArray
+    },
+    [parameterizedSql, [], 1] as QueryReducerArray
+  );
+  return { text, values };
+}
 
 const beginTransaction = async function(conn: any) {
   await conn.query('BEGIN');
