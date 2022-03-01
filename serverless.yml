@@ -60,6 +60,11 @@ custom:
 functions:
   artong:
     handler: artong/handler/artong.handler
+      events:
+       - http:
+          path: example
+          method: GET
+          cors: true
   #   events:
   #    - http:
   #       path: artong/v1/member/{id}
