@@ -24,7 +24,7 @@ export async function handler(event: any, context: any, callback: any) {
         else if (req.path === '/artong/v1/uploads' || req.path === '/artong/v1/uploads/')
           res = await uploads.getUploadsList(req.queryStringParameters);
         else if (req.path === '/artong/v1/auth/uploads' || req.path === '/artong/v1/auth/uploads/')
-          res = await uploads.getAuthUserUploadsList(req.queryStringParameters, req.userId);
+          res = await uploads.getAuthUserUploadsList(req.queryStringParameters,  req.user);
         break;
       case 'POST':
         if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
