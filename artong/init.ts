@@ -33,6 +33,14 @@ const reduceOp = function(args: any, reducer: (a: string, b: string) => any) {
   return args.reduce(reducer, first);
 };
 
+const existsConditionToCheckOnlyUndefined = function(variable: any, options: any) {
+  if (typeof variable !== 'undefined') {
+    return options.fn();
+  } else {
+    return options.inverse();
+  }
+};
+
 handlebars.registerHelper({
   eq  : function(){ return reduceOp(arguments, (a: string, b: string) => a === b); },
   ne  : function(){ return reduceOp(arguments, (a: string, b: string) => a !== b); },
@@ -42,6 +50,7 @@ handlebars.registerHelper({
   gte : function(){ return reduceOp(arguments, (a: string, b: string) => a  >= b); },
   and : function(){ return reduceOp(arguments, (a: string, b: string) => a  && b); },
   or  : function(){ return reduceOp(arguments, (a: string, b: string) => a  || b); },
+  exists : existsConditionToCheckOnlyUndefined,
 }); 
 
 export {
