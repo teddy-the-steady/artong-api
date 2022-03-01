@@ -11,11 +11,11 @@ const selectStatusList = require('../../models/status/selectStatusList.sql');
 const selectStatus = require('../../models/status/selectStatus.sql');
 import { plainToClass } from 'class-transformer';
 
-const createStatus = async function(body: any, userGroups: Array<string>) {
+const createStatus = async function(body: any, user: any) {
   let conn: any;
 
   try {
-    if (!hasBOPermission(userGroups)) throw new Forbidden(NoPermission.message, NoPermission.code);
+    if (!hasBOPermission(user.userGroups)) throw new Forbidden(NoPermission.message, NoPermission.code);
     
     const status = plainToClass(Status, {
       code: body.code,
@@ -25,7 +25,7 @@ const createStatus = async function(body: any, userGroups: Array<string>) {
     conn = await db.getConnection();
     await db.beginTransaction(conn);
 
-    const statusId = await db.execute(conn, selectStatus, status);
+    const statusId = await db.execute(conn, selectStatus, { code: status.code });
     if (statusId.length) {
       throw new BadRequest(`${UniqueValueDuplicated.message}: status.code`, UniqueValueDuplicated.code);
     } else await db.execute(conn, insertStatus, status);
@@ -40,11 +40,11 @@ const createStatus = async function(body: any, userGroups: Array<string>) {
   return {'data': 'success'}
 };
 
-const putStatus = async function(pathParameters: any, body: any, userGroups: Array<string>) {
+const putStatus = async function(pathParameters: any, body: any, user: any) {
   let conn: any;
 
   try {
-    if (!hasBOPermission(userGroups)) throw new Forbidden(NoPermission.message, NoPermission.code);
+    if (!hasBOPermission(user.userGroups)) throw new Forbidden(NoPermission.message, NoPermission.code);
     
     const status = plainToClass(Status, {
       id: pathParameters.id,
@@ -56,8 +56,8 @@ const putStatus = async function(pathParameters: any, body: any, userGroups: Arr
     conn = await db.getConnection();
     await db.beginTransaction(conn);
 
-    const updatedId = await db.execute(conn, updateStatus, status);
-    if (updatedId.length) await db.execute(conn, insertStatus, status);
+    const updatedId = await db.execute(conn, updateStatus, { id: status.id, code: status.code});
+    if (updatedId.length) await db.execute(conn, insertStatus, { code: status.code, description: status.description });
     else throw new InternalServerError(UpdateFailed.message, UpdateFailed.code);
 
     await db.commit(conn);
@@ -70,12 +70,12 @@ const putStatus = async function(pathParameters: any, body: any, userGroups: Arr
   return {'data': 'success'}
 };
 
-const getStatusList = async function(queryStringParameters: any, userGroups: Array<string>) {
+const getStatusList = async function(queryStringParameters: any, user: any) {
   let result: any;
   let conn: any;
 
   try {
-    if (!hasBOPermission(userGroups)) throw new Forbidden(NoPermission.message, NoPermission.code);
+    if (!hasBOPermission(user.userGroups)) throw new Forbidden(NoPermission.message, NoPermission.code);
 
     conn = await db.getConnection();
     result = await db.execute(conn, selectStatusList, queryStringParameters);

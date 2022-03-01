@@ -20,7 +20,7 @@ export async function handler(event: any, context: any, callback: any) {
         else if (req.path.startsWith('/artong/v1/auth/member/'))
           res = await member.getMemberSecure(req.pathParameters);
         else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
-          res = await status.getStatusList(req.queryStringParameters, req.userGroups);
+          res = await status.getStatusList(req.queryStringParameters, req.user);
         else if (req.path === '/artong/v1/uploads' || req.path === '/artong/v1/uploads/')
           res = await uploads.getUploadsList(req.queryStringParameters);
         else if (req.path === '/artong/v1/auth/uploads' || req.path === '/artong/v1/auth/uploads/')
@@ -30,9 +30,9 @@ export async function handler(event: any, context: any, callback: any) {
         if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
           res = await member.createMember(req.body);
         else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
-          res = await status.createStatus(req.body, req.userGroups);
+          res = await status.createStatus(req.body, req.user);
         else if (req.path === '/artong/v1/country' || req.path === '/artong/v1/country/')
-          res = await country.createCountry(req.body, req.userGroups);
+          res = await country.createCountry(req.body, req.user);
         else if (req.path === '/artong/v1/uploads' || req.path === '/artong/v1/uploads/')
           res = await uploads.createUpload(req.body);
         else if (req.path.startsWith('/artong/v1/uploads/') && req.pathParameters && req.path.includes('/actions'))
@@ -40,7 +40,7 @@ export async function handler(event: any, context: any, callback: any) {
         break;
       case 'PUT':
         if (req.path.startsWith('/artong/v1/status/') && req.pathParameters)
-          res = await status.putStatus(req.pathParameters, req.body, req.userGroups);
+          res = await status.putStatus(req.pathParameters, req.body, req.user);
         break;
       case 'PATCH':
         if (req.path === '/artong/v1/memberMaster')
