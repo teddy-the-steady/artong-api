@@ -40,18 +40,21 @@ const execute = async function(conn: any, sql: string, params: any) {
 
 type QueryReducerArray = [string, any[], number];
 const queryConverter = function(parameterizedSql: string, params: any) {
-  const [text, values] = Object.entries(params).reduce(
-    ([sql, array, index], [key, value]) => {
-      sql = replaceAll(sql, `\${${key}}`, `$${index}`);
-      if (value !== undefined) {
-        array.push(value);
-        index += 1;
-      }
-      return [sql, array, index] as QueryReducerArray
-    },
-    [parameterizedSql, [], 1] as QueryReducerArray
-  );
-  return { text, values };
+  if (params) {
+    const [text, values] = Object.entries(params).reduce(
+      ([sql, array, index], [key, value]) => {
+        sql = replaceAll(sql, `\${${key}}`, `$${index}`);
+        if (value !== undefined) {
+          array.push(value);
+          index += 1;
+        }
+        return [sql, array, index] as QueryReducerArray
+      },
+      [parameterizedSql, [], 1] as QueryReducerArray
+    );
+    return { text, values };
+  }
+  return parameterizedSql
 }
 
 const beginTransaction = async function(conn: any) {
