@@ -7,5 +7,5 @@ phases:
       - cd ./node_layers && npm install && cd ..
   build:
     commands:
-      # - serverless create_domain
+      - serverless create_domain
       - serverless deploy
