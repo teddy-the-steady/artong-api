@@ -19,7 +19,6 @@ export default class MemberMaster {
 	@IsOptional()
 	auth_id: string;
 	status_id: number;
-	is_email_verified: boolean;
 
 	created_at: Date;
 	updated_at: Date;
@@ -30,7 +29,6 @@ export default class MemberMaster {
 		username: string,
 		auth_id: string,
 		status_id: number,
-		is_email_verified: boolean,
 		created_at: Date,
 		updated_at: Date,
 	) {
@@ -39,7 +37,6 @@ export default class MemberMaster {
 		this.username = username;
 		this.auth_id = auth_id;
 		this.status_id = status_id;
-		this.is_email_verified = is_email_verified;
 
 		this.created_at = created_at;
 		this.updated_at = updated_at;

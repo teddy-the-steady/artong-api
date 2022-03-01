@@ -9,4 +9,4 @@ FROM member_master m
 LEFT JOIN member_detail d ON d.member_id = m.id
 LEFT JOIN country c ON c.id = d.language_id
 WHERE
-    m.username = '{{username}}'
+    m.id = ${id}
