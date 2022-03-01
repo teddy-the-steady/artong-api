@@ -60,92 +60,92 @@ custom:
 functions:
   artong:
     handler: artong/handler/artong.handler
-  #   events:
-  #    - http:
-  #       path: artong/v1/member/{id}
-  #       method: GET
-  #       cors: true
-  #    - http:
-  #       path: artong/v1/member
-  #       method: POST
-  #       cors: true
-  #    - http:
-  #       path: artong/v1/auth/member/{auth_id}
-  #       method: GET
-  #       cors: true
-  #       authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-  #    - http:
-  #       path: artong/v1/profilePic/{username}
-  #       method: PATCH
-  #       cors: true
-  #       private: true
-  #    - http:
-  #       path: artong/v1/memberMaster
-  #       method: PATCH
-  #       cors: true
-  #       authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-  #    - http:
-  #       path: artong/v1/memberDetail
-  #       method: PATCH
-  #       cors: true
-  #       authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-  #    - http:
-  #       path: artong/v1/uploads
-  #       method: GET
-  #       cors: true
-  #    - http:
-  #       path: artong/v1/auth/uploads
-  #       method: GET
-  #       cors: true
-  #       authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-  #    - http:
-  #       path: artong/v1/uploads
-  #       method: POST
-  #       cors: true
-  #       private: true
-  #    - http:
-  #       path: artong/v1/uploads/{id}/actions
-  #       method: POST
-  #       cors: true
-  #       authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-  #   layers:
-  #    - {Ref: NodeModulesLambdaLayer}
-  # artong-admin:
-  #   handler: artong/handler/artong.handler
-  #   events:
-  #    - http:
-  #       path: artong/v1/status
-  #       method: GET
-  #       cors: true
-  #       authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-  #    - http:
-  #       path: artong/v1/status
-  #       method: POST
-  #       cors: true
-  #       authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-  #    - http:
-  #       path: artong/v1/status/{id}
-  #       method: PUT
-  #       cors: true
-  #       authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-  #    - http:
-  #       path: artong/v1/country
-  #       method: POST
-  #       cors: true
-  #       authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-  #   layers:
-  #    - {Ref: NodeModulesLambdaLayer}
-  # photo:
-  #   handler: artong/handler/photo.handler
-  #   events:
-  #    - s3:
-  #       bucket: artong-stage-image163347-stage
-  #       event: s3:ObjectCreated:*
-  #       rules:
-  #         - prefix: public/
-  #       existing: true
-  #   layers:
-  #    - {Ref: NodeModulesLambdaLayer}
+    events:
+     - http:
+        path: artong/v1/member/{id}
+        method: GET
+        cors: true
+     - http:
+        path: artong/v1/member
+        method: POST
+        cors: true
+     - http:
+        path: artong/v1/auth/member/{auth_id}
+        method: GET
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+     - http:
+        path: artong/v1/profilePic/{username}
+        method: PATCH
+        cors: true
+        private: true
+     - http:
+        path: artong/v1/memberMaster
+        method: PATCH
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+     - http:
+        path: artong/v1/memberDetail
+        method: PATCH
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+     - http:
+        path: artong/v1/uploads
+        method: GET
+        cors: true
+     - http:
+        path: artong/v1/auth/uploads
+        method: GET
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+     - http:
+        path: artong/v1/uploads
+        method: POST
+        cors: true
+        private: true
+     - http:
+        path: artong/v1/uploads/{id}/actions
+        method: POST
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+    layers:
+     - {Ref: NodeModulesLambdaLayer}
+  artong-admin:
+    handler: artong/handler/artong.handler
+    events:
+     - http:
+        path: artong/v1/status
+        method: GET
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+     - http:
+        path: artong/v1/status
+        method: POST
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+     - http:
+        path: artong/v1/status/{id}
+        method: PUT
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+     - http:
+        path: artong/v1/country
+        method: POST
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+    layers:
+     - {Ref: NodeModulesLambdaLayer}
+  photo:
+    handler: artong/handler/photo.handler
+    events:
+     - s3:
+        bucket: artong-stage-image163347-stage
+        event: s3:ObjectCreated:*
+        rules:
+          - prefix: public/
+        existing: true
+    layers:
+     - {Ref: NodeModulesLambdaLayer}
 
 resources:
   Resources:
