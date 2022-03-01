@@ -6,7 +6,7 @@ const updateProfilePic = async function(s3: any) {
     const key = decodeURIComponent(s3.object.key);
     const username = key.split('/')[1];
     
-    await axios.patch(`/member/${username}/profilePic`, {
+    await axios.patch(`/profilePic/${username}`, {
       profile_pic: key
     });
   } catch (error) {
