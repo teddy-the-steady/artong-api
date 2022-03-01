@@ -22,14 +22,14 @@ const getUploadsList = async function(queryStringParameters: any) {
   return {'data': result}
 }
 
-const getAuthUserUploadsList = async function(queryStringParameters: any, userId: string) {
+const getAuthUserUploadsList = async function(queryStringParameters: any, user: any) {
   let result: any;
   let conn: any;
   let params: any;
 
   try {
     params = queryStringParameters;
-    params['userId'] = userId;
+    params['member_id'] = user.member_id;
 
     conn = await db.getConnection();
     result = await db.execute(conn, selectAuthUserUploads, params);
