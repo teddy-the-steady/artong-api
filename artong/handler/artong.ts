@@ -4,7 +4,6 @@ import { successResponse, errorResponse } from '../utils/http/response';
 import { member, status, country, uploads } from '../controllers/artong/index';
 
 export async function handler(event: any, context: any, callback: any) {
-  console.log(event)
   context.callbackWaitsForEmptyEventLoop = false;
   let res: any = {};
 
