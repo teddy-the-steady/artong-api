@@ -27,8 +27,13 @@ const hasBOPermission = function(userGroup: Array<string>) {
     return false
 };
 
+const replaceAll = function(str: string, searchStr: string, replaceStr: string) {
+    return str.split(searchStr).join(replaceStr);
+  }
+
 export {
     getTotalRows,
     extractTotalRows,
     hasBOPermission,
+    replaceAll,
 };
