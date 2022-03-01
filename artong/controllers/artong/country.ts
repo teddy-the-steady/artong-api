@@ -7,11 +7,11 @@ import { hasBOPermission } from '../../utils/common/commonFunc';
 const insertCountry = require('../../models/country/insertCountry.sql');
 const selectCountry = require('../../models/country/selectCountry.sql');
 
-const createCountry = async function(body: any, userGroups: Array<string>) {
+const createCountry = async function(body: any, user: any) {
   let conn: any;
 
   try {
-    if (!hasBOPermission(userGroups)) throw new Forbidden(NoPermission.message, NoPermission.code);
+    if (!hasBOPermission(user.userGroups)) throw new Forbidden(NoPermission.message, NoPermission.code);
     
     const country = new Country({
 			iso_code_3: body.iso_code_3,
@@ -23,7 +23,7 @@ const createCountry = async function(body: any, userGroups: Array<string>) {
     conn = await db.getConnection();
     await db.beginTransaction(conn);
 
-    const result = await db.execute(conn, selectCountry, country);
+    const result = await db.execute(conn, selectCountry, { iso_code_2: country.iso_code_2, iso_code_3: country.iso_code_3 });
     if (result.length) {
       throw new BadRequest(`${UniqueValueDuplicated.message}: country.iso_code`, UniqueValueDuplicated.code);
     } else await db.execute(conn, insertCountry, country);
