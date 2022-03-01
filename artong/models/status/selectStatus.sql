@@ -1,2 +1,2 @@
 SELECT * FROM status
-WHERE code = '{{code}}'
+WHERE code = ${code}
