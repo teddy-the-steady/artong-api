@@ -19,8 +19,8 @@ const requestInit = async function(event: any) {
     }
   }
 
-  try {
-    if (event['requestContext']['authorizer'] && event['requestContext']['authorizer']['principalId']) {
+  if (event['requestContext']['authorizer'] && event['requestContext']['authorizer']['principalId']) {
+    try {
       let auth_id = event['requestContext']['authorizer']['principalId']
       if (process.env.IS_OFFLINE) { // offline에서 member_id로 user 세팅
         const member_id = event['queryStringParameters'] && event['queryStringParameters']['member_id'] ? event['queryStringParameters']['member_id'] : 249;
@@ -29,9 +29,9 @@ const requestInit = async function(event: any) {
       }
       const user = await member.getMemberSecure({ auth_id: auth_id });
       result['user'] = user.data
+    } catch (error) {
+      throw new InternalServerError(error, UnknownError.code);
     }
-  } catch (error) {
-    throw new InternalServerError(error, UnknownError.code);
   }
 
   const jwtToken = event['headers']['Authorization'];
