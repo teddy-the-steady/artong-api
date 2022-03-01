@@ -45,17 +45,17 @@ layers:
 plugins:
   - serverless-webpack
   - serverless-offline
-  - serverless-domain-manager
+  # - serverless-domain-manager
 
-custom:
-  customDomain:
-    domainName: api.4rtong.com
-    stage: ${self:provider.stage}
-    basePath: ${self:provider.stage}
-    certificateName: '*.4rtong.com'
-    createRoute53Record: true
-    endpointType: 'edge'
-    securityPolicy: tls_1_2
+# custom:
+#   customDomain:
+#     domainName: api.4rtong.com
+#     stage: ${self:provider.stage}
+#     basePath: ${self:provider.stage}
+#     certificateName: '*.4rtong.com'
+#     createRoute53Record: true
+#     endpointType: 'edge'
+#     securityPolicy: tls_1_2
 
 functions:
   artong:
