@@ -45,7 +45,7 @@ export async function handler(event: any, context: any, callback: any) {
           res = await member.patchMemberMaster(req.body, req.user);
         else if (req.path === '/artong/v1/memberDetail')
           res = await member.patchMemberDetail(req.body, req.user);
-        else if (req.path.startsWith('/artong/v1/member/') && req.pathParameters && req.path.includes('/profilePic'))
+        else if (req.path.startsWith('/artong/v1/profilePic/'))
             res = await member.patchMemberProfilePic(req.pathParameters, req.body);
         break;
       default:
