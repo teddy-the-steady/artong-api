@@ -2,6 +2,7 @@ import handlebars from 'handlebars';
 import { getPool } from '../../init';
 import { InternalServerError } from '../error/errors';
 import { DBError } from '../error/errorCodes';
+import { replaceAll } from '../common/commonFunc';
 
 const getConnection = async function() {
   try {
@@ -41,7 +42,7 @@ type QueryReducerArray = [string, any[], number];
 const queryConverter = function(parameterizedSql: string, params: any) {
   const [text, values] = Object.entries(params).reduce(
     ([sql, array, index], [key, value]) => {
-      sql = sql.replace(`\${${key}}`, `$${index}`);
+      sql = replaceAll(sql, `\${${key}}`, `$${index}`);
       if (value !== undefined) {
         array.push(value);
         index += 1;
