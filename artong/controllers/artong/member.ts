@@ -191,6 +191,21 @@ const getMemberAuthId = async function(params: any) {
   return {'data': result[0]}
 };
 
+const getMemberOfUsername = async function(queryStringParameters: any) {
+  let result: any;
+  let conn: any;
+
+  try {
+    conn = await db.getConnection();
+    result = await db.execute(conn, selectMemberOfUsername, queryStringParameters);
+  } catch (error) {
+    controllerErrorWrapper(error);
+  } finally {
+    if (conn) db.release(conn);
+  }
+  return {'data': result[0]}
+};
+
 export {
   getMember,
   getMemberSecure,
@@ -199,4 +214,5 @@ export {
   patchMemberDetail,
   patchMemberProfilePic,
   getMemberAuthId,
+  getMemberOfUsername,
 };
