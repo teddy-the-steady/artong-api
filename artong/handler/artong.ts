@@ -8,14 +8,14 @@ export async function handler(event: any, context: any, callback: any) {
   let res: any = {};
 
   try {
-    const req = requestInit(event);
+    const req = await requestInit(event);
     console.log(req);
 
     switch (req.httpMethod) {
       case 'GET':
-        if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
-          res = await member.getMember(req.queryStringParameters);
-        else if (req.path.startsWith('/artong/v1/member/') && req.pathParameters)
+        if (req.path.startsWith('/artong/v1/member/'))
+          res = await member.getMember(req.pathParameters);
+        else if (req.path.startsWith('/artong/v1/auth/member/'))
           res = await member.getMemberSecure(req.pathParameters);
         else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
           res = await status.getStatusList(req.queryStringParameters, req.userGroups);
@@ -41,11 +41,11 @@ export async function handler(event: any, context: any, callback: any) {
           res = await status.putStatus(req.pathParameters, req.body, req.userGroups);
         break;
       case 'PATCH':
-        if (req.path.startsWith('/artong/v1/memberMaster/') && req.pathParameters)
-          res = await member.patchMemberMaster(req.pathParameters, req.body, req.userId);
-        else if (req.path.startsWith('/artong/v1/memberDetail/') && req.pathParameters)
-          res = await member.patchMemberDetail(req.pathParameters, req.body, req.userId);
-        else if (req.path.startsWith('/artong/v1/member/') && req.pathParameters && req.path.includes('/profilePic'))
+        if (req.path === '/artong/v1/memberMaster')
+          res = await member.patchMemberMaster(req.body, req.user);
+        else if (req.path === '/artong/v1/memberDetail')
+          res = await member.patchMemberDetail(req.body, req.user);
+        else if (req.path.startsWith('/artong/v1/profilePic/'))
             res = await member.patchMemberProfilePic(req.pathParameters, req.body);
         break;
       default:
