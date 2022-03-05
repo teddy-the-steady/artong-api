@@ -1,6 +1,7 @@
-import { BadRequest, InternalServerError } from '../error/errors';
-import { SyntaxError, UnknownError } from '../error/errorCodes';
+import { BadRequest } from '../error/errors';
+import { SyntaxError } from '../error/errorCodes';
 import { member } from '../../controllers/artong';
+import controllerErrorWrapper from '../error/errorWrapper';
 
 const requestInit = async function(event: any) {
   let result: any = {};
@@ -41,7 +42,7 @@ const requestInit = async function(event: any) {
       result['user'] = user.data
     }
   } catch (error) {
-    throw new InternalServerError(error, UnknownError.code);
+    controllerErrorWrapper(error);
   }
 
   return result
