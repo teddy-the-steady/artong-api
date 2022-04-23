@@ -82,7 +82,7 @@ class UnprocessableEntity extends ExtendableError {
 
 class InternalServerError extends ExtendableError {
   constructor(message: string | any, errorCode: number | null) {
-    if (arguments.length === 0)
+    if (arguments.length === 0 || process.env.ENV === 'prod')
       super('Internal Server Error', 500, null);
     else if (arguments.length === 1)
       super(message, 500, null);
