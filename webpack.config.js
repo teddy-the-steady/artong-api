@@ -3,7 +3,7 @@ const slsw = require('serverless-webpack');
 const { IgnorePlugin } = require('webpack');
 
 module.exports = {
-  mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
+  mode: slsw.lib.webpack.isLocal || process.env.ENV === 'stage' ? 'development' : 'production',
   entry: slsw.lib.webpack.isLocal ? {
     artong: path.join(__dirname, 'artong/handler/artong.ts'),
   } : null,
