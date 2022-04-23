@@ -17,9 +17,7 @@ class ExtendableError extends Error {
 class BadRequest extends ExtendableError {
   constructor(message: string, errorCode: number | null) {
     if (arguments.length === 0 || process.env.ENV === 'prod')
-      super('Bad Request', 400, errorCode || null);
-    else if (arguments.length === 1)
-      super(message, 400, null);
+      super('Bad Request', 400, errorCode);
     else
       super(message, 400, errorCode);
   }
@@ -28,9 +26,7 @@ class BadRequest extends ExtendableError {
 class Unauthorized extends ExtendableError {
   constructor(message: string, errorCode: number | null) {
     if (arguments.length === 0 || process.env.ENV === 'prod')
-      super('Unauthorized', 401, errorCode || null);
-    else if (arguments.length === 1)
-      super(message, 401, null);
+      super('Unauthorized', 401, errorCode);
     else
       super(message, 401, errorCode);
   }
@@ -39,9 +35,7 @@ class Unauthorized extends ExtendableError {
 class Forbidden extends ExtendableError {
   constructor(message: string, errorCode: number | null) {
     if (arguments.length === 0 || process.env.ENV === 'prod')
-      super('Forbidden', 403, errorCode || null);
-    else if (arguments.length === 1)
-      super(message, 403, null);
+      super('Forbidden', 403, errorCode);
     else
       super(message, 403, errorCode);
   }
@@ -50,9 +44,7 @@ class Forbidden extends ExtendableError {
 class NotFound extends ExtendableError {
   constructor(message: string, errorCode: number) {
     if (arguments.length === 0 || process.env.ENV === 'prod')
-      super('Not Found', 404, errorCode || null);
-    else if (arguments.length === 1)
-      super(message, 404, null);
+      super('Not Found', 404, errorCode);
     else
       super(message, 404, errorCode);
   }
@@ -61,9 +53,7 @@ class NotFound extends ExtendableError {
 class Conflict extends ExtendableError {
   constructor(message: string, errorCode: number | null) {
     if (arguments.length === 0 || process.env.ENV === 'prod')
-      super('Conflict', 409, errorCode || null);
-    else if (arguments.length === 1)
-      super(message, 409, null);
+      super('Conflict', 409, errorCode);
     else
       super(message, 409, errorCode);
   }
@@ -72,9 +62,7 @@ class Conflict extends ExtendableError {
 class UnprocessableEntity extends ExtendableError {
   constructor(message: string, errorCode: number | null) {
     if (arguments.length === 0 || process.env.ENV === 'prod')
-      super('Unprocessable Entity', 422, errorCode || null);
-    else if (arguments.length === 1)
-      super(message, 422, null);
+      super('Unprocessable Entity', 422, errorCode);
     else
       super(message, 422, errorCode);
   }
@@ -83,9 +71,7 @@ class UnprocessableEntity extends ExtendableError {
 class InternalServerError extends ExtendableError {
   constructor(message: string | any, errorCode: number | null) {
     if (arguments.length === 0 || process.env.ENV === 'prod')
-      super('Internal Server Error', 500, errorCode || null);
-    else if (arguments.length === 1)
-      super(message, 500, null);
+      super('Internal Server Error', 500, errorCode);
     else
       super(message, 500, errorCode);
   }
