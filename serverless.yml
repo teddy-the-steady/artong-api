@@ -108,7 +108,7 @@ functions:
         cors: true
         private: true
      - http:
-        path: artong/v1/uploads/{id}/reactions
+        path: artong/v1/content/{id}/reactions
         method: POST
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
