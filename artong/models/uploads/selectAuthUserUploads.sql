@@ -6,8 +6,8 @@
 SELECT
     u.*, d.profile_pic, m.username
     ,(SELECT
-	CASE WHEN action_id = 1 THEN true ELSE NULL END
-    FROM upload_actions ua
+	CASE WHEN reaction_id = 1 THEN true ELSE NULL END
+    FROM upload_reactions ua
     WHERE ua.upload_id = u.id 
 	AND ua.member_id = ${member_id}
     ORDER BY updated_at DESC LIMIT 1) AS "like"

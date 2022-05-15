@@ -1,11 +1,11 @@
 import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
-import { Contents, Uploads, UploadActions } from '../../models/index';
+import { Contents, Uploads, UploadReactions } from '../../models/index';
 import validator from '../../utils/validators/common';
 const insertUploadAndContents = require('../../models/uploads/insertUploadAndContents.sql');
 const selectUploads = require('../../models/uploads/selectUploads.sql');
 const selectAuthUserUploads = require('../../models/uploads/selectAuthUserUploads.sql');
-const insertUploadActions = require('../../models/actions/insertUploadActions.sql')
+const insertUploadReactions = require('../../models/reactions/insertUploadReactions.sql')
 
 const getUploadsList = async function(queryStringParameters: any) {
   let result: any;
@@ -73,12 +73,12 @@ const createUpload = async function(body: any) {
   return {'data': 'success'}
 };
 
-const createUploadAction = async function(pathParameters: any, body: any, user: any) {
+const createUploadReaction = async function(pathParameters: any, body: any, user: any) {
   let conn: any;
   
   try {
-    const action = new UploadActions({
-      action_id: body.action_code,
+    const reaction = new UploadReactions({
+      reaction_id: body.reaction_code,
       upload_id: pathParameters.id,
       member_id: user.member_id
     });
@@ -86,7 +86,7 @@ const createUploadAction = async function(pathParameters: any, body: any, user: 
     conn = await db.getConnection();
     await db.beginTransaction(conn);
 
-    await db.execute(conn, insertUploadActions, action);
+    await db.execute(conn, insertUploadReactions, reaction);
 
     await db.commit(conn);
   } catch (error) {
@@ -102,5 +102,5 @@ export {
   getUploadsList,
   getAuthUserUploadsList,
 	createUpload,
-  createUploadAction,
+  createUploadReaction,
 };
