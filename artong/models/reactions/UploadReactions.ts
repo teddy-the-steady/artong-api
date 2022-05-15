@@ -1,5 +1,5 @@
-export default class UploadActions {
-    action_id: number;
+export default class UploadReactions {
+    reaction_id: number;
     upload_id: number;
     member_id: number;
 
@@ -7,7 +7,7 @@ export default class UploadActions {
     updated_at: Date;
 
     constructor(obj: any) {
-        this.action_id = obj.action_id;
+        this.reaction_id = obj.reaction_id;
         this.upload_id = obj.upload_id;
         this.member_id = obj.member_id;
 
