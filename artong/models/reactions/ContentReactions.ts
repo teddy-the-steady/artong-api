@@ -1,6 +1,6 @@
-export default class UploadReactions {
+export default class ContentReactions {
     reaction_id: number;
-    upload_id: number;
+    content_id: number;
     member_id: number;
 
     created_at: Date;
@@ -8,7 +8,7 @@ export default class UploadReactions {
 
     constructor(obj: any) {
         this.reaction_id = obj.reaction_id;
-        this.upload_id = obj.upload_id;
+        this.content_id = obj.content_id;
         this.member_id = obj.member_id;
 
         this.created_at = obj.created_at;
