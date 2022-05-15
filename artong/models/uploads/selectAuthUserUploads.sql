@@ -7,9 +7,9 @@ SELECT
     u.*, d.profile_pic, m.username
     ,(SELECT
 	CASE WHEN reaction_id = 1 THEN true ELSE NULL END
-    FROM upload_reactions ua
-    WHERE ua.upload_id = u.id 
-	AND ua.member_id = ${member_id}
+    FROM content_reactions ca
+    WHERE ca.content_id = u.id
+	AND ca.member_id = ${member_id}
     ORDER BY updated_at DESC LIMIT 1) AS "like"
 FROM uploads u
 LEFT JOIN member_master m ON u.member_id = m.id
