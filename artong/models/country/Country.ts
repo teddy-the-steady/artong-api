@@ -1,21 +1,53 @@
+import * as db from '../../utils/db/db';
+import controllerErrorWrapper from '../../utils/error/errorWrapper';
+const insertCountry = require('../../models/country/insertCountry.sql');
+
 export default class Country {
-    id: number;
-    iso_code_3: string;
-    iso_code_2: string;
-    name: string;
-    number_code: string;
+	id: number | null;
+	iso_code_3: string | null;
+	iso_code_2: string | null;
+	name: string | null;
+	number_code: string | null;
 
-    created_at: Date;
-    updated_at: Date;
+	created_at: Date | null;
+	updated_at: Date | null;
 
-    constructor(obj: any) {
-        this.id = obj.id;
-        this.iso_code_3 = obj.iso_code_3;
-        this.iso_code_2 = obj.iso_code_2;
-        this.name = obj.name;
-        this.number_code = obj.number_code;
+	constructor({
+		id = null,
+		iso_code_3 = null,
+		iso_code_2 = null,
+		name = null,
+		number_code = null,
+		created_at = null,
+		updated_at = null
+	} = {}) {
+		this.id = id;
+		this.iso_code_3 = iso_code_3;
+		this.iso_code_2 = iso_code_2;
+		this.name = name;
+		this.number_code = number_code;
 
-        this.created_at = obj.created_at;
-        this.updated_at = obj.updated_at;
-    }
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+	}
+
+	async createCountry() {
+		let conn: any;
+
+		try {
+			conn = await db.getConnection();
+			await db.beginTransaction(conn);
+
+			const result = await db.execute(conn, insertCountry, this);
+
+			await db.commit(conn);
+
+			return result
+		} catch (error) {
+			if (conn) await db.rollBack(conn);
+    	controllerErrorWrapper(error);
+		} finally {
+			if (conn) db.release(conn);
+		}
+	}
 }
