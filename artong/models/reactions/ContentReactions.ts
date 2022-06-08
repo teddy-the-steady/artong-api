@@ -1,7 +1,12 @@
 import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
-import { ContentReactionsInfo } from '../../controllers/artong/reactions';
 const insertContentReactions = require('../../models/reactions/insertContentReactions.sql')
+
+interface ContentReactionsInfo {
+  reaction_id: number;
+	content_id: number;
+	member_id: number;
+}
 
 export default class ContentReactions {
 	reaction_id: number | null;
