@@ -92,7 +92,6 @@ const patchMemberMaster = async function(body: any, user: any) {
     const memberMaster = plainToClass(MemberMaster, {
       id: user.member_id,
       username: body.username,
-      status_id: body.status_id
     });
     await validator(memberMaster);
 
