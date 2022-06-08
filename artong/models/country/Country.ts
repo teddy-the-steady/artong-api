@@ -1,5 +1,6 @@
 import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
+import { CountryInfo } from '../../controllers/artong/country';
 const insertCountry = require('../../models/country/insertCountry.sql');
 
 export default class Country {
@@ -31,18 +32,18 @@ export default class Country {
 		this.updated_at = updated_at;
 	}
 
-	async createCountry(): Promise<Country> {
+	async createCountry(country: CountryInfo): Promise<Country> {
 		let conn: any;
 
 		try {
 			conn = await db.getConnection();
 			await db.beginTransaction(conn);
 
-			const country = await db.execute(conn, insertCountry, this);
+			const result = await db.execute(conn, insertCountry, country);
 
 			await db.commit(conn);
 
-			return country[0]
+			return result[0]
 		} catch (error) {
 			if (conn) await db.rollBack(conn);
 			throw controllerErrorWrapper(error);
