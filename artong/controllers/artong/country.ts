@@ -3,13 +3,6 @@ import { Forbidden } from '../../utils/error/errors';
 import { NoPermission } from '../../utils/error/errorCodes';
 import { hasBOPermission } from '../../utils/common/commonFunc';
 
-interface CountryInfo {
-  iso_code_3: string;
-	iso_code_2: string;
-	name: string;
-	number_code: string;
-}
-
 const createCountry = async function(body: any, user: any) {
   if (!hasBOPermission(user.userGroups)) throw new Forbidden(NoPermission.message, NoPermission.code);
 
@@ -26,6 +19,5 @@ const createCountry = async function(body: any, user: any) {
 };
 
 export {
-  CountryInfo,
 	createCountry,
 };

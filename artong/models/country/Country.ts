@@ -1,7 +1,13 @@
 import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
-import { CountryInfo } from '../../controllers/artong/country';
 const insertCountry = require('../../models/country/insertCountry.sql');
+
+interface CountryInfo {
+  iso_code_3: string;
+	iso_code_2: string;
+	name: string;
+	number_code: string;
+}
 
 export default class Country {
 	id: number | null;
