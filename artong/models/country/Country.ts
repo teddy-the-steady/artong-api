@@ -31,21 +31,21 @@ export default class Country {
 		this.updated_at = updated_at;
 	}
 
-	async createCountry() {
+	async createCountry(): Promise<Country> {
 		let conn: any;
 
 		try {
 			conn = await db.getConnection();
 			await db.beginTransaction(conn);
 
-			const result = await db.execute(conn, insertCountry, this);
+			const country = await db.execute(conn, insertCountry, this);
 
 			await db.commit(conn);
 
-			return result
+			return country[0]
 		} catch (error) {
 			if (conn) await db.rollBack(conn);
-    	controllerErrorWrapper(error);
+			throw controllerErrorWrapper(error);
 		} finally {
 			if (conn) db.release(conn);
 		}
