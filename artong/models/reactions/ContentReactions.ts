@@ -1,5 +1,6 @@
 import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
+import { ContentReactionsInfo } from '../../controllers/artong/reactions';
 const insertContentReactions = require('../../models/reactions/insertContentReactions.sql')
 
 export default class ContentReactions {
@@ -25,18 +26,18 @@ export default class ContentReactions {
 		this.updated_at = updated_at;
 	}
 
-	async createContentReaction(): Promise<ContentReactions> {
+	async createContentReaction(contentReaction: ContentReactionsInfo): Promise<ContentReactions> {
 		let conn: any;
 
 		try {
 			conn = await db.getConnection();
 			await db.beginTransaction(conn);
 
-			const contentReaction = await db.execute(conn, insertContentReactions, this);
+			const result = await db.execute(conn, insertContentReactions, contentReaction);
 
 			await db.commit(conn);
 
-			return contentReaction[0]
+			return result[0]
 		} catch (error) {
 			if (conn) await db.rollBack(conn);
 			throw controllerErrorWrapper(error);
