@@ -18,7 +18,6 @@ export default class MemberMaster {
 	@IsUUID('all')
 	@IsOptional()
 	auth_id: string;
-	status_id: number;
 
 	created_at: Date;
 	updated_at: Date;
@@ -28,7 +27,6 @@ export default class MemberMaster {
 		email: string,
 		username: string,
 		auth_id: string,
-		status_id: number,
 		created_at: Date,
 		updated_at: Date,
 	) {
@@ -36,7 +34,6 @@ export default class MemberMaster {
 		this.email = email;
 		this.username = username;
 		this.auth_id = auth_id;
-		this.status_id = status_id;
 
 		this.created_at = created_at;
 		this.updated_at = updated_at;
