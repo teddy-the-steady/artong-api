@@ -31,7 +31,7 @@ const execute = async function(conn: any, sql: string, params: any) {
   // console.log(compiledModel);
   // console.log(convertedSql);
   try {
-    const result = await conn.query(convertedSql); // TODO] SQL인젝션 방지목적 preparedStatement 필요
+    const result = await conn.query(convertedSql);
     return result['rows']
   } catch (error) {
     throw new InternalServerError(error, DBError.code);
@@ -43,8 +43,8 @@ const queryConverter = function(parameterizedSql: string, params: any) {
   if (params) {
     const [text, values] = Object.entries(params).reduce(
       ([sql, array, index], [key, value]) => {
-        sql = replaceAll(sql, `\${${key}}`, `$${index}`);
-        if (value !== undefined) {
+        if (value !== undefined && value != null && sql.indexOf(`\${${key}}`) != -1) {
+          sql = replaceAll(sql, `\${${key}}`, `$${index}`);
           array.push(value);
           index += 1;
         }
