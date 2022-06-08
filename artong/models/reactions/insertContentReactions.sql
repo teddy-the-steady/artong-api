@@ -5,4 +5,4 @@ VALUES(
 	${content_id},
 	${member_id}
 )
-RETURNING reaction_id, content_id, member_id
+RETURNING *
