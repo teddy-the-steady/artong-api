@@ -25,21 +25,21 @@ export default class ContentReactions {
 		this.updated_at = updated_at;
 	}
 
-	async createContentReaction() {
+	async createContentReaction(): Promise<ContentReactions> {
 		let conn: any;
 
 		try {
 			conn = await db.getConnection();
 			await db.beginTransaction(conn);
 
-			const result = await db.execute(conn, insertContentReactions, this);
+			const contentReaction = await db.execute(conn, insertContentReactions, this);
 
 			await db.commit(conn);
 
-			return result
+			return contentReaction[0]
 		} catch (error) {
 			if (conn) await db.rollBack(conn);
-			controllerErrorWrapper(error);
+			throw controllerErrorWrapper(error);
 		} finally {
 			if (conn) db.release(conn);
 		}
