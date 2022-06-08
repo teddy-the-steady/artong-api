@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import requestInit from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response';
-import { member, status, country, reactions } from '../controllers/artong/index';
+import { member, country, reactions } from '../controllers/artong/index';
 
 export async function handler(event: any, context: any, callback: any) {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -19,22 +19,14 @@ export async function handler(event: any, context: any, callback: any) {
           res = await member.getMember(req.pathParameters);
         else if (req.path.startsWith('/artong/v1/auth/member/'))
           res = await member.getMemberSecure(req.pathParameters);
-        else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
-          res = await status.getStatusList(req.queryStringParameters, req.user);
         break;
       case 'POST':
         if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
           res = await member.createMember(req.body);
-        else if (req.path === '/artong/v1/status' || req.path === '/artong/v1/status/')
-          res = await status.createStatus(req.body, req.user);
         else if (req.path === '/artong/v1/country' || req.path === '/artong/v1/country/')
           res = await country.createCountry(req.body, req.user);
         else if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters && req.path.includes('/reactions'))
           res = await reactions.createContentReaction(req.pathParameters, req.body, req.user);
-        break;
-      case 'PUT':
-        if (req.path.startsWith('/artong/v1/status/') && req.pathParameters)
-          res = await status.putStatus(req.pathParameters, req.body, req.user);
         break;
       case 'PATCH':
         if (req.path === '/artong/v1/memberMaster')
