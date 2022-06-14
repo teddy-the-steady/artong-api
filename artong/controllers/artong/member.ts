@@ -3,7 +3,7 @@ import { Member } from '../../models/index';
 
 const getMember = async function(pathParameters: any) {
   const memberModel = new Member({
-    auth_id: pathParameters.auth_id
+    auth_id: pathParameters.id
   });
   await validator(memberModel);
   const result = await memberModel.getMember(memberModel.auth_id);
