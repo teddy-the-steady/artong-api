@@ -3,32 +3,21 @@ import controllerErrorWrapper from '../../utils/error/errorWrapper';
 const insertContentReactions = require('../../models/reactions/insertContentReactions.sql')
 
 export default class ContentReactions {
-	reaction_id: number | null;
-	content_id: number | null;
-	member_id: number | null;
+	reaction_id?: number;
+	content_id?: number;
+	member_id?: number;
 
-	created_at: Date | null;
-	updated_at: Date | null;
+	created_at?: Date;
+	updated_at?: Date;
 
-	constructor({
-		reaction_id = null,
-		content_id = null,
-		member_id = null,
-		created_at = null,
-		updated_at = null
-	} = {}) {
-		this.reaction_id = reaction_id;
-		this.content_id = content_id;
-		this.member_id = member_id;
-
-		this.created_at = created_at;
-		this.updated_at = updated_at;
+	constructor(data: Partial<ContentReactions>) {
+		Object.assign(this, data);
 	}
 
 	async createContentReaction(
-		reaction_id: number | null,
-		content_id: number | null,
-		member_id: number | null
+		reaction_id?: number,
+		content_id?: number,
+		member_id?: number
 	): Promise<ContentReactions> {
 		let conn: any;
 

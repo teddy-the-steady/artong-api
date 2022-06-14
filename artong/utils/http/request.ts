@@ -26,7 +26,7 @@ const requestInit = async function(event: any) {
     if (process.env.IS_OFFLINE) { // offline이면 queryStringParameters로 member_id 세팅(없으면 stage는 default 249)
       const member_id = event['queryStringParameters'] && event['queryStringParameters']['member_id'] ? event['queryStringParameters']['member_id'] : 249;
       const result = await member.getMemberAuthId({ member_id: member_id });
-      auth_id = result;
+      auth_id = result.data;
     }
 
     let payload = null;
