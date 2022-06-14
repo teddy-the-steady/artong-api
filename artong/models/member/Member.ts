@@ -13,53 +13,31 @@ import {
 } from 'class-validator'
 
 interface MemberGroups {
-	memberGroups: string[] | null;
+	memberGroups?: string[];
 }
 
 class Member implements MemberGroups {
-	id: number | null;
+	id?: number;
 	@IsEmail()
 	@IsOptional()
-	email: string | null;
-	username: string | null;
+	email?: string;
+	username?: string;
 	@IsUUID()
-	auth_id: string | null;
-	introduction: string | null;
-	profile_pic: string | null;
-	country_id: number | null;
+	auth_id?: string;
+	introduction?: string;
+	profile_pic?: string;
+	country_id?: number;
 
-	created_at: Date | null;
-	updated_at: Date | null;
+	created_at?: Date;
+	updated_at?: Date;
 
-	memberGroups: string[] | null;
+	memberGroups?: string[];
 
-	constructor({
-		id = null,
-		email = null,
-		username = null,
-		auth_id = null,
-		introduction = null,
-		profile_pic = null,
-		country_id = null,
-		created_at = null,
-		updated_at = null,
-		memberGroups = null,
-	} = {}) {
-		this.id = id;
-		this.email = email;
-		this.username = username;
-		this.auth_id = auth_id;
-		this.introduction = introduction,
-		this.profile_pic = profile_pic,
-		this.country_id = country_id,
-
-		this.created_at = created_at;
-		this.updated_at = updated_at;
-
-		this.memberGroups = memberGroups;
+	constructor(data: Partial<Member> = {}) {
+		Object.assign(this, data);
 	}
 
-	async getMember(auth_id: string | null): Promise<Member> {
+	async getMember(auth_id?: string): Promise<Member> {
 		let conn: any;
 
 		try {
@@ -73,7 +51,7 @@ class Member implements MemberGroups {
 		}
 	}
 
-	async getMemberAuthId(member_id: number | null): Promise<string> {
+	async getMemberAuthId(member_id?: number): Promise<string> {
 		let conn: any;
 
 		try {
@@ -87,7 +65,7 @@ class Member implements MemberGroups {
 		}
 	}
 
-	async getMembers(username: string | null): Promise<Member[]> {
+	async getMembers(username?: string): Promise<Member[]> {
 		let conn: any;
 		let result: any;
 	
@@ -103,9 +81,9 @@ class Member implements MemberGroups {
 	};
 
 	async createMember(
-		auth_id: string | null,
-		username: string | null,
-		email: string | null
+		auth_id?: string,
+		username?: string,
+		email?: string
 	): Promise<Member> {
 		let conn: any;
 
@@ -126,8 +104,8 @@ class Member implements MemberGroups {
 	}
 
 	async updateMemberProfilePic(
-		id: number | null,
-		profile_pic: string | null
+		id?: number,
+		profile_pic?: string
 	): Promise<Member> {
 		let conn: any;
 	
