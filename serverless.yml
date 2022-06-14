@@ -62,11 +62,7 @@ functions:
     handler: artong/handler/artong.handler
     events:
      - http:
-        path: artong/v1/member
-        method: GET
-        cors: true
-     - http:
-        path: artong/v1/member/{id}
+        path: artong/v1/members
         method: GET
         cors: true
      - http:
@@ -74,25 +70,15 @@ functions:
         method: POST
         cors: true
      - http:
-        path: artong/v1/auth/member/{auth_id}
+        path: artong/v1/members/{auth_id}
         method: GET
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
      - http:
-        path: artong/v1/profilePic/{username}
+        path: artong/v1/members/{id}/profile_pic
         method: PATCH
         cors: true
         private: true
-     - http:
-        path: artong/v1/memberMaster
-        method: PATCH
-        cors: true
-        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
-     - http:
-        path: artong/v1/memberDetail
-        method: PATCH
-        cors: true
-        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
      - http:
         path: artong/v1/contents/{id}/reactions
         method: POST
