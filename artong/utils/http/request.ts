@@ -38,7 +38,7 @@ const requestInit = async function(event: any) {
     }
 
     if (auth_id) {
-      const user = await member.getMember({ auth_id: auth_id });
+      const user = await member.getMember({ id: auth_id });
       result['member'] = user.data
     }
   } catch (error) {
