@@ -1,17 +1,21 @@
-import { ContentReactions } from '../../models/index';
+import { ContentReactions, Member } from '../../models/index';
 
-const createContentReaction = async function(pathParameters: any, body: any, user: any) {
-  const reaction = new ContentReactions();
-
-  const result = await reaction.createContentReaction({
+const postContentReaction = async function(pathParameters: any, body: any, member: Member) {
+  const reactionModel = new ContentReactions({
     reaction_id: body.reaction_code,
     content_id: pathParameters.id,
-    member_id: user.member_id
+    member_id: member.id
   });
+
+  const result = await reactionModel.createContentReaction(
+    reactionModel.reaction_id,
+    reactionModel.content_id,
+    reactionModel.member_id
+  );
 
   return {'data': result}
 }
 
 export {
-  createContentReaction,
+  postContentReaction,
 };

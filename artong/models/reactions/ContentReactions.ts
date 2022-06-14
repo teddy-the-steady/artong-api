@@ -2,12 +2,6 @@ import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 const insertContentReactions = require('../../models/reactions/insertContentReactions.sql')
 
-interface ContentReactionsInfo {
-  reaction_id: number;
-	content_id: number;
-	member_id: number;
-}
-
 export default class ContentReactions {
 	reaction_id: number | null;
 	content_id: number | null;
@@ -31,20 +25,22 @@ export default class ContentReactions {
 		this.updated_at = updated_at;
 	}
 
-	async createContentReaction(contentReaction: ContentReactionsInfo): Promise<ContentReactions> {
+	async createContentReaction(
+		reaction_id: number | null,
+		content_id: number | null,
+		member_id: number | null
+	): Promise<ContentReactions> {
 		let conn: any;
 
 		try {
 			conn = await db.getConnection();
-			await db.beginTransaction(conn);
-
-			const result = await db.execute(conn, insertContentReactions, contentReaction);
-
-			await db.commit(conn);
-
+			const result = await db.execute(conn, insertContentReactions, {
+				reaction_id: reaction_id,
+				content_id: content_id,
+				member_id: member_id
+			});
 			return result[0]
 		} catch (error) {
-			if (conn) await db.rollBack(conn);
 			throw controllerErrorWrapper(error);
 		} finally {
 			if (conn) db.release(conn);
