@@ -1,6 +1,5 @@
 SELECT
-    id,
     auth_id
-FROM member_master
+FROM member
 WHERE
     id = ${member_id}

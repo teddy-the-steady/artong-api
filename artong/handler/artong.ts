@@ -13,28 +13,22 @@ export async function handler(event: any, context: any, callback: any) {
 
     switch (req.httpMethod) {
       case 'GET':
-        if (req.path === '/artong/v1/member')
-          res = await member.getMemberOfUsername(req.queryStringParameters);
-        else if (req.path.startsWith('/artong/v1/member/'))
+        if (req.path === '/artong/v1/members' || req.path === '/artong/v1/members/')
+          res = await member.getMembers(req.queryStringParameters);
+        else if (req.path.startsWith('/artong/v1/members/') && req.pathParameters)
           res = await member.getMember(req.pathParameters);
-        else if (req.path.startsWith('/artong/v1/auth/member/'))
-          res = await member.getMemberSecure(req.pathParameters);
         break;
       case 'POST':
         if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
-          res = await member.createMember(req.body);
+          res = await member.postMember(req.body);
         else if (req.path === '/artong/v1/country' || req.path === '/artong/v1/country/')
-          res = await country.createCountry(req.body, req.user);
+          res = await country.postCountry(req.body, req.member);
         else if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters && req.path.includes('/reactions'))
-          res = await reactions.createContentReaction(req.pathParameters, req.body, req.user);
+          res = await reactions.postContentReaction(req.pathParameters, req.body, req.member);
         break;
       case 'PATCH':
-        if (req.path === '/artong/v1/memberMaster')
-          res = await member.patchMemberMaster(req.body, req.user);
-        else if (req.path === '/artong/v1/memberDetail')
-          res = await member.patchMemberDetail(req.body, req.user);
-        else if (req.path.startsWith('/artong/v1/profilePic/'))
-            res = await member.patchMemberProfilePic(req.pathParameters, req.body);
+        if (req.path.startsWith('/artong/v1/members/') && req.pathParameters && req.path.includes('profile_pic'))
+          res = await member.patchMemberProfilePic(req.pathParameters, req.body);
         break;
       default:
         console.error('METHOD undefined');
