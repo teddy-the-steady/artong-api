@@ -19,7 +19,7 @@ const extractTotalRows = function(list: any[]) {
     }
 };
 
-const hasBOPermission = function(memberGroups: Array<string> | null) {
+const hasBOPermission = function(memberGroups?: string[]) {
     const permissionGroups = ['manager'];
     if (memberGroups) {
         return permissionGroups.some(r => memberGroups.includes(r));
