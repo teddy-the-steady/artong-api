@@ -70,7 +70,7 @@ functions:
         method: POST
         cors: true
      - http:
-        path: artong/v1/members/{auth_id}
+        path: artong/v1/members/{id} # 이 경우만 예외적으로 id: auth_id(cognito sub)
         method: GET
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
