@@ -73,7 +73,7 @@ functions:
         path: artong/v1/members/{id} # 이 경우만 예외적으로 id: auth_id(cognito sub)
         method: GET
         cors: true
-        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
      - http:
         path: artong/v1/members/{id}/profile_pic
         method: PATCH
@@ -83,7 +83,7 @@ functions:
         path: artong/v1/contents/{id}/reactions
         method: POST
         cors: true
-        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
     layers:
      - {Ref: NodeModulesLambdaLayer}
   artong-admin:
@@ -93,7 +93,7 @@ functions:
         path: artong/v1/country
         method: POST
         cors: true
-        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
     layers:
      - {Ref: NodeModulesLambdaLayer}
   photo:
