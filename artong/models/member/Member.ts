@@ -22,6 +22,7 @@ class Member implements MemberGroups {
 	@IsOptional()
 	email?: string;
 	username?: string;
+	wallet_address?: string;
 	@IsUUID()
 	auth_id?: string;
 	introduction?: string;
@@ -83,7 +84,7 @@ class Member implements MemberGroups {
 	async createMember(
 		auth_id?: string,
 		username?: string,
-		email?: string
+		wallet_address?: string
 	): Promise<Member> {
 		let conn: any;
 
@@ -92,7 +93,7 @@ class Member implements MemberGroups {
 			const result = await db.execute(conn, insertMember, {
 				auth_id: auth_id,
 				username: username,
-				email: email
+				wallet_address: wallet_address
 			});
 			return result[0]
 		} catch (error) {
