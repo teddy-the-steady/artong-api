@@ -28,23 +28,15 @@ const getMembers = async function(queryStringParameters: any) {
 
 const postMember = async function(body: any) {
   const memberModel = new Member({
-    email: body.email,
-    username: body.email.split('@')[0],
+    username: body.wallet_address,
+    wallet_address: body.wallet_address,
     auth_id: body.auth_id,
   });
   await validator(memberModel);
-  while(true) { // remove duplicate username
-    const members = await memberModel.getMembers(memberModel.username);
-    if (members.length > 0) {
-      memberModel.username += '+';
-    } else {
-      break;
-    }
-  }
   const result = await memberModel.createMember(
     memberModel.auth_id,
     memberModel.username,
-    memberModel.email
+    memberModel.wallet_address
   );
   return {'data': result}
 };
