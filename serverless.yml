@@ -70,7 +70,7 @@ functions:
         method: POST
         cors: true
      - http:
-        path: artong/v1/members/{id} # 이 경우만 예외적으로 id: auth_id(cognito sub)
+        path: artong/v1/members/{id} # 이 경우만 id: wallet_address or pk(나머지는 pk만 허용)
         method: GET
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
