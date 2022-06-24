@@ -1,20 +1,16 @@
-import validator from '../../utils/validators/common';
 import { Member } from '../../models/index';
 
 const getMember = async function(pathParameters: any) {
-  const memberModel = new Member({
-    auth_id: pathParameters.id
-  });
-  await validator(memberModel);
-  const result = await memberModel.getMember(memberModel.auth_id);
-  return {'data': result}
-};
-
-const getMemberAuthId = async function(params: any) {
-  const memberModel = new Member({
-    id: params.member_id
-  });
-  const result = await memberModel.getMemberAuthId(memberModel.id);
+  const memberModel = new Member(
+    typeof pathParameters.id === 'string' && pathParameters.id.startsWith('0x')?
+    { wallet_address: pathParameters.id }
+      :
+    { id: pathParameters.id }
+  );
+  const result = await memberModel.getMember(
+    memberModel.id,
+    memberModel.wallet_address
+  );
   return {'data': result}
 };
 
@@ -29,12 +25,9 @@ const getMembers = async function(queryStringParameters: any) {
 const postMember = async function(body: any) {
   const memberModel = new Member({
     username: body.wallet_address,
-    wallet_address: body.wallet_address,
-    auth_id: body.auth_id,
+    wallet_address: body.wallet_address
   });
-  await validator(memberModel);
   const result = await memberModel.createMember(
-    memberModel.auth_id,
     memberModel.username,
     memberModel.wallet_address
   );
@@ -55,7 +48,6 @@ const patchMemberProfilePic = async function(pathParameters: any, body: any) {
 
 export {
   getMember,
-  getMemberAuthId,
   getMembers,
 	postMember,
   patchMemberProfilePic,
