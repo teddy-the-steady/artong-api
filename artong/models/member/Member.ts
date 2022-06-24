@@ -1,13 +1,11 @@
 import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 const selectMember = require('../../models/member/selectMember.sql');
-const selectMemberAuthId = require('../../models/member/selectMemberAuthId.sql');
 const selectMembers = require('../../models/member/selectMembers.sql');
 const insertMember = require('../../models/member/insertMember.sql');
 const updateMemberProfilePic = require('../../models/member/updateMemberProfilePic.sql');
 
 import {
-	IsUUID,
 	IsEmail,
 	IsOptional,
 } from 'class-validator'
@@ -23,8 +21,6 @@ class Member implements MemberGroups {
 	email?: string;
 	username?: string;
 	wallet_address?: string;
-	@IsUUID()
-	auth_id?: string;
 	introduction?: string;
 	profile_pic?: string;
 	country_id?: number;
@@ -38,27 +34,16 @@ class Member implements MemberGroups {
 		Object.assign(this, data);
 	}
 
-	async getMember(auth_id?: string): Promise<Member> {
+	async getMember(id?: number, wallet_address?: string): Promise<Member> {
 		let conn: any;
 
 		try {
 			conn = await db.getConnection();
-			const result = await db.execute(conn, selectMember, { auth_id: auth_id });
+			const result = await db.execute(conn, selectMember, {
+				id: id,
+				wallet_address: wallet_address
+			});
 			return result[0]
-		} catch (error) {
-			throw controllerErrorWrapper(error);
-		} finally {
-			if (conn) db.release(conn);
-		}
-	}
-
-	async getMemberAuthId(member_id?: number): Promise<string> {
-		let conn: any;
-
-		try {
-			conn = await db.getConnection();
-			const result = await db.execute(conn, selectMemberAuthId, { member_id: member_id });
-			return result[0].auth_id
 		} catch (error) {
 			throw controllerErrorWrapper(error);
 		} finally {
@@ -82,7 +67,6 @@ class Member implements MemberGroups {
 	};
 
 	async createMember(
-		auth_id?: string,
 		username?: string,
 		wallet_address?: string
 	): Promise<Member> {
@@ -91,7 +75,6 @@ class Member implements MemberGroups {
 		try {
 			conn = await db.getConnection();
 			const result = await db.execute(conn, insertMember, {
-				auth_id: auth_id,
 				username: username,
 				wallet_address: wallet_address
 			});
