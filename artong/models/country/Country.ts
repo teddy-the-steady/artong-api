@@ -1,5 +1,4 @@
 import * as db from '../../utils/db/db';
-import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import Models from '../Models';
 const insertCountry = require('../../models/country/insertCountry.sql');
 
@@ -24,11 +23,8 @@ class Country extends Models {
     name?: string,
     number_code?: string
 	): Promise<Country> {
-		let conn: any;
-
 		try {
-			conn = await db.getConnection();
-			const result = await db.execute(conn, insertCountry, {
+			const result = await db.execute(this.conn, insertCountry, {
 				iso_code_3,
 				iso_code_2,
 				name,
@@ -36,9 +32,7 @@ class Country extends Models {
 			});
 			return result[0]
 		} catch (error) {
-			throw controllerErrorWrapper(error);
-		} finally {
-			if (conn) db.release(conn);
+			throw error;
 		}
 	}
 }
