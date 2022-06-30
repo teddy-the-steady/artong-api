@@ -1,47 +1,30 @@
 import * as db from '../../utils/db/db';
-import controllerErrorWrapper from '../../utils/error/errorWrapper';
+import Models from '../Models';
 const insertCountry = require('../../models/country/insertCountry.sql');
 
-class Country {
-	id: number | null;
-	iso_code_3: string | null;
-	iso_code_2: string | null;
-	name: string | null;
-	number_code: string | null;
+class Country extends Models {
+	id?: number;
+	iso_code_3?: string;
+	iso_code_2?: string;
+	name?: string;
+	number_code?: string;
 
-	created_at: Date | null;
-	updated_at: Date | null;
+	created_at?: Date;
+	updated_at?: Date;
 
-	constructor({
-		id = null,
-		iso_code_3 = null,
-		iso_code_2 = null,
-		name = null,
-		number_code = null,
-		created_at = null,
-		updated_at = null
-	} = {}) {
-		this.id = id;
-		this.iso_code_3 = iso_code_3;
-		this.iso_code_2 = iso_code_2;
-		this.name = name;
-		this.number_code = number_code;
-
-		this.created_at = created_at;
-		this.updated_at = updated_at;
+	constructor(data: Partial<Country> = {}) {
+		super(data.conn);
+		Object.assign(this, data);
 	}
 
 	async createCountry(
-		iso_code_3: string | null,
-    iso_code_2: string | null,
-    name: string | null,
-    number_code: string | null
+		iso_code_3?: string,
+    iso_code_2?: string,
+    name?: string,
+    number_code?: string
 	): Promise<Country> {
-		let conn: any;
-
 		try {
-			conn = await db.getConnection();
-			const result = await db.execute(conn, insertCountry, {
+			const result = await db.execute(this.conn, insertCountry, {
 				iso_code_3,
 				iso_code_2,
 				name,
@@ -49,9 +32,7 @@ class Country {
 			});
 			return result[0]
 		} catch (error) {
-			throw controllerErrorWrapper(error);
-		} finally {
-			if (conn) db.release(conn);
+			throw error;
 		}
 	}
 }
