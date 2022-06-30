@@ -31,7 +31,7 @@ class Member extends Models implements MemberGroups {
 	memberGroups?: string[];
 
 	constructor(data: Partial<Member> = {}) {
-		super(data.conn)
+		super(data.conn);
 		Object.assign(this, data);
 	}
 

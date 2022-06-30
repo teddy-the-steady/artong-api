@@ -13,7 +13,7 @@ class Country extends Models {
 	updated_at?: Date;
 
 	constructor(data: Partial<Country> = {}) {
-		super(data.conn)
+		super(data.conn);
 		Object.assign(this, data);
 	}
 
