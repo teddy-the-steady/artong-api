@@ -14,7 +14,7 @@ const getMember = async function(pathParameters: any) {
 
     const memberModel = new Member({
       ...id,
-      conn
+      conn: conn
     });
 
     const result = await memberModel.getMember(
@@ -35,7 +35,7 @@ const getMembers = async function(queryStringParameters: any) {
   try {
     const memberModel = new Member({
       username: queryStringParameters.username,
-      conn
+      conn: conn
     });
 
     const result = await memberModel.getMembers(memberModel.username);
@@ -54,7 +54,7 @@ const postMember = async function(body: any) {
     const memberModel = new Member({
       username: body.wallet_address,
       wallet_address: body.wallet_address,
-      conn
+      conn: conn
     });
 
     const result = await memberModel.createMember(
@@ -76,7 +76,7 @@ const patchMemberProfilePic = async function(pathParameters: any, body: any) {
     const memberModel = new Member({
       id: pathParameters.id,
       profile_pic: body.profile_pic,
-      conn
+      conn: conn
     });
 
     const result = await memberModel.updateMemberProfilePic(
