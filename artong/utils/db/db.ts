@@ -3,8 +3,9 @@ import { getPool } from '../../init';
 import { InternalServerError } from '../error/errors';
 import { DBError } from '../error/errorCodes';
 import { replaceAll } from '../common/commonFunc';
+import { Client } from 'pg';
 
-const getConnection = async function() {
+const getConnection = async function(): Promise<Client> {
   try {
     const pool: any = await getPool();
     const conn = await pool.connect();
@@ -28,8 +29,8 @@ const execute = async function(conn: any, sql: string, params: any) {
   const compiledModel = preCompiledModel(params);
   const convertedSql = queryConverter(compiledModel, params);
   /* 쿼리 debug시 주석 해제 */
-  console.log(compiledModel);
-  console.log(convertedSql);
+  // console.log(compiledModel);
+  // console.log(convertedSql);
   try {
     const result = await conn.query(convertedSql);
     return result['rows']
