@@ -1,19 +1,30 @@
+import { Client } from 'pg';
 import { ContentReactions, Member } from '../../models/index';
+import controllerErrorWrapper from '../../utils/error/errorWrapper';
+import * as db from '../../utils/db/db';
 
 const postContentReaction = async function(pathParameters: any, body: any, member: Member) {
-  const reactionModel = new ContentReactions({
-    reaction_id: body.reaction_code,
-    content_id: pathParameters.id,
-    member_id: member.id
-  });
+  const conn: Client = await db.getConnection();
 
-  const result = await reactionModel.createContentReaction(
-    reactionModel.reaction_id,
-    reactionModel.content_id,
-    reactionModel.member_id
-  );
+  try {
+    const reactionModel = new ContentReactions({
+      reaction_id: body.reaction_code,
+      content_id: pathParameters.id,
+      member_id: member.id,
+      conn: conn
+    });
 
-  return {'data': result}
+    const result = await reactionModel.createContentReaction(
+      reactionModel.reaction_id,
+      reactionModel.content_id,
+      reactionModel.member_id
+    );
+    return {'data': result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
 }
 
 export {
