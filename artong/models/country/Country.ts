@@ -1,3 +1,4 @@
+import { Client } from 'pg';
 import * as db from '../../utils/db/db';
 import Models from '../Models';
 const insertCountry = require('../../models/country/insertCountry.sql');
@@ -12,8 +13,8 @@ class Country extends Models {
 	created_at?: Date;
 	updated_at?: Date;
 
-	constructor(data: Partial<Country> = {}) {
-		super(data.conn);
+	constructor(data: Partial<Country> = {}, conn: Client) {
+		super(conn);
 		Object.assign(this, data);
 	}
 

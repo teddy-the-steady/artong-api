@@ -11,8 +11,7 @@ const postContentReaction = async function(pathParameters: any, body: any, membe
       reaction_id: body.reaction_code,
       content_id: pathParameters.id,
       member_id: member.id,
-      conn: conn
-    });
+    }, conn);
 
     const result = await reactionModel.createContentReaction(
       reactionModel.reaction_id,
