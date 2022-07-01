@@ -24,7 +24,7 @@ const compileSQL = function(sql: string) {
   return preCompiledModel
 }
 
-const execute = async function(conn: any, sql: string, params: any) {
+const execute = async function(conn: Client, sql: string, params: any) {
   const preCompiledModel = compileSQL(sql);
   const compiledModel = preCompiledModel(params);
   const convertedSql = queryConverter(compiledModel, params);
@@ -58,19 +58,19 @@ const queryConverter = function(parameterizedSql: string, params: any) {
   return parameterizedSql
 }
 
-const beginTransaction = async function(conn: any) {
+const beginTransaction = async function(conn: Client) {
   await conn.query('BEGIN');
 }
 
-const commit = async function(conn: any) {
+const commit = async function(conn: Client) {
   await conn.query('COMMIT');
 }
 
-const rollBack = async function(conn: any) {
+const rollBack = async function(conn: Client) {
   await conn.query('ROLLBACK');
 }
 
-export {
+export { // TODO] 여기 함수들 Models.ts 로 넣는게 어떨지?
   getConnection,
   release,
   execute,

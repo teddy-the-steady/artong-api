@@ -1,3 +1,4 @@
+import { Client } from 'pg';
 import * as db from '../../utils/db/db';
 import Models from '../Models';
 const insertContentReactions = require('../../models/reactions/insertContentReactions.sql')
@@ -10,8 +11,8 @@ export default class ContentReactions extends Models {
 	created_at?: Date;
 	updated_at?: Date;
 
-	constructor(data: Partial<ContentReactions>) {
-		super(data.conn);
+	constructor(data: Partial<ContentReactions> = {}, conn: Client) {
+		super(conn);
 		Object.assign(this, data);
 	}
 
