@@ -9,6 +9,7 @@ import {
 	IsEmail,
 	IsOptional,
 } from 'class-validator'
+import { Client } from 'pg';
 
 interface MemberGroups {
 	memberGroups?: string[];
@@ -30,8 +31,8 @@ class Member extends Models implements MemberGroups {
 
 	memberGroups?: string[];
 
-	constructor(data: Partial<Member> = {}) {
-		super(data.conn);
+	constructor(data: Partial<Member> = {}, conn: Client) {
+		super(conn);
 		Object.assign(this, data);
 	}
 
