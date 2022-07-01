@@ -16,8 +16,7 @@ const postCountry = async function(body: any, member: Member) {
       iso_code_2: body.iso_code_2,
       name: body.name,
       number_code: body.number_code,
-      conn: conn
-    });
+    }, conn);
 
     const result = await countryModel.createCountry(
       countryModel.iso_code_3,
