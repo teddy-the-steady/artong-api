@@ -40,7 +40,7 @@ class Member extends Models implements MemberGroups {
 		try {
 			const result = await db.execute(this.conn, selectMember, {
 				id: id,
-				wallet_address: wallet_address
+				wallet_address: wallet_address?.toLowerCase()
 			});
 			return result[0]
 		} catch (error) {
