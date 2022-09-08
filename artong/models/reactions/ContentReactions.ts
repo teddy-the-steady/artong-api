@@ -1,7 +1,7 @@
 import { Client } from 'pg';
 import * as db from '../../utils/db/db';
 import Models from '../Models';
-const insertContentReactions = require('../../models/reactions/insertContentReactions.sql')
+const insertContentReactions = require('./insertContentReactions.sql')
 
 export default class ContentReactions extends Models {
 	reaction_id?: number;
