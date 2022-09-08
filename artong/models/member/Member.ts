@@ -1,9 +1,9 @@
 import * as db from '../../utils/db/db';
 import Models from '../Models';
-const selectMember = require('../../models/member/selectMember.sql');
-const selectMembers = require('../../models/member/selectMembers.sql');
-const insertMember = require('../../models/member/insertMember.sql');
-const updateMemberProfilePic = require('../../models/member/updateMemberProfilePic.sql');
+const selectMember = require('./selectMember.sql');
+const selectMembers = require('./selectMembers.sql');
+const insertMember = require('./insertMember.sql');
+const updateMemberProfilePic = require('./updateMemberProfilePic.sql');
 
 import {
 	IsEmail,
