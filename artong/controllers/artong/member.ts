@@ -50,8 +50,8 @@ const postMember = async function(body: any) {
 
   try {
     const memberModel = new Member({
-      username: body.wallet_address,
-      wallet_address: body.wallet_address,
+      username: body.wallet_address?.toLowerCase(),
+      wallet_address: body.wallet_address?.toLowerCase(),
     }, conn);
 
     const result = await memberModel.createMember(
