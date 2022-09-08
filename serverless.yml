@@ -84,6 +84,11 @@ functions:
         method: POST
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
+     - http:
+        path: artong/v1/projects
+        method: POST
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:authorizer
     layers:
      - {Ref: NodeModulesLambdaLayer}
   artong-admin:
