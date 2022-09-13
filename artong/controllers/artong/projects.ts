@@ -10,13 +10,15 @@ const postProject = async function(body: any, member: Member) {
     const projectModel = new Projects({
       address: body.address,
       member_id: member.id,
-      name: body.name
+      name: body.name,
+      status: body.status
     }, conn);
 
     const result = await projectModel.createProject(
       projectModel.address,
       projectModel.member_id,
-      projectModel.name
+      projectModel.name,
+      projectModel.status
     );
     return {'data': result}
   } catch (error) {
