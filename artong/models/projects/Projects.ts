@@ -5,6 +5,7 @@ const insertProject = require('./insertProject.sql');
 const updateProject = require('./updateProject.sql');
 
 class Projects extends Models {
+	create_tx_hash?: string;
 	address?: string;
 	member_id?: number;
 	name?: string;
@@ -22,14 +23,14 @@ class Projects extends Models {
 	}
 
 	async createProject(
-		address?: string,
+		create_tx_hash?: string,
 		member_id?: number,
     name?: string,
 		status?: string
 	): Promise<Projects> {
 		try {
 			const result = await db.execute(this.conn, insertProject, {
-				address,
+				create_tx_hash,
 				member_id,
 				name,
 				status
@@ -41,6 +42,7 @@ class Projects extends Models {
 	}
 
 	async updateProject(
+		create_tx_hash?: string,
 		address?: string,
 		member_id?: number,
 		description?: string,
@@ -50,6 +52,7 @@ class Projects extends Models {
 	): Promise<Projects>  {
 		try {
 			const result = await db.execute(this.conn, updateProject, {
+				create_tx_hash,
 				address,
 				member_id,
 				description,
