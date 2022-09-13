@@ -10,6 +10,7 @@ class Projects extends Models {
 	description?: string;
 	thumbnail_url?: string;
 	background_url?: string;
+	status?: string;
 
 	created_at?: Date;
 	updated_at?: Date;
@@ -22,13 +23,15 @@ class Projects extends Models {
 	async createProject(
 		address?: string,
 		member_id?: number,
-    name?: string
+    name?: string,
+		status?: string
 	): Promise<Projects> {
 		try {
 			const result = await db.execute(this.conn, insertProject, {
 				address,
 				member_id,
-				name
+				name,
+				status
 			});
 			return result[0]
 		} catch (error) {
