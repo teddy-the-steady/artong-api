@@ -8,14 +8,14 @@ const postProject = async function(body: any, member: Member) {
 
   try {
     const projectModel = new Projects({
-      address: body.address,
+      create_tx_hash: body.create_tx_hash,
       member_id: member.id,
       name: body.name,
       status: body.status
     }, conn);
 
     const result = await projectModel.createProject(
-      projectModel.address,
+      projectModel.create_tx_hash,
       projectModel.member_id,
       projectModel.name,
       projectModel.status
@@ -33,7 +33,8 @@ const patchProject = async function(pathParameters: any, body: any, member: Memb
 
   try {
     const projectModel = new Projects({
-      address: pathParameters.address,
+      create_tx_hash: pathParameters.txHash,
+      address: body.address,
       member_id: member.id,
       description: body.description,
       thumbnail_url: body.thumbnail_url,
@@ -42,6 +43,7 @@ const patchProject = async function(pathParameters: any, body: any, member: Memb
     }, conn);
 
     const result = await projectModel.updateProject(
+      projectModel.create_tx_hash,
       projectModel.address,
       projectModel.member_id,
       projectModel.description,
