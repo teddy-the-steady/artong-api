@@ -2,7 +2,7 @@ const path = require('path');
 const slsw = require('serverless-webpack');
 const isLocal = slsw.lib.webpack.isLocal;
 const ENV = slsw.lib.serverless.service.provider.environment
-const { IgnorePlugin } = require('webpack');
+const { IgnorePlugin, ProvidePlugin } = require('webpack');
 
 module.exports = {
   mode: isLocal || ENV !== 'prod' ? 'development' : 'production',
@@ -37,5 +37,11 @@ module.exports = {
 	resolve: {
     extensions: ['.tsx', '.ts', '.js']
   },
-  plugins: [new IgnorePlugin({resourceRegExp: /^pg-native$/})],
+  plugins: [
+    new IgnorePlugin({resourceRegExp: /^pg-native$/}),
+    new ProvidePlugin({
+      WebSocket: 'ws',
+      fetch: ['node-fetch', 'default'],
+    }),
+  ],
 }
