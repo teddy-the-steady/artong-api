@@ -17,6 +17,8 @@ export async function handler(event: any, context: any, callback: any) {
           res = await member.getMembers(req.queryStringParameters);
         else if (req.path.startsWith('/artong/v1/members/') && req.pathParameters)
           res = await member.getMember(req.pathParameters);
+        else if (req.path.startsWith('/artong/v1/projects/') && req.pathParameters)
+          res = await projects.getProject(req.pathParameters);
         break;
       case 'POST':
         if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
