@@ -3,6 +3,7 @@ import * as db from '../../utils/db/db';
 import Models from '../Models';
 const insertProject = require('./insertProject.sql');
 const updateProject = require('./updateProject.sql');
+const getProject = require('./selectProject.sql');
 
 class Projects extends Models {
 	create_tx_hash?: string;
@@ -59,6 +60,17 @@ class Projects extends Models {
 				thumbnail_url,
 				background_url,
 				status
+			});
+			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getProject(create_tx_hash?: string): Promise<Projects> {
+		try {
+			const result = await db.execute(this.conn, getProject, {
+				create_tx_hash
 			});
 			return result[0]
 		} catch (error) {
