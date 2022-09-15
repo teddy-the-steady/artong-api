@@ -2,6 +2,7 @@ import { Client } from 'pg';
 import { Member } from '../../models/index';
 import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
+import validator from '../../utils/validators/common'
 
 const getMember = async function(pathParameters: any) {
   const conn: Client = await db.getConnection();
@@ -52,11 +53,15 @@ const postMember = async function(body: any) {
     const memberModel = new Member({
       username: body.wallet_address?.toLowerCase(),
       wallet_address: body.wallet_address?.toLowerCase(),
+      principal_id: body.principal_id,
     }, conn);
+
+    await validator(memberModel);
 
     const result = await memberModel.createMember(
       memberModel.username,
-      memberModel.wallet_address
+      memberModel.wallet_address,
+      memberModel.principal_id,
     );
     return {'data': result}
   } catch (error) {
