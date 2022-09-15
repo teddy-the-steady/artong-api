@@ -11,8 +11,6 @@ provider:
     NODE_PATH: './:/opt/node_modules'
   apiKeys:
     - artongApiKey-${self:provider.stage}
-  httpApi:
-    payload: '2.0'
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
