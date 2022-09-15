@@ -12,10 +12,7 @@ provider:
   apiKeys:
     - artongApiKey-${self:provider.stage}
   httpApi:
-    authorizers:
-      customAuthorizer:
-        type: request
-        functionArn: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
+    payload: '2.0'
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -78,8 +75,7 @@ functions:
         path: artong/v1/members/{id} # 이 경우만 id: wallet_address or pk(나머지는 pk만 허용)
         method: GET
         cors: true
-        authorizer:
-          name: customAuthorizer
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
      - http:
         path: artong/v1/members/{id}/profile_pic
         method: PATCH
@@ -89,26 +85,22 @@ functions:
         path: artong/v1/contents/{id}/reactions
         method: POST
         cors: true
-        authorizer:
-          name: customAuthorizer
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
      - http:
         path: artong/v1/projects
         method: POST
         cors: true
-        authorizer:
-          name: customAuthorizer
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
      - http:
         path: artong/v1/projects/{txHash}
         method: PATCH
         cors: true
-        authorizer:
-          name: customAuthorizer
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
      - http:
         path: artong/v1/projects/{txHash}
         method: GET
         cors: true
-        authorizer:
-          name: customAuthorizer
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
     layers:
      - {Ref: NodeModulesLambdaLayer}
   artong-admin:
@@ -118,8 +110,7 @@ functions:
         path: artong/v1/country
         method: POST
         cors: true
-        authorizer:
-          name: customAuthorizer
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
     layers:
      - {Ref: NodeModulesLambdaLayer}
   photo:
