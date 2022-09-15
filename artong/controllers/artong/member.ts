@@ -34,10 +34,14 @@ const getMembers = async function(queryStringParameters: any) {
 
   try {
     const memberModel = new Member({
-      username: queryStringParameters.username,
+      username: queryStringParameters?.username,
+      principal_id: queryStringParameters?.principal_id
     }, conn);
 
-    const result = await memberModel.getMembers(memberModel.username);
+    const result = await memberModel.getMembers(
+      memberModel.username,
+      memberModel.principal_id
+    );
     return {'data': result}
   } catch (error) {
     throw controllerErrorWrapper(error);
