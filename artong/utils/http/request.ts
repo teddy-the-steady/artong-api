@@ -28,10 +28,14 @@ const requestInit = async function(event: any) {
       usernameOrMemberId = event['queryStringParameters'] && event['queryStringParameters']['member_id'] ? event['queryStringParameters']['member_id'] : 249;
     } else {
       const jwtToken = event['headers']['Authorization'];
-      principalId = event['requestContext']['authorizer']['principalId'];
-      if (jwtToken && principalId) {
+      if (jwtToken &&
+        event['requestContext'] &&
+        event['requestContext']['authorizer'] &&
+        event['requestContext']['authorizer']['principalId']
+      ) {
         const payload = parseJwt(jwtToken);
         result['member']['memberGroups'] = payload['cognito:groups'];
+        principalId = event['requestContext']['authorizer']['principalId'];
       }
     }
 
