@@ -1,4 +1,4 @@
 INSERT INTO
-    member(wallet_address, username)
-VALUES(${wallet_address}, ${username})
+    member(wallet_address, username, principal_id)
+VALUES(${wallet_address}, ${username}, ${principal_id})
 RETURNING *

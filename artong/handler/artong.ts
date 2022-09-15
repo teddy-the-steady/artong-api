@@ -22,7 +22,7 @@ export async function handler(event: any, context: any, callback: any) {
           res = await projects.getProjectWhileUpdatingCreatedPendingOne(req.pathParameters, req.member);
         break;
       case 'POST':
-        if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
+        if (req.path === '/artong/v1/members' || req.path === '/artong/v1/members/')
           res = await member.postMember(req.body);
         else if (req.path === '/artong/v1/country' || req.path === '/artong/v1/country/')
           res = await country.postCountry(req.body, req.member);
