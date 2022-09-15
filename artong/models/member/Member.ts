@@ -8,6 +8,8 @@ const updateMemberProfilePic = require('./updateMemberProfilePic.sql');
 import {
 	IsEmail,
 	IsOptional,
+	IsUUID,
+	IsEthereumAddress
 } from 'class-validator'
 import { Client } from 'pg';
 
@@ -21,10 +23,15 @@ class Member extends Models implements MemberGroups {
 	@IsOptional()
 	email?: string;
 	username?: string;
+	@IsEthereumAddress()
+	@IsOptional()
 	wallet_address?: string;
 	introduction?: string;
 	profile_pic?: string;
 	country_id?: number;
+	@IsUUID()
+	@IsOptional()
+	principal_id?: string;
 
 	created_at?: Date;
 	updated_at?: Date;
@@ -59,12 +66,14 @@ class Member extends Models implements MemberGroups {
 
 	async createMember(
 		username?: string,
-		wallet_address?: string
+		wallet_address?: string,
+		principal_id?: string
 	): Promise<Member> {
 		try {
 			const result = await db.execute(this.conn, insertMember, {
 				username: username,
-				wallet_address: wallet_address
+				wallet_address: wallet_address,
+				principal_id: principal_id
 			});
 			return result[0]
 		} catch (error) {
