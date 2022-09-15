@@ -55,9 +55,15 @@ class Member extends Models implements MemberGroups {
 		}
 	}
 
-	async getMembers(username?: string): Promise<Member[]> {
+	async getMembers(
+		username?: string,
+		principal_id?: string
+	): Promise<Member[]> {
 		try {
-			const result = await db.execute(this.conn, selectMembers, { username: username });
+			const result = await db.execute(this.conn, selectMembers, {
+				username: username,
+				principal_id: principal_id
+			});
 			return result
 		} catch (error) {
 			throw error;
