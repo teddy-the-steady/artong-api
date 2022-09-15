@@ -38,3 +38,15 @@ Default region name: ap-northeast-2
 ```
 $ utern /aws/lambda/artong-api-stage-artong
 ```
+
+## 개발전용 람다 간편 업로드
+```
+npx tsc
+```
+```
+serverless deploy function -f <functionName>
+```
+## Before git push, js 파일 삭제
+```
+find ./<service> -name "*.js" -exec rm -rf {} \;
+```
