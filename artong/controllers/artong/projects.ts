@@ -61,7 +61,7 @@ const patchProject = async function(pathParameters: any, body: any, member: Memb
   }
 };
 
-const getProject = async function(pathParameters: any) {
+const getProjectWhileUpdatingCreatedPendingOne = async function(pathParameters: any) {
   const conn: Client = await db.getConnection();
 
   try {
@@ -127,5 +127,5 @@ const getProjectAddressFromContractCreatedEvent = function(txReceipt: any) {
 export {
 	postProject,
   patchProject,
-  getProject,
+  getProjectWhileUpdatingCreatedPendingOne,
 };
