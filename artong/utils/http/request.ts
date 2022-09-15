@@ -22,21 +22,27 @@ const requestInit = async function(event: any) {
 
   try {
     result['member'] = {};
-    let usernameOrMemberId = null;
+    let usernameOrMemberId = null; // only offline
+    let principalId = null; // stage and prod
     if (process.env.IS_OFFLINE) { // offline이면 queryStringParameters로 member_id 세팅(없으면 stage는 admin 249)
       usernameOrMemberId = event['queryStringParameters'] && event['queryStringParameters']['member_id'] ? event['queryStringParameters']['member_id'] : 249;
-    }
-
-    const jwtToken = event['headers']['Authorization'];
-    if (jwtToken) {
-      const payload = parseJwt(jwtToken);
-      result['member']['memberGroups'] = payload['cognito:groups'];
-      usernameOrMemberId = payload['username'];
+    } else {
+      const jwtToken = event['headers']['Authorization'];
+      principalId = event['requestContext']['authorizer']['principalId'];
+      if (jwtToken && principalId) {
+        const payload = parseJwt(jwtToken);
+        result['member']['memberGroups'] = payload['cognito:groups'];
+      }
     }
 
     if (usernameOrMemberId) {
       const user = await member.getMember({ id: usernameOrMemberId });
       result['member'] = Object.assign(result['member'], user.data)
+    }
+
+    if (principalId) {
+      const user = await member.getMembers({ principal_id: principalId });
+      result['member'] = Object.assign(result['member'], user.data[0]);
     }
   } catch (error) {
     controllerErrorWrapper(error);
