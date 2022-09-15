@@ -66,7 +66,7 @@ functions:
         method: GET
         cors: true
      - http:
-        path: artong/v1/member
+        path: artong/v1/members
         method: POST
         cors: true
      - http:
