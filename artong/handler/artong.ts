@@ -8,6 +8,7 @@ export async function handler(event: any, context: any, callback: any) {
   let res: any = {};
 
   try {
+    console.log(event)
     const req = await requestInit(event);
     console.log(req);
 
