@@ -5,7 +5,7 @@ class InfuraProvider {
 
   constructor() {
     this.provider = new ethers.providers.InfuraProvider(
-      process.env.ENV === 'prod'? 'homestead' : 'rinkeby',
+      process.env.ENV === 'prod'? 'homestead' : 'ropsten',
       'c60789555fff407eabc1c2bfa1330684'
     )
   }
