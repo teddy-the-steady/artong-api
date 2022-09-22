@@ -5,6 +5,29 @@ import * as db from '../../utils/db/db';
 import { Client } from 'pg';
 import { ethers } from 'ethers';
 
+const getProjects = async function(queryStringParameters: any) {
+  const conn: Client = await db.getConnection();
+
+  try {
+    const projectModel = new Projects({
+      member_id: queryStringParameters.member_id,
+      status: queryStringParameters.status
+    }, conn)
+
+    const result = await projectModel.getProjects(
+      projectModel.member_id,
+      projectModel.status,
+      queryStringParameters.start_num,
+      queryStringParameters.count_num
+    );
+    return {'data': result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+};
+
 const postProject = async function(body: any, member: Member) {
   const conn: Client = await db.getConnection();
 
@@ -128,6 +151,7 @@ const getProjectAddressFromContractCreatedEvent = function(txReceipt: any) {
 }
 
 export {
+  getProjects,
 	postProject,
   patchProject,
   getProjectWhileUpdatingCreatedPendingOne,
