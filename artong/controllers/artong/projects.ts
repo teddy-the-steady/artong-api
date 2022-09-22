@@ -13,6 +13,7 @@ const postProject = async function(body: any, member: Member) {
       create_tx_hash: body.create_tx_hash,
       member_id: member.id,
       name: body.name,
+      symbol: body.symbol,
       status: body.status
     }, conn);
 
@@ -20,6 +21,7 @@ const postProject = async function(body: any, member: Member) {
       projectModel.create_tx_hash,
       projectModel.member_id,
       projectModel.name,
+      projectModel.symbol,
       projectModel.status
     );
     return {'data': result}
