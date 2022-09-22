@@ -14,6 +14,7 @@ class Projects extends Models {
 	thumbnail_url?: string;
 	background_url?: string;
 	status?: string;
+	symbol?: string;
 
 	created_at?: Date;
 	updated_at?: Date;
@@ -27,6 +28,7 @@ class Projects extends Models {
 		create_tx_hash?: string,
 		member_id?: number,
     name?: string,
+		symbol?: string,
 		status?: string
 	): Promise<Projects> {
 		try {
@@ -34,6 +36,7 @@ class Projects extends Models {
 				create_tx_hash,
 				member_id,
 				name,
+				symbol,
 				status
 			});
 			return result[0]
