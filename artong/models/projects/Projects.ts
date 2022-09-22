@@ -4,6 +4,8 @@ import Models from '../Models';
 const insertProject = require('./insertProject.sql');
 const updateProject = require('./updateProject.sql');
 const getProject = require('./selectProject.sql');
+const getProjects = require('./selectProjects.sql');
+
 
 class Projects extends Models {
 	create_tx_hash?: string;
@@ -76,6 +78,25 @@ class Projects extends Models {
 				create_tx_hash
 			});
 			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getProjects(
+		member_id?: number,
+		status?: string,
+		start_num?: number,
+		count_num?: number
+	): Promise<Projects[]> {
+		try {
+			const result = await db.execute(this.conn, getProjects, {
+				member_id,
+				status,
+				start_num,
+				count_num
+			});
+			return result
 		} catch (error) {
 			throw error;
 		}
