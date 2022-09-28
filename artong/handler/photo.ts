@@ -19,7 +19,7 @@ export async function handler(event: any, context: any, callback: any) {
       initKeys = await setApiKey();
     } 
     const key = decodeURIComponent(event.Records[0].s3.object.key);
-    const type = key.split('/')[2];
+    const type = key.split('/')[1];
 
     switch (type) {
       case 'profile':
