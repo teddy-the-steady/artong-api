@@ -12,6 +12,7 @@ let initKeys: any = null; // TODO] 핸들러 밖에서 초기화가 잘 안되�
 
 export async function handler(event: any, context: any, callback: any) {
   console.log(event);
+  console.log(event.Records[0].s3.object);
 
   try {
     if (!initKeys) {
