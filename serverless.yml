@@ -107,7 +107,7 @@ functions:
         path: artong/v1/nft
         method: POST
         cors: true
-        private: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
     layers:
      - {Ref: NodeModulesLambdaLayer}
   artong-admin:
