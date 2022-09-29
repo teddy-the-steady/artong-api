@@ -1,3 +1,3 @@
-INSERT INTO contents (member_id, content_url)
-VALUES(${member_id}, ${content_url})
+INSERT INTO contents (member_id, project_address, content_url)
+VALUES(${member_id}, ${project_address}, ${content_url})
 RETURNING *

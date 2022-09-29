@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import requestInit from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response';
-import { member, country, reactions, projects } from '../controllers/artong/index';
+import { member, country, reactions, projects, contents } from '../controllers/artong/index';
 
 export async function handler(event: any, context: any, callback: any) {
   context.callbackWaitsForEmptyEventLoop = false;
@@ -32,6 +32,8 @@ export async function handler(event: any, context: any, callback: any) {
           res = await reactions.postContentReaction(req.pathParameters, req.body, req.member);
         else if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
           res = await projects.postProject(req.body, req.member);
+        else if (req.path === '/artong/v1/nft' || req.path === '/artong/v1/nft/')
+          res = await contents.postContent(req.body);
         break;
       case 'PATCH':
         if (req.path.startsWith('/artong/v1/members/') && req.pathParameters && req.path.includes('profile_pic'))
