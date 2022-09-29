@@ -4,10 +4,11 @@ import axios from 'axios';
 const insertNft = async function(s3: any) {
   try {
     const key = decodeURIComponent(s3.object.key);
-    const id = key.split('/')[2];
+    const keyItems = key.split('/');
     
     await axios.post(`/nft`, {
-      member_id: id,
+      member_id: keyItems[3],
+      project_address: keyItems[2],
       content_url: key,
     });
   } catch (error) {

@@ -22,11 +22,13 @@ class Contents extends Models {
 
 	async createContent(
 		member_id?: number,
+		project_address?: string,
 		content_url?: string,
 	): Promise<Contents> {
 		try {
 			const result = await db.execute(this.conn, insertContent, {
 				member_id,
+				project_address,
 				content_url,
 			});
 			return result[0]
