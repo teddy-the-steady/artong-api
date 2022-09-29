@@ -103,6 +103,11 @@ functions:
         method: GET
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
+     - http:
+        path: artong/v1/nft
+        method: POST
+        cors: true
+        private: true
     layers:
      - {Ref: NodeModulesLambdaLayer}
   artong-admin:
@@ -115,8 +120,8 @@ functions:
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
     layers:
      - {Ref: NodeModulesLambdaLayer}
-  photo:
-    handler: artong/handler/photo.handler
+  image:
+    handler: artong/handler/image.handler
     events:
      - s3:
         bucket: artong-stage-image163347-stage
