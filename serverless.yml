@@ -9,6 +9,7 @@ provider:
   environment:
     ENV: ${self:provider.stage}
     NODE_PATH: './:/opt/node_modules'
+    S3_BUCKET: 'artong-stage-image163347-stage'
   apiKeys:
     - artongApiKey-${self:provider.stage}
   iamRoleStatements:
@@ -18,8 +19,8 @@ provider:
         - 's3:GetObject'
         - 's3:ListBucket'
       Resource:
-        - 'arn:aws:s3:::artong-stage-image163347-stage'
-        - 'arn:aws:s3:::artong-stage-image163347-stage/*'
+        - 'arn:aws:s3:::${env:S3_BUCKET}'
+        - 'arn:aws:s3:::${env:S3_BUCKET}/*'
     - Effect: 'Allow'
       Action:
         - 'ssm:GetParameters'
@@ -40,7 +41,7 @@ package:
 layers:
   NodeModules:
     path: node_layers
-    description: 'includes pg, handlebars, axios'
+    description: 'includes pg, handlebars, axios, aws-sdk'
 
 plugins:
   - serverless-webpack
@@ -108,6 +109,11 @@ functions:
         method: POST
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
+     - http:
+        path: artong/v1/nft/store
+        method: POST
+        cors: true
+        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
     layers:
      - {Ref: NodeModulesLambdaLayer}
   artong-admin:
@@ -124,7 +130,7 @@ functions:
     handler: artong/handler/image.handler
     events:
      - s3:
-        bucket: artong-stage-image163347-stage
+        bucket: ${env:S3_BUCKET}
         event: s3:ObjectCreated:*
         rules:
           - prefix: public/profile/
