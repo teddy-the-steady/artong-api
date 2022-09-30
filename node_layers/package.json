@@ -4,7 +4,7 @@
   "description": "node package for serverless api layers",
   "main": "index.js",
   "dependencies": {
-    "aws-sdk": "^2.1226.0",
+    "@aws-sdk/client-s3": "^3.181.0",
     "axios": "^0.21.1",
     "handlebars": "^4.7.3",
     "pg": "^8.2.2"
