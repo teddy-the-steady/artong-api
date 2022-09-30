@@ -1,14 +1,15 @@
 import { Contents, Member } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
+import getSecretKeys from '../../utils/common/ssmKeys';
 import { Client } from 'pg';
 
-const postContent = async function(body: any) {
+const postContent = async function(body: any, member: Member) {
   const conn: Client = await db.getConnection();
 
   try {
     const contentModel = new Contents({
-      member_id: body.member_id,
+      member_id: member.id,
       project_address: body.project_address,
       content_url: body.content_url,
     }, conn);
@@ -26,6 +27,17 @@ const postContent = async function(body: any) {
   }
 };
 
+const getNftStorageApiKey = async function() {
+  try {
+    const keys = await getSecretKeys();
+    const nftStorageApiKey = keys[`/nftStorage/${process.env.ENV}/apikey`];
+    return nftStorageApiKey;
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  }
+};
+
 export {
 	postContent,
+  getNftStorageApiKey,
 };
