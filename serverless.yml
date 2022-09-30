@@ -19,8 +19,8 @@ provider:
         - 's3:GetObject'
         - 's3:ListBucket'
       Resource:
-        - 'arn:aws:s3:::artong-stage-image163347-stage'
-        - 'arn:aws:s3:::artong-stage-image163347-stage/*'
+        - 'arn:aws:s3:::${env:S3_BUCKET}'
+        - 'arn:aws:s3:::${env:S3_BUCKET}/*'
     - Effect: 'Allow'
       Action:
         - 'ssm:GetParameters'
@@ -130,7 +130,7 @@ functions:
     handler: artong/handler/image.handler
     events:
      - s3:
-        bucket: artong-stage-image163347-stage
+        bucket: ${env:S3_BUCKET}
         event: s3:ObjectCreated:*
         rules:
           - prefix: public/profile/
