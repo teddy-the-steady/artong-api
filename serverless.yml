@@ -41,7 +41,7 @@ package:
 layers:
   NodeModules:
     path: node_layers
-    description: 'includes pg, handlebars, axios, aws-sdk'
+    description: 'includes pg, handlebars, axios, @aws-sdk/client-s3'
 
 plugins:
   - serverless-webpack
