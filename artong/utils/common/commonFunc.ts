@@ -1,3 +1,6 @@
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import { Readable } from 'stream';
+
 const getTotalRows = function(list: any[]) {
     if (typeof list !== 'undefined' && list.length > 0) {
         return list[0].TotalRows
@@ -31,9 +34,38 @@ const replaceAll = function(str: string, searchStr: string, replaceStr: string) 
     return str.split(searchStr).join(replaceStr);
 };
 
+const getS3Object = function(
+    client: S3Client,
+    bucket: string|undefined,
+    key: string
+): Promise<Buffer> {
+    const option: any = {
+        Bucket: bucket,
+        Key: key
+    };
+
+    return new Promise(async (resolve, reject) => {
+        const getObjectCommand = new GetObjectCommand(option);
+
+        try {
+            const response = await client.send(getObjectCommand);
+            const body = response.Body as Readable;
+
+            let responseDataChunks: any[] = [];
+
+            body.once('error', err => reject(err));
+            body.on('data', chunk => responseDataChunks.push(chunk));
+            body.once('end', () => resolve(Buffer.concat(responseDataChunks)));
+        } catch (err) {
+            return reject(err);
+        }
+    })
+}
+
 export {
     getTotalRows,
     extractTotalRows,
     hasBOPermission,
     replaceAll,
+    getS3Object,
 };
