@@ -31,7 +31,7 @@ const getNftStorageApiKey = async function() {
   try {
     const keys = await getSecretKeys();
     const nftStorageApiKey = keys[`/nftStorage/${process.env.ENV}/apikey`];
-    return nftStorageApiKey;
+    return {'data': nftStorageApiKey}
   } catch (error) {
     throw controllerErrorWrapper(error);
   }
