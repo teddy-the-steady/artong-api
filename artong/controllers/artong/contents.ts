@@ -70,7 +70,30 @@ const uploadToNftStorageAndUpdateContent = async function(body: any) {
   }
 };
 
+const patchContent = async function(pathParameters: any, body: any) {
+  const conn: Client = await db.getConnection();
+
+  try {
+    const contentModel = new Contents({
+      id: pathParameters.id,
+      token_id: body.tokenId,
+    }, conn);
+
+    const result = await contentModel.updateContent(
+      contentModel.id,
+      contentModel.ipfs_url,
+      contentModel.token_id,
+    );
+    return {'data': result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
 	postContent,
   uploadToNftStorageAndUpdateContent,
+  patchContent,
 };
