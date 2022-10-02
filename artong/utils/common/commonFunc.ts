@@ -1,5 +1,6 @@
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
+// import Blob from 'cross-blob';
 
 const getTotalRows = function(list: any[]) {
     if (typeof list !== 'undefined' && list.length > 0) {
@@ -34,7 +35,7 @@ const replaceAll = function(str: string, searchStr: string, replaceStr: string) 
     return str.split(searchStr).join(replaceStr);
 };
 
-const getS3Object = function(
+const getS3ObjectInBuffer = function(
     client: S3Client,
     bucket: string|undefined,
     key: string
@@ -67,5 +68,5 @@ export {
     extractTotalRows,
     hasBOPermission,
     replaceAll,
-    getS3Object,
+    getS3ObjectInBuffer,
 };
