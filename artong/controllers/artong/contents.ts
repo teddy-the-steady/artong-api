@@ -3,7 +3,7 @@ import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import getSecretKeys from '../../utils/common/ssmKeys';
 import { Client } from 'pg';
-import { getS3ObjectInBuffer } from '../../utils/common/commonFunc';
+import { getS3ObjectInBuffer, getS3ObjectHead } from '../../utils/common/commonFunc';
 import { S3Client } from '@aws-sdk/client-s3';
 import { NFTStorage } from 'nft.storage';
 import { File } from '@web-std/file';
@@ -37,7 +37,10 @@ const uploadToNftStorageAndUpdateContent = async function(body: any) {
   try {
     const client = new S3Client({ region: 'ap-northeast-2' });
     const image = await getS3ObjectInBuffer(client, process.env.S3_BUCKET, body.imageKey);
-    const file = new File([image], 'cat.png', { type: 'image/png' })
+    const head = await getS3ObjectHead(client, process.env.S3_BUCKET, body.imageKey);
+
+    const fileName = body.imageKey.substring(body.imageKey.lastIndexOf('/') + 1, body.imageKey.length)
+    const file = new File([image], fileName, { type: head.ContentType })
 
     const keys = await getSecretKeys();
     const nftStorageApiKey = keys[`/nftStorage/${process.env.ENV}/apikey`];
