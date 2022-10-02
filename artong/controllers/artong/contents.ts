@@ -3,6 +3,10 @@ import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import getSecretKeys from '../../utils/common/ssmKeys';
 import { Client } from 'pg';
+import { getS3ObjectInBuffer } from '../../utils/common/commonFunc';
+import { S3Client } from '@aws-sdk/client-s3';
+import { NFTStorage } from 'nft.storage';
+import { File } from '@web-std/file';
 
 const postContent = async function(body: any, member: Member) {
   const conn: Client = await db.getConnection();
@@ -27,17 +31,43 @@ const postContent = async function(body: any, member: Member) {
   }
 };
 
-const getNftStorageApiKey = async function() {
+const uploadToNftStorageAndUpdateContent = async function(body: any) {
+  const conn: Client = await db.getConnection();
+
   try {
+    const client = new S3Client({ region: 'ap-northeast-2' });
+    const image = await getS3ObjectInBuffer(client, process.env.S3_BUCKET, body.imageKey);
+    const file = new File([image], 'cat.png', { type: 'image/png' })
+
     const keys = await getSecretKeys();
     const nftStorageApiKey = keys[`/nftStorage/${process.env.ENV}/apikey`];
-    return {'data': nftStorageApiKey}
+
+    const storage = new NFTStorage({ token: nftStorageApiKey });
+    const metadata = await storage.store({
+      name: body.name,
+      description: body.description,
+      image: file
+    });
+
+    const contentModel = new Contents({
+      id: body.content_id,
+      ipfs_url: metadata.url,
+    }, conn);
+
+    const result = await contentModel.updateContent(
+      contentModel.id,
+      contentModel.ipfs_url,
+    );
+
+    return {'data': result}
   } catch (error) {
     throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
   }
 };
 
 export {
 	postContent,
-  getNftStorageApiKey,
+  uploadToNftStorageAndUpdateContent,
 };

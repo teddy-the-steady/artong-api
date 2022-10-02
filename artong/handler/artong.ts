@@ -22,8 +22,6 @@ export async function handler(event: any, context: any, callback: any) {
           res = await projects.getProjectWhileUpdatingCreatedPendingOne(req.pathParameters, req.member);
         else if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
           res = await projects.getProjects(req.queryStringParameters);
-        else if (req.path === '/artong/v1/nft/storage' || req.path === '/artong/v1/nft/storage/')
-          res = await contents.getNftStorageApiKey();
         break;
       case 'POST':
         if (req.path === '/artong/v1/members' || req.path === '/artong/v1/members/')
@@ -36,6 +34,8 @@ export async function handler(event: any, context: any, callback: any) {
           res = await projects.postProject(req.body, req.member);
         else if (req.path === '/artong/v1/nft' || req.path === '/artong/v1/nft/')
           res = await contents.postContent(req.body, req.member);
+        else if (req.path === '/artong/v1/nft/storage' || req.path === '/artong/v1/nft/storage/')
+          res = await contents.uploadToNftStorageAndUpdateContent(req.body);
         break;
       case 'PATCH':
         if (req.path.startsWith('/artong/v1/members/') && req.pathParameters && req.path.includes('profile_pic'))

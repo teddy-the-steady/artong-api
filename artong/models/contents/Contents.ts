@@ -2,6 +2,7 @@ import { Client } from 'pg';
 import * as db from '../../utils/db/db';
 import Models from '../Models';
 const insertContent = require('./insertContent.sql');
+const updateContent = require('./updateContent.sql');
 
 class Contents extends Models {
 	id?: number;
@@ -9,6 +10,7 @@ class Contents extends Models {
 	project_address?: string;
 	token_id?: number;
 	content_url?: string;
+	ipfs_url?: string;
 	name?: string;
 	description?: string;
 
@@ -30,6 +32,21 @@ class Contents extends Models {
 				member_id,
 				project_address,
 				content_url,
+			});
+			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async updateContent(
+		id?: number,
+		ipfs_url?: string,
+	): Promise<Contents> {
+		try {
+			const result = await db.execute(this.conn, updateContent, {
+				id,
+				ipfs_url,
 			});
 			return result[0]
 		} catch (error) {

@@ -111,7 +111,7 @@ functions:
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
      - http:
         path: artong/v1/nft/storage
-        method: GET
+        method: POST
         cors: true
         authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
     layers:
