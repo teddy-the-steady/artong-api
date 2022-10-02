@@ -1,6 +1,5 @@
-import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, GetObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
-// import Blob from 'cross-blob';
 
 const getTotalRows = function(list: any[]) {
     if (typeof list !== 'undefined' && list.length > 0) {
@@ -63,10 +62,26 @@ const getS3ObjectInBuffer = function(
     })
 }
 
+const getS3ObjectHead = async function(
+    client: S3Client,
+    bucket: string|undefined,
+    key: string
+) {
+    const option: any = {
+        Bucket: bucket,
+        Key: key
+    };
+
+    const command = new HeadObjectCommand(option);
+    const response = await client.send(command);
+    return response
+}
+
 export {
     getTotalRows,
     extractTotalRows,
     hasBOPermission,
     replaceAll,
     getS3ObjectInBuffer,
+    getS3ObjectHead,
 };
