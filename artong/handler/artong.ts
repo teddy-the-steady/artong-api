@@ -42,6 +42,8 @@ export async function handler(event: any, context: any, callback: any) {
           res = await member.patchMemberProfilePic(req.pathParameters, req.body);
         else if (req.path.startsWith('/artong/v1/projects/') && req.pathParameters)
           res = await projects.patchProject(req.pathParameters, req.body, req.member);
+        else if (req.path.startsWith('/artong/v1/nft/') && req.pathParameters)
+          res = await contents.patchContent(req.pathParameters, req.body);
         break;
       default:
         console.error('METHOD undefined');

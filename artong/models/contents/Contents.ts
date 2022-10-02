@@ -42,11 +42,13 @@ class Contents extends Models {
 	async updateContent(
 		id?: number,
 		ipfs_url?: string,
+		token_id?: number,
 	): Promise<Contents> {
 		try {
 			const result = await db.execute(this.conn, updateContent, {
 				id,
 				ipfs_url,
+				token_id,
 			});
 			return result[0]
 		} catch (error) {
