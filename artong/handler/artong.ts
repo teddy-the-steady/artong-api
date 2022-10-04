@@ -8,7 +8,6 @@ export async function handler(event: any, context: any, callback: any) {
   let res: any = {};
 
   try {
-    console.log(event)
     const req = await requestInit(event);
     console.log(req);
 
@@ -18,8 +17,12 @@ export async function handler(event: any, context: any, callback: any) {
           res = await member.getMembers(req.queryStringParameters);
         else if (req.path.startsWith('/artong/v1/members/') && req.pathParameters)
           res = await member.getMember(req.pathParameters);
-        else if (req.path.startsWith('/artong/v1/projects/') && req.pathParameters)
-          res = await projects.getProjectWhileUpdatingCreatedPendingOne(req.pathParameters, req.member);
+        else if (req.path.startsWith('/artong/v1/projects/') && req.pathParameters) {
+          if (req.path.includes('/tx_receipt_updated'))
+            res = await projects.getProjectWhileUpdatingPendingToCreated(req.pathParameters, req.member);
+          else
+           res = await projects.getProject(req.pathParameters);
+        }
         else if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
           res = await projects.getProjects(req.queryStringParameters);
         break;

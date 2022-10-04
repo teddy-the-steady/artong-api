@@ -86,7 +86,7 @@ const patchProject = async function(pathParameters: any, body: any, member: Memb
   }
 };
 
-const getProjectWhileUpdatingCreatedPendingOne = async function(pathParameters: any, member: any) {
+const getProjectWhileUpdatingPendingToCreated = async function(pathParameters: any, member: any) {
   const conn: Client = await db.getConnection();
 
   try {
@@ -94,7 +94,7 @@ const getProjectWhileUpdatingCreatedPendingOne = async function(pathParameters: 
       create_tx_hash: pathParameters.txHash
     }, conn);
 
-    const result = await projectModel.getProject(
+    const result = await projectModel.getProjectWithTxhash(
       projectModel.create_tx_hash
     );
 
@@ -150,9 +150,29 @@ const getProjectAddressFromContractCreatedEvent = function(txReceipt: any) {
   }
 }
 
+const getProject = async function(pathParameters: any) {
+  const conn: Client = await db.getConnection();
+
+  try {
+    const projectModel = new Projects({
+      address: pathParameters.address,
+    }, conn)
+
+    const result = await projectModel.getProjectWithAddress(
+      projectModel.address,
+    );
+    return {'data': result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+};
+
 export {
   getProjects,
 	postProject,
   patchProject,
-  getProjectWhileUpdatingCreatedPendingOne,
+  getProjectWhileUpdatingPendingToCreated,
+  getProject,
 };
