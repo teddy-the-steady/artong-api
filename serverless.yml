@@ -49,7 +49,7 @@ plugins:
   - serverless-domain-manager
 
 custom:
-  authorizer: ${self:custom.authorizer}
+  authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
   customDomain:
     domainName: api.4rtong.com
     stage: ${self:provider.stage}
