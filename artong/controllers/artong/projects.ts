@@ -91,7 +91,7 @@ const getProjectWhileUpdatingPendingToCreated = async function(pathParameters: a
 
   try {
     const projectModel = new Projects({
-      create_tx_hash: pathParameters.txHash
+      create_tx_hash: pathParameters.id
     }, conn);
 
     const result = await projectModel.getProjectWithTxhash(
@@ -99,7 +99,7 @@ const getProjectWhileUpdatingPendingToCreated = async function(pathParameters: a
     );
 
     if (result && result.status === 'PENDING') {
-      const txReceipt = await InfuraProvider.provider.getTransactionReceipt(pathParameters.txHash);
+      const txReceipt = await InfuraProvider.provider.getTransactionReceipt(pathParameters.id);
       if (txReceipt) {
         const address = getProjectAddressFromContractCreatedEvent(txReceipt);
 
@@ -155,7 +155,7 @@ const getProject = async function(pathParameters: any) {
 
   try {
     const projectModel = new Projects({
-      address: pathParameters.address,
+      address: pathParameters.id,
     }, conn)
 
     const result = await projectModel.getProjectWithAddress(
