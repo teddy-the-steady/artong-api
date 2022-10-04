@@ -97,17 +97,17 @@ functions:
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
-        path: artong/v1/projects/{txHash}
+        path: artong/v1/projects/{id}
         method: PATCH
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
-        path: artong/v1/projects/{address}
+        path: artong/v1/projects/{id}
         method: GET
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
-        path: artong/v1/projects/{txHash}/tx_receipt_updated
+        path: artong/v1/projects/{id}/tx_receipt_updated
         method: GET
         cors: true
         authorizer: ${self:custom.authorizer}
