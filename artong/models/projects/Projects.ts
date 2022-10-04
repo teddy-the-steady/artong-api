@@ -72,10 +72,21 @@ class Projects extends Models {
 		}
 	}
 
-	async getProject(create_tx_hash?: string): Promise<Projects> {
+	async getProjectWithTxhash(create_tx_hash?: string): Promise<Projects> {
 		try {
 			const result = await db.execute(this.conn, getProject, {
 				create_tx_hash
+			});
+			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getProjectWithAddress(address?: string): Promise<Projects> {
+		try {
+			const result = await db.execute(this.conn, getProject, {
+				address
 			});
 			return result[0]
 		} catch (error) {

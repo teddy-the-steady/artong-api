@@ -3,4 +3,5 @@ SELECT
 FROM
   projects
 WHERE
-  create_tx_hash = ${create_tx_hash}
+  {{#exists create_tx_hash}} create_tx_hash = ${create_tx_hash} {{/exists}}
+  {{#exists address}} address = ${address} {{/exists}}
