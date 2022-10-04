@@ -49,6 +49,7 @@ plugins:
   - serverless-domain-manager
 
 custom:
+  authorizer: ${self:custom.authorizer}
   customDomain:
     domainName: api.4rtong.com
     stage: ${self:provider.stage}
@@ -75,7 +76,7 @@ functions:
         path: artong/v1/members/{id} # 이 경우만 id: wallet_address or pk(나머지는 pk만 허용)
         method: GET
         cors: true
-        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
+        authorizer: ${self:custom.authorizer}
      - http:
         path: artong/v1/members/{id}/profile_pic
         method: PATCH
@@ -85,7 +86,7 @@ functions:
         path: artong/v1/contents/{id}/reactions
         method: POST
         cors: true
-        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
+        authorizer: ${self:custom.authorizer}
      - http:
         path: artong/v1/projects
         method: GET
@@ -94,32 +95,32 @@ functions:
         path: artong/v1/projects
         method: POST
         cors: true
-        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
+        authorizer: ${self:custom.authorizer}
      - http:
         path: artong/v1/projects/{txHash}
         method: PATCH
         cors: true
-        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
+        authorizer: ${self:custom.authorizer}
      - http:
         path: artong/v1/projects/{txHash}
         method: GET
         cors: true
-        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
+        authorizer: ${self:custom.authorizer}
      - http:
         path: artong/v1/nft
         method: POST
         cors: true
-        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
+        authorizer: ${self:custom.authorizer}
      - http:
         path: artong/v1/nft/storage
         method: POST
         cors: true
-        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
+        authorizer: ${self:custom.authorizer}
      - http:
         path: artong/v1/nft/{id}
         method: PATCH
         cors: true
-        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
+        authorizer: ${self:custom.authorizer}
     layers:
      - {Ref: NodeModulesLambdaLayer}
   artong-admin:
@@ -129,7 +130,7 @@ functions:
         path: artong/v1/country
         method: POST
         cors: true
-        authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
+        authorizer: ${self:custom.authorizer}
     layers:
      - {Ref: NodeModulesLambdaLayer}
   image:
