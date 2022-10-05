@@ -1,6 +1,6 @@
 import { Projects, Member } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
-import InfuraProvider from '../../utils/common/InfuraProvider';
+import { InfuraProvider, abi } from '../../contracts';
 import * as db from '../../utils/db/db';
 import { Client } from 'pg';
 import { ethers } from 'ethers';
@@ -135,7 +135,7 @@ const getProjectAddressFromContractCreatedEvent = function(txReceipt: any) {
   const resultArray = txReceipt.logs.map((evt: any) => {
     if (
       evt.topics[0] ===
-      '0x2d49c67975aadd2d389580b368cfff5b49965b0bd5da33c144922ce01e7a4d7b' // Event: ContractCreated
+      '0x2d49c67975aadd2d389580b368cfff5b49965b0bd5da33c144922ce01e7a4d7b' // INFO] Event: ContractCreated
     ) {
       const address = ethers.utils.hexDataSlice(evt.data, 44)
       return address
@@ -161,6 +161,12 @@ const getProject = async function(pathParameters: any) {
     const result = await projectModel.getProjectWithAddress(
       projectModel.address,
     );
+
+    const contract = new ethers.Contract(pathParameters.id, abi.ERC721_ABI, InfuraProvider.provider);
+    console.log(contract);
+    const tx = await contract.policy();
+    console.log(tx);
+
     return {'data': result}
   } catch (error) {
     throw controllerErrorWrapper(error);
