@@ -163,9 +163,12 @@ const getProject = async function(pathParameters: any) {
     );
 
     const contract = new ethers.Contract(pathParameters.id, abi.ERC721_ABI, InfuraProvider.provider);
-    console.log(contract);
-    const tx = await contract.policy();
-    console.log(tx);
+    try {
+      const tx = await contract.policy();
+      result.policy = tx;
+    } catch (error) {
+      console.log(error);
+    }
 
     return {'data': result}
   } catch (error) {
