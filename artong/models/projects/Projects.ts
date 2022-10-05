@@ -21,6 +21,8 @@ class Projects extends Models {
 	created_at?: Date;
 	updated_at?: Date;
 
+	policy?: number; // on-chain data
+
 	constructor(data: Partial<Projects> = {}, conn: Client) {
 		super(conn);
 		Object.assign(this, data);
