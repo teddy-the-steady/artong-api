@@ -22,9 +22,9 @@ const requestInit = async function(event: any) {
 
   try {
     result['member'] = {};
-    let usernameOrMemberId = null; // only offline
-    let principalId = null; // stage and prod
-    if (process.env.IS_OFFLINE) { // offline이면 queryStringParameters로 member_id 세팅(없으면 stage는 admin 249)
+    let usernameOrMemberId = null; // INFO] only offline
+    let principalId = null; // INFO] stage and prod
+    if (process.env.IS_OFFLINE) { // INFO] offline이면 queryStringParameters로 member_id 세팅(없으면 stage는 admin 249)
       usernameOrMemberId = event['queryStringParameters'] && event['queryStringParameters']['member_id'] ? event['queryStringParameters']['member_id'] : 249;
     } else {
       const jwtToken = event['headers']['Authorization'];
