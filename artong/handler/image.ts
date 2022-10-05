@@ -19,7 +19,7 @@ export async function handler(event: any, context: any, callback: any) {
       initKeys = await setApiKey();
     } 
     const key = decodeURIComponent(event.Records[0].s3.object.key);
-    const type = key.split('/')[1]; // ex) public/profile/315/monkey.png
+    const type = key.split('/')[1]; // INFO] ex) public/profile/315/monkey.png
 
     switch (type) {
       case 'profile':
