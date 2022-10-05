@@ -1,6 +1,6 @@
 import { Projects, Member } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
-import InfuraProvider from '../../utils/common/InfuraProvider';
+import { InfuraProvider, abi } from '../../contracts';
 import * as db from '../../utils/db/db';
 import { Client } from 'pg';
 import { ethers } from 'ethers';
@@ -161,6 +161,12 @@ const getProject = async function(pathParameters: any) {
     const result = await projectModel.getProjectWithAddress(
       projectModel.address,
     );
+
+    const contract = new ethers.Contract(pathParameters.id, abi.ERC721_ABI, InfuraProvider.provider);
+    console.log(contract);
+    const tx = await contract.policy();
+    console.log(tx);
+
     return {'data': result}
   } catch (error) {
     throw controllerErrorWrapper(error);
