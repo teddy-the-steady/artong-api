@@ -13,6 +13,7 @@ class Contents extends Models {
 	ipfs_url?: string;
 	name?: string;
 	description?: string;
+	voucher?: object;
 
 	created_at?: Date;
 	updated_at?: Date;
@@ -43,12 +44,14 @@ class Contents extends Models {
 		id?: number,
 		ipfs_url?: string,
 		token_id?: number,
+		voucher?: object,
 	): Promise<Contents> {
 		try {
 			const result = await db.execute(this.conn, updateContent, {
 				id,
 				ipfs_url,
 				token_id,
+				voucher,
 			});
 			return result[0]
 		} catch (error) {
