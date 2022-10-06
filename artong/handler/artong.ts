@@ -25,6 +25,8 @@ export async function handler(event: any, context: any, callback: any) {
         }
         else if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
           res = await projects.getProjects(req.queryStringParameters);
+        else if (req.path.startsWith('/artong/v1/nft/') && req.pathParameters)
+          res = await contents.getContent(req.pathParameters);
         break;
       case 'POST':
         if (req.path === '/artong/v1/members' || req.path === '/artong/v1/members/')

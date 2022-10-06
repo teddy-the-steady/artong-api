@@ -3,6 +3,7 @@ import * as db from '../../utils/db/db';
 import Models from '../Models';
 const insertContent = require('./insertContent.sql');
 const updateContent = require('./updateContent.sql');
+const selectContent = require('./selectContent.sql');
 
 class Contents extends Models {
 	id?: number;
@@ -53,6 +54,15 @@ class Contents extends Models {
 				token_id,
 				voucher,
 			});
+			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getContent(id?: number): Promise<Contents> {
+		try {
+			const result = await db.execute(this.conn, selectContent, { id });
 			return result[0]
 		} catch (error) {
 			throw error;
