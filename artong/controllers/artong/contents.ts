@@ -77,12 +77,14 @@ const patchContent = async function(pathParameters: any, body: any) {
     const contentModel = new Contents({
       id: pathParameters.id,
       token_id: body.tokenId,
+      voucher: body.voucher,
     }, conn);
 
     const result = await contentModel.updateContent(
       contentModel.id,
       contentModel.ipfs_url,
       contentModel.token_id,
+      contentModel.voucher,
     );
     return {'data': result}
   } catch (error) {
