@@ -94,8 +94,28 @@ const patchContent = async function(pathParameters: any, body: any) {
   }
 }
 
+const getContent = async function(pathParameters: any) {
+  const conn: Client = await db.getConnection();
+
+  try {
+    const contentModel = new Contents({
+      id: pathParameters.id,
+    }, conn);
+
+    const result = await contentModel.getContent(
+      contentModel.id,
+    );
+    return {'data': result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
 	postContent,
   uploadToNftStorageAndUpdateContent,
   patchContent,
+  getContent,
 };
