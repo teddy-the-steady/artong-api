@@ -3,8 +3,8 @@ SET
     updated_at = now()
     {{#exists address}} ,address = ${address} {{/exists}}
     {{#exists description}} ,description = ${description} {{/exists}}
-    {{#exists thumbnail_url}} ,thumbnail_url = ${thumbnail_url} {{/exists}}
-    {{#exists background_url}} ,background_url = ${background_url} {{/exists}}
+    {{#exists project_s3key}} ,project_s3key = ${project_s3key} {{/exists}}
+    {{#exists background_s3key}} ,background_s3key = ${background_s3key} {{/exists}}
     {{#exists status}} ,status = ${status} {{/exists}}
 WHERE
     create_tx_hash = ${create_tx_hash}
