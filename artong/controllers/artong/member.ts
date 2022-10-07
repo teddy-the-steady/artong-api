@@ -75,18 +75,20 @@ const postMember = async function(body: any) {
   }
 };
 
-const patchMemberProfilePic = async function(pathParameters: any, body: any) {
+const patchMemberProfileS3keys = async function(pathParameters: any, body: any) {
   const conn: Client = await db.getConnection();
 
   try {
     const memberModel = new Member({
       id: pathParameters.id,
-      profile_pic: body.profile_pic,
+      profile_s3key: body.profile_s3key,
+      profile_thumbnail_s3key: body.profile_thumbnail_s3key,
     }, conn);
 
-    const result = await memberModel.updateMemberProfilePic(
+    const result = await memberModel.updateMemberProfileS3keys(
       memberModel.id,
-      memberModel.profile_pic
+      memberModel.profile_s3key,
+      memberModel.profile_thumbnail_s3key,
     );
     return {'data': result}
   } catch (error) {
@@ -100,5 +102,5 @@ export {
   getMember,
   getMembers,
 	postMember,
-  patchMemberProfilePic,
+  patchMemberProfileS3keys,
 };
