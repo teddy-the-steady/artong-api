@@ -1,5 +1,12 @@
-import { S3Client, GetObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s3';
+import {
+    S3Client,
+    GetObjectCommand,
+    HeadObjectCommand,
+    PutObjectCommand
+} from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
+import { InternalServerError } from '../error/errors';
+import { AWSError } from '../error/errorCodes';
 
 const getTotalRows = function(list: any[]) {
     if (typeof list !== 'undefined' && list.length > 0) {
@@ -72,9 +79,31 @@ const getS3ObjectHead = async function(
         Key: key
     };
 
-    const command = new HeadObjectCommand(option);
-    const response = await client.send(command);
-    return response
+    try {
+        const command = new HeadObjectCommand(option);
+        const response = await client.send(command);
+        return response
+    } catch (error) {
+        throw new InternalServerError(error, AWSError);
+    }
+}
+
+const putS3Object = async function(
+    client: S3Client,
+    bucket: string|undefined,
+    key: string,
+    body: Buffer
+) {
+    try {
+        const data = await client.send(new PutObjectCommand({
+            Bucket: bucket,
+            Key: key,
+            Body: body,
+        }));
+        return data
+    } catch (error) {
+        throw new InternalServerError(error, AWSError);
+    }
 }
 
 export {
@@ -84,4 +113,5 @@ export {
     replaceAll,
     getS3ObjectInBuffer,
     getS3ObjectHead,
+    putS3Object,
 };
