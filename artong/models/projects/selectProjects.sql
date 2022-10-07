@@ -1,6 +1,6 @@
 SELECT
-    p.thumbnail_url,
-    p.background_url,
+    p.project_s3key,
+    p.background_s3key,
     p.member_id,
     p.address,
     p.name,
