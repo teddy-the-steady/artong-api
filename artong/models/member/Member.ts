@@ -3,7 +3,7 @@ import Models from '../Models';
 const selectMember = require('./selectMember.sql');
 const selectMembers = require('./selectMembers.sql');
 const insertMember = require('./insertMember.sql');
-const updateMemberProfilePic = require('./updateMemberProfilePic.sql');
+const updateMemberProfileS3keys = require('./updateMemberProfileS3keys.sql');
 
 import {
 	IsEmail,
@@ -27,7 +27,8 @@ class Member extends Models implements MemberGroups {
 	@IsOptional()
 	wallet_address?: string;
 	introduction?: string;
-	profile_pic?: string;
+	profile_s3key?: string;
+	profile_thumbnail_s3key?: string;
 	country_id?: number;
 	@IsUUID()
 	@IsOptional()
@@ -87,14 +88,16 @@ class Member extends Models implements MemberGroups {
 		}
 	}
 
-	async updateMemberProfilePic(
+	async updateMemberProfileS3keys(
 		id?: number,
-		profile_pic?: string
+		profile_s3key?: string,
+		profile_thumbnail_s3key?: string,
 	): Promise<Member> {
 		try {
-			const result = await db.execute(this.conn, updateMemberProfilePic, {
+			const result = await db.execute(this.conn, updateMemberProfileS3keys, {
 				id: id,
-				profile_pic: profile_pic
+				profile_s3key: profile_s3key,
+				profile_thumbnail_s3key: profile_thumbnail_s3key
 			});
 			return result[0]
 		} catch (error) {
