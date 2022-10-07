@@ -105,7 +105,6 @@ functions:
         path: artong/v1/projects/{id} # INFO] id: project address
         method: GET
         cors: true
-        authorizer: ${self:custom.authorizer}
      - http:
         path: artong/v1/projects/{id}/tx_receipt_updated # INFO] id: txHash
         method: GET
