@@ -23,7 +23,7 @@ export async function handler(event: any, context: any, callback: any) {
 
     switch (type) {
       case 'profile':
-        await profile.updateProfilePic(event.Records[0].s3);
+        await profile.updateProfileThumbnail(event.Records[0].s3);
         break;
       default:
         break;
