@@ -64,8 +64,8 @@ const patchProject = async function(pathParameters: any, body: any, member: Memb
       address: body.address,
       member_id: member.id,
       description: body.description,
-      thumbnail_url: body.thumbnail_url,
-      background_url: body.background_url,
+      project_s3key: body.project_s3key,
+      background_s3key: body.background_s3key,
       status: body.status
     }, conn);
 
@@ -74,8 +74,8 @@ const patchProject = async function(pathParameters: any, body: any, member: Memb
       projectModel.address,
       projectModel.member_id,
       projectModel.description,
-      projectModel.thumbnail_url,
-      projectModel.background_url,
+      projectModel.project_s3key,
+      projectModel.background_s3key,
       projectModel.status
     );
     return {'data': result}
@@ -112,8 +112,8 @@ const getProjectWhileUpdatingPendingToCreated = async function(pathParameters: a
           projectModel.address,
           projectModel.member_id,
           projectModel.description,
-          projectModel.thumbnail_url,
-          projectModel.background_url,
+          projectModel.project_s3key,
+          projectModel.background_s3key,
           projectModel.status
         );
 
