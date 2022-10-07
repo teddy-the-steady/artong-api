@@ -13,8 +13,10 @@ class Projects extends Models {
 	member_id?: number;
 	name?: string;
 	description?: string;
-	thumbnail_url?: string;
-	background_url?: string;
+	project_s3key?: string;
+	project_thumbnail_s3key?: string;
+	background_s3key?: string;
+	background_thumbnail_s3key?: string;
 	status?: string;
 	symbol?: string;
 
@@ -54,8 +56,8 @@ class Projects extends Models {
 		address?: string,
 		member_id?: number,
 		description?: string,
-    thumbnail_url?: string,
-    background_url?: string,
+    project_s3key?: string,
+    background_s3key?: string,
 		status?: string
 	): Promise<Projects>  {
 		try {
@@ -64,8 +66,8 @@ class Projects extends Models {
 				address,
 				member_id,
 				description,
-				thumbnail_url,
-				background_url,
+				project_s3key,
+				background_s3key,
 				status
 			});
 			return result[0]
