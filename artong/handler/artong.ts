@@ -43,8 +43,10 @@ export async function handler(event: any, context: any, callback: any) {
           res = await contents.uploadToNftStorageAndUpdateContent(req.body);
         break;
       case 'PATCH':
-        if (req.path.startsWith('/artong/v1/members/') && req.pathParameters && req.path.includes('profile_s3keys'))
-          res = await member.patchMemberProfileS3keys(req.pathParameters, req.body);
+        if (req.path.startsWith('/artong/v1/members/') && req.path.includes('profile_s3key'))
+          res = await member.patchMemberProfileS3key(req.body, req.member);
+        else if (req.path.startsWith('/artong/v1/members/') && req.pathParameters && req.path.includes('profile_thumbnail_s3key'))
+          res = await member.patchMemberProfileThumbnailS3key(req.pathParameters, req.body);
         else if (req.path.startsWith('/artong/v1/projects/') && req.pathParameters)
           res = await projects.patchProject(req.pathParameters, req.body, req.member);
         else if (req.path.startsWith('/artong/v1/nft/') && req.pathParameters)
