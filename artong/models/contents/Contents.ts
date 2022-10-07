@@ -10,7 +10,7 @@ class Contents extends Models {
 	member_id?: number;
 	project_address?: string;
 	token_id?: number;
-	content_url?: string;
+	content_s3key?: string;
 	ipfs_url?: string;
 	name?: string;
 	description?: string;
@@ -27,13 +27,13 @@ class Contents extends Models {
 	async createContent(
 		member_id?: number,
 		project_address?: string,
-		content_url?: string,
+		content_s3key?: string,
 	): Promise<Contents> {
 		try {
 			const result = await db.execute(this.conn, insertContent, {
 				member_id,
 				project_address,
-				content_url,
+				content_s3key,
 			});
 			return result[0]
 		} catch (error) {

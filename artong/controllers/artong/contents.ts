@@ -15,13 +15,13 @@ const postContent = async function(body: any, member: Member) {
     const contentModel = new Contents({
       member_id: member.id,
       project_address: body.project_address,
-      content_url: body.content_url,
+      content_s3key: body.content_s3key,
     }, conn);
 
     const result = await contentModel.createContent(
       contentModel.member_id,
       contentModel.project_address,
-      contentModel.content_url
+      contentModel.content_s3key
     );
     return {'data': result}
   } catch (error) {
