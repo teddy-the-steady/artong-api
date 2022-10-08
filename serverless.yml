@@ -60,6 +60,12 @@ custom:
     createRoute53Record: true
     endpointType: 'edge'
     securityPolicy: tls_1_2
+  custom:
+    webpack:
+      packagerOptions:
+        scripts:
+          - rm -rf node_modules/sharp
+          - npm install --arch=x64 --platform=linux sharp
 
 functions:
   artong:
