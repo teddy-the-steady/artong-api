@@ -61,10 +61,11 @@ custom:
     endpointType: 'edge'
     securityPolicy: tls_1_2
   webpack:
-    packagerOptions:
-      scripts:
-        - rm -rf node_modules/sharp
-        - npm install --arch=x64 --platform=linux sharp
+    includeModules: true
+    # packagerOptions:
+    #   scripts:
+    #     - rm -rf node_modules/sharp
+    #     - npm install --arch=x64 --platform=linux sharp
 
 functions:
   artong:
