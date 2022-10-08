@@ -9,3 +9,6 @@ phases:
     commands:
       - serverless create_domain
       - serverless deploy
+  post_build:
+    commands:
+      - ls -al ./node_modules
