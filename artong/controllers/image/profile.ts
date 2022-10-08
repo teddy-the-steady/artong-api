@@ -17,7 +17,7 @@ const updateProfileThumbnail = async function(s3: any) {
     }
 
     const imageType = typeMatch[1].toLowerCase();
-    if (imageType != 'jpg' && imageType != 'png') {
+    if (imageType != 'jpg' && imageType != 'jpeg' && imageType != 'png') {
       console.log(`Unsupported image type: ${imageType}`);
       return
     }
