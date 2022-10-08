@@ -4,7 +4,7 @@ phases:
     commands:
       - npm install
       - rm -rf node_modules/sharp
-      - npm install --arch=x64 --platform=linux sharp
+      - SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install --arch=x64 --platform=linux --libc=glibc sharp
       - npm install -g serverless
       - cd ./node_layers && npm install && cd ..
   build:

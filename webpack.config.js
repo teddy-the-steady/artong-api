@@ -45,6 +45,6 @@ module.exports = {
     }),
   ],
   externals: {
-    sharp: 'commonjs sharp',
+    'sharp': 'commonjs sharp',
   },
 }
