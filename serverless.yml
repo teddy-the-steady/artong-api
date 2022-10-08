@@ -62,10 +62,6 @@ custom:
     securityPolicy: tls_1_2
   webpack:
     includeModules: true
-    # packagerOptions:
-    #   scripts:
-    #     - rm -rf node_modules/sharp
-    #     - npm install --arch=x64 --platform=linux sharp
 
 functions:
   artong:
