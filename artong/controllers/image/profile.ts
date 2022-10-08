@@ -40,12 +40,12 @@ const updateProfileThumbnail = async function(s3: any) {
 };
 
 const makeDstKeyWithResizedFileName = function(srcKey: string) {
-  const srcKeyItems = srcKey.split('/');
-  let fileName = srcKeyItems[srcKeyItems.length - 1];
+  const items = srcKey.split('/');
+  let fileName = items[items.length - 1];
   fileName = 'resized-' + fileName;
-  srcKeyItems[srcKeyItems.length - 1] = fileName;
+  items[items.length - 1] = fileName;
 
-  return srcKeyItems.join('/')
+  return `${items[0]}/thumbnails/${items[1]}/${items[2]}/${items[3]}`
 }
 
 export {
