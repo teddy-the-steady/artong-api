@@ -3,7 +3,6 @@ phases:
   install:
     commands:
       - npm install
-      - npm rebuild sharp --target=16.15.1 --target_arch=x64 --target_platform=linux
       - npm install -g serverless
       - cd ./node_layers && npm install && cd ..
   build:
