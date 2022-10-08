@@ -32,10 +32,6 @@ module.exports = {
           },
         ],
       },
-      {
-        test: /\.node$/,
-        loader: "node-loader",
-      },
     ]
   },
 	resolve: {
@@ -48,4 +44,7 @@ module.exports = {
       fetch: ['node-fetch', 'default'],
     }),
   ],
+  externals: {
+    sharp: 'commonjs sharp',
+  },
 }
