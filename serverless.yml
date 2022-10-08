@@ -62,6 +62,7 @@ custom:
     securityPolicy: tls_1_2
   custom:
     webpack:
+      webpackConfig: 'webpack.config.js'
       packagerOptions:
         scripts:
           - rm -rf node_modules/sharp
