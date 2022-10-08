@@ -38,7 +38,6 @@ package:
   exclude:
     - node_layers/**
     - node_modules/**
-    # - '!node_modules/sharp/**'
 
 layers:
   NodeModules:
@@ -60,6 +59,8 @@ custom:
     createRoute53Record: true
     endpointType: 'edge'
     securityPolicy: tls_1_2
+  webpack:
+    includeModules: true
 
 functions:
   artong:
