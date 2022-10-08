@@ -149,17 +149,17 @@ functions:
         authorizer: ${self:custom.authorizer}
     layers:
      - {Ref: NodeModulesLambdaLayer}
-  image:
-    handler: artong/handler/image.handler
-    events:
-     - s3:
-        bucket: ${self:provider.environment.S3_BUCKET}
-        event: s3:ObjectCreated:*
-        rules:
-          - prefix: public/profile/
-        existing: true
-    layers:
-     - {Ref: NodeModulesLambdaLayer}
+  # image:
+  #   handler: artong/handler/image.handler
+  #   events:
+  #    - s3:
+  #       bucket: ${self:provider.environment.S3_BUCKET}
+  #       event: s3:ObjectCreated:*
+  #       rules:
+  #         - prefix: public/profile/
+  #       existing: true
+  #   layers:
+  #    - {Ref: NodeModulesLambdaLayer}
 
 resources:
   Resources:
