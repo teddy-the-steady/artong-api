@@ -10,7 +10,6 @@
     "@aws-sdk/client-s3": "^3.181.0",
     "@types/node": "^16.0.0",
     "@types/pg": "^7.14.10",
-    "@types/sharp": "^0.31.0",
     "@web-std/file": "^3.0.2",
     "axios": "^0.21.1",
     "class-transformer": "^0.4.0",
@@ -24,7 +23,6 @@
     "serverless-domain-manager": "^6.0.2",
     "serverless-offline": "^8.8.0",
     "serverless-webpack": "^5.9.0",
-    "sharp": "^0.31.1",
     "ts-loader": "^8.0.17",
     "typescript": "^3.9.9",
     "webpack": "^5.23.0"
