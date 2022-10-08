@@ -38,7 +38,7 @@ package:
   exclude:
     - node_layers/**
     - node_modules/**
-    - '!node_modules/sharp/**'
+    # - '!node_modules/sharp/**'
 
 layers:
   NodeModules:
@@ -60,6 +60,12 @@ custom:
     createRoute53Record: true
     endpointType: 'edge'
     securityPolicy: tls_1_2
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    packagerOptions:
+      scripts:
+        - rm -rf node_modules/sharp
+        - npm install --arch=x64 --platform=linux sharp
 
 functions:
   artong:
