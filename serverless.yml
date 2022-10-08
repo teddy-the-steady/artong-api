@@ -37,6 +37,8 @@ package:
   individually: true
   exclude:
     - node_layers/**
+    - node_modules/**
+    - '!node_modules/sharp/**'
 
 layers:
   NodeModules:
