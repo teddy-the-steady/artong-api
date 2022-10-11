@@ -7,4 +7,4 @@ SET
     {{#exists is_redeemed}} ,is_redeemed = ${is_redeemed} {{/exists}}
 WHERE
     id = ${id}
-RETURNING *
+RETURNING id, project_address, ipfs_url
