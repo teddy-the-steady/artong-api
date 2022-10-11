@@ -15,6 +15,7 @@ class Contents extends Models {
 	name?: string;
 	description?: string;
 	voucher?: object;
+	is_redeemed?: boolean;
 
 	created_at?: Date;
 	updated_at?: Date;
@@ -46,6 +47,7 @@ class Contents extends Models {
 		ipfs_url?: string,
 		token_id?: number,
 		voucher?: object,
+		is_redeemed?: boolean,
 	): Promise<Contents> {
 		try {
 			const result = await db.execute(this.conn, updateContent, {
@@ -53,6 +55,7 @@ class Contents extends Models {
 				ipfs_url,
 				token_id,
 				voucher,
+				is_redeemed,
 			});
 			return result[0]
 		} catch (error) {

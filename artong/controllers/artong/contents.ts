@@ -78,6 +78,7 @@ const patchContent = async function(pathParameters: any, body: any) {
       id: pathParameters.id,
       token_id: body.tokenId,
       voucher: body.voucher,
+      is_redeemed: body.isRedeemed,
     }, conn);
 
     const result = await contentModel.updateContent(
@@ -85,6 +86,7 @@ const patchContent = async function(pathParameters: any, body: any) {
       contentModel.ipfs_url,
       contentModel.token_id,
       contentModel.voucher,
+      contentModel.is_redeemed,
     );
     return {'data': result}
   } catch (error) {
