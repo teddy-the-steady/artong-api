@@ -27,7 +27,10 @@ const updateProfileThumbnail = async function(s3: any) {
 
     const width = 200;
 
-    const buffer = await sharp(image).resize(width).toBuffer();
+    const buffer = await sharp(image)
+      .resize(width)
+      .withMetadata()
+      .toBuffer();
 
     await putS3Object(client, bucket, dstKey, buffer);
 
