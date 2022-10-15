@@ -15,9 +15,7 @@
     "axios": "^0.21.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
-    "ethers": "^5.7.1",
     "handlebars": "^4.7.7",
-    "nft.storage": "^7.0.0",
     "pg": "^8.5.1",
     "raw-loader": "^4.0.2",
     "reflect-metadata": "^0.1.13",
@@ -39,6 +37,8 @@
   "author": "jeonth",
   "license": "ISC",
   "dependencies": {
+    "ethers": "^5.7.1",
+    "nft.storage": "^7.0.0",
     "sharp": "^0.31.1"
   }
 }
