@@ -10,8 +10,6 @@ provider:
     ENV: ${self:provider.stage}
     NODE_PATH: './:/opt/node_modules'
     S3_BUCKET: 'artong-stage-image163347-stage'
-  apiKeys:
-    - artongApiKey-${self:provider.stage}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -48,6 +46,7 @@ plugins:
   - serverless-webpack
   - serverless-offline
   - serverless-domain-manager
+  - serverless-add-api-key
 
 custom:
   authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-dev-authorizer
@@ -61,6 +60,8 @@ custom:
     securityPolicy: tls_1_2
   webpack:
     includeModules: true
+  apiKeys:
+    - artongApiKey-${self:provider.stage}
 
 functions:
   artong:
