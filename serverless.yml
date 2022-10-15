@@ -61,7 +61,7 @@ custom:
   webpack:
     includeModules: true
   apiKeys:
-    - artongApiKey-${self:provider.stage}
+    - name: artongApiKey-${self:provider.stage}
 
 functions:
   artong:
