@@ -2,12 +2,20 @@ import 'reflect-metadata';
 import requestInit from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response';
 import { member, country, reactions, projects, contents } from '../controllers/artong/index';
+import { getPool } from '../init';
+import { Pool } from 'pg';
+
+export let pool: Pool;
 
 export async function handler(event: any, context: any, callback: any) {
   context.callbackWaitsForEmptyEventLoop = false;
   let res: any = {};
 
   try {
+    if (!pool) {
+      pool = await getPool();
+      console.log('handler: getPool!!!')
+    }
     const req = await requestInit(event);
     console.log(req);
 
