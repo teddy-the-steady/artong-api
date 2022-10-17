@@ -2,11 +2,11 @@ import { Projects, Member } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import { InfuraProvider, abi } from '../../contracts';
 import * as db from '../../utils/db/db';
-import { Client } from 'pg';
+import { PoolClient } from 'pg';
 import { ethers } from 'ethers';
 
 const getProjects = async function(queryStringParameters: any) {
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const projectModel = new Projects({
@@ -29,7 +29,7 @@ const getProjects = async function(queryStringParameters: any) {
 };
 
 const postProject = async function(body: any, member: Member) {
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const projectModel = new Projects({
@@ -56,7 +56,7 @@ const postProject = async function(body: any, member: Member) {
 };
 
 const patchProject = async function(pathParameters: any, body: any, member: Member) {
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const projectModel = new Projects({
@@ -87,7 +87,7 @@ const patchProject = async function(pathParameters: any, body: any, member: Memb
 };
 
 const getProjectWhileUpdatingPendingToCreated = async function(pathParameters: any, member: any) {
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const projectModel = new Projects({
@@ -151,7 +151,7 @@ const getProjectAddressFromContractCreatedEvent = function(txReceipt: any) {
 }
 
 const getProject = async function(pathParameters: any) {
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const projectModel = new Projects({

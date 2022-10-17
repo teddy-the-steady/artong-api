@@ -1,13 +1,14 @@
 import handlebars from 'handlebars';
-import { getPool } from '../../init';
+// import { getPool } from '../../init';
+import { pool } from '../../handler/artong';
 import { InternalServerError } from '../error/errors';
 import { DBError } from '../error/errorCodes';
 import { replaceAll } from '../common/commonFunc';
-import { Client } from 'pg';
+import { PoolClient } from 'pg';
 
-const getConnection = async function(): Promise<Client> {
+const getConnection = async function(): Promise<PoolClient> {
   try {
-    const pool: any = await getPool();
+    // const pool: any = await getPool();
     const conn = await pool.connect();
     return conn
   } catch (error) {
@@ -24,7 +25,7 @@ const compileSQL = function(sql: string) {
   return preCompiledModel
 }
 
-const execute = async function(conn: Client, sql: string, params: any) {
+const execute = async function(conn: PoolClient, sql: string, params: any) {
   const preCompiledModel = compileSQL(sql);
   const compiledModel = preCompiledModel(params);
   const convertedSql = queryConverter(compiledModel, params);
@@ -58,15 +59,15 @@ const queryConverter = function(parameterizedSql: string, params: any) {
   return parameterizedSql
 }
 
-const beginTransaction = async function(conn: Client) {
+const beginTransaction = async function(conn: PoolClient) {
   await conn.query('BEGIN');
 }
 
-const commit = async function(conn: Client) {
+const commit = async function(conn: PoolClient) {
   await conn.query('COMMIT');
 }
 
-const rollBack = async function(conn: Client) {
+const rollBack = async function(conn: PoolClient) {
   await conn.query('ROLLBACK');
 }
 

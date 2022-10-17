@@ -2,23 +2,18 @@ import { Pool } from 'pg';
 import handlebars from 'handlebars';
 import getSecretKeys from './utils/common/ssmKeys';
 
-const getPool = async function() {
-  try {
-    const keys = await getSecretKeys();
-    const env = process.env.ENV;
-    return new Pool({
-      host: process.env.IS_OFFLINE? 'localhost' : keys[`/db/${env}/host`],
-      user: keys[`/db/${env}/user`],
-      password: keys[`/db/${env}/password`],
-      database: keys[`/db/${env}/database`],
-      port: 5432,
-      max: 20,
-      idleTimeoutMillis: 1000,
-      connectionTimeoutMillis: 1000,
-    });
-  } catch (error) {
-    console.error(error);
-  }
+const getPool = async function(): Promise<Pool> {
+  const keys = await getSecretKeys();
+  return new Pool({
+    host: process.env.IS_OFFLINE? 'localhost' : keys[`/db/${process.env.ENV}/host`],
+    user: keys[`/db/${process.env.ENV}/user`],
+    password: keys[`/db/${process.env.ENV}/password`],
+    database: keys[`/db/${process.env.ENV}/database`],
+    port: 5432,
+    max: 20,
+    idleTimeoutMillis: 1000,
+    connectionTimeoutMillis: 1000,
+  });
 };
 
 const ALLOWED_ORIGINS: string[] = [
