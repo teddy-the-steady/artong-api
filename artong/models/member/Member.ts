@@ -11,7 +11,7 @@ import {
 	IsUUID,
 	IsEthereumAddress
 } from 'class-validator'
-import { Client } from 'pg';
+import { PoolClient } from 'pg';
 
 interface MemberGroups {
 	memberGroups?: string[];
@@ -39,7 +39,7 @@ class Member extends Models implements MemberGroups {
 
 	memberGroups?: string[];
 
-	constructor(data: Partial<Member> = {}, conn: Client) {
+	constructor(data: Partial<Member> = {}, conn: PoolClient) {
 		super(conn);
 		Object.assign(this, data);
 	}
