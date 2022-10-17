@@ -4,11 +4,11 @@ import { NoPermission } from '../../utils/error/errorCodes';
 import { hasBOPermission } from '../../utils/common/commonFunc';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
-import { Client } from 'pg';
+import { PoolClient } from 'pg';
 
 const postCountry = async function(body: any, member: Member) {
   if (!hasBOPermission(member.memberGroups)) throw new Forbidden(NoPermission.message, NoPermission.code);
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const countryModel = new Country({

@@ -2,14 +2,14 @@ import { Contents, Member } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import getSecretKeys from '../../utils/common/ssmKeys';
-import { Client } from 'pg';
+import { PoolClient } from 'pg';
 import { getS3ObjectInBuffer, getS3ObjectHead } from '../../utils/common/commonFunc';
 import { S3Client } from '@aws-sdk/client-s3';
 import { NFTStorage } from 'nft.storage';
 import { File } from '@web-std/file';
 
 const postContent = async function(body: any, member: Member) {
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const contentModel = new Contents({
@@ -32,7 +32,7 @@ const postContent = async function(body: any, member: Member) {
 };
 
 const uploadToNftStorageAndUpdateContent = async function(body: any) {
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const client = new S3Client({ region: 'ap-northeast-2' });
@@ -71,7 +71,7 @@ const uploadToNftStorageAndUpdateContent = async function(body: any) {
 };
 
 const patchContent = async function(pathParameters: any, body: any) {
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const contentModel = new Contents({
@@ -97,7 +97,7 @@ const patchContent = async function(pathParameters: any, body: any) {
 }
 
 const getContent = async function(pathParameters: any) {
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const contentModel = new Contents({
