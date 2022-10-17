@@ -5,8 +5,7 @@ import axios from 'axios';
 
 axios.defaults.baseURL = `https://api.4rtong.com/${process.env.ENV}/artong/v1`;
 const setApiKey = async function() {
-  const keys = await getSecretKeys();
-  return keys
+  return await getSecretKeys();
 };
 let initKeys: any = null;
 
@@ -17,7 +16,6 @@ export async function handler(event: any, context: any, callback: any) {
   try {
     if (!initKeys) {
       initKeys = await setApiKey();
-      console.log('initKeys:',initKeys);
       axios.defaults.headers.common['x-api-key'] = initKeys[`/apikey/${process.env.ENV}/artong`];
     } 
     const key = decodeURIComponent(event.Records[0].s3.object.key);
