@@ -1,10 +1,10 @@
-import { Client } from 'pg';
+import { PoolClient } from 'pg';
 import { ContentReactions, Member } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 
 const postContentReaction = async function(pathParameters: any, body: any, member: Member) {
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const reactionModel = new ContentReactions({
