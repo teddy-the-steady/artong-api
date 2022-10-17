@@ -1,9 +1,9 @@
-import { Client } from 'pg';
+import { PoolClient } from 'pg';
 
 export default class Models {
-	conn: Client;
+	conn: PoolClient;
 
-	constructor(conn: Client) {
+	constructor(conn: PoolClient) {
 		this.conn = conn;
 	}
 }

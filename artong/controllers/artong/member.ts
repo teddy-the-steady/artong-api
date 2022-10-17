@@ -1,11 +1,11 @@
-import { Client } from 'pg';
+import { PoolClient } from 'pg';
 import { Member } from '../../models/index';
 import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import validator from '../../utils/validators/common'
 
 const getMember = async function(pathParameters: any) {
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const id = typeof pathParameters.id === 'string' && pathParameters.id.startsWith('0x')?
@@ -30,7 +30,7 @@ const getMember = async function(pathParameters: any) {
 };
 
 const getMembers = async function(queryStringParameters: any) {
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const memberModel = new Member({
@@ -51,7 +51,7 @@ const getMembers = async function(queryStringParameters: any) {
 };
 
 const postMember = async function(body: any) {
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const memberModel = new Member({
@@ -76,7 +76,7 @@ const postMember = async function(body: any) {
 };
 
 const patchMemberProfileS3key = async function(body:any, member: Member) {
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const memberModel = new Member({
@@ -97,7 +97,7 @@ const patchMemberProfileS3key = async function(body:any, member: Member) {
 };
 
 const patchMemberProfileThumbnailS3key = async function(pathParameters:any, body:any) {
-  const conn: Client = await db.getConnection();
+  const conn: PoolClient = await db.getConnection();
 
   try {
     const memberModel = new Member({
