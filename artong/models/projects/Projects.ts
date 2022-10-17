@@ -1,4 +1,4 @@
-import { Client } from 'pg';
+import { PoolClient } from 'pg';
 import * as db from '../../utils/db/db';
 import Models from '../Models';
 const insertProject = require('./insertProject.sql');
@@ -25,7 +25,7 @@ class Projects extends Models {
 
 	policy?: number; // on-chain data
 
-	constructor(data: Partial<Projects> = {}, conn: Client) {
+	constructor(data: Partial<Projects> = {}, conn: PoolClient) {
 		super(conn);
 		Object.assign(this, data);
 	}
