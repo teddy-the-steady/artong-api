@@ -4,6 +4,7 @@ import getSecretKeys from './utils/common/ssmKeys';
 
 const getPool = async function() {
   try {
+    console.log('getPool!!!')
     const keys = await getSecretKeys();
     const env = process.env.ENV;
     return new Pool({
