@@ -1,6 +1,5 @@
 import handlebars from 'handlebars';
-// import { getPool } from '../../init';
-import { pool } from '../../handler/artong';
+import { dbConnectionPool } from '../../handler/artong';
 import { InternalServerError } from '../error/errors';
 import { DBError } from '../error/errorCodes';
 import { replaceAll } from '../common/commonFunc';
@@ -8,8 +7,7 @@ import { PoolClient } from 'pg';
 
 const getConnection = async function(): Promise<PoolClient> {
   try {
-    // const pool: any = await getPool();
-    const conn = await pool.connect();
+    const conn = await dbConnectionPool.connect();
     return conn
   } catch (error) {
     throw new InternalServerError(error, DBError.code);
