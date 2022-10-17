@@ -2,12 +2,19 @@ import 'reflect-metadata';
 import requestInit from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response';
 import { member, country, reactions, projects, contents } from '../controllers/artong/index';
+import { getDbConnentionPool } from '../init';
+import { Pool } from 'pg';
+
+export let dbConnectionPool: Pool;
 
 export async function handler(event: any, context: any, callback: any) {
   context.callbackWaitsForEmptyEventLoop = false;
   let res: any = {};
 
   try {
+    if (!dbConnectionPool) {
+      dbConnectionPool = await getDbConnentionPool();
+    }
     const req = await requestInit(event);
     console.log(req);
 
