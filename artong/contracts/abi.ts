@@ -223,6 +223,25 @@ export const MARKETPLACE_ABI = [
       {
         "indexed": true,
         "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "Received",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "collectionOwner",
         "type": "address"
       },
@@ -738,6 +757,10 @@ export const MARKETPLACE_ABI = [
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
   }
 ];
 
@@ -777,6 +800,30 @@ export const FACTORY_ABI = [
         "internalType": "address",
         "name": "nft",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "symbol",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "maxAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum Policy",
+        "name": "policy",
+        "type": "uint8"
       }
     ],
     "name": "ContractCreated",
@@ -799,6 +846,25 @@ export const FACTORY_ABI = [
       }
     ],
     "name": "ContractDisabled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "nft",
+        "type": "address"
+      }
+    ],
+    "name": "ContractRegistered",
     "type": "event"
   },
   {
@@ -1166,6 +1232,37 @@ export const ERC721_ABI = [
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "address",
+        "name": "minter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "tokenUri",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "contentUri",
+        "type": "string"
+      }
+    ],
+    "name": "TokenMinted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "from",
@@ -1375,6 +1472,11 @@ export const ERC721_ABI = [
         "internalType": "string",
         "name": "_tokenUri",
         "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_contentUri",
+        "type": "string"
       }
     ],
     "name": "mint",
@@ -1500,7 +1602,12 @@ export const ERC721_ABI = [
           },
           {
             "internalType": "string",
-            "name": "uri",
+            "name": "tokenUri",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "contentUri",
             "type": "string"
           },
           {
@@ -1650,6 +1757,49 @@ export const ERC721_ABI = [
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "tokenByIndex",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "tokenOfOwnerByIndex",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
       }
@@ -1660,6 +1810,19 @@ export const ERC721_ABI = [
         "internalType": "string",
         "name": "",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalSupply",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
