@@ -137,8 +137,7 @@ const getProjectAddressFromContractCreatedEvent = function(txReceipt: any) {
       evt.topics[0] ===
       '0x3a7b4f8ec4c999d5e111169052be6ed6d3043552a3319cba2c6fb1818e1c13ac' // INFO] Event: ContractCreated
     ) {
-      const address = ethers.utils.hexDataSlice(evt.data, 44)
-      return address
+      return evt.address
     }
   })
 
