@@ -19,7 +19,7 @@ const getDbConnentionPool = async function(): Promise<Pool> {
 const ALLOWED_ORIGINS: string[] = [
   'https://myfirstorigin.com',
   'https://mysecondorigin.com'
-];
+]; // TODO] cors 처리 안되어있음
 
 const reduceOp = function(args: any, reducer: (a: string, b: string) => any) {
   args = Array.from(args);
