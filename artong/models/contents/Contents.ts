@@ -17,6 +17,8 @@ class Contents extends Models {
 	voucher?: object;
 	is_redeemed?: boolean;
 
+	content_url?: string;
+
 	created_at?: Date;
 	updated_at?: Date;
 
