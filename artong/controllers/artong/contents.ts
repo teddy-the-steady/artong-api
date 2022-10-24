@@ -32,7 +32,7 @@ const postContent = async function(body: any, member: Member) {
   }
 };
 
-const uploadToNftStorageAndUpdateContent = async function(body: any) {
+const uploadToNftStorage = async function(body: any) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -53,22 +53,7 @@ const uploadToNftStorageAndUpdateContent = async function(body: any) {
       image: file
     });
 
-    const contentModel = new Contents({
-      id: body.content_id,
-      ipfs_url: metadata.url,
-    }, conn);
-
-    const result = await contentModel.updateContent(
-      contentModel.id,
-      contentModel.ipfs_url,
-    );
-
-    const realMetadata = await axios.get(`https://ipfs.io/ipfs/${metadata.ipnft}/metadata.json`);
-    if (realMetadata && realMetadata.data && realMetadata.data.image) {
-      result.content_url = realMetadata.data.image;
-    }
-
-    return {'data': result}
+    return {'data': metadata}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -82,6 +67,7 @@ const patchContent = async function(pathParameters: any, body: any) {
   try {
     const contentModel = new Contents({
       id: pathParameters.id,
+      ipfs_url: body.ipfs_url,
       token_id: body.tokenId,
       voucher: body.voucher,
       is_redeemed: body.isRedeemed,
@@ -123,7 +109,7 @@ const getContent = async function(pathParameters: any) {
 
 export {
 	postContent,
-  uploadToNftStorageAndUpdateContent,
+  uploadToNftStorage,
   patchContent,
   getContent,
 };
