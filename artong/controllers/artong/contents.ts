@@ -23,7 +23,7 @@ const postContent = async function(body: any, member: Member) {
       contentModel.project_address,
       contentModel.content_s3key
     );
-    return {'data': result}
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -52,7 +52,7 @@ const uploadToNftStorage = async function(body: any) {
       image: file
     });
 
-    return {'data': metadata}
+    return {data: metadata}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -79,7 +79,7 @@ const patchContent = async function(pathParameters: any, body: any) {
       contentModel.voucher,
       contentModel.is_redeemed,
     );
-    return {'data': result}
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -98,7 +98,7 @@ const getContent = async function(pathParameters: any) {
     const result = await contentModel.getContent(
       contentModel.id,
     );
-    return {'data': result}
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
