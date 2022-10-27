@@ -12,13 +12,13 @@ const graphql = async function(body: any, member: Member) {
   
   const pureQuery = parseGraphqlQuery(body.query);
   const _db_ = parse_db_data(body.query);
-  const isDataMergeNecessary = _db_;
+  const isDataMergeNecessary = _db_.length > 0;
   
   if (isDataMergeNecessary) {
     switch (queryName) {
       case 'Project': result = await projects.queryProject(body, _db_, pureQuery);
         break;
-      case 'ProjectStats':
+      case 'Projects': result = await projects.queryProjects(body, _db_, pureQuery);
         break;
       default:
         throw new BadRequest('query name undefined', null);
