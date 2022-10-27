@@ -28,7 +28,7 @@ export async function handler(event: any, context: any, callback: any) {
       default:
         break;
     }
-    return {'data': 'success'};
+    return {data: 'success'};
   } catch (err) {
     throw new InternalServerError(err, null);
   }
