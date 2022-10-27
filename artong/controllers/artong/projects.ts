@@ -4,6 +4,7 @@ import { InfuraProvider, abi } from '../../contracts';
 import * as db from '../../utils/db/db';
 import { PoolClient } from 'pg';
 import { ethers } from 'ethers';
+import _ from 'lodash';
 import { graphqlRequest } from '../../utils/common/graphqlUtil';
 
 const getProjects = async function(queryStringParameters: any) {
@@ -151,7 +152,7 @@ const getProjectAddressFromContractCreatedEvent = function(txReceipt: any) {
   }
 }
 
-const queryProject = async function(body: any, _db_: RegExpMatchArray|null, pureQuery: string) {
+const queryProject = async function(body: any, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -165,11 +166,8 @@ const queryProject = async function(body: any, _db_: RegExpMatchArray|null, pure
     ]);
 
     if (dbResult && gqlResult.project) {
-      if (_db_) {
-        for (let field of _db_) {
-          let fieldName = field.substring(4)
-          gqlResult.project[fieldName] = (dbResult as any)[fieldName];
-        }
+      for (let field of _db_) {
+        gqlResult.project[field] = (dbResult as any)[field];
       }
     } else {
       return {data: {}}
@@ -183,10 +181,39 @@ const queryProject = async function(body: any, _db_: RegExpMatchArray|null, pure
   }
 }
 
+const queryProjects = async function(body: any, _db_: string[], pureQuery: string) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
+    const addressArray = gqlResult.projects.map((project: { id: string; }) => project.id);
+
+    const projectModel = new Projects({
+      addressArray: addressArray
+    }, conn);
+
+    const dbResult = await projectModel.getProjectsWithAddressArray(
+      projectModel.addressArray,
+      _db_
+    );
+
+    if (dbResult && gqlResult.projects && dbResult.length === gqlResult.projects.length) {
+      return _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(dbResult, 'id'));
+    } else {
+      return {data: gqlResult.projects}
+    }
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
   getProjects,
 	postProject,
   patchProject,
   getProjectWhileUpdatingPendingToCreated,
   queryProject,
+  queryProjects,
 };
