@@ -7,7 +7,6 @@ import { getS3ObjectInBuffer, getS3ObjectHead } from '../../utils/common/commonF
 import { S3Client } from '@aws-sdk/client-s3';
 import { NFTStorage } from 'nft.storage';
 import { File } from '@web-std/file';
-import axios from 'axios';
 
 const postContent = async function(body: any, member: Member) {
   const conn: PoolClient = await db.getConnection();
