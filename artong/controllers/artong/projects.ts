@@ -171,7 +171,7 @@ const queryProject = async function(body: any, _db_: RegExpMatchArray|null, pure
       }
     }
 
-    return gqlResult
+    return {data: gqlResult.project}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -184,6 +184,5 @@ export {
 	postProject,
   patchProject,
   getProjectWhileUpdatingPendingToCreated,
-  getProject,
   queryProject,
 };
