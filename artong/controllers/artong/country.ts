@@ -24,7 +24,7 @@ const postCountry = async function(body: any, member: Member) {
       countryModel.name,
       countryModel.number_code
     );
-    return {'data': result}
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
