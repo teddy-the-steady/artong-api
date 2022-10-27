@@ -4,6 +4,7 @@ import { InfuraProvider, abi } from '../../contracts';
 import * as db from '../../utils/db/db';
 import { PoolClient } from 'pg';
 import { ethers } from 'ethers';
+import { graphqlRequest } from '../../utils/common/graphqlUtil';
 
 const getProjects = async function(queryStringParameters: any) {
   const conn: PoolClient = await db.getConnection();
@@ -178,10 +179,39 @@ const getProject = async function(pathParameters: any) {
   }
 };
 
+const queryProject = async function(body: any, _db_: RegExpMatchArray|null, pureQuery: string) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const projectModel = new Projects({
+      address: body.variables.id
+    }, conn);
+
+    const [dbResult, gqlResult] = await Promise.all([
+      projectModel.getProjectWithAddress(projectModel.address),
+      graphqlRequest({query: pureQuery, variables: body.variables})
+    ]);
+
+    if (_db_) {
+      for (let field of _db_) {
+        let fieldName = field.substring(4)
+        gqlResult.project[fieldName] = (dbResult as any)[fieldName];
+      }
+    }
+
+    return gqlResult
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
   getProjects,
 	postProject,
   patchProject,
   getProjectWhileUpdatingPendingToCreated,
   getProject,
+  queryProject,
 };
