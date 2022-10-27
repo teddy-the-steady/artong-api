@@ -3,8 +3,9 @@ import * as db from '../../utils/db/db';
 import Models from '../Models';
 const insertProject = require('./insertProject.sql');
 const updateProject = require('./updateProject.sql');
-const getProject = require('./selectProject.sql');
-const getProjects = require('./selectProjects.sql');
+const selectProject = require('./selectProject.sql');
+const selectProjects = require('./selectProjects.sql');
+const selectProjectsWithAddressArray = require('./selectProjectsWithAddressArray.sql')
 
 
 class Projects extends Models {
@@ -24,6 +25,7 @@ class Projects extends Models {
 	updated_at?: Date;
 
 	policy?: number; // on-chain data
+	addressArray?: Array<string>;
 
 	constructor(data: Partial<Projects> = {}, conn: PoolClient) {
 		super(conn);
@@ -78,7 +80,7 @@ class Projects extends Models {
 
 	async getProjectWithTxhash(create_tx_hash?: string): Promise<Projects> {
 		try {
-			const result = await db.execute(this.conn, getProject, {
+			const result = await db.execute(this.conn, selectProject, {
 				create_tx_hash
 			});
 			return result[0]
@@ -89,7 +91,7 @@ class Projects extends Models {
 
 	async getProjectWithAddress(address?: string): Promise<Projects> {
 		try {
-			const result = await db.execute(this.conn, getProject, {
+			const result = await db.execute(this.conn, selectProject, {
 				address
 			});
 			return result[0]
@@ -105,12 +107,25 @@ class Projects extends Models {
 		count_num?: number
 	): Promise<Projects[]> {
 		try {
-			const result = await db.execute(this.conn, getProjects, {
+			const result = await db.execute(this.conn, selectProjects, {
 				member_id,
 				status,
 				start_num,
 				count_num
 			});
+			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getProjectsWithAddressArray(addressArray?: Array<string>, _db_?: string[]): Promise<Projects[]> {
+		try {
+			const result = await db.execute(
+				this.conn,
+				selectProjectsWithAddressArray,
+				{addressArray, _db_}
+			);
 			return result
 		} catch (error) {
 			throw error;
