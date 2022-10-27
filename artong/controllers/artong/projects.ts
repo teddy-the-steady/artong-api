@@ -164,11 +164,15 @@ const queryProject = async function(body: any, _db_: RegExpMatchArray|null, pure
       graphqlRequest({query: pureQuery, variables: body.variables})
     ]);
 
-    if (_db_) {
-      for (let field of _db_) {
-        let fieldName = field.substring(4)
-        gqlResult.project[fieldName] = (dbResult as any)[fieldName];
+    if (dbResult && gqlResult.project) {
+      if (_db_) {
+        for (let field of _db_) {
+          let fieldName = field.substring(4)
+          gqlResult.project[fieldName] = (dbResult as any)[fieldName];
+        }
       }
+    } else {
+      return {data: {}}
     }
 
     return {data: gqlResult.project}
