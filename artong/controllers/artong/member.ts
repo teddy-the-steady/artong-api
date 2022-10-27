@@ -21,7 +21,7 @@ const getMember = async function(pathParameters: any) {
       memberModel.id,
       memberModel.wallet_address
     );
-    return {'data': result}
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error)
   } finally {
@@ -42,7 +42,7 @@ const getMembers = async function(queryStringParameters: any) {
       memberModel.username,
       memberModel.principal_id
     );
-    return {'data': result}
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -67,7 +67,7 @@ const postMember = async function(body: any) {
       memberModel.wallet_address,
       memberModel.principal_id,
     );
-    return {'data': result}
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -88,7 +88,7 @@ const patchMemberProfileS3key = async function(body:any, member: Member) {
       memberModel.id,
       memberModel.profile_s3key,
     );
-    return {'data': result}
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -110,7 +110,7 @@ const patchMemberProfileThumbnailS3key = async function(pathParameters:any, body
       memberModel.profile_s3key,
       memberModel.profile_thumbnail_s3key,
     );
-    return {'data': result}
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {

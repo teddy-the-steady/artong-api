@@ -21,7 +21,7 @@ const getProjects = async function(queryStringParameters: any) {
       queryStringParameters.start_num,
       queryStringParameters.count_num
     );
-    return {'data': result}
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -48,7 +48,7 @@ const postProject = async function(body: any, member: Member) {
       projectModel.symbol,
       projectModel.status
     );
-    return {'data': result}
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -79,7 +79,7 @@ const patchProject = async function(pathParameters: any, body: any, member: Memb
       projectModel.background_s3key,
       projectModel.status
     );
-    return {'data': result}
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -118,13 +118,13 @@ const getProjectWhileUpdatingPendingToCreated = async function(pathParameters: a
           projectModel.status
         );
 
-        return {'data': result}
+        return {data: result}
       } else {
-        return {'data': result}
+        return {data: result}
       }
     }
 
-    return {'data': result}
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error)
   } finally {
@@ -151,34 +151,6 @@ const getProjectAddressFromContractCreatedEvent = function(txReceipt: any) {
   }
 }
 
-const getProject = async function(pathParameters: any) {
-  const conn: PoolClient = await db.getConnection();
-
-  try {
-    const projectModel = new Projects({
-      address: pathParameters.id,
-    }, conn)
-
-    const result = await projectModel.getProjectWithAddress(
-      projectModel.address,
-    );
-
-    const contract = new ethers.Contract(pathParameters.id, abi.ERC721_ABI, InfuraProvider.provider);
-    try {
-      const tx = await contract.policy();
-      result.policy = tx;
-    } catch (error) {
-      console.log(error);
-    }
-
-    return {'data': result}
-  } catch (error) {
-    throw controllerErrorWrapper(error);
-  } finally {
-    db.release(conn);
-  }
-};
-
 const queryProject = async function(body: any, _db_: RegExpMatchArray|null, pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
@@ -199,7 +171,7 @@ const queryProject = async function(body: any, _db_: RegExpMatchArray|null, pure
       }
     }
 
-    return gqlResult
+    return {data: gqlResult.project}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -212,6 +184,5 @@ export {
 	postProject,
   patchProject,
   getProjectWhileUpdatingPendingToCreated,
-  getProject,
   queryProject,
 };

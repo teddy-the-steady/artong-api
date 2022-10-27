@@ -18,7 +18,7 @@ const postContentReaction = async function(pathParameters: any, body: any, membe
       reactionModel.content_id,
       reactionModel.member_id
     );
-    return {'data': result}
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
