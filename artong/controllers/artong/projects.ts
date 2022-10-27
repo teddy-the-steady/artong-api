@@ -151,34 +151,6 @@ const getProjectAddressFromContractCreatedEvent = function(txReceipt: any) {
   }
 }
 
-const getProject = async function(pathParameters: any) {
-  const conn: PoolClient = await db.getConnection();
-
-  try {
-    const projectModel = new Projects({
-      address: pathParameters.id,
-    }, conn)
-
-    const result = await projectModel.getProjectWithAddress(
-      projectModel.address,
-    );
-
-    const contract = new ethers.Contract(pathParameters.id, abi.ERC721_ABI, InfuraProvider.provider);
-    try {
-      const tx = await contract.policy();
-      result.policy = tx;
-    } catch (error) {
-      console.log(error);
-    }
-
-    return {'data': result}
-  } catch (error) {
-    throw controllerErrorWrapper(error);
-  } finally {
-    db.release(conn);
-  }
-};
-
 const queryProject = async function(body: any, _db_: RegExpMatchArray|null, pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
