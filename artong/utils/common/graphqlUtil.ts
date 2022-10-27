@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { BadRequest } from '../error/errors';
 
 const graphqlRequest = async function(body: any) {
   const result = await axios({
@@ -7,6 +8,10 @@ const graphqlRequest = async function(body: any) {
     method: 'POST',
     data: body
   });
+
+  if (result.status === 200 && result.data.errors) {
+    throw new BadRequest(result.data.errors, null)
+  }
 
   return result.data.data
 }
@@ -20,8 +25,10 @@ const remove_db_dataFromGraphqlQuery = function(query: string): string {
   return query.replace(regexp, '');
 }
 
-const parse_db_data = function(query: string) {
-  return get_db_ArrayFromGraphqlQuery(query);
+const parse_db_data = function(query: string): string[] {
+  const _db_dataArray = get_db_ArrayFromGraphqlQuery(query);
+  const result = _db_dataArray?.map(data => data.substring(4));
+  return result || []
 }
 
 const get_db_ArrayFromGraphqlQuery = function(query: string): RegExpMatchArray | null {
