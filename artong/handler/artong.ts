@@ -11,7 +11,7 @@ export let dbConnectionPool: Pool;
 export async function handler(event: any, context: any, callback: any) {
   context.callbackWaitsForEmptyEventLoop = false;
   let res: any = {};
-
+console.log(event)
   try {
     if (!dbConnectionPool) {
       dbConnectionPool = await getDbConnentionPool();
