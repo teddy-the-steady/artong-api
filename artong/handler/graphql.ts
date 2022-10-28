@@ -8,12 +8,11 @@ const graphql = async function(body: any, member: Member) {
   const parsed = parse(body.query);
   const queryName = (parsed.definitions[0] as any).name.value;
 
-  let result: any;
-  
   const pureQuery = parseGraphqlQuery(body.query);
   const _db_ = parse_db_data(body.query);
   const isDataMergeNecessary = _db_.length > 0;
-  
+
+  let result: any;
   if (isDataMergeNecessary) {
     switch (queryName) {
       case 'Project': result = await projects.queryProject(body, _db_, pureQuery);
