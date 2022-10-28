@@ -3,7 +3,7 @@ SELECT
     {{#each _db_}}
         {{this}},
     {{/each}}
-    (SELECT COUNT(*) FROM projects) AS total
+    (SELECT COUNT(*)::int FROM projects) AS total
 FROM
     projects
 WHERE
