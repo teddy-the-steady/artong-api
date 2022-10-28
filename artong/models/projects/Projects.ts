@@ -5,7 +5,8 @@ const insertProject = require('./insertProject.sql');
 const updateProject = require('./updateProject.sql');
 const selectProject = require('./selectProject.sql');
 const selectProjects = require('./selectProjects.sql');
-const selectProjectsWithAddressArray = require('./selectProjectsWithAddressArray.sql')
+const selectProjectsWithAddressArray = require('./selectProjectsWithAddressArray.sql');
+const selectProjectsByCreatorWithAddressArray = require('./selectProjectsByCreatorWithAddressArray.sql');
 
 
 class Projects extends Models {
@@ -125,6 +126,23 @@ class Projects extends Models {
 				this.conn,
 				selectProjectsWithAddressArray,
 				{addressArray, _db_}
+			);
+			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getProjectsByCreatorWithAddressArray(
+		addressArray?: Array<string>,
+		address?: string,
+		_db_?: string[]
+	): Promise<Projects[]> {
+		try {
+			const result = await db.execute(
+				this.conn,
+				selectProjectsByCreatorWithAddressArray,
+				{addressArray, address, _db_}
 			);
 			return result
 		} catch (error) {
