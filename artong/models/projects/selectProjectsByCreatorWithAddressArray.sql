@@ -12,5 +12,11 @@ SELECT
 FROM
     projects p
 LEFT JOIN member m ON m.id = p.member_id
-WHERE
-    m.wallet_address = ${address}
+WHERE 1=1
+    AND m.wallet_address = ${address}
+    AND address IN (
+        {{#each addressArray}}
+            '{{this}}'
+            {{#unless @last}},{{/unless}}
+        {{/each}}
+    )
