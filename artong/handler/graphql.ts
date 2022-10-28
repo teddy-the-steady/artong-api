@@ -19,6 +19,8 @@ const graphql = async function(body: any, member: Member) {
         break;
       case 'Projects': result = await projects.queryProjects(body, _db_, pureQuery);
         break;
+      case 'ProjectsByCreator': result = await projects.queryProjectsByCreator(body, _db_, pureQuery);
+        break;
       default:
         throw new BadRequest('query name undefined', null);
     }

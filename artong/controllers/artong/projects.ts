@@ -205,6 +205,39 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
   }
 }
 
+const queryProjectsByCreator = async function(body: any, _db_: string[], pureQuery: string) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
+    if (gqlResult.projects.length === 0) {
+      return {data: []}
+    }
+
+    const addressArray = gqlResult.projects.map((project: { id: string; }) => project.id);
+    const projectModel = new Projects({
+      addressArray: addressArray,
+      address: body.variables.creator
+    }, conn);
+
+    const dbResult = await projectModel.getProjectsByCreatorWithAddressArray(
+      projectModel.addressArray,
+      projectModel.address,
+      _db_
+    );
+
+    if (dbResult && gqlResult.projects && dbResult.length === gqlResult.projects.length) {
+      return {data: _.merge(gqlResult.projects, dbResult)}
+    } else {
+      return {data: []}
+    }
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
   getProjects,
 	postProject,
@@ -212,4 +245,5 @@ export {
   getProjectWhileUpdatingPendingToCreated,
   queryProject,
   queryProjects,
+  queryProjectsByCreator,
 };
