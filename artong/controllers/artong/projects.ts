@@ -198,7 +198,7 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
     );
 
     if (dbResult && gqlResult.projects && dbResult.length === gqlResult.projects.length) {
-      return _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(dbResult, 'id'));
+      return {data: _.merge(gqlResult.projects, dbResult)}
     } else {
       return {data: gqlResult.projects}
     }
