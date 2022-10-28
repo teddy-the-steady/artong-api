@@ -156,9 +156,7 @@ const queryProject = async function(body: any, _db_: string[], pureQuery: string
   const conn: PoolClient = await db.getConnection();
 
   try {
-    const projectModel = new Projects({
-      address: body.variables.id
-    }, conn);
+    const projectModel = new Projects({ address: body.variables.id }, conn);
 
     const [dbResult, gqlResult] = await Promise.all([
       projectModel.getProjectWithAddress(projectModel.address),
@@ -191,14 +189,9 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
     }
 
     const addressArray = gqlResult.projects.map((project: { id: string; }) => project.id);
-    const projectModel = new Projects({
-      addressArray: addressArray
-    }, conn);
+    const projectModel = new Projects({ addressArray: addressArray }, conn);
 
-    const dbResult = await projectModel.getProjectsWithAddressArray(
-      projectModel.addressArray,
-      _db_
-    );
+    const dbResult = await projectModel.getProjectsWithAddressArray(projectModel.addressArray, _db_);
 
     if (dbResult && gqlResult.projects && dbResult.length === gqlResult.projects.length) {
       return {data: _.merge(gqlResult.projects, dbResult)}
