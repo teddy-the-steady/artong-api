@@ -1,9 +1,9 @@
 SELECT
     address AS id,
     {{#each _db_}}
-        {{this}}
-        {{#unless @last}},{{/unless}}
+        {{this}},
     {{/each}}
+    (SELECT COUNT(*) FROM projects) AS total
 FROM
     projects
 WHERE
