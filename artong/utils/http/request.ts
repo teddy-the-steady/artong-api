@@ -15,7 +15,7 @@ const requestInit = async function(event: any) {
   if (result['body']) {
     try {
       result.body = JSON.parse(result.body);
-    } catch(error){
+    } catch(error: any){
       throw new BadRequest(error.toString(), SyntaxError);
     }
   }
