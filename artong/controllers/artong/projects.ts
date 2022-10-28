@@ -186,8 +186,11 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
 
   try {
     const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
-    const addressArray = gqlResult.projects.map((project: { id: string; }) => project.id);
+    if (gqlResult.projects.length === 0) {
+      return {data: []}
+    }
 
+    const addressArray = gqlResult.projects.map((project: { id: string; }) => project.id);
     const projectModel = new Projects({
       addressArray: addressArray
     }, conn);
