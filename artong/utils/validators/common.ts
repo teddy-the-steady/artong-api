@@ -5,7 +5,7 @@ import { validateOrReject } from 'class-validator';
 const validator = async function(input: any) {
   try {
     await validateOrReject(input);
-  } catch (error) {
+  } catch (error: any) {
     throw new BadRequest(error.toString(), ValidationError.code);
   }
 }
