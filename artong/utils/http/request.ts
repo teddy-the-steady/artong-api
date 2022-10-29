@@ -22,13 +22,13 @@ const requestInit = async function(event: any) {
 
   try {
     result['member'] = {};
-    let usernameOrMemberId = null; // INFO] only offline
-    let principalId = null; // INFO] stage and prod
+    let usernameOrMemberId = null;
+    let principalId = null;
     if (process.env.IS_OFFLINE) { // INFO] offline이면 queryStringParameters로 member_id 세팅(없으면 stage는 admin 249)
       usernameOrMemberId = event['queryStringParameters'] && event['queryStringParameters']['member_id'] ? event['queryStringParameters']['member_id'] : 249;
-    } else {
+    } else if (event['headers']['Authorization']) {
       const jwtToken = event['headers']['Authorization'];
-      if (jwtToken &&
+      if ( // INFO] cognito authorized
         event['requestContext'] &&
         event['requestContext']['authorizer'] &&
         event['requestContext']['authorizer']['principalId']
@@ -36,6 +36,9 @@ const requestInit = async function(event: any) {
         const payload = parseJwt(jwtToken);
         result['member']['memberGroups'] = payload['cognito:groups'];
         principalId = event['requestContext']['authorizer']['principalId'];
+      } else { // INFO] when authorization is not needed, just open header to check who the sender is (however, token not verified)
+        const payload = parseJwt(jwtToken);
+        principalId = payload['sub'];
       }
     }
 
