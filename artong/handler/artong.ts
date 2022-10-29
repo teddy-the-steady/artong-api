@@ -17,7 +17,6 @@ console.log(event)
       dbConnectionPool = await getDbConnentionPool();
     }
     const req = await requestInit(event);
-    console.log(req);
 
     switch (req.httpMethod) {
       case 'GET':
