@@ -17,6 +17,7 @@ export async function handler(event: any, context: any, callback: any) {
       dbConnectionPool = await getDbConnentionPool();
     }
     const req = await requestInit(event);
+    console.log(req);
 
     switch (req.httpMethod) {
       case 'GET':
