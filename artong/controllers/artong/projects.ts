@@ -229,7 +229,7 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
     if (dbResult && gqlResult.projects && dbResult.length === gqlResult.projects.length) {
       return {data: _.merge(gqlResult.projects, dbResult)}
     } else {
-      return {data: []}
+      return {data: gqlResult.projects}
     }
   } catch (error) {
     throw controllerErrorWrapper(error);
