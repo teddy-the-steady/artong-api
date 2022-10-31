@@ -1,7 +1,7 @@
 import { parse } from 'graphql';
 import { Member } from '../models';
 import { BadRequest } from '../utils/error/errors';
-import { projects } from '../controllers/artong';
+import { projects, contents } from '../controllers/artong';
 import { graphqlRequest, parseGraphqlQuery, parse_db_data } from '../utils/common/graphqlUtil';
 
 const graphql = async function(body: any, member: Member) {
@@ -21,11 +21,13 @@ const graphql = async function(body: any, member: Member) {
         break;
       case 'ProjectsByCreator': result = await projects.queryProjectsByCreator(body, _db_, pureQuery);
         break;
+      case 'Token': result = await contents.queryToken(body, _db_, pureQuery);
+        break;
       default:
         throw new BadRequest('query name undefined', null);
     }
   } else {
-    result = await graphqlRequest({query: pureQuery});
+    result = {data: await graphqlRequest({query: pureQuery, variables: body.variables})};
   }
 
   return result
