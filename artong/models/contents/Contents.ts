@@ -65,9 +65,15 @@ class Contents extends Models {
 		}
 	}
 
-	async getContent(id?: number): Promise<Contents> {
+	async getContent(
+		project_address?: string,
+		token_id?: number
+	): Promise<Contents> {
 		try {
-			const result = await db.execute(this.conn, selectContent, { id });
+			const result = await db.execute(this.conn, selectContent, {
+				project_address,
+				token_id
+			});
 			return result[0]
 		} catch (error) {
 			throw error;
