@@ -14,5 +14,6 @@ SELECT
   is_redeemed
 FROM
   contents
-WHERE
-  id = ${id}
+WHERE 1=1
+  AND project_address = ${project_address}
+  AND token_id = ${token_id}

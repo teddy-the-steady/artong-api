@@ -7,6 +7,7 @@ import { getS3ObjectInBuffer, getS3ObjectHead } from '../../utils/common/commonF
 import { S3Client } from '@aws-sdk/client-s3';
 import { NFTStorage } from 'nft.storage';
 import { File } from '@web-std/file';
+import { graphqlRequest } from '../../utils/common/graphqlUtil';
 
 const postContent = async function(body: any, member: Member) {
   const conn: PoolClient = await db.getConnection();
@@ -87,18 +88,29 @@ const patchContent = async function(pathParameters: any, body: any) {
   }
 }
 
-const getContent = async function(pathParameters: any) {
+const queryToken = async function(body: any, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
-    const contentModel = new Contents({
-      id: pathParameters.id,
+    const contentsModel = new Contents({
+      project_address: body.variables.project_address,
+      token_id: body.variables.token_id
     }, conn);
 
-    const result = await contentModel.getContent(
-      contentModel.id,
-    );
-    return {data: result}
+    const [dbResult, gqlResult] = await Promise.all([
+      contentsModel.getContent(contentsModel.project_address, contentsModel.token_id),
+      graphqlRequest({query: pureQuery, variables: body.variables})
+    ]);
+
+    if (dbResult && gqlResult.token) {
+      for (let field of _db_) {
+        gqlResult.token[field] = (dbResult as any)[field];
+      }
+    } else {
+      return {data: {token: {}}}
+    }
+
+    return {data: gqlResult}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -110,5 +122,5 @@ export {
 	postContent,
   uploadToNftStorage,
   patchContent,
-  getContent,
+  queryToken,
 };
