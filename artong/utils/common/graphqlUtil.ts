@@ -27,13 +27,20 @@ const remove_db_dataFromGraphqlQuery = function(query: string): string {
 
 const parse_db_data = function(query: string): string[] {
   const _db_dataArray = get_db_ArrayFromGraphqlQuery(query);
-  const result = _db_dataArray?.map(data => data.substring(4));
+  const result = remove_db_prefixFromDataArray(_db_dataArray)
   return result || []
 }
 
 const get_db_ArrayFromGraphqlQuery = function(query: string): RegExpMatchArray | null {
   const regexp = /_db_\w+/g;
   return query.match(regexp);
+}
+
+const remove_db_prefixFromDataArray = function(_db_dataArray: RegExpMatchArray | null): string[] {
+  if (!_db_dataArray) {
+    return []
+  }
+  return _db_dataArray?.map(data => data.substring(4));
 }
 
 export {
