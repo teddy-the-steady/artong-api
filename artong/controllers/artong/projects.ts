@@ -168,10 +168,10 @@ const queryProject = async function(body: any, _db_: string[], pureQuery: string
         gqlResult.project[field] = (dbResult as any)[field];
       }
     } else {
-      return {data: {}}
+      return {data: {project: {}}}
     }
 
-    return {data: gqlResult.project}
+    return {data: gqlResult}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -185,7 +185,7 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
   try {
     const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
     if (gqlResult.projects.length === 0) {
-      return {data: []}
+      return {data: {projects: []}}
     }
 
     const addressArray = gqlResult.projects.map((project: { id: string; }) => project.id);
@@ -194,9 +194,9 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
     const dbResult = await projectModel.getProjectsWithAddressArray(projectModel.addressArray, _db_);
 
     if (dbResult && gqlResult.projects && dbResult.length === gqlResult.projects.length) {
-      return {data: _.merge(gqlResult.projects, dbResult)}
+      return {data: {projects: _.merge(gqlResult.projects, dbResult)}}
     } else {
-      return {data: gqlResult.projects}
+      return {data: gqlResult}
     }
   } catch (error) {
     throw controllerErrorWrapper(error);
@@ -211,7 +211,7 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
   try {
     const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
     if (gqlResult.projects.length === 0) {
-      return {data: []}
+      return {data: {projects: []}}
     }
 
     const addressArray = gqlResult.projects.map((project: { id: string; }) => project.id);
@@ -227,9 +227,9 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
     );
 
     if (dbResult && gqlResult.projects && dbResult.length === gqlResult.projects.length) {
-      return {data: _.merge(gqlResult.projects, dbResult)}
+      return {data: {projects: _.merge(gqlResult.projects, dbResult)}}
     } else {
-      return {data: gqlResult.projects}
+      return {data: gqlResult}
     }
   } catch (error) {
     throw controllerErrorWrapper(error);
