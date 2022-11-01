@@ -6,7 +6,9 @@ SELECT
   (SELECT
     COUNT(*)::int
   FROM contents
-  WHERE token_id IS NOT NULL)
+  WHERE 1=1
+  AND token_id IS NOT NULL
+  AND project_address = ${project_address})
   AS total
 FROM
   contents
@@ -17,9 +19,4 @@ WHERE 1=1
       {{#unless @last}},{{/unless}}
     {{/each}}
   )
-  AND project_address IN (
-    {{#each projectAddressArray}}
-      '{{this}}'
-      {{#unless @last}},{{/unless}}
-    {{/each}}
-  )
+  AND project_address = ${project_address}
