@@ -25,6 +25,8 @@ const graphql = async function(body: any, member: Member) {
         break;
       case 'Tokens': result = await contents.queryTokens(body, _db_, pureQuery);
         break;
+      case 'TokensByProject': result = await contents.queryTokensByProject(body, _db_, pureQuery);
+        break;
       default:
         throw new BadRequest('query name undefined', null);
     }
