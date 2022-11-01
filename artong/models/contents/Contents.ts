@@ -5,6 +5,7 @@ const insertContent = require('./insertContent.sql');
 const updateContent = require('./updateContent.sql');
 const selectContent = require('./selectContent.sql');
 const selectContentsWithTokenIdArray = require('./selectContentsWithTokenIdArray.sql');
+const selectContentsByProjectWithTokenIdArray = require('./selectContentsByProjectWithTokenIdArray.sql');
 
 class Contents extends Models {
 	id?: number;
@@ -97,6 +98,28 @@ class Contents extends Models {
 				this.conn,
 				selectContentsWithTokenIdArray,
 				{tokenIdArray, projectAddressArray, _db_}
+			);
+			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getTokensByProjectWithIdArray(
+		tokenIdArray?: Array<number>,
+		project_address?: string,
+		_db_?: string[]
+	): Promise<Contents[]> {
+		try {
+			if (_db_) {
+				const idx = _db_.indexOf('voucher')
+				if (idx > -1) _db_.splice(idx, 1)
+			}
+
+			const result = await db.execute(
+				this.conn,
+				selectContentsByProjectWithTokenIdArray,
+				{tokenIdArray, project_address, _db_}
 			);
 			return result
 		} catch (error) {
