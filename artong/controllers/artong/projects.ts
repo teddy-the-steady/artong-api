@@ -188,8 +188,8 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
       return {data: {projects: []}}
     }
 
-    const addressArray = gqlResult.projects.map((project: { id: string; }) => project.id);
-    const projectModel = new Projects({ addressArray: addressArray }, conn);
+    const extractedProjectIds = gqlResult.projects.map((project: { id: string; }) => project.id);
+    const projectModel = new Projects({ addressArray: extractedProjectIds }, conn);
 
     const dbResult = await projectModel.getProjectsWithAddressArray(projectModel.addressArray, _db_);
 
@@ -214,9 +214,9 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
       return {data: {projects: []}}
     }
 
-    const addressArray = gqlResult.projects.map((project: { id: string; }) => project.id);
+    const extractedProjectIds = gqlResult.projects.map((project: { id: string; }) => project.id);
     const projectModel = new Projects({
-      addressArray: addressArray,
+      addressArray: extractedProjectIds,
       address: body.variables.creator
     }, conn);
 
