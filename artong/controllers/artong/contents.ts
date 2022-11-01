@@ -153,10 +153,44 @@ const queryTokens = async function(body: any, _db_: string[], pureQuery: string)
   }
 }
 
+const queryTokensByProject = async function(body: any, _db_: string[], pureQuery: string) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
+    if (gqlResult.tokens.length === 0) {
+      return {data: {tokens: []}}
+    }
+
+    const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
+    const contentModel = new Contents({
+      tokenIdArray: extractedTokenIds,
+      project_address: body.variables.project
+    }, conn);
+
+    const dbResult = await contentModel.getTokensByProjectWithIdArray(
+      contentModel.tokenIdArray,
+      contentModel.project_address,
+      _db_
+    );
+
+    if (dbResult && gqlResult.tokens && dbResult.length === gqlResult.tokens.length) {
+      return {data: {tokens: _.merge(gqlResult.tokens, dbResult)}}
+    } else {
+      return {data: gqlResult}
+    }
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
 	postContent,
   uploadToNftStorage,
   patchContent,
   queryToken,
   queryTokens,
+  queryTokensByProject,
 };
