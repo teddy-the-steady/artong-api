@@ -4,6 +4,7 @@ import Models from '../Models';
 const insertContent = require('./insertContent.sql');
 const updateContent = require('./updateContent.sql');
 const selectContent = require('./selectContent.sql');
+const selectContentsWithTokenIdArray = require('./selectContentsWithTokenIdArray.sql');
 
 class Contents extends Models {
 	id?: number;
@@ -17,10 +18,11 @@ class Contents extends Models {
 	voucher?: object;
 	is_redeemed?: boolean;
 
-	content_url?: string;
-
 	created_at?: Date;
 	updated_at?: Date;
+
+	tokenIdArray?: Array<number>;
+	projectAddressArray?: Array<string>;
 
 	constructor(data: Partial<Contents> = {}, conn: PoolClient) {
 		super(conn);
@@ -75,6 +77,28 @@ class Contents extends Models {
 				token_id
 			});
 			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getTokensWithIdArray(
+		tokenIdArray?: Array<number>,
+		projectAddressArray?: Array<string>,
+		_db_?: string[]
+	): Promise<Contents[]> {
+		try {
+			if (_db_) { // INFO] voucher는 보안상 getContent에서 is_redeemd = False 일때만 제공
+				const idx = _db_.indexOf('voucher')
+				if (idx > -1) _db_.splice(idx, 1)
+			}
+
+			const result = await db.execute(
+				this.conn,
+				selectContentsWithTokenIdArray,
+				{tokenIdArray, projectAddressArray, _db_}
+			);
+			return result
 		} catch (error) {
 			throw error;
 		}

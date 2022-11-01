@@ -4,10 +4,11 @@ import * as db from '../../utils/db/db';
 import getSecretKeys from '../../utils/common/ssmKeys';
 import { PoolClient } from 'pg';
 import { getS3ObjectInBuffer, getS3ObjectHead } from '../../utils/common/commonFunc';
+import { graphqlRequest } from '../../utils/common/graphqlUtil';
 import { S3Client } from '@aws-sdk/client-s3';
 import { NFTStorage } from 'nft.storage';
 import { File } from '@web-std/file';
-import { graphqlRequest } from '../../utils/common/graphqlUtil';
+import _ from 'lodash';
 
 const postContent = async function(body: any, member: Member) {
   const conn: PoolClient = await db.getConnection();
@@ -118,9 +119,44 @@ const queryToken = async function(body: any, _db_: string[], pureQuery: string) 
   }
 }
 
+const queryTokens = async function(body: any, _db_: string[], pureQuery: string) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
+    if (gqlResult.tokens.length === 0) {
+      return {data: {tokens: []}}
+    }
+
+    const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
+    const extractedProjectIds = gqlResult.tokens.map((token: { project : { id: string; } }) => token.project.id);
+    const contentModel = new Contents({
+      tokenIdArray: extractedTokenIds,
+      projectAddressArray: extractedProjectIds
+    }, conn);
+
+    const dbResult = await contentModel.getTokensWithIdArray(
+      contentModel.tokenIdArray,
+      contentModel.projectAddressArray,
+      _db_
+    );
+
+    if (dbResult && gqlResult.tokens && dbResult.length === gqlResult.tokens.length) {
+      return {data: {tokens: _.merge(gqlResult.tokens, dbResult)}}
+    } else {
+      return {data: gqlResult}
+    }
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
 	postContent,
   uploadToNftStorage,
   patchContent,
   queryToken,
+  queryTokens,
 };
