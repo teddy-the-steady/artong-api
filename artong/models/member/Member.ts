@@ -4,6 +4,7 @@ const selectMember = require('./selectMember.sql');
 const selectMembers = require('./selectMembers.sql');
 const insertMember = require('./insertMember.sql');
 const updateMemberProfileS3keys = require('./updateMemberProfileS3keys.sql');
+const selectMembersWithWalletAddressArray = require('./selectMembersWithWalletAddressArray.sql');
 
 import {
 	IsEmail,
@@ -38,6 +39,7 @@ class Member extends Models implements MemberGroups {
 	updated_at?: Date;
 
 	memberGroups?: string[];
+	walletAddressArray?: Array<string>;
 
 	constructor(data: Partial<Member> = {}, conn: PoolClient) {
 		super(conn);
@@ -100,6 +102,19 @@ class Member extends Models implements MemberGroups {
 				profile_thumbnail_s3key: profile_thumbnail_s3key
 			});
 			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	};
+
+	async getMembersWithWalletAddressArray(
+		walletAddressArray?: Array<string>,
+	): Promise<Member[]> {
+		try {
+			const result = await db.execute(this.conn, selectMembersWithWalletAddressArray, {
+				walletAddressArray: walletAddressArray
+			});
+			return result
 		} catch (error) {
 			throw error;
 		}
