@@ -1,7 +1,7 @@
 SELECT
   CONCAT(project_address,token_id) AS id,
 {{#each _db_}}
-    {{this}},
+  {{this}},
 {{/each}}
   (SELECT
     COUNT(*)::int
