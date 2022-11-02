@@ -194,7 +194,8 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
     const dbResult = await projectModel.getProjectsWithAddressArray(projectModel.addressArray, _db_);
 
     if (dbResult && gqlResult.projects && dbResult.length === gqlResult.projects.length) {
-      return {data: {projects: _.merge(gqlResult.projects, dbResult)}}
+      const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(dbResult, 'id'))
+      return {data: {projects: _.values(merged)}}
     } else {
       return {data: gqlResult}
     }
@@ -227,7 +228,8 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
     );
 
     if (dbResult && gqlResult.projects && dbResult.length === gqlResult.projects.length) {
-      return {data: {projects: _.merge(gqlResult.projects, dbResult)}}
+      const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(dbResult, 'id'))
+      return {data: {projects: _.values(merged)}}
     } else {
       return {data: gqlResult}
     }
