@@ -1,5 +1,7 @@
+import _ from 'lodash';
 import { PoolClient } from 'pg';
 import * as db from '../../utils/db/db';
+import { Member } from '../member/Member';
 import Models from '../Models';
 const insertContent = require('./insertContent.sql');
 const updateContent = require('./updateContent.sql');
@@ -121,6 +123,7 @@ class Contents extends Models {
 				selectContentsByProjectWithTokenIdArray,
 				{tokenIdArray, project_address, _db_}
 			);
+
 			return result
 		} catch (error) {
 			throw error;
