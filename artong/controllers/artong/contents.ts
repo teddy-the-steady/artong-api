@@ -128,6 +128,18 @@ const queryTokens = async function(body: any, _db_: string[], pureQuery: string)
       return {data: {tokens: []}}
     }
 
+    const extractedOwners = gqlResult.tokens.map((token: { owner: string; }) => token.owner);
+    const memberModel = new Member({walletAddressArray: extractedOwners}, conn);
+    const memberResult = await memberModel.getMembersWithWalletAddressArray(extractedOwners);
+
+    for (let token of gqlResult.tokens) {
+      for (let member of memberResult) {
+        if (token.owner === member.wallet_address) {
+          token.owner = member
+        }
+      }
+    }
+
     const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
     const extractedProjectIds = gqlResult.tokens.map((token: { project : { id: string; } }) => token.project.id);
     const contentModel = new Contents({
@@ -135,14 +147,15 @@ const queryTokens = async function(body: any, _db_: string[], pureQuery: string)
       projectAddressArray: extractedProjectIds
     }, conn);
 
-    const dbResult = await contentModel.getTokensWithIdArray(
+    const contentResult = await contentModel.getTokensWithIdArray(
       contentModel.tokenIdArray,
       contentModel.projectAddressArray,
       _db_
     );
 
-    if (dbResult && gqlResult.tokens && dbResult.length === gqlResult.tokens.length) {
-      return {data: {tokens: _.merge(gqlResult.tokens, dbResult)}}
+    if (contentResult && gqlResult.tokens && contentResult.length === gqlResult.tokens.length) {
+      const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
+      return {data: {tokens: _.values(merged)}}
     } else {
       return {data: gqlResult}
     }
@@ -162,20 +175,33 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
       return {data: {tokens: []}}
     }
 
+    const extractedOwners = gqlResult.tokens.map((token: { owner: string; }) => token.owner);
+    const memberModel = new Member({walletAddressArray: extractedOwners}, conn);
+    const memberResult = await memberModel.getMembersWithWalletAddressArray(extractedOwners);
+
+    for (let token of gqlResult.tokens) {
+      for (let member of memberResult) {
+        if (token.owner === member.wallet_address) {
+          token.owner = member
+        }
+      }
+    }
+
     const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
     const contentModel = new Contents({
       tokenIdArray: extractedTokenIds,
       project_address: body.variables.project
     }, conn);
 
-    const dbResult = await contentModel.getTokensByProjectWithIdArray(
+    const contentResult = await contentModel.getTokensByProjectWithIdArray(
       contentModel.tokenIdArray,
       contentModel.project_address,
       _db_
     );
 
-    if (dbResult && gqlResult.tokens && dbResult.length === gqlResult.tokens.length) {
-      return {data: {tokens: _.merge(gqlResult.tokens, dbResult)}}
+    if (contentResult && gqlResult.tokens && contentResult.length === gqlResult.tokens.length) {
+      const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
+      return {data: {tokens: _.values(merged)}}
     } else {
       return {data: gqlResult}
     }
