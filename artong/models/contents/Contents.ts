@@ -5,6 +5,7 @@ import { Member } from '../member/Member';
 import Models from '../Models';
 const insertContent = require('./insertContent.sql');
 const updateContent = require('./updateContent.sql');
+const updateContentThumbnailS3keys = require('./updateContentThumbnailS3keys.sql');
 const selectContent = require('./selectContent.sql');
 const selectContentsWithTokenIdArray = require('./selectContentsWithTokenIdArray.sql');
 const selectContentsByProjectWithTokenIdArray = require('./selectContentsByProjectWithTokenIdArray.sql');
@@ -15,6 +16,7 @@ class Contents extends Models {
 	project_address?: string;
 	token_id?: number;
 	content_s3key?: string;
+	content_thumbnail_s3key?: string;
 	ipfs_url?: string;
 	name?: string;
 	description?: string;
@@ -129,6 +131,21 @@ class Contents extends Models {
 			throw error;
 		}
 	}
+
+	async updateContentThumbnailS3keys(
+		content_s3key?: string,
+		content_thumbnail_s3key?: string,
+	): Promise<Member> {
+		try {
+			const result = await db.execute(this.conn, updateContentThumbnailS3keys, {
+				content_s3key: content_s3key,
+				content_thumbnail_s3key: content_thumbnail_s3key
+			});
+			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	};
 }
 
 export {
