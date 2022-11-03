@@ -214,18 +214,18 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
 
 const patchContentThumbnailS3key = async function(body:any) {
   const conn: PoolClient = await db.getConnection();
-console.log('patchContentThumbnailS3key in?!')
+
   try {
     const contentModel = new Contents({
       content_s3key: body.content_s3key,
       content_thumbnail_s3key: body.content_thumbnail_s3key,
     }, conn);
-console.log(contentModel)
+
     const result = await contentModel.updateContentThumbnailS3keys(
       contentModel.content_s3key,
       contentModel.content_thumbnail_s3key,
     );
-console.log(result)
+
     return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
