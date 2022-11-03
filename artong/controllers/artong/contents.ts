@@ -212,6 +212,28 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
   }
 }
 
+const patchContentThumbnailS3key = async function(pathParameters:any, body:any) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const contentModel = new Contents({
+      content_s3key: body.content_s3key,
+      content_thumbnail_s3key: body.content_thumbnail_s3key,
+    }, conn);
+
+    const result = await contentModel.updateContentThumbnailS3keys(
+      contentModel.content_s3key,
+      contentModel.content_thumbnail_s3key,
+    );
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+};
+
+
 export {
 	postContent,
   uploadToNftStorage,
@@ -219,4 +241,5 @@ export {
   queryToken,
   queryTokens,
   queryTokensByProject,
+  patchContentThumbnailS3key,
 };
