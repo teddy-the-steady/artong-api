@@ -32,7 +32,7 @@ provider:
       - subnet-091d67b7e5ec421bb
 
 package:
-  individually: true
+  individually: false
   exclude:
     - node_layers/**
     - node_modules/**
@@ -159,7 +159,7 @@ functions:
         event: s3:ObjectCreated:*
         rules:
           - prefix: public/profile/
-          # - prefix: public/nft/
+          - prefix: public/nft/
         existing: true
     layers:
      - {Ref: NodeModulesLambdaLayer}
