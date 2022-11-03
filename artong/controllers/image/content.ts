@@ -34,8 +34,9 @@ const updateContentThumbnail = async function(s3: any) {
 
     await putS3Object(client, bucket, dstKey, buffer);
 
-    await axios.patch(`/members/${srcKey.split('/')[2]}/profile_thumbnail_s3key`, {
-      profile_thumbnail_s3key: dstKey
+    await axios.patch(`/nft/content_thumbnail_s3key`, {
+      content_s3key: srcKey,
+      content_thumbnail_s3key: dstKey
     });
   } catch (error) {
     controllerErrorWrapper(error);
