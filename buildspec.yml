@@ -8,4 +8,4 @@ phases:
   build:
     commands:
       - serverless create_domain
-      - node --max-old-space-size=4096 ./node_modules/.bin/serverless deploy
+      - serverless deploy
