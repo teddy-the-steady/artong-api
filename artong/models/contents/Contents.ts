@@ -138,8 +138,8 @@ class Contents extends Models {
 	): Promise<Member> {
 		try {
 			const result = await db.execute(this.conn, updateContentThumbnailS3keys, {
-				content_s3key: content_s3key,
-				content_thumbnail_s3key: content_thumbnail_s3key
+				content_s3key,
+				content_thumbnail_s3key
 			});
 			return result[0]
 		} catch (error) {
