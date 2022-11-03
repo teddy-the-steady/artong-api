@@ -5,6 +5,9 @@ phases:
       - npm install
       - npm install -g serverless
       - cd ./node_layers && npm install && cd ..
+  pre_build:
+    commands:
+      - export NODE_OPTIONS=--max_old_space_size=8192
   build:
     commands:
       - serverless create_domain
