@@ -3,6 +3,7 @@ import sharp from 'sharp';
 import { S3Client } from '@aws-sdk/client-s3';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import { getS3ObjectInBuffer, putS3Object } from '../../utils/common/commonFunc';
+import { makeDstKeyWithResizedFileName } from '.';
 
 const updateProfileThumbnail = async function(s3: any) {
   try {
@@ -41,15 +42,6 @@ const updateProfileThumbnail = async function(s3: any) {
     controllerErrorWrapper(error);
   }
 };
-
-const makeDstKeyWithResizedFileName = function(srcKey: string) {
-  const items = srcKey.split('/');
-  let fileName = items[items.length - 1];
-  fileName = 'resized-' + fileName;
-  items[items.length - 1] = fileName;
-
-  return `${items[0]}/thumbnails/${items[1]}/${items[2]}/${items[3]}`
-}
 
 export {
 	updateProfileThumbnail,
