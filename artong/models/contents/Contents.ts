@@ -135,7 +135,7 @@ class Contents extends Models {
 	async updateContentThumbnailS3keys(
 		content_s3key?: string,
 		content_thumbnail_s3key?: string,
-	): Promise<Member> {
+	): Promise<Contents> {
 		try {
 			const result = await db.execute(this.conn, updateContentThumbnailS3keys, {
 				content_s3key,
