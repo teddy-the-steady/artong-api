@@ -159,7 +159,7 @@ functions:
         event: s3:ObjectCreated:*
         rules:
           - prefix: public/profile/
-          - prefix: public/nft/
+          # - prefix: public/nft/
         existing: true
     layers:
      - {Ref: NodeModulesLambdaLayer}
