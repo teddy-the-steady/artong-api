@@ -56,7 +56,7 @@ export async function handler(event: any, context: any, callback: any) {
         else if (req.path.startsWith('/artong/v1/nft/') && req.pathParameters)
           res = await contents.patchContent(req.pathParameters, req.body);
         else if (req.path === '/artong/v1/nft/content_thumbnail_s3key' || req.path === '/artong/v1/nft/content_thumbnail_s3key/')
-          res = await contents.patchContentThumbnailS3key(req.pathParameters, req.body);
+          res = await contents.patchContentThumbnailS3key(req.body);
         break;
       default:
         console.error('METHOD undefined');
