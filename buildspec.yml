@@ -7,6 +7,8 @@ phases:
       - cd ./node_layers && npm install && cd ..
   pre_build:
     commands:
+      - node -v
+      - nvm ls
       - export NODE_OPTIONS=--max_old_space_size=8192
   build:
     commands:
