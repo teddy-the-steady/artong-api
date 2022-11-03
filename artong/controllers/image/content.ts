@@ -49,7 +49,7 @@ const makeDstKeyWithResizedFileName = function(srcKey: string) {
   fileName = 'resized-' + fileName;
   items[items.length - 1] = fileName;
 
-  return `${items[0]}/nft/${items[1]}/${items[2]}/${items[3]}`
+  return `${items[0]}/thumbnails/${items[1]}/${items[2]}/${items[3]}`
 }
 
 export {
