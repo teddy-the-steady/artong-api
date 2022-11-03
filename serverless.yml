@@ -131,6 +131,11 @@ functions:
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
+        path: artong/v1/nft/content_thumbnail_s3key
+        method: PATCH
+        cors: true
+        private: true
+     - http:
         path: artong/v1/graphql
         method: POST
         cors: true
@@ -154,6 +159,7 @@ functions:
         event: s3:ObjectCreated:*
         rules:
           - prefix: public/profile/
+          - prefix: public/nft/
         existing: true
     layers:
      - {Ref: NodeModulesLambdaLayer}

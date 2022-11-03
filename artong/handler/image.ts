@@ -1,4 +1,4 @@
-import { profile } from '../controllers/image/index';
+import { profile, content } from '../controllers/image/index';
 import { InternalServerError } from '../utils/error/errors';
 import getSecretKeys from '../utils/common/ssmKeys';
 import axios from 'axios';
@@ -24,6 +24,9 @@ export async function handler(event: any, context: any, callback: any) {
     switch (type) {
       case 'profile':
         await profile.updateProfileThumbnail(event.Records[0].s3);
+        break;
+      case 'nft':
+        await content.updateContentThumbnail(event.Records[0].s3);
         break;
       default:
         break;
