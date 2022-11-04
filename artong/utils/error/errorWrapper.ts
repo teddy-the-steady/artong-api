@@ -1,4 +1,4 @@
-import { BadRequest, InternalServerError, Forbidden } from './errors';
+import { BadRequest, InternalServerError, Forbidden, Unauthorized } from './errors';
 import { DBError, UniqueConstraint, UnknownError, ValidationError, DBSyntaxError } from './errorCodes';
 
 const controllerErrorWrapper = function(error: any) {
@@ -14,6 +14,8 @@ const controllerErrorWrapper = function(error: any) {
 		throw new InternalServerError(error.errorMessage, error.errorCode);
 	} else if (error instanceof Forbidden) {
 		throw new Forbidden(error.errorMessage, error.errorCode);
+	}	else if (error instanceof Unauthorized) {
+		throw new Unauthorized(error.errorMessage, error.errorCode);
 	} else {
 		throw new InternalServerError(error, UnknownError.code);
 	}

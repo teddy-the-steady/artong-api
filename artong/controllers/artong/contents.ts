@@ -2,13 +2,16 @@ import { Contents, Member } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import getSecretKeys from '../../utils/common/ssmKeys';
-import { PoolClient } from 'pg';
 import { getS3ObjectInBuffer, getS3ObjectHead } from '../../utils/common/commonFunc';
 import { graphqlRequest } from '../../utils/common/graphqlUtil';
+import { Unauthorized } from '../../utils/error/errors';
+import { NoPermission } from '../../utils/error/errorCodes';
+import { PoolClient } from 'pg';
 import { S3Client } from '@aws-sdk/client-s3';
 import { NFTStorage } from 'nft.storage';
 import { File } from '@web-std/file';
 import _ from 'lodash';
+
 
 const postContent = async function(body: any, member: Member) {
   const conn: PoolClient = await db.getConnection();
@@ -228,25 +231,54 @@ const patchContentThumbnailS3key = async function(body:any) {
   }
 };
 
-/*
-  1. voucher, is_redeemed:false 조회
-  2. minted tokens 조회
-  3. 둘의 비율은? 5:5
-  4. 둘을 섞는게 맞을까? 쪼개서 전송?
-  5. 실시간으로 늘어날 수가 있으니까 둘을 따로 조회해서 FE는 뿌려주기만?
-    일단 api를 쪼개는게 맞는듯?!?! 오케이.. 제공은 서버몫, 보여주는건 프론트몫
-  6. 오너가 비공개처리 가능하도록
-*/
-
-const getMintReadyContents = async function(queryStringParameters: any) {
+const getMintReadyContentsInProject = async function(pathParameters: any, queryStringParameters: any) {
   const conn: PoolClient = await db.getConnection();
 
   try {
+    // TODO] query policy on every req for now. BEST is to listen event in our server and to syncronize with db
+    const policyResult = await graphqlRequest({
+      query: 'query Project($id: String) { project(id: $id) { policy } }',
+      variables: {id: pathParameters.id}
+    });
+    if (policyResult.project.policy === 1) {
+      throw new Unauthorized(NoPermission.message, NoPermission.code);
+    }
+
     const contentModel = new Contents({
-      project_address: queryStringParameters.project_address,
+      project_address: pathParameters.id,
     }, conn);
 
-    const result = await contentModel.getContents(
+    const result = await contentModel.getMintReadyContents(
+      contentModel.project_address,
+      queryStringParameters.start_num,
+      queryStringParameters.count_num
+    );
+
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+};
+
+const getTobeApprovedContentsInProject = async function(pathParameters: any, queryStringParameters: any, member: Member) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const ownerResult = await graphqlRequest({
+      query: 'query Project($id: String) { project(id: $id) { owner } }',
+      variables: {id: pathParameters.id}
+    });
+    if (ownerResult.project.owner !== member.wallet_address) {
+      throw new Unauthorized(NoPermission.message, NoPermission.code);
+    }
+
+    const contentModel = new Contents({
+      project_address: pathParameters.id,
+    }, conn);
+
+    const result = await contentModel.getMintReadyContents(
       contentModel.project_address,
       queryStringParameters.start_num,
       queryStringParameters.count_num
@@ -268,5 +300,6 @@ export {
   queryTokens,
   queryTokensByProject,
   patchContentThumbnailS3key,
-  getMintReadyContents,
+  getMintReadyContentsInProject,
+  getTobeApprovedContentsInProject,
 };

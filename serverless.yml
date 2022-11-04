@@ -116,9 +116,14 @@ functions:
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
-        path: artong/v1/contents/mint_ready
+        path: artong/v1/projects/{id}/contents/mint_ready
         method: GET
         cors: true
+     - http:
+        path: artong/v1/projects/{id}/contents/tobe_approved
+        method: GET
+        cors: true
+        authorizer: ${self:custom.authorizer}
      - http:
         path: artong/v1/contents
         method: POST
