@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import { PoolClient } from 'pg';
 import * as db from '../../utils/db/db';
-import { Member } from '../member/Member';
 import Models from '../Models';
 const insertContent = require('./insertContent.sql');
 const updateContent = require('./updateContent.sql');
@@ -26,9 +25,6 @@ class Contents extends Models {
 
 	created_at?: Date;
 	updated_at?: Date;
-
-	tokenIdArray?: Array<number>;
-	projectAddressArray?: Array<string>;
 
 	constructor(data: Partial<Contents> = {}, conn: PoolClient) {
 		super(conn);
@@ -120,7 +116,7 @@ class Contents extends Models {
 				const idx = _db_.indexOf('voucher')
 				if (idx > -1) _db_.splice(idx, 1)
 			}
-
+console.log(project_address)
 			const result = await db.execute(
 				this.conn,
 				selectContentsByProjectWithTokenIdArray,
