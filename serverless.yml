@@ -116,22 +116,22 @@ functions:
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
-        path: artong/v1/nft
+        path: artong/v1/contents
         method: POST
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
-        path: artong/v1/nft/storage
+        path: artong/v1/contents/storage
         method: POST
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
-        path: artong/v1/nft/{id}
+        path: artong/v1/contents/{id}
         method: PATCH
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
-        path: artong/v1/nft/content_thumbnail_s3key
+        path: artong/v1/contents/content_thumbnail_s3key
         method: PATCH
         cors: true
         private: true
