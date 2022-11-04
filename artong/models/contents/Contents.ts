@@ -22,6 +22,7 @@ class Contents extends Models {
 	description?: string;
 	voucher?: object;
 	is_redeemed?: boolean;
+	status?: string;
 
 	created_at?: Date;
 	updated_at?: Date;
@@ -144,7 +145,7 @@ console.log(project_address)
 		}
 	}
 
-	async getContents(
+	async getMintReadyContents(
 		project_address?: string,
 		start_num?: number,
 		count_num?: number
