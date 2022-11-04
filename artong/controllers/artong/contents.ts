@@ -244,6 +244,28 @@ const patchContentThumbnailS3key = async function(body:any) {
   6. 오너가 비공개처리 가능하도록
 */
 
+const getMintReadyContents = async function(queryStringParameters: any) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const contentModel = new Contents({
+      project_address: queryStringParameters.project_address,
+    }, conn);
+
+    const result = await contentModel.getContents(
+      contentModel.project_address,
+      queryStringParameters.start_num,
+      queryStringParameters.count_num
+    );
+
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+};
+
 export {
 	postContent,
   uploadToNftStorage,
@@ -252,4 +274,5 @@ export {
   queryTokens,
   queryTokensByProject,
   patchContentThumbnailS3key,
+  getMintReadyContents,
 };

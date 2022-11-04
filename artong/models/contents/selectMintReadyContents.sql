@@ -8,10 +8,6 @@ SELECT
   content_s3key,
   content_thumbnail_s3key,
   ipfs_url,
-  (CASE
-    WHEN is_redeemed = true THEN null
-    ELSE voucher
-  END) AS voucher,
   is_redeemed,
   created_at,
   updated_at
@@ -19,4 +15,7 @@ FROM
   contents
 WHERE 1=1
   AND project_address = ${project_address}
-  AND token_id = ${token_id}
+  AND is_redeemed = FALSE
+ORDER BY created_at DESC
+LIMIT ${count_num}
+OFFSET ${start_num}
