@@ -94,8 +94,8 @@ const queryToken = async function(body: any, _db_: string[], pureQuery: string) 
 
   try {
     const contentsModel = new Contents({
-      project_address: body.variables.project_address,
-      token_id: body.variables.token_id
+      project_address: body.db.project_address,
+      token_id: body.db.token_id
     }, conn);
 
     const [dbResult, gqlResult] = await Promise.all([
@@ -234,6 +234,15 @@ const patchContentThumbnailS3key = async function(body:any) {
   }
 };
 
+/*
+  1. voucher, is_redeemed:false 조회
+  2. minted tokens 조회
+  3. 둘의 비율은? 5:5
+  4. 둘을 섞는게 맞을까? 쪼개서 전송?
+  5. 실시간으로 늘어날 수가 있으니까 둘을 따로 조회해서 FE는 뿌려주기만?
+    일단 api를 쪼개는게 맞는듯?!?! 오케이.. 제공은 서버몫, 보여주는건 프론트몫
+  6. 오너가 비공개처리 가능하도록
+*/
 
 export {
 	postContent,

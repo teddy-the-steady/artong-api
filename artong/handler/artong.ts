@@ -39,9 +39,9 @@ export async function handler(event: any, context: any, callback: any) {
           res = await reactions.postContentReaction(req.pathParameters, req.body, req.member);
         else if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
           res = await projects.postProject(req.body, req.member);
-        else if (req.path === '/artong/v1/nft' || req.path === '/artong/v1/nft/')
+        else if (req.path === '/artong/v1/contents' || req.path === '/artong/v1/contents/')
           res = await contents.postContent(req.body, req.member);
-        else if (req.path === '/artong/v1/nft/storage' || req.path === '/artong/v1/nft/storage/')
+        else if (req.path === '/artong/v1/contents/storage' || req.path === '/artong/v1/contents/storage/')
           res = await contents.uploadToNftStorage(req.body);
         else if (req.path === '/artong/v1/graphql' || req.path === '/artong/v1/graphql/')
           res = await graphql(req.body, req.member);
@@ -53,9 +53,9 @@ export async function handler(event: any, context: any, callback: any) {
           res = await member.patchMemberProfileThumbnailS3key(req.pathParameters, req.body);
         else if (req.path.startsWith('/artong/v1/projects/') && req.pathParameters)
           res = await projects.patchProject(req.pathParameters, req.body, req.member);
-        else if (req.path.startsWith('/artong/v1/nft/') && req.pathParameters)
+        else if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters)
           res = await contents.patchContent(req.pathParameters, req.body);
-        else if (req.path === '/artong/v1/nft/content_thumbnail_s3key' || req.path === '/artong/v1/nft/content_thumbnail_s3key/')
+        else if (req.path === '/artong/v1/contents/content_thumbnail_s3key' || req.path === '/artong/v1/contents/content_thumbnail_s3key/')
           res = await contents.patchContentThumbnailS3key(req.body);
         break;
       default:
