@@ -35,7 +35,7 @@ const updateContentThumbnail = async function(s3: any) {
 
     await putS3Object(client, bucket, dstKey, buffer);
 
-    await axios.patch(`/nft/content_thumbnail_s3key`, {
+    await axios.patch(`/contents/content_thumbnail_s3key`, {
       content_s3key: srcKey,
       content_thumbnail_s3key: dstKey
     });
