@@ -39,7 +39,6 @@ class Member extends Models implements MemberGroups {
 	updated_at?: Date;
 
 	memberGroups?: string[];
-	walletAddressArray?: Array<string>;
 
 	constructor(data: Partial<Member> = {}, conn: PoolClient) {
 		super(conn);
