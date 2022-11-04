@@ -10,12 +10,14 @@ SELECT
   ipfs_url,
   is_redeemed,
   created_at,
-  updated_at
+  updated_at,
+  COUNT(*) OVER() AS total
 FROM
   contents
 WHERE 1=1
   AND project_address = ${project_address}
   AND is_redeemed = FALSE
+  AND (status != 'BLOCKED' OR status IS NULL)
 ORDER BY created_at DESC
 LIMIT ${count_num}
 OFFSET ${start_num}
