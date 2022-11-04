@@ -129,7 +129,7 @@ const queryTokens = async function(body: any, _db_: string[], pureQuery: string)
     }
 
     const extractedOwners = gqlResult.tokens.map((token: { owner: string; }) => token.owner);
-    const memberModel = new Member({walletAddressArray: extractedOwners}, conn);
+    const memberModel = new Member({}, conn);
     const memberResult = await memberModel.getMembersWithWalletAddressArray(extractedOwners);
 
     for (let token of gqlResult.tokens) {
@@ -140,16 +140,13 @@ const queryTokens = async function(body: any, _db_: string[], pureQuery: string)
       }
     }
 
+    const contentModel = new Contents({}, conn);
     const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
     const extractedProjectIds = gqlResult.tokens.map((token: { project : { id: string; } }) => token.project.id);
-    const contentModel = new Contents({
-      tokenIdArray: extractedTokenIds,
-      projectAddressArray: extractedProjectIds
-    }, conn);
 
     const contentResult = await contentModel.getTokensWithIdArray(
-      contentModel.tokenIdArray,
-      contentModel.projectAddressArray,
+      extractedTokenIds,
+      extractedProjectIds,
       _db_
     );
 
@@ -176,7 +173,7 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
     }
 
     const extractedOwners = gqlResult.tokens.map((token: { owner: string; }) => token.owner);
-    const memberModel = new Member({walletAddressArray: extractedOwners}, conn);
+    const memberModel = new Member({}, conn);
     const memberResult = await memberModel.getMembersWithWalletAddressArray(extractedOwners);
 
     for (let token of gqlResult.tokens) {
@@ -187,15 +184,12 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
       }
     }
 
+    const contentModel = new Contents({}, conn);
     const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
-    const contentModel = new Contents({
-      tokenIdArray: extractedTokenIds,
-      project_address: body.variables.project
-    }, conn);
 
     const contentResult = await contentModel.getTokensByProjectWithIdArray(
-      contentModel.tokenIdArray,
-      contentModel.project_address,
+      extractedTokenIds,
+      body.variables.project,
       _db_
     );
 

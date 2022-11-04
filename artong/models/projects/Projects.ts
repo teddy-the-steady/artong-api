@@ -25,9 +25,6 @@ class Projects extends Models {
 	created_at?: Date;
 	updated_at?: Date;
 
-	policy?: number; // on-chain data
-	addressArray?: Array<string>;
-
 	constructor(data: Partial<Projects> = {}, conn: PoolClient) {
 		super(conn);
 		Object.assign(this, data);
