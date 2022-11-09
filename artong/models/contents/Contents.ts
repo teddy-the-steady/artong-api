@@ -9,6 +9,7 @@ const selectContent = require('./selectContent.sql');
 const selectMintReadyContents = require('./selectMintReadyContents.sql');
 const selectContentsWithTokenIdArray = require('./selectContentsWithTokenIdArray.sql');
 const selectContentsByProjectWithTokenIdArray = require('./selectContentsByProjectWithTokenIdArray.sql');
+const selectContentVoucherById = require('./selectContentVoucherById.sql');
 
 class Contents extends Models {
 	id?: number;
@@ -117,7 +118,7 @@ class Contents extends Models {
 				const idx = _db_.indexOf('voucher')
 				if (idx > -1) _db_.splice(idx, 1)
 			}
-console.log(project_address)
+
 			const result = await db.execute(
 				this.conn,
 				selectContentsByProjectWithTokenIdArray,
@@ -157,6 +158,17 @@ console.log(project_address)
 				count_num: count_num
 			});
 			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getContentVoucherById(id?: number): Promise<Contents> {
+		try {
+			const result = await db.execute(this.conn, selectContentVoucherById, {
+				id: id,
+			});
+			return result[0]
 		} catch (error) {
 			throw error;
 		}
