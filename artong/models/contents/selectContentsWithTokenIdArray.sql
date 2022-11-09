@@ -1,13 +1,8 @@
 SELECT
-  CONCAT(project_address,token_id) AS id,
 {{#each _db_}}
-    {{this}},
+  {{this}},
 {{/each}}
-  (SELECT
-    COUNT(*)::int
-  FROM contents
-  WHERE token_id IS NOT NULL)
-  AS total
+  CONCAT(project_address,token_id) AS id
 FROM
   contents
 WHERE 1=1
