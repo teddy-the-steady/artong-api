@@ -153,7 +153,7 @@ const queryTokens = async function(body: any, _db_: string[], pureQuery: string)
       _db_
     );
 
-    if (contentResult && gqlResult.tokens && contentResult.length === gqlResult.tokens.length) {
+    if (contentResult && gqlResult.tokens) {
       const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
       return {data: {tokens: _.values(merged)}}
     } else {
@@ -196,7 +196,7 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
       _db_
     );
 
-    if (contentResult && gqlResult.tokens && contentResult.length === gqlResult.tokens.length) {
+    if (contentResult && gqlResult.tokens) {
       const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
       return {data: {tokens: _.values(merged)}}
     } else {
