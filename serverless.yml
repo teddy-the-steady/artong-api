@@ -125,6 +125,11 @@ functions:
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
+        path: artong/v1/contents/{id}/voucher
+        method: GET
+        cors: true
+        authorizer: ${self:custom.authorizer}
+     - http:
         path: artong/v1/contents
         method: POST
         cors: true
