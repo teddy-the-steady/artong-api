@@ -292,6 +292,26 @@ const getTobeApprovedContentsInProject = async function(pathParameters: any, que
   }
 };
 
+const getContentVoucherById = async function(pathParameters: any) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const contentModel = new Contents({
+      id: pathParameters.id
+    }, conn)
+
+    const result = await contentModel.getContentVoucherById(
+      contentModel.id
+    );
+
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+};
+
 export {
 	postContent,
   uploadToNftStorage,
@@ -302,4 +322,5 @@ export {
   patchContentThumbnailS3key,
   getMintReadyContentsInProject,
   getTobeApprovedContentsInProject,
+  getContentVoucherById,
 };
