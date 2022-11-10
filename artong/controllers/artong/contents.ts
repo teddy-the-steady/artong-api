@@ -312,6 +312,49 @@ const getContentVoucherById = async function(pathParameters: any) {
   }
 };
 
+const queryTokensByCreator = async function(body: any, _db_: string[], pureQuery: string) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
+    if (gqlResult.tokens.length === 0) {
+      return {data: {tokens: []}}
+    }
+
+    const extractedOwners = gqlResult.tokens.map((token: { owner: string; }) => token.owner);
+    const memberModel = new Member({}, conn);
+    const memberResult = await memberModel.getMembersWithWalletAddressArray(extractedOwners);
+
+    for (let token of gqlResult.tokens) {
+      for (let member of memberResult) {
+        if (token.owner === member.wallet_address) {
+          token.owner = member
+        }
+      }
+    }
+
+    const contentModel = new Contents({}, conn);
+    const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
+console.log(body.variables.creator)
+    const contentResult = await contentModel.getTokensByCreatorWithIdArray(
+      extractedTokenIds,
+      body.variables.creator,
+      _db_
+    );
+
+    if (contentResult && gqlResult.tokens) {
+      const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
+      return {data: {tokens: _.values(merged)}}
+    } else {
+      return {data: gqlResult}
+    }
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
 	postContent,
   uploadToNftStorage,
@@ -323,4 +366,5 @@ export {
   getMintReadyContentsInProject,
   getTobeApprovedContentsInProject,
   getContentVoucherById,
+  queryTokensByCreator,
 };

@@ -9,6 +9,7 @@ const selectContent = require('./selectContent.sql');
 const selectMintReadyContents = require('./selectMintReadyContents.sql');
 const selectContentsWithTokenIdArray = require('./selectContentsWithTokenIdArray.sql');
 const selectContentsByProjectWithTokenIdArray = require('./selectContentsByProjectWithTokenIdArray.sql');
+const selectContentsByCreatorWithTokenIdArray = require('./selectContentsByCreatorWithTokenIdArray.sql');
 const selectContentVoucherById = require('./selectContentVoucherById.sql');
 
 class Contents extends Models {
@@ -169,6 +170,29 @@ class Contents extends Models {
 				id: id,
 			});
 			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getTokensByCreatorWithIdArray(
+		tokenIdArray?: Array<number>,
+		creator?: string,
+		_db_?: string[]
+	): Promise<Contents[]> {
+		try {
+			if (_db_) {
+				const idx = _db_.indexOf('voucher')
+				if (idx > -1) _db_.splice(idx, 1)
+			}
+console.log('in?!', creator)
+			const result = await db.execute(
+				this.conn,
+				selectContentsByCreatorWithTokenIdArray,
+				{tokenIdArray, creator, _db_}
+			);
+
+			return result
 		} catch (error) {
 			throw error;
 		}
