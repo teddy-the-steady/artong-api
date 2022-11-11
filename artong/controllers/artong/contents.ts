@@ -131,17 +131,8 @@ const queryTokens = async function(body: any, _db_: string[], pureQuery: string)
       return {data: {tokens: []}}
     }
 
-    const extractedOwners = gqlResult.tokens.map((token: { owner: string; }) => token.owner);
     const memberModel = new Member({}, conn);
-    const memberResult = await memberModel.getMembersWithWalletAddressArray(extractedOwners);
-
-    for (let token of gqlResult.tokens) {
-      for (let member of memberResult) {
-        if (token.owner === member.wallet_address) {
-          token.owner = member
-        }
-      }
-    }
+    gqlResult.tokens = await memberModel.setOwnerFromMemberListTo(gqlResult.tokens);
 
     const contentModel = new Contents({}, conn);
     const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
@@ -175,17 +166,8 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
       return {data: {tokens: []}}
     }
 
-    const extractedOwners = gqlResult.tokens.map((token: { owner: string; }) => token.owner);
     const memberModel = new Member({}, conn);
-    const memberResult = await memberModel.getMembersWithWalletAddressArray(extractedOwners);
-
-    for (let token of gqlResult.tokens) {
-      for (let member of memberResult) {
-        if (token.owner === member.wallet_address) {
-          token.owner = member
-        }
-      }
-    }
+    gqlResult.tokens = await memberModel.setOwnerFromMemberListTo(gqlResult.tokens);
 
     const contentModel = new Contents({}, conn);
     const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
@@ -321,21 +303,12 @@ const queryTokensByCreator = async function(body: any, _db_: string[], pureQuery
       return {data: {tokens: []}}
     }
 
-    const extractedOwners = gqlResult.tokens.map((token: { owner: string; }) => token.owner);
     const memberModel = new Member({}, conn);
-    const memberResult = await memberModel.getMembersWithWalletAddressArray(extractedOwners);
-
-    for (let token of gqlResult.tokens) {
-      for (let member of memberResult) {
-        if (token.owner === member.wallet_address) {
-          token.owner = member
-        }
-      }
-    }
+    gqlResult.tokens = await memberModel.setOwnerFromMemberListTo(gqlResult.tokens);
 
     const contentModel = new Contents({}, conn);
     const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
-console.log(body.variables.creator)
+
     const contentResult = await contentModel.getTokensByCreatorWithIdArray(
       extractedTokenIds,
       body.variables.creator,

@@ -118,6 +118,27 @@ class Member extends Models implements MemberGroups {
 			throw error;
 		}
 	};
+
+	async setOwnerFromMemberListTo(
+		objList: {owner: string}[]
+	) {
+		try {
+			const extractedOwners = objList.map((token: { owner: string; }) => token.owner);
+			const memberList = await this.getMembersWithWalletAddressArray(extractedOwners);
+
+			for (let obj of objList) {
+				for (let member of memberList) {
+					if (obj.owner === member.wallet_address) {
+						(obj.owner as any) = member;
+					}
+				}
+			}
+
+			return objList
+		} catch (error) {
+			throw error;
+		}
+	}
 }
 
 export {
