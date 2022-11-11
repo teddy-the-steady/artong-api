@@ -185,7 +185,7 @@ class Contents extends Models {
 				const idx = _db_.indexOf('voucher')
 				if (idx > -1) _db_.splice(idx, 1)
 			}
-console.log('in?!', creator)
+
 			const result = await db.execute(
 				this.conn,
 				selectContentsByCreatorWithTokenIdArray,
