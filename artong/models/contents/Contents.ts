@@ -88,8 +88,7 @@ class Contents extends Models {
 	}
 
 	async getTokensWithIdArray(
-		tokenIdArray?: Array<number>,
-		projectAddressArray?: Array<string>,
+		idArray?: Array<number>,
 		_db_?: string[]
 	): Promise<Contents[]> {
 		try {
@@ -101,7 +100,7 @@ class Contents extends Models {
 			const result = await db.execute(
 				this.conn,
 				selectContentsWithTokenIdArray,
-				{tokenIdArray, projectAddressArray, _db_}
+				{idArray, _db_}
 			);
 			return result
 		} catch (error) {
