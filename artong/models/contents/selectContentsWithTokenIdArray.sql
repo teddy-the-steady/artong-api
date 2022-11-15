@@ -6,14 +6,8 @@ SELECT
 FROM
   contents
 WHERE 1=1
-  AND token_id IN (
-    {{#each tokenIdArray}}
-      '{{this}}'
-      {{#unless @last}},{{/unless}}
-    {{/each}}
-  )
-  AND project_address IN (
-    {{#each projectAddressArray}}
+  AND CONCAT(project_address,token_id) IN (
+    {{#each idArray}}
       '{{this}}'
       {{#unless @last}},{{/unless}}
     {{/each}}

@@ -135,12 +135,10 @@ const queryTokens = async function(body: any, _db_: string[], pureQuery: string)
     gqlResult.tokens = await memberModel.setOwnerFromMemberListTo(gqlResult.tokens);
 
     const contentModel = new Contents({}, conn);
-    const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
-    const extractedProjectIds = gqlResult.tokens.map((token: { project : { id: string; } }) => token.project.id);
+    const extractedIds = gqlResult.tokens.map((token: { id: string; }) => token.id);
 
     const contentResult = await contentModel.getTokensWithIdArray(
-      extractedTokenIds,
-      extractedProjectIds,
+      extractedIds,
       _db_
     );
 
@@ -341,6 +339,39 @@ const queryTokensByCreator = async function(body: any, _db_: string[], pureQuery
   }
 }
 
+const queryTokensByOwner = async function(body: any, _db_: string[], pureQuery: string) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
+    if (gqlResult.tokens.length === 0) {
+      return {data: {tokens: []}}
+    }
+
+    const memberModel = new Member({}, conn);
+    gqlResult.tokens = await memberModel.setOwnerFromMemberListTo(gqlResult.tokens);
+
+    const contentModel = new Contents({}, conn);
+    const extractedIds = gqlResult.tokens.map((token: { id: string; }) => token.id);
+
+    const contentResult = await contentModel.getTokensWithIdArray(
+      extractedIds,
+      _db_
+    );
+
+    if (contentResult && gqlResult.tokens) {
+      const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
+      return {data: {tokens: _.values(merged)}}
+    } else {
+      return {data: gqlResult}
+    }
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
 	postContent,
   uploadToNftStorage,
@@ -353,4 +384,5 @@ export {
   getTobeApprovedContentsInProject,
   getContentVoucherById,
   queryTokensByCreator,
+  queryTokensByOwner,
 };
