@@ -123,7 +123,6 @@ functions:
         path: artong/v1/projects/{id}/contents/tobe_approved
         method: GET
         cors: true
-        authorizer: ${self:custom.authorizer}
      - http:
         path: artong/v1/contents/{id}/voucher
         method: GET
