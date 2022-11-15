@@ -31,7 +31,7 @@ export async function handler(event: any, context: any, callback: any) {
           if (req.path.includes('/contents/mint_ready'))
             res = await contents.getMintReadyContentsInProject(req.pathParameters, req.queryStringParameters);
           if (req.path.includes('/contents/tobe_approved'))
-            res = await contents.getTobeApprovedContentsInProject(req.pathParameters, req.queryStringParameters, req.member);
+            res = await contents.getTobeApprovedContentsInProject(req.pathParameters, req.queryStringParameters);
         }
         else if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
           res = await projects.getProjects(req.queryStringParameters);
