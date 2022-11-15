@@ -29,6 +29,8 @@ const graphql = async function(body: any, member: Member) {
         break;
       case 'TokensByCreator': result = await contents.queryTokensByCreator(body, _db_, pureQuery);
         break;
+      case 'TokensByOwner': result = await contents.queryTokensByOwner(body, _db_, pureQuery);
+        break;
       default:
         throw new BadRequest('query name undefined', null);
     }
