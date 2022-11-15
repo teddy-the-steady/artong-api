@@ -244,18 +244,10 @@ const getMintReadyContentsInProject = async function(pathParameters: any, queryS
   }
 };
 
-const getTobeApprovedContentsInProject = async function(pathParameters: any, queryStringParameters: any, member: Member) {
+const getTobeApprovedContentsInProject = async function(pathParameters: any, queryStringParameters: any) {
   const conn: PoolClient = await db.getConnection();
 
   try {
-    const ownerResult = await graphqlRequest({
-      query: 'query Project($id: String) { project(id: $id) { owner } }',
-      variables: {id: pathParameters.id}
-    });
-    if (ownerResult.project.owner !== member.wallet_address) {
-      throw new Unauthorized(NoPermission.message, NoPermission.code);
-    }
-
     const contentModel = new Contents({
       project_address: pathParameters.id,
     }, conn);
