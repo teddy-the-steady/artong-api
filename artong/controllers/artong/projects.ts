@@ -39,7 +39,7 @@ const postProject = async function(body: any, member: Member) {
       member_id: member.id,
       name: body.name,
       symbol: body.symbol,
-      status: body.status
+      status: body.status || 'PENDING'
     }, conn);
 
     const result = await projectModel.createProject(

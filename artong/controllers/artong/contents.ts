@@ -234,6 +234,27 @@ const getMintReadyContentsInProject = async function(pathParameters: any, queryS
       queryStringParameters.count_num
     );
 
+    for (let i = 0; i < result.length; i++) {
+      (result[i] as any).owner = {
+        id: result[i].member_id,
+        username: (result[i] as any).username,
+        wallet_address: (result[i] as any).wallet_address,
+        email: (result[i] as any).email,
+        profile_s3key: (result[i] as any).profile_s3key,
+        profile_thumbnail_s3key: (result[i] as any).profile_thumbnail_s3key,
+        created_at: (result[i] as any).member_created_at,
+        updated_at: (result[i] as any).member_updated_at
+      }
+
+      delete (result[i] as any).username
+      delete (result[i] as any).wallet_address
+      delete (result[i] as any).email
+      delete (result[i] as any).profile_s3key
+      delete (result[i] as any).profile_thumbnail_s3key
+      delete (result[i] as any).member_created_at
+      delete (result[i] as any).member_updated_at
+    }
+
     return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
