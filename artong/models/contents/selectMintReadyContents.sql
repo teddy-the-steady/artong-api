@@ -27,5 +27,5 @@ WHERE 1=1
   AND c.is_redeemed = FALSE
   AND (c.status != 'BLOCKED' OR c.status IS NULL)
 ORDER BY c.created_at DESC
-LIMIT 5
+LIMIT ${count_num}
 OFFSET ${start_num}
