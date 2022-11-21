@@ -1,6 +1,8 @@
 SELECT
     p.project_s3key,
+    p.project_thumbnail_s3key,
     p.background_s3key,
+    p.background_thumbnail_s3key,
     p.member_id,
     p.address,
     p.name,
