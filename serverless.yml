@@ -92,11 +92,6 @@ functions:
         cors: true
         private: true
      - http:
-        path: artong/v1/contents/{id}/reactions
-        method: POST
-        cors: true
-        authorizer: ${self:custom.authorizer}
-     - http:
         path: artong/v1/projects
         method: GET
         cors: true
@@ -148,6 +143,11 @@ functions:
         method: PATCH
         cors: true
         private: true
+     - http:
+        path: artong/v1/contents/{id}/reactions
+        method: POST
+        cors: true
+        authorizer: ${self:custom.authorizer}
      - http:
         path: artong/v1/graphql
         method: POST
