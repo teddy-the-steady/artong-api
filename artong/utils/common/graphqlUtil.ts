@@ -3,7 +3,7 @@ import { BadRequest } from '../error/errors';
 
 const graphqlRequest = async function(body: any) {
   const result = await axios({
-    url: '/query/36284/artong-test/v0.0.16',
+    url: '/query/36284/artong-test/v0.0.17',
     baseURL: 'https://api.studio.thegraph.com',
     method: 'POST',
     data: body
