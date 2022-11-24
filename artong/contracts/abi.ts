@@ -171,6 +171,12 @@ export const MARKETPLACE_ABI = [
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "offerId",
+        "type": "uint256"
+      },
+      {
         "indexed": true,
         "internalType": "address",
         "name": "nft",
@@ -195,6 +201,12 @@ export const MARKETPLACE_ABI = [
   {
     "anonymous": false,
     "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "offerId",
+        "type": "uint256"
+      },
       {
         "indexed": true,
         "internalType": "address",
