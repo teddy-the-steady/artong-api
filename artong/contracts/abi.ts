@@ -558,6 +558,19 @@ export const MARKETPLACE_ABI = [
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "offerId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -577,6 +590,11 @@ export const MARKETPLACE_ABI = [
     ],
     "name": "offers",
     "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "offerId",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "price",
@@ -768,6 +786,11 @@ export const MARKETPLACE_ABI = [
     ],
     "name": "userOffers",
     "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "offerId",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "price",
