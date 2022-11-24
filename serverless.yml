@@ -66,7 +66,7 @@ custom:
 functions:
   artong:
     handler: artong/handler/artong.handler
-    timeout: 15
+    timeout: 30
     events:
      - http:
         path: artong/v1/members
