@@ -26,7 +26,7 @@ const updateContentThumbnail = async function(s3: any) {
     const client = new S3Client({ region: 'ap-northeast-2' });
     const image = await getS3ObjectInBuffer(client, bucket, srcKey);
 
-    const width = 200;
+    const width = 500;
 
     const buffer = await sharp(image)
       .resize(width)
