@@ -87,6 +87,11 @@ functions:
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
+        path: artong/v1/members/{id}
+        method: PATCH
+        cors: true
+        authorizer: ${self:custom.authorizer}
+     - http:
         path: artong/v1/members/{id}/profile_thumbnail_s3key
         method: PATCH
         cors: true
