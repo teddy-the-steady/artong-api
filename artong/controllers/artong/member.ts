@@ -75,7 +75,7 @@ const postMember = async function(body: any) {
   }
 };
 
-const patchMemberProfileS3key = async function(body:any, member: Member) {
+const patchMemberProfileS3key = async function(body: any, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -96,7 +96,7 @@ const patchMemberProfileS3key = async function(body:any, member: Member) {
   }
 };
 
-const patchMemberProfileThumbnailS3key = async function(pathParameters:any, body:any) {
+const patchMemberProfileThumbnailS3key = async function(pathParameters: any, body: any) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -118,10 +118,34 @@ const patchMemberProfileThumbnailS3key = async function(pathParameters:any, body
   }
 };
 
+const patchMember = async function(body: any, pathParameters: any, member: Member) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const memberModel = new Member({
+      id: pathParameters.id,
+      username: body.username,
+      introduction: body. introduction,
+    }, conn);
+
+    const result = await memberModel.updateMember(
+      memberModel.id,
+      memberModel.username,
+      memberModel.introduction,
+    );
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
   getMember,
   getMembers,
 	postMember,
   patchMemberProfileS3key,
   patchMemberProfileThumbnailS3key,
+  patchMember,
 };

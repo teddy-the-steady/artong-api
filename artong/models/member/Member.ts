@@ -5,6 +5,7 @@ const selectMembers = require('./selectMembers.sql');
 const insertMember = require('./insertMember.sql');
 const updateMemberProfileS3keys = require('./updateMemberProfileS3keys.sql');
 const selectMembersWithWalletAddressArray = require('./selectMembersWithWalletAddressArray.sql');
+const updateMember = require('./updateMember.sql');
 
 import {
 	IsEmail,
@@ -135,6 +136,23 @@ class Member extends Models implements MemberGroups {
 			}
 
 			return objList
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async updateMember(
+		id?: number,
+		username?: string,
+		introduction?: string,
+	) {
+		try {
+			const result = await db.execute(this.conn, updateMember, {
+				id: id,
+				username: username,
+				introduction: introduction,
+			});
+			return result[0]
 		} catch (error) {
 			throw error;
 		}
