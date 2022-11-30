@@ -6,6 +6,7 @@ const insertMember = require('./insertMember.sql');
 const updateMemberProfileS3keys = require('./updateMemberProfileS3keys.sql');
 const selectMembersWithWalletAddressArray = require('./selectMembersWithWalletAddressArray.sql');
 const updateMember = require('./updateMember.sql');
+const selectMembersLikeName = require('./selectMembersLikeName.sql');
 
 import {
 	IsEmail,
@@ -157,6 +158,19 @@ class Member extends Models implements MemberGroups {
 			throw error;
 		}
 	}
+
+	async searchMembers(
+		username?: string,
+	): Promise<Member[]> {
+		try {
+			const result = await db.execute(this.conn, selectMembersLikeName, {
+				username: username,
+			});
+			return result
+		} catch (error) {
+			throw error;
+		}
+	};
 }
 
 export {
