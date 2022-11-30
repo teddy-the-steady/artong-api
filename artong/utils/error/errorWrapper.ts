@@ -1,5 +1,5 @@
 import { BadRequest, InternalServerError, Forbidden, Unauthorized } from './errors';
-import { DBError, UniqueConstraint, UnknownError, ValidationError, DBSyntaxError } from './errorCodes';
+import { DBError, UniqueValueDuplicated, UnknownError, DBSyntaxError } from './errorCodes';
 
 const controllerErrorWrapper = function(error: any) {
 	console.error(error)
@@ -8,7 +8,6 @@ const controllerErrorWrapper = function(error: any) {
 	} else if (error instanceof InternalServerError) {
 		switch (error.errorCode) {
 			case DBError.code:
-				if (error.errorMessage.code === '23505') throw new InternalServerError(error.errorMessage.detail, UniqueConstraint.code);
 				if (error.errorMessage.code === '42601') throw new InternalServerError(DBSyntaxError.message + ' at position: ' + error.errorMessage.position, DBSyntaxError.code);
 		}
 		throw new InternalServerError(error.errorMessage, error.errorCode);

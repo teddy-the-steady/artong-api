@@ -5,8 +5,7 @@ const SyntaxError: number = 4002; // Syntax 에러
 const NoPermission = {code: 4003, message: 'No permission to perform this action'}; // 권한 에러
 const DBError = {code: 5100, message: 'DB Error'};
 const UpdateFailed = {code: 5101, message: 'Update failed'}; // db 업데이트 실패
-const UniqueConstraint = {code: 5102, message: 'Unique constraint violated'}; // db 유니크 제약조건 위반
-const DBSyntaxError = {code: 5103, message: 'DB Syntax error'};
+const DBSyntaxError = {code: 5102, message: 'DB Syntax error'};
 const AWSError = 5200; // AWS 관련 에러
 
 export {
@@ -17,7 +16,6 @@ export {
     NoPermission,
     DBError,
     UpdateFailed,
-    UniqueConstraint,
     DBSyntaxError,
     AWSError,
 };
