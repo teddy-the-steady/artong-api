@@ -142,6 +142,29 @@ class Member extends Models implements MemberGroups {
 		}
 	}
 
+	async setSenderFromMemberListTo(
+		objList: {from: string}[]
+	) {
+		try {
+			const extractedSenders = objList.map((obj: { from: string; }) => obj.from);
+			console.log(extractedSenders)
+			const memberList = await this.getMembersWithWalletAddressArray(extractedSenders);
+			console.log(memberList)
+
+			for (let obj of objList) {
+				for (let member of memberList) {
+					if (obj.from === member.wallet_address) {
+						(obj.from as any) = member;
+					}
+				}
+			}
+
+			return objList
+		} catch (error) {
+			throw error;
+		}
+	}
+
 	async updateMember(
 		id?: number,
 		username?: string,
