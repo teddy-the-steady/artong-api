@@ -1,7 +1,7 @@
 import handlebars from 'handlebars';
 import { dbConnectionPool } from '../../handler/artong';
-import { InternalServerError } from '../error/errors';
-import { DBError } from '../error/errorCodes';
+import { BadRequest, InternalServerError } from '../error/errors';
+import { DBError, UniqueValueDuplicated } from '../error/errorCodes';
 import { replaceAll } from '../common/commonFunc';
 import { PoolClient } from 'pg';
 
@@ -34,6 +34,9 @@ const execute = async function(conn: PoolClient, sql: string, params: any) {
     const result = await conn.query(convertedSql);
     return result['rows']
   } catch (error) {
+    if (error.code === '23505') {
+      throw new BadRequest(error.detail, UniqueValueDuplicated.code);
+    }
     throw new InternalServerError(error, DBError.code);
   }
 };
