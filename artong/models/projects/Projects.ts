@@ -7,7 +7,7 @@ const selectProject = require('./selectProject.sql');
 const selectProjects = require('./selectProjects.sql');
 const selectProjectsWithAddressArray = require('./selectProjectsWithAddressArray.sql');
 const selectProjectsByCreatorWithAddressArray = require('./selectProjectsByCreatorWithAddressArray.sql');
-
+const selectProjectsLikeName = require('./selectProjectsLikeName.sql');
 
 class Projects extends Models {
 	create_tx_hash?: string;
@@ -141,6 +141,17 @@ class Projects extends Models {
 				selectProjectsByCreatorWithAddressArray,
 				{addressArray, address, _db_}
 			);
+			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async searchProjects(name?: string): Promise<Projects[]> {
+		try {
+			const result = await db.execute(this.conn, selectProjectsLikeName, {
+				name
+			});
 			return result
 		} catch (error) {
 			throw error;
