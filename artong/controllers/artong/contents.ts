@@ -75,6 +75,8 @@ const patchContent = async function(pathParameters: any, body: any) {
       token_id: body.tokenId,
       voucher: body.voucher,
       is_redeemed: body.isRedeemed,
+      name: body.name,
+      description: body.description,
     }, conn);
 
     const result = await contentModel.updateContent(
@@ -83,6 +85,8 @@ const patchContent = async function(pathParameters: any, body: any) {
       contentModel.token_id,
       contentModel.voucher,
       contentModel.is_redeemed,
+      contentModel.name,
+      contentModel.description,
     );
     return {data: result}
   } catch (error) {
