@@ -1,7 +1,7 @@
 import { parse } from 'graphql';
 import { Member } from '../models';
 import { BadRequest } from '../utils/error/errors';
-import { projects, contents, search } from '../controllers/artong';
+import { projects, contents } from '../controllers/artong';
 import { graphqlRequest, parseGraphqlQuery, parse_db_data } from '../utils/common/graphqlUtil';
 
 const graphql = async function(body: any, member: Member) {
@@ -30,8 +30,6 @@ const graphql = async function(body: any, member: Member) {
       case 'TokensByCreator': result = await contents.queryTokensByCreator(body, _db_, pureQuery);
         break;
       case 'TokensByOwner': result = await contents.queryTokensByOwner(body, _db_, pureQuery);
-        break;
-      case 'Search': result = await search.querySearch(body, _db_, pureQuery);
         break;
       default:
         throw new BadRequest('query name undefined', null);
