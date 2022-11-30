@@ -11,6 +11,7 @@ const selectContentsWithTokenIdArray = require('./selectContentsWithTokenIdArray
 const selectContentsByProjectWithTokenIdArray = require('./selectContentsByProjectWithTokenIdArray.sql');
 const selectContentsByCreatorWithTokenIdArray = require('./selectContentsByCreatorWithTokenIdArray.sql');
 const selectContentVoucherById = require('./selectContentVoucherById.sql');
+const selectContentsLikeName = require('./selectContentsLikeName.sql');
 
 class Contents extends Models {
 	id?: number;
@@ -57,6 +58,8 @@ class Contents extends Models {
 		token_id?: number,
 		voucher?: object,
 		is_redeemed?: boolean,
+		name?: string,
+		description?: string,
 	): Promise<Contents> {
 		try {
 			const result = await db.execute(this.conn, updateContent, {
@@ -65,6 +68,8 @@ class Contents extends Models {
 				token_id,
 				voucher,
 				is_redeemed,
+				name,
+				description,
 			});
 			return result[0]
 		} catch (error) {
@@ -192,6 +197,19 @@ class Contents extends Models {
 			);
 
 			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async searchContents(
+		name?: string,
+	): Promise<Contents> {
+		try {
+			const result = await db.execute(this.conn, updateContentThumbnailS3keys, {
+				name
+			});
+			return result[0]
 		} catch (error) {
 			throw error;
 		}
