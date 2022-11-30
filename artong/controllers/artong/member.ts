@@ -125,7 +125,7 @@ const patchMember = async function(body: any, pathParameters: any, member: Membe
     const memberModel = new Member({
       id: pathParameters.id,
       username: body.username,
-      introduction: body. introduction,
+      introduction: body.introduction,
     }, conn);
 
     const result = await memberModel.updateMember(
