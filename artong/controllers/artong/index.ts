@@ -4,6 +4,7 @@ import * as reactions from './reactions';
 import * as projects from './projects';
 import * as contents from './contents';
 import * as search from './search';
+import * as offers from './offers';
 
 export {
 	member,
@@ -12,4 +13,5 @@ export {
 	projects,
 	contents,
 	search,
+	offers,
 };
