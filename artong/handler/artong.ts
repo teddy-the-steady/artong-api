@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import requestInit from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response';
-import { member, country, reactions, projects, contents } from '../controllers/artong/index';
+import { member, country, reactions, projects, contents, search } from '../controllers/artong/index';
 import { graphql } from './graphql'
 import { getDbConnentionPool } from '../init';
 import { Pool } from 'pg';
@@ -37,6 +37,13 @@ export async function handler(event: any, context: any, callback: any) {
           res = await projects.getProjects(req.queryStringParameters);
         else if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters && req.path.includes('/voucher'))
           res = await contents.getContentVoucherById(req.pathParameters);
+        else if (req.path.startsWith('/artong/v1/search/'))
+          if (req.path.includes('projects'))
+            res = await search.searchProjects(req.queryStringParameters, req.member);
+          else if (req.path.includes('contents'))
+            res = await search.searchContents(req.queryStringParameters, req.member);
+          else if (req.path.includes('members'))
+            res = await search.searchMembers(req.queryStringParameters, req.member);
         break;
       case 'POST':
         if (req.path === '/artong/v1/members' || req.path === '/artong/v1/members/')

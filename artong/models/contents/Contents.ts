@@ -204,12 +204,12 @@ class Contents extends Models {
 
 	async searchContents(
 		name?: string,
-	): Promise<Contents> {
+	): Promise<Contents[]> {
 		try {
-			const result = await db.execute(this.conn, updateContentThumbnailS3keys, {
+			const result = await db.execute(this.conn, selectContentsLikeName, {
 				name
 			});
-			return result[0]
+			return result
 		} catch (error) {
 			throw error;
 		}
