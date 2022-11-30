@@ -154,6 +154,18 @@ functions:
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
+        path: artong/v1/search/projects
+        method: GET
+        cors: true
+     - http:
+        path: artong/v1/search/contents
+        method: GET
+        cors: true
+     - http:
+        path: artong/v1/search/members
+        method: GET
+        cors: true
+     - http:
         path: artong/v1/graphql
         method: POST
         cors: true
