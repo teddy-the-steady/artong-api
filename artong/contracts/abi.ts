@@ -1026,11 +1026,6 @@ export const FACTORY_ABI = [
         name: '_policy',
         type: 'uint8',
       },
-      {
-        internalType: 'uint16',
-        name: '_collectionRoyalty',
-        type: 'uint16',
-      },
     ],
     name: 'createNFTContract',
     outputs: [
