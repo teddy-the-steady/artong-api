@@ -11,6 +11,7 @@ import { S3Client } from '@aws-sdk/client-s3';
 import { NFTStorage } from 'nft.storage';
 import { File } from '@web-std/file';
 import _ from 'lodash';
+import { ContentsHistory } from '../../models/contentsHistory/ContentsHistory';
 
 
 const postContent = async function(body: any, member: Member) {
@@ -397,6 +398,119 @@ const queryTokensByOwner = async function(body: any, _db_: string[], pureQuery: 
   }
 }
 
+const queryTokenHistory = async function(body: any, _db_: string[], pureQuery: string) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
+    if (!gqlResult.token) {
+      return {data: {token: {}}}
+    }
+
+    const contentsHistoryModel = new ContentsHistory({}, conn);
+
+    if (body.pagination.start_num === 0) {
+      const result = await contentsHistoryModel.getLatestContentsHistory(
+        gqlResult.token.project.id,
+        gqlResult.token.tokenId
+      );
+
+      type Histories = {
+        [key: string]: any[];
+      }
+      const histories: Histories = {
+        transfers: gqlResult.token.transfers,
+        offers: gqlResult.token.offers,
+        sales: gqlResult.token.sales,
+        listings: gqlResult.token.listings,
+      };
+
+      if (result) {
+        if (result.block_timestamp) {
+          const contentsHistoryInsertData: any[] = [];
+          for (let key in histories) {
+            for (let history of histories[key as string]) {
+              if (history.createdAt <= result.block_timestamp) {
+                break;
+              } else {
+                makeContentsHistoryInsertData(
+                  contentsHistoryInsertData,
+                  history,
+                  key,
+                );
+              }
+            }
+          }
+
+          if (contentsHistoryInsertData.length > 0) {
+            await contentsHistoryModel.createContentsHistories(
+              contentsHistoryInsertData,
+              gqlResult.token.project.id,
+              gqlResult.token.tokenId,
+            );
+          }
+        }
+      } else {
+        const contentsHistoryInsertData = [{
+          from_member_id: '0x0000000000000000000000000000000000000000',
+          to_member_id: gqlResult.token.creator,
+          history_type: 'MINTED',
+          subgraph_raw: null,
+          tx_hash: gqlResult.token.txHash,
+          block_timestamp: gqlResult.token.createdAt
+        }];
+
+        for (let key in histories) {
+          for (let history of histories[key as string]) {
+            makeContentsHistoryInsertData(
+              contentsHistoryInsertData,
+              history,
+              key,
+            );
+          }
+        }
+        await contentsHistoryModel.createContentsHistories(
+          contentsHistoryInsertData,
+          gqlResult.token.project.id,
+          gqlResult.token.tokenId,
+        );
+      }
+    }
+
+    const result = await contentsHistoryModel.getContentsHistories(
+      gqlResult.token.project.id,
+      gqlResult.token.tokenId,
+      body.pagination.start_num,
+      body.pagination.count_num,
+    );
+
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
+const makeContentsHistoryInsertData = function(
+  contentsHistoryInsertData: any[],
+  history: {[key: string]: string},
+  historyKey: string
+) {
+  contentsHistoryInsertData.push({
+    from_member_id: history.from,
+    to_member_id: history.to,
+    history_type: history.eventType ?
+      `${historyKey.toUpperCase()}_${history.eventType}` :
+      `${historyKey.toUpperCase()}`,
+    subgraph_raw: history,
+    tx_hash: historyKey.toUpperCase() === 'OFFERS'?
+      history.txHash :
+      history.id,
+    block_timestamp: history.createdAt,
+  });
+}
+
 export {
 	postContent,
   uploadToNftStorage,
@@ -410,4 +524,5 @@ export {
   getContentVoucherById,
   queryTokensByCreator,
   queryTokensByOwner,
+  queryTokenHistory,
 };
