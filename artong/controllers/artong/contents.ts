@@ -225,6 +225,9 @@ const getMintReadyContentsInProject = async function(pathParameters: any, queryS
       query: 'query Project($id: String) { project(id: $id) { policy } }',
       variables: {id: pathParameters.id}
     });
+    if (!policyResult.project) {
+      return {data: []}
+    }
     if (policyResult.project.policy === 1) {
       throw new Unauthorized(NoPermission.message, NoPermission.code);
     }
@@ -233,32 +236,13 @@ const getMintReadyContentsInProject = async function(pathParameters: any, queryS
       project_address: pathParameters.id,
     }, conn);
 
-    const result = await contentModel.getMintReadyContents(
+    let result = await contentModel.getMintReadyContents(
       contentModel.project_address,
       queryStringParameters.start_num,
       queryStringParameters.count_num
     );
 
-    for (let i = 0; i < result.length; i++) {
-      (result[i] as any).owner = {
-        id: result[i].member_id,
-        username: (result[i] as any).username,
-        wallet_address: (result[i] as any).wallet_address,
-        email: (result[i] as any).email,
-        profile_s3key: (result[i] as any).profile_s3key,
-        profile_thumbnail_s3key: (result[i] as any).profile_thumbnail_s3key,
-        created_at: (result[i] as any).member_created_at,
-        updated_at: (result[i] as any).member_updated_at
-      }
-
-      delete (result[i] as any).username
-      delete (result[i] as any).wallet_address
-      delete (result[i] as any).email
-      delete (result[i] as any).profile_s3key
-      delete (result[i] as any).profile_thumbnail_s3key
-      delete (result[i] as any).member_created_at
-      delete (result[i] as any).member_updated_at
-    }
+    result = makeMemberInfo(result, [''], 'owner');
 
     return {data: result}
   } catch (error) {
@@ -276,32 +260,13 @@ const getTobeApprovedContentsInProject = async function(pathParameters: any, que
       project_address: pathParameters.id,
     }, conn);
 
-    const result = await contentModel.getMintReadyContents(
+    let result = await contentModel.getMintReadyContents(
       contentModel.project_address,
       queryStringParameters.start_num,
       queryStringParameters.count_num
     );
 
-    for (let i = 0; i < result.length; i++) {
-      (result[i] as any).owner = {
-        id: result[i].member_id,
-        username: (result[i] as any).username,
-        wallet_address: (result[i] as any).wallet_address,
-        email: (result[i] as any).email,
-        profile_s3key: (result[i] as any).profile_s3key,
-        profile_thumbnail_s3key: (result[i] as any).profile_thumbnail_s3key,
-        created_at: (result[i] as any).member_created_at,
-        updated_at: (result[i] as any).member_updated_at
-      }
-
-      delete (result[i] as any).username
-      delete (result[i] as any).wallet_address
-      delete (result[i] as any).email
-      delete (result[i] as any).profile_s3key
-      delete (result[i] as any).profile_thumbnail_s3key
-      delete (result[i] as any).member_created_at
-      delete (result[i] as any).member_updated_at
-    }
+    result = makeMemberInfo(result, [''], 'owner');
 
     return {data: result}
   } catch (error) {
@@ -477,12 +442,14 @@ const queryTokenHistory = async function(body: any, _db_: string[], pureQuery: s
       }
     }
 
-    const result = await contentsHistoryModel.getContentsHistories(
+    let result = await contentsHistoryModel.getContentsHistories(
       gqlResult.token.project.id,
       gqlResult.token.tokenId,
       body.pagination.start_num,
       body.pagination.count_num,
     );
+
+    result = makeMemberInfo(result, ['from_', 'to_'], 'member');
 
     return {data: result}
   } catch (error) {
@@ -509,6 +476,36 @@ const makeContentsHistoryInsertData = function(
       history.id,
     block_timestamp: history.createdAt,
   });
+}
+
+const makeMemberInfo = function(result: any[], prefix: string[], memberResultName: string) {
+  for (let i = 0; i < result.length; i++) {
+    for (let j = 0; j < prefix.length; j++) {
+      if (result[i][`${prefix[j]}member_id`]) {
+        (result[i] as any)[`${prefix[j]}${memberResultName}`] = {
+          id: result[i][`${prefix[j]}member_id`],
+          username: (result[i] as any)[`${prefix[j]}username`],
+          wallet_address: (result[i] as any)[`${prefix[j]}wallet_address`],
+          email: (result[i] as any)[`${prefix[j]}email`],
+          profile_s3key: (result[i] as any)[`${prefix[j]}profile_s3key`],
+          profile_thumbnail_s3key: (result[i] as any)[`${prefix[j]}profile_thumbnail_s3key`],
+          created_at: (result[i] as any)[`${prefix[j]}member_created_at`],
+          updated_at: (result[i] as any)[`${prefix[j]}member_updated_at`]
+        }
+      }
+
+      delete (result[i] as any)[`${prefix[j]}member_id`];
+      delete (result[i] as any)[`${prefix[j]}username`];
+      delete (result[i] as any)[`${prefix[j]}wallet_address`];
+      delete (result[i] as any)[`${prefix[j]}email`];
+      delete (result[i] as any)[`${prefix[j]}profile_s3key`];
+      delete (result[i] as any)[`${prefix[j]}profile_thumbnail_s3key`];
+      delete (result[i] as any)[`${prefix[j]}member_created_at`];
+      delete (result[i] as any)[`${prefix[j]}member_updated_at`];
+    }
+  }
+
+  return result
 }
 
 export {
