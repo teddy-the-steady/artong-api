@@ -88,7 +88,7 @@ const patchProject = async function(pathParameters: any, body: any, member: Memb
   }
 };
 
-const getProjectWhileUpdatingPendingToCreated = async function(pathParameters: any, member: any) {
+const getProjectWhileUpdatingPendingToCreated = async function(pathParameters: any, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -101,31 +101,49 @@ const getProjectWhileUpdatingPendingToCreated = async function(pathParameters: a
     );
 
     if (result && result.status === 'PENDING') {
-      const txReceipt = await InfuraProvider.provider.getTransactionReceipt(pathParameters.id);
-      if (txReceipt) {
-        const address = getProjectAddressFromContractCreatedEvent(txReceipt);
-
-        projectModel.address = address;
-        projectModel.member_id = member.id;
-        projectModel.status = 'CREATED';
-
-        const result = await projectModel.updateProject(
-          projectModel.create_tx_hash,
-          projectModel.address,
-          projectModel.member_id,
-          projectModel.description,
-          projectModel.project_s3key,
-          projectModel.background_s3key,
-          projectModel.status
-        );
-
-        return {data: result}
-      } else {
-        return {data: result}
-      }
+      const result = await getTxReceiptAndUpdateStatus(
+        member.id,
+        projectModel.create_tx_hash
+      );
+      return {data: result}
     }
 
     return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error)
+  } finally {
+    db.release(conn);
+  }
+};
+
+const getTxReceiptAndUpdateStatus = async function(member_id?: number, txHash?: string) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const projectModel = new Projects({
+      create_tx_hash: txHash
+    }, conn);
+
+    const txReceipt = await InfuraProvider.provider.getTransactionReceipt(txHash);
+    if (txReceipt) {
+      const address = getProjectAddressFromContractCreatedEvent(txReceipt);
+
+      projectModel.address = address;
+      projectModel.member_id = member_id;
+      projectModel.status = 'CREATED';
+
+      const result = await projectModel.updateProject(
+        projectModel.create_tx_hash,
+        projectModel.address,
+        projectModel.member_id,
+        projectModel.description,
+        projectModel.project_s3key,
+        projectModel.background_s3key,
+        projectModel.status
+      );
+
+      return result
+    }
   } catch (error) {
     throw controllerErrorWrapper(error)
   } finally {
@@ -206,10 +224,15 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
   }
 }
 
-const queryProjectsByCreator = async function(body: any, _db_: string[], pureQuery: string) {
+const queryProjectsByCreator = async function(body: any, _db_: string[], pureQuery: string, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
+    if (member.wallet_address === body.variables.creator) {
+      const result = await queryProjectsWhenCreatorEqualsMember(body, _db_, member);
+      return {data: {projects: result}}
+    }
+
     const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
     if (gqlResult.projects.length === 0) {
       return {data: {projects: []}}
@@ -237,6 +260,86 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
   } finally {
     db.release(conn);
   }
+};
+
+const queryProjectsWhenCreatorEqualsMember = async function(body: any, _db_: string[], member: Member) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const projectModel = new Projects({ member_id: member.id }, conn);
+    let projects = await projectModel.getProjects(
+      projectModel.member_id,
+      projectModel.status,
+      body.variables.skip,
+      body.variables.first,
+    );
+
+    let updatedProjects = await getTxReceiptsAndUpdateStatusForProjectArray(projects);
+    updatedProjects = updatedProjects.filter(element => {
+      return element !== undefined;
+    });
+
+    if (updatedProjects.length > 0) {
+      const merged = _.merge(_.keyBy(projects, 'create_tx_hash'), _.keyBy(updatedProjects, 'create_tx_hash'));
+      projects =  _.values(merged);
+    }
+
+    const extractedProjectIds = projects.reduce((acc, Projects: Projects) => {
+      if (Projects && Projects.address) {
+        acc.push(Projects.address);
+      }
+      return acc;
+    }, [] as any);
+
+    delete body.variables.first;
+    delete body.variables.skip;
+    body.variables.ids = extractedProjectIds;
+
+    const gqlResult = await graphqlRequest({query: `
+      query ProjectsByCreator($creator: String, $ids: [String]) {
+        projects(where: {creator: $creator, id_in: $ids}) {
+          id
+          creator
+          owner
+          name
+          symbol
+          maxAmount
+          policy
+          isDisabled
+          createdAt
+          updatedAt
+        }
+      }
+    `, variables: body.variables});
+
+    const merged2 = _.merge(_.keyBy(projects, 'address'), _.keyBy(gqlResult.projects, 'id'));
+    const result =  _.values(merged2);
+
+    return  result
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
+const getTxReceiptsAndUpdateStatusForProjectArray = async function(projectArray: Projects[]): Promise<Projects[]> {
+  const pendingInfo = projectArray.reduce((acc, project) => {
+    if (project.status === 'PENDING') {
+      acc.push({
+        func: getTxReceiptAndUpdateStatus,
+        params: {member_id: project.member_id, txHash: project.create_tx_hash}
+      });
+    }
+    return acc;
+  }, [] as any);
+
+  if (pendingInfo.length > 0) {
+    return await Promise.all(pendingInfo.map(async (obj: any) => {
+      return await obj.func(obj.params.member_id, obj.params.txHash);
+    }));
+  }
+  return []
 }
 
 export {
