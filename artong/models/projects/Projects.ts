@@ -33,7 +33,7 @@ class Projects extends Models {
 	async createProject(
 		create_tx_hash?: string,
 		member_id?: number,
-    name?: string,
+    	name?: string,
 		symbol?: string,
 		status?: string
 	): Promise<Projects> {
@@ -56,8 +56,8 @@ class Projects extends Models {
 		address?: string,
 		member_id?: number,
 		description?: string,
-    project_s3key?: string,
-    background_s3key?: string,
+    	project_s3key?: string,
+    	background_s3key?: string,
 		status?: string
 	): Promise<Projects>  {
 		try {
