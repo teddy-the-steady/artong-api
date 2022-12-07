@@ -149,6 +149,8 @@ const getProjectContributors = async function(pathParameters:any, queryStringPar
 
     const result = await memberModel.getProjectContributors(
       pathParameters.id,
+      queryStringParameters.start_num,
+      queryStringParameters.count_num,
     );
     return {data: result}
   } catch (error) {
