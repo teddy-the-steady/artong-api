@@ -198,10 +198,14 @@ class Member extends Models implements MemberGroups {
 
 	async getProjectContributors(
 		project_address?: string,
+		start_num?: number,
+		count_num?: number,
 	): Promise<Member[]> {
 		try {
 			const result = await db.execute(this.conn, selectProjectContributors, {
-				project_address
+				project_address,
+				start_num,
+				count_num,
 			});
 			return result
 		} catch (error) {
