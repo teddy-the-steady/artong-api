@@ -28,6 +28,8 @@ export async function handler(event: any, context: any, callback: any) {
         else if (req.path.startsWith('/artong/v1/projects/') && req.pathParameters) {
           if (req.path.includes('/tx_receipt_updated'))
             res = await projects.getProjectWhileUpdatingPendingToCreated(req.pathParameters, req.member);
+          if (req.path.includes('/contributors'))
+            res = await member.getProjectContributors(req.pathParameters, req.queryStringParameters);
           if (req.path.includes('/contents/mint_ready'))
             res = await contents.getMintReadyContentsInProject(req.pathParameters, req.queryStringParameters);
           if (req.path.includes('/contents/tobe_approved'))
