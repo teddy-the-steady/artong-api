@@ -124,6 +124,10 @@ functions:
         method: GET
         cors: true
      - http:
+        path: artong/v1/projects/{id}/contributors
+        method: GET
+        cors: true
+     - http:
         path: artong/v1/contents/{id}/voucher
         method: GET
         cors: true
