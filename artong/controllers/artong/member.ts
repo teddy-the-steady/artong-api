@@ -141,6 +141,23 @@ const patchMember = async function(body: any, pathParameters: any, member: Membe
   }
 }
 
+const getProjectContributors = async function(pathParameters:any, queryStringParameters: any) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const memberModel = new Member({}, conn);
+
+    const result = await memberModel.getProjectContributors(
+      pathParameters.id,
+    );
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
   getMember,
   getMembers,
@@ -148,4 +165,5 @@ export {
   patchMemberProfileS3key,
   patchMemberProfileThumbnailS3key,
   patchMember,
+  getProjectContributors,
 };
