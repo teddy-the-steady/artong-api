@@ -73,11 +73,16 @@ functions:
         method: GET
         cors: true
      - http:
-        path: artong/v1/members
+        path: artong/v1/member
         method: POST
         cors: true
      - http:
         path: artong/v1/members/{id} # INFO] 이 경우만 id: wallet_address or pk(나머지는 pk만 허용)
+        method: GET
+        cors: true
+        authorizer: ${self:custom.authorizer}
+     - http:
+        path: artong/v1/current_member
         method: GET
         cors: true
         authorizer: ${self:custom.authorizer}
@@ -169,6 +174,16 @@ functions:
         path: artong/v1/search/members
         method: GET
         cors: true
+     - http:
+        path: artong/v1/follow
+        method: POST
+        cors: true
+        authorizer: ${self:custom.authorizer}
+     - http:
+        path: artong/v1/subscribe
+        method: POST
+        cors: true
+        authorizer: ${self:custom.authorizer}
      - http:
         path: artong/v1/graphql
         method: POST

@@ -50,7 +50,11 @@ const getMembers = async function(queryStringParameters: any) {
   }
 };
 
-const postMember = async function(body: any) {
+interface MemberInfo {
+  wallet_address: string
+  principal_id: string
+}
+const postMember = async function(body: MemberInfo) {
   const conn: PoolClient = await db.getConnection();
 
   try {
