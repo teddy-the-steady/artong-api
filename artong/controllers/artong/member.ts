@@ -8,8 +8,8 @@ const getMember = async function(pathParameters: any) {
   const conn: PoolClient = await db.getConnection();
 
   try {
-    const id = typeof pathParameters.id === 'string' && pathParameters.id.startsWith('0x')?
-    { wallet_address: pathParameters.id }
+    const id = typeof pathParameters.id === 'string' && pathParameters.id.includes('-')?
+    { principal_id: pathParameters.id }
     :
     { id: pathParameters.id }
 
@@ -19,7 +19,7 @@ const getMember = async function(pathParameters: any) {
 
     const result = await memberModel.getMember(
       memberModel.id,
-      memberModel.wallet_address
+      memberModel.principal_id
     );
     return {data: result}
   } catch (error) {
