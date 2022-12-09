@@ -2,6 +2,7 @@ import { Member, Follow, Subscribe } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import { PoolClient } from 'pg';
+import { BadRequest } from '../../utils/error/errors';
 
 interface FollowInfo {
   isFollowRequest: boolean
@@ -11,6 +12,10 @@ const doFollowMemberOrUndo = async function(body: FollowInfo, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
+    if (member.id === body.targetMemberId) {
+      throw new BadRequest('Cannot self follow', null);
+    }
+
     const followModel = new Follow({
       followee_id: member.id,
       follower_id: body.targetMemberId,
