@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import requestInit from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response';
-import { member, country, reactions, projects, contents, search } from '../controllers/artong/index';
+import { member, country, reactions, projects, contents, search, follow } from '../controllers/artong/index';
 import { graphql } from './graphql'
 import { getDbConnentionPool } from '../init';
 import { Pool } from 'pg';
@@ -25,6 +25,8 @@ export async function handler(event: any, context: any, callback: any) {
           res = await member.getMembers(req.queryStringParameters);
         else if (req.path.startsWith('/artong/v1/members/') && req.pathParameters)
           res = await member.getMember(req.pathParameters);
+        else if (req.path === '/artong/v1/current_member' || req.path === '/artong/v1/current_member/')
+          res = { data: req.member };
         else if (req.path.startsWith('/artong/v1/projects/') && req.pathParameters) {
           if (req.path.includes('/tx_receipt_updated'))
             res = await projects.getProjectWhileUpdatingPendingToCreated(req.pathParameters, req.member);
@@ -48,7 +50,7 @@ export async function handler(event: any, context: any, callback: any) {
             res = await search.searchMembers(req.queryStringParameters, req.member);
         break;
       case 'POST':
-        if (req.path === '/artong/v1/members' || req.path === '/artong/v1/members/')
+        if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
           res = await member.postMember(req.body);
         else if (req.path === '/artong/v1/country' || req.path === '/artong/v1/country/')
           res = await country.postCountry(req.body, req.member);
@@ -60,6 +62,10 @@ export async function handler(event: any, context: any, callback: any) {
           res = await contents.postContent(req.body, req.member);
         else if (req.path === '/artong/v1/contents/storage' || req.path === '/artong/v1/contents/storage/')
           res = await contents.uploadToNftStorage(req.body);
+        else if (req.path === '/artong/v1/follow' || req.path === '/artong/v1/follow/')
+          res = await follow.doFollowMemberOrUndo(req.body, req.member);
+        else if (req.path === '/artong/v1/subscribe' || req.path === '/artong/v1/subscribe/')
+          res = await follow.doSubsribeProjectOrUndo(req.body, req.member);
         else if (req.path === '/artong/v1/graphql' || req.path === '/artong/v1/graphql/')
           res = await graphql(req.body, req.member);
         break;
