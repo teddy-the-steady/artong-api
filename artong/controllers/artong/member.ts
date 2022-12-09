@@ -4,7 +4,7 @@ import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import validator from '../../utils/validators/common'
 
-const getMember = async function(pathParameters: any) {
+const getMember = async function(pathParameters: any) { // INFO] inner use only
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -20,6 +20,25 @@ const getMember = async function(pathParameters: any) {
     const result = await memberModel.getMember(
       memberModel.id,
       memberModel.principal_id
+    );
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error)
+  } finally {
+    db.release(conn);
+  }
+};
+
+const getMemberByUsername = async function(pathParameters: any) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const memberModel = new Member({
+      username: pathParameters.id
+    }, conn);
+
+    const result = await memberModel.getMemberByUsername(
+      memberModel.username,
     );
     return {data: result}
   } catch (error) {
@@ -166,6 +185,7 @@ const getProjectContributors = async function(pathParameters:any, queryStringPar
 
 export {
   getMember,
+  getMemberByUsername,
   getMembers,
 	postMember,
   patchMemberProfileS3key,
