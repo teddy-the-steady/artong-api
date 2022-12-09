@@ -48,11 +48,11 @@ class Member extends Models implements MemberGroups {
 		Object.assign(this, data);
 	}
 
-	async getMember(id?: number, wallet_address?: string): Promise<Member> {
+	async getMember(id?: number, principal_id?: string): Promise<Member> {
 		try {
 			const result = await db.execute(this.conn, selectMember, {
-				id: id,
-				wallet_address: wallet_address?.toLowerCase()
+				id,
+				principal_id
 			});
 			return result[0]
 		} catch (error) {
