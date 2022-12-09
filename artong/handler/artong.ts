@@ -25,6 +25,8 @@ export async function handler(event: any, context: any, callback: any) {
           res = await member.getMembers(req.queryStringParameters);
         else if (req.path.startsWith('/artong/v1/members/') && req.pathParameters)
           res = await member.getMember(req.pathParameters);
+        else if (req.path === '/artong/v1/current_member' || req.path === '/artong/v1/current_member/')
+          res = { data: req.member };
         else if (req.path.startsWith('/artong/v1/projects/') && req.pathParameters) {
           if (req.path.includes('/tx_receipt_updated'))
             res = await projects.getProjectWhileUpdatingPendingToCreated(req.pathParameters, req.member);
@@ -48,7 +50,7 @@ export async function handler(event: any, context: any, callback: any) {
             res = await search.searchMembers(req.queryStringParameters, req.member);
         break;
       case 'POST':
-        if (req.path === '/artong/v1/members' || req.path === '/artong/v1/members/')
+        if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
           res = await member.postMember(req.body);
         else if (req.path === '/artong/v1/country' || req.path === '/artong/v1/country/')
           res = await country.postCountry(req.body, req.member);

@@ -3,7 +3,10 @@ import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import { PoolClient } from 'pg';
 
-interface FollowInfo {isFollowRequest: boolean, targetMemberId: number}
+interface FollowInfo {
+  isFollowRequest: boolean
+  targetMemberId: number
+}
 const doFollowMemberOrUndo = async function(body: FollowInfo, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
@@ -34,7 +37,10 @@ const doFollowMemberOrUndo = async function(body: FollowInfo, member: Member) {
   }
 }
 
-interface SubscribeInfo {isSubscribeRequest: boolean, targetProjectAddress: string}
+interface SubscribeInfo {
+  isSubscribeRequest: boolean
+  targetProjectAddress: string
+}
 const doSubsribeProjectOrUndo = async function(body: SubscribeInfo, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
