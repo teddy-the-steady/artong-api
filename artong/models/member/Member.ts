@@ -1,6 +1,7 @@
 import * as db from '../../utils/db/db';
 import Models from '../Models';
 const selectMember = require('./selectMember.sql');
+const selectMemberByUsername = require('./selectMemberByUsername.sql');
 const selectMembers = require('./selectMembers.sql');
 const insertMember = require('./insertMember.sql');
 const updateMemberProfileS3keys = require('./updateMemberProfileS3keys.sql');
@@ -53,6 +54,17 @@ class Member extends Models implements MemberGroups {
 			const result = await db.execute(this.conn, selectMember, {
 				id,
 				principal_id
+			});
+			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getMemberByUsername(username?: string): Promise<Member> {
+		try {
+			const result = await db.execute(this.conn, selectMemberByUsername, {
+				username,
 			});
 			return result[0]
 		} catch (error) {
