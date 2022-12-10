@@ -21,8 +21,12 @@ export async function handler(event: any, context: any, callback: any) {
 
     switch (req.httpMethod) {
       case 'GET':
-        if (req.path.startsWith('/artong/v1/members/') && req.pathParameters)
-          res = await member.getMemberByUsername(req.pathParameters);
+        if (req.path.startsWith('/artong/v1/members/') && req.pathParameters) {
+          if (req.path.includes('/follow'))
+          res = await member.getMemberFollowerOrFollowing(req.pathParameters, req.queryStringParameters);
+          else
+            res = await member.getMemberByUsername(req.pathParameters);
+        }
         else if (req.path === '/artong/v1/current_member' || req.path === '/artong/v1/current_member/')
           res = { data: req.member };
         else if (req.path.startsWith('/artong/v1/projects/') && req.pathParameters) {
