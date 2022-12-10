@@ -69,10 +69,6 @@ functions:
     timeout: 30
     events:
      - http:
-        path: artong/v1/members
-        method: GET
-        cors: true
-     - http:
         path: artong/v1/members/{id} # INFO] id: username
         method: GET
         cors: true
