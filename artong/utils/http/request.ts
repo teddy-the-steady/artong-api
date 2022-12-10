@@ -48,7 +48,7 @@ const requestInit = async function(event: any) {
     }
 
     if (principalId) {
-      const user = await member.getMember({ principal_id: principalId });
+      const user = await member.getMember({ id: principalId });
       result['member'] = Object.assign(result['member'], user.data);
     }
   } catch (error) {

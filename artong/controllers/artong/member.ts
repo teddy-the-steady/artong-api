@@ -48,27 +48,6 @@ const getMemberByUsername = async function(pathParameters: any) {
   }
 };
 
-const getMembers = async function(queryStringParameters: any) {
-  const conn: PoolClient = await db.getConnection();
-
-  try {
-    const memberModel = new Member({
-      username: queryStringParameters?.username,
-      principal_id: queryStringParameters?.principal_id
-    }, conn);
-
-    const result = await memberModel.getMembers(
-      memberModel.username,
-      memberModel.principal_id
-    );
-    return {data: result}
-  } catch (error) {
-    throw controllerErrorWrapper(error);
-  } finally {
-    db.release(conn);
-  }
-};
-
 interface MemberInfo {
   wallet_address: string
   principal_id: string
@@ -186,7 +165,6 @@ const getProjectContributors = async function(pathParameters:any, queryStringPar
 export {
   getMember,
   getMemberByUsername,
-  getMembers,
 	postMember,
   patchMemberProfileS3key,
   patchMemberProfileThumbnailS3key,
