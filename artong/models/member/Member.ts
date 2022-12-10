@@ -8,6 +8,8 @@ const selectMembersWithWalletAddressArray = require('./selectMembersWithWalletAd
 const updateMember = require('./updateMember.sql');
 const selectMembersLikeName = require('./selectMembersLikeName.sql');
 const selectProjectContributors = require('./selectProjectContributors.sql');
+const selectFollower = require('./selectFollower.sql');
+const selectFollowing = require('./selectFollowing.sql');
 
 import {
 	IsEmail,
@@ -200,6 +202,40 @@ class Member extends Models implements MemberGroups {
 		try {
 			const result = await db.execute(this.conn, selectProjectContributors, {
 				project_address,
+				start_num,
+				count_num,
+			});
+			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getMemberFollower(
+		id?: number,
+		start_num?: number,
+		count_num?: number,
+	): Promise<Member[]> {
+		try {
+			const result = await db.execute(this.conn, selectFollower, {
+				id,
+				start_num,
+				count_num,
+			});
+			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getMemberFollowing(
+		id?: number,
+		start_num?: number,
+		count_num?: number,
+	): Promise<Member[]> {
+		try {
+			const result = await db.execute(this.conn, selectFollowing, {
+				id,
 				start_num,
 				count_num,
 			});
