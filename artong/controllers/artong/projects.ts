@@ -57,7 +57,7 @@ const postProject = async function(body: any, member: Member) {
   }
 };
 
-const patchProject = async function(pathParameters: any, body: any, member: Member) {
+const patchProject = async function(pathParameters: { txHash: string }, body: any, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -88,12 +88,12 @@ const patchProject = async function(pathParameters: any, body: any, member: Memb
   }
 };
 
-const getProjectWhileUpdatingPendingToCreated = async function(pathParameters: any, member: Member) {
+const getProjectWhileUpdatingPendingToCreated = async function(pathParameters: { txHash: string }, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
     const projectModel = new Projects({
-      create_tx_hash: pathParameters.id
+      create_tx_hash: pathParameters.txHash
     }, conn);
 
     const result = await projectModel.getProjectWithTxhash(

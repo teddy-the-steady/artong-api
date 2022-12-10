@@ -29,12 +29,12 @@ const getMember = async function(pathParameters: any) { // INFO] inner use only
   }
 };
 
-const getMemberByUsername = async function(pathParameters: any) {
+const getMemberByUsername = async function(pathParameters: { username: string }) {
   const conn: PoolClient = await db.getConnection();
 
   try {
     const memberModel = new Member({
-      username: pathParameters.id
+      username: pathParameters.username
     }, conn);
 
     const result = await memberModel.getMemberByUsername(
@@ -143,17 +143,53 @@ const patchMember = async function(body: any, pathParameters: any, member: Membe
   }
 }
 
-const getProjectContributors = async function(pathParameters:any, queryStringParameters: any) {
+const getProjectContributors = async function(pathParameters: { address: string }, queryStringParameters: any) {
   const conn: PoolClient = await db.getConnection();
 
   try {
     const memberModel = new Member({}, conn);
 
     const result = await memberModel.getProjectContributors(
-      pathParameters.id,
+      pathParameters.address,
       queryStringParameters.start_num,
       queryStringParameters.count_num,
     );
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
+interface memberFollowInfo {
+  type: 'follower' | 'following'
+  start_num: number
+  count_num: number
+}
+const getMemberFollowerOrFollowing = async function(pathParameters: { id: string }, queryStringParameters: memberFollowInfo) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const memberModel = new Member({
+      id: parseInt(pathParameters.id),
+    }, conn);
+
+    let result = null;
+    if (queryStringParameters.type === 'follower') {
+      result = await memberModel.getMemberFollower(
+        memberModel.id,
+        queryStringParameters.start_num,
+        queryStringParameters.count_num,
+      );
+    } else {
+      result = await memberModel.getMemberFollowing(
+        memberModel.id,
+        queryStringParameters.start_num,
+        queryStringParameters.count_num,
+      );
+    }
+
     return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
@@ -170,4 +206,5 @@ export {
   patchMemberProfileThumbnailS3key,
   patchMember,
   getProjectContributors,
+  getMemberFollowerOrFollowing,
 };
