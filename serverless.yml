@@ -69,7 +69,7 @@ functions:
     timeout: 30
     events:
      - http:
-        path: artong/v1/members/{username} # INFO] id: username
+        path: artong/v1/members/{username}
         method: GET
         cors: true
      - http:
@@ -110,25 +110,25 @@ functions:
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
-        path: artong/v1/projects/{id}
+        path: artong/v1/projects/{txHash}
         method: PATCH
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
-        path: artong/v1/projects/{id}/tx_receipt_updated # INFO] id: txHash
+        path: artong/v1/projects/{txHash}/tx_receipt_updated
         method: GET
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
-        path: artong/v1/projects/{id}/contents/mint_ready
+        path: artong/v1/projects/{address}/contents/mint_ready
         method: GET
         cors: true
      - http:
-        path: artong/v1/projects/{id}/contents/tobe_approved
+        path: artong/v1/projects/{address}/contents/tobe_approved
         method: GET
         cors: true
      - http:
-        path: artong/v1/projects/{id}/contributors
+        path: artong/v1/projects/{address}/contributors
         method: GET
         cors: true
      - http:

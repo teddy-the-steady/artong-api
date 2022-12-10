@@ -143,14 +143,14 @@ const patchMember = async function(body: any, pathParameters: any, member: Membe
   }
 }
 
-const getProjectContributors = async function(pathParameters:any, queryStringParameters: any) {
+const getProjectContributors = async function(pathParameters: { address: string }, queryStringParameters: any) {
   const conn: PoolClient = await db.getConnection();
 
   try {
     const memberModel = new Member({}, conn);
 
     const result = await memberModel.getProjectContributors(
-      pathParameters.id,
+      pathParameters.address,
       queryStringParameters.start_num,
       queryStringParameters.count_num,
     );
