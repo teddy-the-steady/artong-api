@@ -100,20 +100,20 @@ functions:
         path: artong/v1/members/{id}/follow
         method: GET
         cors: true
-     - http:
-        path: artong/v1/projects
-        method: GET
-        cors: true
-     - http:
-        path: artong/v1/projects
-        method: POST
-        cors: true
-        authorizer: ${self:custom.authorizer}
-     - http:
-        path: artong/v1/projects/{id} # INFO] id: txHash
-        method: PATCH
-        cors: true
-        authorizer: ${self:custom.authorizer}
+   #   - http:
+   #      path: artong/v1/projects
+   #      method: GET
+   #      cors: true
+   #   - http:
+   #      path: artong/v1/projects
+   #      method: POST
+   #      cors: true
+   #      authorizer: ${self:custom.authorizer}
+   #   - http:
+   #      path: artong/v1/projects/{id} # INFO] id: txHash
+   #      method: PATCH
+   #      cors: true
+   #      authorizer: ${self:custom.authorizer}
    #   - http:
    #      path: artong/v1/projects/{id}/tx_receipt_updated  # INFO] id: txHash
    #      method: GET
