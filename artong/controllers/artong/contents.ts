@@ -216,14 +216,14 @@ const patchContentThumbnailS3key = async function(body:any) {
   }
 };
 
-const getMintReadyContentsInProject = async function(pathParameters: { address: string }, queryStringParameters: any) {
+const getMintReadyContentsInProject = async function(pathParameters: { id: string }, queryStringParameters: any) {
   const conn: PoolClient = await db.getConnection();
 
   try {
     // TODO] query policy on every req for now. BEST is to listen event in our server and to syncronize with db
     const policyResult = await graphqlRequest({
       query: 'query Project($id: String) { project(id: $id) { policy } }',
-      variables: {id: pathParameters.address}
+      variables: {id: pathParameters.id}
     });
     if (!policyResult.project) {
       return {data: []}
@@ -233,7 +233,7 @@ const getMintReadyContentsInProject = async function(pathParameters: { address: 
     }
 
     const contentModel = new Contents({
-      project_address: pathParameters.address,
+      project_address: pathParameters.id,
     }, conn);
 
     let result = await contentModel.getMintReadyContents(
@@ -252,12 +252,12 @@ const getMintReadyContentsInProject = async function(pathParameters: { address: 
   }
 };
 
-const getTobeApprovedContentsInProject = async function(pathParameters: { address: string }, queryStringParameters: any) {
+const getTobeApprovedContentsInProject = async function(pathParameters: { id: string }, queryStringParameters: any) {
   const conn: PoolClient = await db.getConnection();
 
   try {
     const contentModel = new Contents({
-      project_address: pathParameters.address,
+      project_address: pathParameters.id,
     }, conn);
 
     let result = await contentModel.getMintReadyContents(
