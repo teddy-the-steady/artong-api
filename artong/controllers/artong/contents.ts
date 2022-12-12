@@ -216,7 +216,7 @@ const patchContentThumbnailS3key = async function(body:any) {
   }
 };
 
-const getMintReadyContentsInProject = async function(pathParameters: any, queryStringParameters: any) {
+const getMintReadyContentsInProject = async function(pathParameters: { id: string }, queryStringParameters: any) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -252,7 +252,7 @@ const getMintReadyContentsInProject = async function(pathParameters: any, queryS
   }
 };
 
-const getTobeApprovedContentsInProject = async function(pathParameters: any, queryStringParameters: any) {
+const getTobeApprovedContentsInProject = async function(pathParameters: { id: string }, queryStringParameters: any) {
   const conn: PoolClient = await db.getConnection();
 
   try {
