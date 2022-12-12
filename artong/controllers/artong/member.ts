@@ -29,12 +29,12 @@ const getMember = async function(pathParameters: any) { // INFO] inner use only
   }
 };
 
-const getMemberByUsername = async function(pathParameters: { username: string }) {
+const getMemberByUsername = async function(pathParameters: { id: string }) {
   const conn: PoolClient = await db.getConnection();
 
   try {
     const memberModel = new Member({
-      username: pathParameters.username
+      username: pathParameters.id
     }, conn);
 
     const result = await memberModel.getMemberByUsername(
@@ -143,7 +143,7 @@ const patchMember = async function(body: any, pathParameters: any, member: Membe
   }
 }
 
-const getProjectContributors = async function(pathParameters:any, queryStringParameters: any) {
+const getProjectContributors = async function(pathParameters: { id: string }, queryStringParameters: any) {
   const conn: PoolClient = await db.getConnection();
 
   try {
