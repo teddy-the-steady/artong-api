@@ -114,23 +114,23 @@ functions:
         method: PATCH
         cors: true
         authorizer: ${self:custom.authorizer}
-     - http:
-        path: artong/v1/projects/{id}/tx_receipt_updated  # INFO] id: txHash
-        method: GET
-        cors: true
-        authorizer: ${self:custom.authorizer}
-     - http:
-        path: artong/v1/projects/{id}/contents/mint_ready
-        method: GET
-        cors: true
-     - http:
-        path: artong/v1/projects/{id}/contents/tobe_approved
-        method: GET
-        cors: true
-     - http:
-        path: artong/v1/projects/{id}/contributors
-        method: GET
-        cors: true
+   #   - http:
+   #      path: artong/v1/projects/{id}/tx_receipt_updated  # INFO] id: txHash
+   #      method: GET
+   #      cors: true
+   #      authorizer: ${self:custom.authorizer}
+   #   - http:
+   #      path: artong/v1/projects/{id}/contents/mint_ready
+   #      method: GET
+   #      cors: true
+   #   - http:
+   #      path: artong/v1/projects/{id}/contents/tobe_approved
+   #      method: GET
+   #      cors: true
+   #   - http:
+   #      path: artong/v1/projects/{id}/contributors
+   #      method: GET
+   #      cors: true
      - http:
         path: artong/v1/contents/{id}/voucher
         method: GET
