@@ -10,7 +10,8 @@ SELECT
     p.symbol,
     p.status,
     p.created_at,
-    p.updated_at
+    p.updated_at,
+    (SELECT COUNT(*) FROM subscribe s WHERE s.project_address = p.address) AS subscribers
 FROM
     projects p
 WHERE 1=1
