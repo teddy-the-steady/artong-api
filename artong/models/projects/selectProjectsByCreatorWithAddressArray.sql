@@ -2,7 +2,8 @@ SELECT
 {{#each _db_}}
     {{this}},
 {{/each}}
-    address AS id
+    address AS id,
+    (SELECT COUNT(*) FROM subscribe s WHERE s.project_address = p.address) AS subscribers
 FROM
     projects p
 LEFT JOIN member m ON m.id = p.member_id
