@@ -24,6 +24,8 @@ export async function handler(event: any, context: any, callback: any) {
         if (req.path.startsWith('/artong/v1/members/') && req.pathParameters) {
           if (req.path.includes('/follow'))
             res = await member.getMemberFollowerOrFollowing(req.pathParameters, req.queryStringParameters);
+          else if (req.path.includes('/subscribe'))
+            res = await projects.getMemberSubscribedProjects(req.pathParameters, req.queryStringParameters);
           else
             res = await member.getMemberByUsername(req.pathParameters);
         }
