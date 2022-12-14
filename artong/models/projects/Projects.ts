@@ -36,7 +36,9 @@ class Projects extends Models {
 		member_id?: number,
     	name?: string,
 		symbol?: string,
-		status?: string
+		status?: string,
+		project_s3key?: string,
+		background_s3key?: string,
 	): Promise<Projects> {
 		try {
 			const result = await db.execute(this.conn, insertProject, {
@@ -44,7 +46,9 @@ class Projects extends Models {
 				member_id,
 				name,
 				symbol,
-				status
+				status,
+				project_s3key,
+				background_s3key,
 			});
 			return result[0]
 		} catch (error) {
