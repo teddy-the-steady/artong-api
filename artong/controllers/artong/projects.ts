@@ -6,8 +6,13 @@ import { PoolClient } from 'pg';
 import { ethers } from 'ethers';
 import _ from 'lodash';
 import { graphqlRequest } from '../../utils/common/graphqlUtil';
+import { paginationInfo } from './index';
 
-const getProjects = async function(queryStringParameters: any) {
+interface getProjectsInfo extends paginationInfo {
+  member_id: number
+  status: string
+}
+const getProjects = async function(queryStringParameters: getProjectsInfo) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -342,6 +347,28 @@ const getTxReceiptsAndUpdateStatusForProjectArray = async function(projectArray:
   return []
 }
 
+const getMemberSubscribedProjects = async function(pathParameters: { id: string }, queryStringParameters: paginationInfo) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const projectModel = new Projects({
+      member_id: parseInt(pathParameters.id),
+    }, conn);
+
+    const result = await projectModel.getMemberSubscribedProjects(
+      projectModel.member_id,
+      queryStringParameters.start_num,
+      queryStringParameters.count_num,
+    );
+
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
   getProjects,
 	postProject,
@@ -350,4 +377,5 @@ export {
   queryProject,
   queryProjects,
   queryProjectsByCreator,
+  getMemberSubscribedProjects,
 };
