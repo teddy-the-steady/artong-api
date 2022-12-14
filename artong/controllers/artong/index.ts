@@ -7,6 +7,11 @@ import * as search from './search';
 import * as offers from './offers';
 import * as follow from './follow';
 
+interface paginationInfo {
+	start_num: number
+	count_num: number
+  }
+
 export {
 	member,
 	country,
@@ -16,4 +21,5 @@ export {
 	search,
 	offers,
 	follow,
+	paginationInfo
 };
