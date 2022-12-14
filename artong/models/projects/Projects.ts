@@ -8,6 +8,7 @@ const selectProjects = require('./selectProjects.sql');
 const selectProjectsWithAddressArray = require('./selectProjectsWithAddressArray.sql');
 const selectProjectsByCreatorWithAddressArray = require('./selectProjectsByCreatorWithAddressArray.sql');
 const selectProjectsLikeName = require('./selectProjectsLikeName.sql');
+const selectSubscribedProjectsByMember = require('./selectSubscribedProjectsByMember.sql');
 
 class Projects extends Models {
 	create_tx_hash?: string;
@@ -151,6 +152,23 @@ class Projects extends Models {
 		try {
 			const result = await db.execute(this.conn, selectProjectsLikeName, {
 				name
+			});
+			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getMemberSubscribedProjects(
+		member_id?: number,
+		start_num?: number,
+		count_num?: number,
+	): Promise<Projects[]> {
+		try {
+			const result = await db.execute(this.conn, selectSubscribedProjectsByMember, {
+				member_id,
+				start_num,
+				count_num,
 			});
 			return result
 		} catch (error) {
