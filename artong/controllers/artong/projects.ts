@@ -62,7 +62,9 @@ const postProject = async function(body: PostProjectInfo, member: Member) {
       projectModel.member_id,
       projectModel.name,
       projectModel.symbol,
-      projectModel.status
+      projectModel.status,
+      projectModel.project_s3key,
+      projectModel.background_s3key,
     );
     return {data: result}
   } catch (error) {
