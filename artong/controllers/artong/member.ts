@@ -3,7 +3,7 @@ import { Member } from '../../models/index';
 import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import validator from '../../utils/validators/common';
-import { paginationInfo } from './index';
+import { PaginationInfo } from './index';
 
 const getMember = async function(pathParameters: any) { // INFO] inner use only
   const conn: PoolClient = await db.getConnection();
@@ -144,7 +144,7 @@ const patchMember = async function(body: any, pathParameters: any, member: Membe
   }
 }
 
-const getProjectContributors = async function(pathParameters: { id: string }, queryStringParameters: paginationInfo) {
+const getProjectContributors = async function(pathParameters: { id: string }, queryStringParameters: PaginationInfo) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -163,10 +163,10 @@ const getProjectContributors = async function(pathParameters: { id: string }, qu
   }
 }
 
-interface memberFollowInfo extends paginationInfo {
+interface MemberFollowInfo extends PaginationInfo {
   type: 'follower' | 'following'
 }
-const getMemberFollowerOrFollowing = async function(pathParameters: { id: string }, queryStringParameters: memberFollowInfo) {
+const getMemberFollowerOrFollowing = async function(pathParameters: { id: string }, queryStringParameters: MemberFollowInfo) {
   const conn: PoolClient = await db.getConnection();
 
   try {
