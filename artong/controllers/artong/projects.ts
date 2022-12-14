@@ -6,13 +6,13 @@ import { PoolClient } from 'pg';
 import { ethers } from 'ethers';
 import _ from 'lodash';
 import { graphqlRequest } from '../../utils/common/graphqlUtil';
-import { paginationInfo } from './index';
+import { PaginationInfo } from './index';
 
-interface getProjectsInfo extends paginationInfo {
+interface GetProjectsInfo extends PaginationInfo {
   member_id: number
   status: string
 }
-const getProjects = async function(queryStringParameters: getProjectsInfo) {
+const getProjects = async function(queryStringParameters: GetProjectsInfo) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -35,7 +35,15 @@ const getProjects = async function(queryStringParameters: getProjectsInfo) {
   }
 };
 
-const postProject = async function(body: any, member: Member) {
+interface PostProjectInfo {
+  create_tx_hash: string
+  name: string
+  symbol: string
+  status: string
+  project_s3key: string
+  background_s3key: string
+}
+const postProject = async function(body: PostProjectInfo, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -44,7 +52,9 @@ const postProject = async function(body: any, member: Member) {
       member_id: member.id,
       name: body.name,
       symbol: body.symbol,
-      status: body.status || 'PENDING'
+      status: body.status || 'PENDING',
+      project_s3key: body.project_s3key,
+      background_s3key: body.background_s3key,
     }, conn);
 
     const result = await projectModel.createProject(
@@ -347,7 +357,7 @@ const getTxReceiptsAndUpdateStatusForProjectArray = async function(projectArray:
   return []
 }
 
-const getMemberSubscribedProjects = async function(pathParameters: { id: string }, queryStringParameters: paginationInfo) {
+const getMemberSubscribedProjects = async function(pathParameters: { id: string }, queryStringParameters: PaginationInfo) {
   const conn: PoolClient = await db.getConnection();
 
   try {
