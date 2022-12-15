@@ -10,6 +10,7 @@ const selectMembersLikeName = require('./selectMembersLikeName.sql');
 const selectProjectContributors = require('./selectProjectContributors.sql');
 const selectFollower = require('./selectFollower.sql');
 const selectFollowing = require('./selectFollowing.sql');
+const selectTop5ContributorsInProjects = require('./selectTop5ContributorsInProjects.sql');
 
 import {
 	IsEmail,
@@ -244,6 +245,19 @@ class Member extends Models implements MemberGroups {
 			throw error;
 		}
 	}
+
+	async getTop5ContributorsInProjects(
+		projectAddressArray?: Array<string>,
+	): Promise<Member[]> {
+		try {
+			const result = await db.execute(this.conn, selectTop5ContributorsInProjects, {
+				projectAddressArray: projectAddressArray
+			});
+			return result
+		} catch (error) {
+			throw error;
+		}
+	};
 }
 
 export {
