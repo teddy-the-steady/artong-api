@@ -1,4 +1,4 @@
-import { profile, content } from '../controllers/image/index';
+import { profile, content, project } from '../controllers/image/index';
 import { InternalServerError } from '../utils/error/errors';
 import getSecretKeys from '../utils/common/ssmKeys';
 import axios from 'axios';
@@ -27,6 +27,9 @@ export async function handler(event: any, context: any, callback: any) {
         break;
       case 'nft':
         await content.updateContentThumbnail(event.Records[0].s3);
+        break;
+      case 'project':
+        await project.updateProjectThumbnail(event.Records[0].s3);
         break;
       default:
         break;
