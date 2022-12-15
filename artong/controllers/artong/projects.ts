@@ -381,6 +381,33 @@ const getMemberSubscribedProjects = async function(pathParameters: { id: string 
   }
 }
 
+interface PatchProjectThumbnailS3keyInfo {
+  project_s3key: string
+  project_thumbnail_s3key: string
+  background_s3key: string
+  background_thumbnail_s3key: string
+}
+const patchProjectThumbnailS3key = async function(body: PatchProjectThumbnailS3keyInfo) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const projectModel = new Projects({}, conn);
+
+    const result = await projectModel.updateProjectThumbnailS3keys(
+      projectModel.project_s3key,
+      projectModel.project_thumbnail_s3key,
+      projectModel.background_s3key,
+      projectModel.background_thumbnail_s3key,
+    );
+
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
   getProjects,
 	postProject,
@@ -390,4 +417,5 @@ export {
   queryProjects,
   queryProjectsByCreator,
   getMemberSubscribedProjects,
+  patchProjectThumbnailS3key,
 };

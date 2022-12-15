@@ -1,5 +1,6 @@
 import * as profile from './profile';
 import * as content from './content';
+import * as project from './project';
 
 const makeDstKeyWithResizedFileName = function(srcKey: string) {
   const items = srcKey.split('/');
@@ -16,4 +17,5 @@ export {
 	makeDstKeyWithResizedFileName,
 	profile,
 	content,
+  project,
 };
