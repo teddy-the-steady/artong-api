@@ -391,7 +391,12 @@ const patchProjectThumbnailS3key = async function(body: PatchProjectThumbnailS3k
   const conn: PoolClient = await db.getConnection();
 
   try {
-    const projectModel = new Projects({}, conn);
+    const projectModel = new Projects({
+      project_s3key: body.project_s3key,
+      project_thumbnail_s3key: body.project_thumbnail_s3key,
+      background_s3key: body.background_s3key,
+      background_thumbnail_s3key: body.background_thumbnail_s3key,
+    }, conn);
 
     const result = await projectModel.updateProjectThumbnailS3keys(
       projectModel.project_s3key,
