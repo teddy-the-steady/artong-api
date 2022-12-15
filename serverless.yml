@@ -136,6 +136,11 @@ functions:
         method: GET
         cors: true
      - http:
+        path: artong/v1/projects/thumbnail_s3key
+        method: PATCH
+        cors: true
+        private: true
+     - http:
         path: artong/v1/contents/{id}/voucher
         method: GET
         cors: true
@@ -217,6 +222,12 @@ functions:
         event: s3:ObjectCreated:*
         rules:
           - prefix: public/nft/
+        existing: true
+     - s3:
+        bucket: ${self:provider.environment.S3_BUCKET}
+        event: s3:ObjectCreated:*
+        rules:
+          - prefix: public/project/
         existing: true
     layers:
      - {Ref: NodeModulesLambdaLayer}

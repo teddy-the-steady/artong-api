@@ -84,6 +84,8 @@ export async function handler(event: any, context: any, callback: any) {
         }
         else if (req.path.startsWith('/artong/v1/projects/') && req.pathParameters)
           res = await projects.patchProject(req.pathParameters, req.body, req.member);
+        else if (req.path === '/artong/v1/projects/thumbnail_s3key' || req.path === '/artong/v1/projects/thumbnail_s3key/')
+          res = await projects.patchProjectThumbnailS3key(req.body);
         else if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters)
           res = await contents.patchContent(req.pathParameters, req.body);
         else if (req.path === '/artong/v1/contents/content_thumbnail_s3key' || req.path === '/artong/v1/contents/content_thumbnail_s3key/')
