@@ -9,6 +9,7 @@ const selectProjectsWithAddressArray = require('./selectProjectsWithAddressArray
 const selectProjectsByCreatorWithAddressArray = require('./selectProjectsByCreatorWithAddressArray.sql');
 const selectProjectsLikeName = require('./selectProjectsLikeName.sql');
 const selectSubscribedProjectsByMember = require('./selectSubscribedProjectsByMember.sql');
+const updateProjectThumbnailS3keys = require('./updateProjectThumbnailS3keys.sql');
 
 class Projects extends Models {
 	create_tx_hash?: string;
@@ -175,6 +176,25 @@ class Projects extends Models {
 				count_num,
 			});
 			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async updateProjectThumbnailS3keys(
+		project_s3key?: string,
+		project_thumbnail_s3key?: string,
+		background_s3key?: string,
+		background_thumbnail_s3key?: string,
+	): Promise<Projects> {
+		try {
+			const result = await db.execute(this.conn, updateProjectThumbnailS3keys, {
+				project_s3key,
+				project_thumbnail_s3key,
+				background_s3key,
+				background_thumbnail_s3key,
+			});
+			return result[0]
 		} catch (error) {
 			throw error;
 		}
