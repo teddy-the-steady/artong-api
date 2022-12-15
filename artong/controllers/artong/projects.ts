@@ -223,17 +223,31 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
       return {data: {projects: []}}
     }
 
-    const projectModel = new Projects({}, conn);
     const extractedProjectIds = gqlResult.projects.map((project: { id: string; }) => project.id);
 
-    const dbResult = await projectModel.getProjectsWithAddressArray(extractedProjectIds, _db_);
+    const projectModel = new Projects({}, conn);
+    const projectResult = await projectModel.getProjectsWithAddressArray(extractedProjectIds, _db_);
 
-    if (dbResult && gqlResult.projects) {
-      const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(dbResult, 'id'))
-      return {data: {projects: _.values(merged)}}
+    let result = null;
+
+    if (projectResult && gqlResult.projects) {
+      const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(projectResult, 'id'));
+      result = {projects: _.values(merged)};
     } else {
-      return {data: gqlResult}
+      result = gqlResult;
     }
+
+    const memberModel = new Member({}, conn);
+    const contributorsResult = await memberModel.getTop5ContributorsInProjects(extractedProjectIds);
+
+    if (contributorsResult.length > 0) {
+      const contributorsArrayGroupByProjectAddress = _.groupBy(contributorsResult as any[], c => c.project_address);
+      for (let index in result.projects) {
+        result.projects[index].contributors = contributorsArrayGroupByProjectAddress[result.projects[index].id] || [];
+      }
+    }
+
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -255,23 +269,37 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
       return {data: {projects: []}}
     }
 
+    const extractedProjectIds = gqlResult.projects.map((project: { id: string; }) => project.id);
+
     const projectModel = new Projects({
       address: body.variables.creator
     }, conn);
-    const extractedProjectIds = gqlResult.projects.map((project: { id: string; }) => project.id);
-
-    const dbResult = await projectModel.getProjectsByCreatorWithAddressArray(
+    const projectResult = await projectModel.getProjectsByCreatorWithAddressArray(
       extractedProjectIds,
       projectModel.address,
       _db_
     );
 
-    if (dbResult && gqlResult.projects) {
-      const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(dbResult, 'id'))
-      return {data: {projects: _.values(merged)}}
+    let result = null;
+
+    if (projectResult && gqlResult.projects) {
+      const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(projectResult, 'id'))
+      result = {projects: _.values(merged)};
     } else {
-      return {data: gqlResult}
+      result = gqlResult
     }
+
+    const memberModel = new Member({}, conn);
+    const contributorsResult = await memberModel.getTop5ContributorsInProjects(extractedProjectIds);
+
+    if (contributorsResult.length > 0) {
+      const contributorsArrayGroupByProjectAddress = _.groupBy(contributorsResult as any[], c => c.project_address);
+      for (let index in result.projects) {
+        result.projects[index].contributors = contributorsArrayGroupByProjectAddress[result.projects[index].id] || [];
+      }
+    }
+
+    return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
