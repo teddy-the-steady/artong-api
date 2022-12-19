@@ -24,4 +24,3 @@ WHERE 1=1
     AND c.token_id > 0
 GROUP BY c.member_id, m.id, c.project_address
 ORDER BY project_address, contributions DESC
-LIMIT 5
