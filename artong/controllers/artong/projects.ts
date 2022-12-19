@@ -243,6 +243,9 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
     if (contributorsResult.length > 0) {
       const contributorsArrayGroupByProjectAddress = _.groupBy(contributorsResult as any[], c => c.project_address);
       for (let index in result.projects) {
+        if (contributorsArrayGroupByProjectAddress[result.projects[index].id]) {
+          contributorsArrayGroupByProjectAddress[result.projects[index].id].splice(5)
+        }
         result.projects[index].contributors = contributorsArrayGroupByProjectAddress[result.projects[index].id] || [];
       }
     }
