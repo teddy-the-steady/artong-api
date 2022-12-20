@@ -37,7 +37,7 @@ const postContent = async function(body: any, member: Member) {
   }
 };
 
-const uploadToNftStorage = async function(body: any) {
+const uploadToNftStorageAndUpdateContent = async function(body: any) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -57,6 +57,21 @@ const uploadToNftStorage = async function(body: any) {
       description: body.description,
       image: file
     });
+
+    const contentModel = new Contents({
+      id: body.content_id,
+      ipfs_url: metadata.url,
+      name: body.name,
+      description: body.description,
+    }, conn);
+
+    await contentModel.updateContent(
+      contentModel.id,
+      contentModel.ipfs_url,
+      undefined, undefined, undefined,
+      contentModel.name,
+      contentModel.description,
+    );
 
     return {data: metadata}
   } catch (error) {
@@ -536,7 +551,7 @@ const makeMemberInfo = function(result: any[], prefix: string[], memberResultNam
 
 export {
 	postContent,
-  uploadToNftStorage,
+  uploadToNftStorageAndUpdateContent,
   patchContent,
   queryToken,
   queryTokens,
