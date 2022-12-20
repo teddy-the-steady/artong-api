@@ -3,6 +3,7 @@ SELECT
   h.contents_id,
   h.history_type,
   h.tx_hash,
+  h.price,
   h.block_timestamp,
   h.created_at,
   m1.id AS from_member_id,
