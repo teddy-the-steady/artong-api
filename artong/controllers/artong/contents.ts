@@ -111,6 +111,30 @@ const queryToken = async function(body: any, _db_: string[], pureQuery: string) 
       graphqlRequest({query: pureQuery, variables: body.variables})
     ]);
 
+    if (gqlResult.token.project) {
+      gqlResult.token.project['project_s3key'] = (dbResult as any)['project_s3key'];
+      gqlResult.token.project['project_thumbnail_s3key'] = (dbResult as any)['project_thumbnail_s3key'];
+    }
+
+    const memberModel = new Member({}, conn);
+    const memberResult = await memberModel.getMembersWithWalletAddressArray([
+      gqlResult.token.owner,
+      gqlResult.token.creator,
+    ]);
+
+    if (memberResult.length > 0) {
+      if (gqlResult.token.owner === gqlResult.token.creator) {
+        gqlResult.token.owner = memberResult[0];
+        gqlResult.token.creator = memberResult[0];
+      } else if (memberResult[0].wallet_address === gqlResult.token.owner) {
+        gqlResult.token.owner = memberResult[0];
+        gqlResult.token.creator = memberResult[1];
+      } else if (memberResult[0].wallet_address === gqlResult.token.creator) {
+        gqlResult.token.owner = memberResult[1];
+        gqlResult.token.creator = memberResult[0];
+      }
+    }
+
     if (dbResult && gqlResult.token) {
       for (let field of _db_) {
         gqlResult.token[field] = (dbResult as any)[field];

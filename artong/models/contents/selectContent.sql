@@ -1,22 +1,25 @@
 SELECT
-  id,
-  member_id,
-  project_address,
-  name,
-  description,
-  token_id,
-  content_s3key,
-  content_thumbnail_s3key,
-  ipfs_url,
+  c.id,
+  c.member_id,
+  c.project_address,
+  c.name,
+  c.description,
+  c.token_id,
+  c.content_s3key,
+  c.content_thumbnail_s3key,
+  c.ipfs_url,
   (CASE
-    WHEN is_redeemed = true THEN null
-    ELSE voucher
+    WHEN c.is_redeemed = true THEN null
+    ELSE c.voucher
   END) AS voucher,
-  is_redeemed,
-  created_at,
-  updated_at
+  c.is_redeemed,
+  c.created_at,
+  c.updated_at,
+  p.project_s3key,
+  p.project_thumbnail_s3key
 FROM
-  contents
+  contents c
+JOIN projects p ON p.address = c.project_address
 WHERE 1=1
   AND project_address = ${project_address}
   AND token_id = ${token_id}
