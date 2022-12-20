@@ -65,7 +65,7 @@ export async function handler(event: any, context: any, callback: any) {
         else if (req.path === '/artong/v1/contents' || req.path === '/artong/v1/contents/')
           res = await contents.postContent(req.body, req.member);
         else if (req.path === '/artong/v1/contents/storage' || req.path === '/artong/v1/contents/storage/')
-          res = await contents.uploadToNftStorage(req.body);
+          res = await contents.uploadToNftStorageAndUpdateContent(req.body);
         else if (req.path === '/artong/v1/follow' || req.path === '/artong/v1/follow/')
           res = await follow.doFollowMemberOrUndo(req.body, req.member);
         else if (req.path === '/artong/v1/subscribe' || req.path === '/artong/v1/subscribe/')
