@@ -147,9 +147,7 @@ class Member extends Models implements MemberGroups {
 	) {
 		try {
 			const extractedSenders = objList.map((obj: { from: string; }) => obj.from);
-			console.log(extractedSenders)
 			const memberList = await this.getMembersWithWalletAddressArray(extractedSenders);
-			console.log(memberList)
 
 			for (let obj of objList) {
 				for (let member of memberList) {
