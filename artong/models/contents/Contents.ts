@@ -5,6 +5,7 @@ import Models from '../Models';
 const insertContent = require('./insertContent.sql');
 const updateContent = require('./updateContent.sql');
 const updateContentThumbnailS3keys = require('./updateContentThumbnailS3keys.sql');
+const updateContentTokenIds = require('./updateContentTokenIds.sql');
 const selectContent = require('./selectContent.sql');
 const selectMintReadyContents = require('./selectMintReadyContents.sql');
 const selectContentsWithTokenIdArray = require('./selectContentsWithTokenIdArray.sql');
@@ -208,6 +209,19 @@ class Contents extends Models {
 		try {
 			const result = await db.execute(this.conn, selectContentsLikeName, {
 				name
+			});
+			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async updateContentTokenIds(
+		contents?: any[],
+	): Promise<Contents[]> {
+		try {
+			const result = await db.execute(this.conn, updateContentTokenIds, {
+				contents
 			});
 			return result
 		} catch (error) {
