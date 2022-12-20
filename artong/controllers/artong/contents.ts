@@ -444,6 +444,7 @@ const queryTokenHistory = async function(body: any, _db_: string[], pureQuery: s
           from_member_id: '0x0000000000000000000000000000000000000000',
           to_member_id: gqlResult.token.creator,
           history_type: 'MINTED',
+          price: null,
           subgraph_raw: null,
           tx_hash: gqlResult.token.txHash,
           block_timestamp: gqlResult.token.createdAt
@@ -495,6 +496,7 @@ const makeContentsHistoryInsertData = function(
       `${historyKey.toUpperCase()}_${history.eventType}` :
       `${historyKey.toUpperCase()}`,
     subgraph_raw: history,
+    price: history.price,
     tx_hash: historyKey.toUpperCase() === 'OFFERS'?
       history.txHash :
       history.id,
