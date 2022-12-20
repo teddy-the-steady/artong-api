@@ -181,10 +181,19 @@ const queryTokens = async function(body: any, _db_: string[], pureQuery: string)
     const contentModel = new Contents({}, conn);
     const extractedIds = gqlResult.tokens.map((token: { id: string; }) => token.id);
 
-    const contentResult = await contentModel.getTokensWithIdArray(
+    let contentResult = await contentModel.getTokensWithIdArray(
       extractedIds,
       _db_
     );
+
+    if (contentResult.length !== gqlResult.tokens.length) {
+      const tokens = calculateMinusBetweenTowSetsById(gqlResult.tokens, contentResult as any);
+      await contentModel.updateContentTokenIds(tokens);
+      contentResult = await contentModel.getTokensWithIdArray(
+        extractedIds,
+        _db_
+      );
+    }
 
     if (contentResult && gqlResult.tokens) {
       const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
@@ -214,11 +223,21 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
     const contentModel = new Contents({}, conn);
     const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
 
-    const contentResult = await contentModel.getTokensByProjectWithIdArray(
+    let contentResult = await contentModel.getTokensByProjectWithIdArray(
       extractedTokenIds,
       body.variables.project,
       _db_
     );
+
+    if (contentResult.length !== gqlResult.tokens.length) {
+      const tokens = calculateMinusBetweenTowSetsById(gqlResult.tokens, contentResult as any);
+      await contentModel.updateContentTokenIds(tokens);
+      contentResult = await contentModel.getTokensByProjectWithIdArray(
+        extractedTokenIds,
+        body.variables.project,
+        _db_
+      );
+    }
 
     if (contentResult && gqlResult.tokens) {
       const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
@@ -350,11 +369,21 @@ const queryTokensByCreator = async function(body: any, _db_: string[], pureQuery
     const contentModel = new Contents({}, conn);
     const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
 
-    const contentResult = await contentModel.getTokensByCreatorWithIdArray(
+    let contentResult = await contentModel.getTokensByCreatorWithIdArray(
       extractedTokenIds,
       body.variables.creator,
       _db_
     );
+
+    if (contentResult.length !== gqlResult.tokens.length) {
+      const tokens = calculateMinusBetweenTowSetsById(gqlResult.tokens, contentResult as any);
+      await contentModel.updateContentTokenIds(tokens);
+      contentResult = await contentModel.getTokensByCreatorWithIdArray(
+        extractedTokenIds,
+        body.variables.creator,
+        _db_
+      );
+    }
 
     if (contentResult && gqlResult.tokens) {
       const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
@@ -384,10 +413,19 @@ const queryTokensByOwner = async function(body: any, _db_: string[], pureQuery: 
     const contentModel = new Contents({}, conn);
     const extractedIds = gqlResult.tokens.map((token: { id: string; }) => token.id);
 
-    const contentResult = await contentModel.getTokensWithIdArray(
+    let contentResult = await contentModel.getTokensWithIdArray(
       extractedIds,
       _db_
     );
+
+    if (contentResult.length !== gqlResult.tokens.length) {
+      const tokens = calculateMinusBetweenTowSetsById(gqlResult.tokens, contentResult as any);
+      await contentModel.updateContentTokenIds(tokens);
+      contentResult = await contentModel.getTokensWithIdArray(
+        extractedIds,
+        _db_
+      );
+    }
 
     if (contentResult && gqlResult.tokens) {
       const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
@@ -547,6 +585,12 @@ const makeMemberInfo = function(result: any[], prefix: string[], memberResultNam
   }
 
   return result
+}
+
+const calculateMinusBetweenTowSetsById = function(setA: [], setB: []): any[] {
+  return setA.filter(
+      (a: { id: string }) => setB.every((b: { id: string }) => a.id !== b.id)
+    );
 }
 
 export {
