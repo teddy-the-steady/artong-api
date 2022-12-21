@@ -9,8 +9,8 @@ FROM
 LEFT JOIN member m ON m.id = p.member_id
 WHERE 1=1
     AND m.wallet_address = ${address}
-    AND address IN (
-        {{#each addressArray}}
+    AND create_tx_hash IN (
+        {{#each txHashArray}}
             '{{this}}'
             {{#unless @last}},{{/unless}}
         {{/each}}

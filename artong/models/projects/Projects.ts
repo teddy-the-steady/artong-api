@@ -7,6 +7,7 @@ const selectProject = require('./selectProject.sql');
 const selectProjects = require('./selectProjects.sql');
 const selectProjectsWithAddressArray = require('./selectProjectsWithAddressArray.sql');
 const selectProjectsByCreatorWithAddressArray = require('./selectProjectsByCreatorWithAddressArray.sql');
+const selectProjectsByCreatorWithTxHashArray = require('./selectProjectsByCreatorWithTxHashArray.sql');
 const selectProjectsLikeName = require('./selectProjectsLikeName.sql');
 const selectSubscribedProjectsByMember = require('./selectSubscribedProjectsByMember.sql');
 const updateProjectThumbnailS3keys = require('./updateProjectThumbnailS3keys.sql');
@@ -146,6 +147,23 @@ class Projects extends Models {
 				this.conn,
 				selectProjectsByCreatorWithAddressArray,
 				{addressArray, address, _db_}
+			);
+			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getProjectsByCreatorWithTxHashArray(
+		txHashArray?: Array<string>,
+		address?: string,
+		_db_?: string[]
+	): Promise<Projects[]> {
+		try {
+			const result = await db.execute(
+				this.conn,
+				selectProjectsByCreatorWithTxHashArray,
+				{txHashArray, address, _db_}
 			);
 			return result
 		} catch (error) {
