@@ -230,7 +230,7 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
 
     let result = null;
 
-    if (projectResult && gqlResult.projects) {
+    if (projectResult.length > 0) {
       const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(projectResult, 'id'));
       result = {projects: _.values(merged)};
     } else {
@@ -281,7 +281,7 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
         member.wallet_address,
         _db_
       );
-      projectResult = await getProjectArrayOfUpdatedStatusWithTxReceipts(projectResult);
+      projectResult = await getProjectArrayWithStatusUpdatesFromTxReceipts(projectResult);
     } else {
       projectResult = await projectModel.getProjectsByCreatorWithAddressArray(
         extractedProjectIds,
@@ -290,7 +290,7 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
       );
     }
 
-    if (projectResult.length > 0 && gqlResult.projects) {
+    if (projectResult.length > 0) {
       const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(projectResult, 'address'))
       result = {projects: _.values(merged)};
     } else {
@@ -315,7 +315,7 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
   }
 };
 
-const getProjectArrayOfUpdatedStatusWithTxReceipts = async function(projects: Projects[]) {
+const getProjectArrayWithStatusUpdatesFromTxReceipts = async function(projects: Projects[]) {
   try {
     let updatedProjects = await getTxReceiptsAndUpdateStatus(projects);
     updatedProjects = updatedProjects.filter(element => {
