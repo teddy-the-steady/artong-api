@@ -231,7 +231,7 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
     let result = null;
 
     if (projectResult.length > 0) {
-      const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(projectResult, 'id'));
+      const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(projectResult, 'address'));
       result = {projects: _.values(merged)};
     } else {
       result = gqlResult;
@@ -262,9 +262,6 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
   const conn: PoolClient = await db.getConnection();
 
   try {
-    let result = null;
-    let projectResult = [];
-
     const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
     if (gqlResult.projects.length === 0) {
       return {data: {projects: []}}
@@ -272,6 +269,7 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
 
     const extractedProjectIds = gqlResult.projects.map((project: { id: string; }) => project.id);
 
+    let projectResult = [];
     const projectModel = new Projects({}, conn);
 
     if (member.wallet_address === body.variables.creator) {
@@ -290,6 +288,8 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
       );
     }
 
+    let result = null;
+
     if (projectResult.length > 0) {
       const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(projectResult, 'address'))
       result = {projects: _.values(merged)};
@@ -303,6 +303,9 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
     if (contributorsResult.length > 0) {
       const contributorsArrayGroupByProjectAddress = _.groupBy(contributorsResult as any[], c => c.project_address);
       for (let index in result.projects) {
+        if (contributorsArrayGroupByProjectAddress[result.projects[index].id]) {
+          contributorsArrayGroupByProjectAddress[result.projects[index].id].splice(5)
+        }
         result.projects[index].contributors = contributorsArrayGroupByProjectAddress[result.projects[index].id] || [];
       }
     }
