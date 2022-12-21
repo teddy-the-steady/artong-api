@@ -195,7 +195,7 @@ const queryTokens = async function(body: any, _db_: string[], pureQuery: string)
       );
     }
 
-    if (contentResult && gqlResult.tokens) {
+    if (contentResult.length > 0) {
       const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
       return {data: {tokens: _.values(merged)}}
     } else {
@@ -239,7 +239,7 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
       );
     }
 
-    if (contentResult && gqlResult.tokens) {
+    if (contentResult.length > 0) {
       const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
       return {data: {tokens: _.values(merged)}}
     } else {
@@ -385,7 +385,7 @@ const queryTokensByCreator = async function(body: any, _db_: string[], pureQuery
       );
     }
 
-    if (contentResult && gqlResult.tokens) {
+    if (contentResult.length > 0) {
       const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
       return {data: {tokens: _.values(merged)}}
     } else {
@@ -427,7 +427,7 @@ const queryTokensByOwner = async function(body: any, _db_: string[], pureQuery: 
       );
     }
 
-    if (contentResult && gqlResult.tokens) {
+    if (contentResult.length > 0) {
       const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
       return {data: {tokens: _.values(merged)}}
     } else {
