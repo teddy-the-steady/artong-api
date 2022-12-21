@@ -262,10 +262,8 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
   const conn: PoolClient = await db.getConnection();
 
   try {
-    if (member.wallet_address === body.variables.creator) {
-      const result = await queryProjectsWhenCreatorEqualsMember(body, _db_, member);
-      return {data: {projects: result}}
-    }
+    let result = null;
+    let projectResult = [];
 
     const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
     if (gqlResult.projects.length === 0) {
@@ -274,19 +272,26 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
 
     const extractedProjectIds = gqlResult.projects.map((project: { id: string; }) => project.id);
 
-    const projectModel = new Projects({
-      address: body.variables.creator
-    }, conn);
-    const projectResult = await projectModel.getProjectsByCreatorWithAddressArray(
-      extractedProjectIds,
-      projectModel.address,
-      _db_
-    );
+    const projectModel = new Projects({}, conn);
 
-    let result = null;
+    if (member.wallet_address === body.variables.creator) {
+      const extractedCreateTxHashes = gqlResult.projects.map((project: { txHash: string; }) => project.txHash);
+      projectResult = await projectModel.getProjectsByCreatorWithTxHashArray(
+        extractedCreateTxHashes,
+        member.wallet_address,
+        _db_
+      );
+      projectResult = await getProjectArrayOfUpdatedStatusWithTxReceipts(projectResult);
+    } else {
+      projectResult = await projectModel.getProjectsByCreatorWithAddressArray(
+        extractedProjectIds,
+        body.variables.creator,
+        _db_
+      );
+    }
 
-    if (projectResult && gqlResult.projects) {
-      const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(projectResult, 'id'))
+    if (projectResult.length > 0 && gqlResult.projects) {
+      const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(projectResult, 'address'))
       result = {projects: _.values(merged)};
     } else {
       result = gqlResult
@@ -310,19 +315,9 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
   }
 };
 
-const queryProjectsWhenCreatorEqualsMember = async function(body: any, _db_: string[], member: Member) {
-  const conn: PoolClient = await db.getConnection();
-
+const getProjectArrayOfUpdatedStatusWithTxReceipts = async function(projects: Projects[]) {
   try {
-    const projectModel = new Projects({ member_id: member.id }, conn);
-    let projects = await projectModel.getProjects(
-      projectModel.member_id,
-      projectModel.status,
-      body.variables.skip,
-      body.variables.first,
-    );
-
-    let updatedProjects = await getTxReceiptsAndUpdateStatusForProjectArray(projects);
+    let updatedProjects = await getTxReceiptsAndUpdateStatus(projects);
     updatedProjects = updatedProjects.filter(element => {
       return element !== undefined;
     });
@@ -332,46 +327,13 @@ const queryProjectsWhenCreatorEqualsMember = async function(body: any, _db_: str
       projects =  _.values(merged);
     }
 
-    const extractedProjectIds = projects.reduce((acc, Projects: Projects) => {
-      if (Projects && Projects.address) {
-        acc.push(Projects.address);
-      }
-      return acc;
-    }, [] as any);
-
-    delete body.variables.first;
-    delete body.variables.skip;
-    body.variables.ids = extractedProjectIds;
-
-    const gqlResult = await graphqlRequest({query: `
-      query ProjectsByCreator($creator: String, $ids: [String]) {
-        projects(where: {creator: $creator, id_in: $ids}) {
-          id
-          creator
-          owner
-          name
-          symbol
-          maxAmount
-          policy
-          isDisabled
-          createdAt
-          updatedAt
-        }
-      }
-    `, variables: body.variables});
-
-    const merged2 = _.merge(_.keyBy(projects, 'address'), _.keyBy(gqlResult.projects, 'id'));
-    const result =  _.values(merged2);
-
-    return  result
+    return projects
   } catch (error) {
     throw controllerErrorWrapper(error);
-  } finally {
-    db.release(conn);
   }
 }
 
-const getTxReceiptsAndUpdateStatusForProjectArray = async function(projectArray: Projects[]): Promise<Projects[]> {
+const getTxReceiptsAndUpdateStatus = async function(projectArray: Projects[]): Promise<Projects[]> {
   const pendingInfo = projectArray.reduce((acc, project) => {
     if (project.status === 'PENDING') {
       acc.push({
