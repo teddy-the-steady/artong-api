@@ -186,7 +186,7 @@ const queryTokens = async function(body: any, _db_: string[], pureQuery: string)
       _db_
     );
 
-    if (contentResult.length !== gqlResult.tokens.length) {
+    if (contentResult.length < gqlResult.tokens.length) {
       const tokens = calculateMinusBetweenTowSetsById(gqlResult.tokens, contentResult as any);
       await contentModel.updateContentTokenIds(tokens);
       contentResult = await contentModel.getTokensWithIdArray(
@@ -229,7 +229,7 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
       _db_
     );
 
-    if (contentResult.length !== gqlResult.tokens.length) {
+    if (contentResult.length < gqlResult.tokens.length) {
       const tokens = calculateMinusBetweenTowSetsById(gqlResult.tokens, contentResult as any);
       await contentModel.updateContentTokenIds(tokens);
       contentResult = await contentModel.getTokensByProjectWithIdArray(
@@ -375,7 +375,7 @@ const queryTokensByCreator = async function(body: any, _db_: string[], pureQuery
       _db_
     );
 
-    if (contentResult.length !== gqlResult.tokens.length) {
+    if (contentResult.length < gqlResult.tokens.length) {
       const tokens = calculateMinusBetweenTowSetsById(gqlResult.tokens, contentResult as any);
       await contentModel.updateContentTokenIds(tokens);
       contentResult = await contentModel.getTokensByCreatorWithIdArray(
@@ -418,7 +418,7 @@ const queryTokensByOwner = async function(body: any, _db_: string[], pureQuery: 
       _db_
     );
 
-    if (contentResult.length !== gqlResult.tokens.length) {
+    if (contentResult.length < gqlResult.tokens.length) {
       const tokens = calculateMinusBetweenTowSetsById(gqlResult.tokens, contentResult as any);
       await contentModel.updateContentTokenIds(tokens);
       contentResult = await contentModel.getTokensWithIdArray(
