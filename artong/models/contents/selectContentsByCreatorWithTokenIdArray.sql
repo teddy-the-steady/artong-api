@@ -6,8 +6,8 @@ SELECT
 FROM
   contents
 WHERE 1=1
-  AND token_id IN (
-    {{#each tokenIdArray}}
+  AND CONCAT(project_address,token_id) IN (
+    {{#each subgraphTokenIdArray}}
       '{{this}}'
       {{#unless @last}},{{/unless}}
     {{/each}}

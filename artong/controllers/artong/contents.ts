@@ -367,10 +367,10 @@ const queryTokensByCreator = async function(body: any, _db_: string[], pureQuery
     gqlResult.tokens = await memberModel.setOwnerFromMemberListTo(gqlResult.tokens);
 
     const contentModel = new Contents({}, conn);
-    const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
+    const extractedSuggraphTokenIds = gqlResult.tokens.map((token: { id: string; }) => parseInt(token.id));
 
     let contentResult = await contentModel.getTokensByCreatorWithIdArray(
-      extractedTokenIds,
+      extractedSuggraphTokenIds,
       body.variables.creator,
       _db_
     );
@@ -379,7 +379,7 @@ const queryTokensByCreator = async function(body: any, _db_: string[], pureQuery
       const tokens = calculateMinusBetweenTowSetsById(gqlResult.tokens, contentResult as any);
       await contentModel.updateContentTokenIds(tokens);
       contentResult = await contentModel.getTokensByCreatorWithIdArray(
-        extractedTokenIds,
+        extractedSuggraphTokenIds,
         body.variables.creator,
         _db_
       );
