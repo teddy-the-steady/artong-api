@@ -367,7 +367,7 @@ const queryTokensByCreator = async function(body: any, _db_: string[], pureQuery
     gqlResult.tokens = await memberModel.setOwnerFromMemberListTo(gqlResult.tokens);
 
     const contentModel = new Contents({}, conn);
-    const extractedSuggraphTokenIds = gqlResult.tokens.map((token: { id: string; }) => parseInt(token.id));
+    const extractedSuggraphTokenIds = gqlResult.tokens.map((token: { id: string; }) => token.id);
 
     let contentResult = await contentModel.getTokensByCreatorWithIdArray(
       extractedSuggraphTokenIds,
