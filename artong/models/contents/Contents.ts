@@ -181,7 +181,7 @@ class Contents extends Models {
 	}
 
 	async getTokensByCreatorWithIdArray(
-		tokenIdArray?: Array<number>,
+		subgraphTokenIdArray?: Array<string>,
 		creator?: string,
 		_db_?: string[]
 	): Promise<Contents[]> {
@@ -194,7 +194,7 @@ class Contents extends Models {
 			const result = await db.execute(
 				this.conn,
 				selectContentsByCreatorWithTokenIdArray,
-				{tokenIdArray, creator, _db_}
+				{subgraphTokenIdArray, creator, _db_}
 			);
 
 			return result
