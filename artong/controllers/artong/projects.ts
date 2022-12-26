@@ -6,6 +6,7 @@ import { PoolClient } from 'pg';
 import { ethers } from 'ethers';
 import _ from 'lodash';
 import { graphqlRequest } from '../../utils/common/graphqlUtil';
+import { calculateMinusBetweenTowSetsById } from '../../utils/common/commonFunc'
 import { PaginationInfo } from './index';
 
 interface GetProjectsInfo extends PaginationInfo {
@@ -268,12 +269,12 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
     }
 
     const extractedProjectIds = gqlResult.projects.map((project: { id: string; }) => project.id);
+    const extractedCreateTxHashes = gqlResult.projects.map((project: { txHash: string; }) => project.txHash);
 
     let projectResult = [];
     const projectModel = new Projects({}, conn);
 
     if (member.wallet_address === body.variables.creator) {
-      const extractedCreateTxHashes = gqlResult.projects.map((project: { txHash: string; }) => project.txHash);
       projectResult = await projectModel.getProjectsByCreatorWithTxHashArray(
         extractedCreateTxHashes,
         member.wallet_address,
@@ -288,10 +289,20 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
       );
     }
 
+    if (projectResult.length < gqlResult.projects.length) {
+      const projects = calculateMinusBetweenTowSetsById(gqlResult.projects, projectResult as any);
+      await projectModel.createProjects(projects);
+      projectResult = await projectModel.getProjectsByCreatorWithAddressArray(
+        extractedProjectIds,
+        body.variables.creator,
+        _db_
+      );
+    }
+
     let result = null;
 
     if (projectResult.length > 0) {
-      const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(projectResult, 'address'))
+      const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(projectResult, 'id'))
       result = {projects: _.values(merged)};
     } else {
       result = gqlResult
