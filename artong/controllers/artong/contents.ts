@@ -2,7 +2,7 @@ import { Contents, Member } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import getSecretKeys from '../../utils/common/ssmKeys';
-import { getS3ObjectInBuffer, getS3ObjectHead } from '../../utils/common/commonFunc';
+import { getS3ObjectInBuffer, getS3ObjectHead, calculateMinusBetweenTowSetsById } from '../../utils/common/commonFunc';
 import { graphqlRequest } from '../../utils/common/graphqlUtil';
 import { Unauthorized } from '../../utils/error/errors';
 import { NoPermission } from '../../utils/error/errorCodes';
@@ -585,12 +585,6 @@ const makeMemberInfo = function(result: any[], prefix: string[], memberResultNam
   }
 
   return result
-}
-
-const calculateMinusBetweenTowSetsById = function(setA: [], setB: []): any[] {
-  return setA.filter(
-      (a: { id: string }) => setB.every((b: { id: string }) => a.id !== b.id)
-    );
 }
 
 export {
