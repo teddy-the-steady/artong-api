@@ -2,7 +2,7 @@ SELECT
 {{#each _db_}}
     {{this}},
 {{/each}}
-    address,
+    address as id,
     (SELECT COUNT(*) FROM subscribe s WHERE s.project_address = p.address) AS subscribers
 FROM
     projects p
