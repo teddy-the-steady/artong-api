@@ -22,10 +22,10 @@ const requestInit = async function(event: any) {
 
   try {
     result['member'] = {};
-    let memberId = null;
+    let memberId: number = 0;
     let principalId = null;
     if (process.env.IS_OFFLINE) { // INFO] offline이면 queryStringParameters로 받은 member_id 세팅(없으면 stage는 admin 0)
-      memberId = event['queryStringParameters'] && event['queryStringParameters']['member_id'] ? event['queryStringParameters']['member_id'] : 0;
+      memberId = event['queryStringParameters'] && event['queryStringParameters']['member_id'] ? parseInt(event['queryStringParameters']['member_id']) : 0;
     } else if (event['headers']['Authorization']) {
       const jwtToken = event['headers']['Authorization'];
       if ( // INFO] cognito authorized
