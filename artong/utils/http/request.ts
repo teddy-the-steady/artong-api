@@ -24,8 +24,8 @@ const requestInit = async function(event: any) {
     result['member'] = {};
     let memberId = null;
     let principalId = null;
-    if (process.env.IS_OFFLINE) { // INFO] offline이면 queryStringParameters로 받은 member_id 세팅(없으면 stage는 admin 249)
-      memberId = event['queryStringParameters'] && event['queryStringParameters']['member_id'] ? event['queryStringParameters']['member_id'] : 249;
+    if (process.env.IS_OFFLINE) { // INFO] offline이면 queryStringParameters로 받은 member_id 세팅(없으면 stage는 admin 0)
+      memberId = event['queryStringParameters'] && event['queryStringParameters']['member_id'] ? event['queryStringParameters']['member_id'] : 0;
     } else if (event['headers']['Authorization']) {
       const jwtToken = event['headers']['Authorization'];
       if ( // INFO] cognito authorized
@@ -42,7 +42,7 @@ const requestInit = async function(event: any) {
       }
     }
 
-    if (memberId) {
+    if (memberId >= 0) {
       const user = await member.getMember({ id: memberId });
       result['member'] = Object.assign(result['member'], user.data);
     }
