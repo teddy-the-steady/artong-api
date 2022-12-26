@@ -227,7 +227,17 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
     const extractedProjectIds = gqlResult.projects.map((project: { id: string; }) => project.id);
 
     const projectModel = new Projects({}, conn);
-    const projectResult = await projectModel.getProjectsWithAddressArray(extractedProjectIds, _db_);
+    let projectResult = await projectModel.getProjectsWithAddressArray(extractedProjectIds, _db_);
+
+    if (projectResult.length < gqlResult.projects.length) {
+      const projects = calculateMinusBetweenTowSetsById(gqlResult.projects, projectResult as any);
+      await projectModel.createProjects(projects);
+      projectResult = await projectModel.getProjectsByCreatorWithAddressArray(
+        extractedProjectIds,
+        body.variables.creator,
+        _db_
+      );
+    }
 
     let result = null;
 
