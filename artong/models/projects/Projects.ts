@@ -2,6 +2,7 @@ import { PoolClient } from 'pg';
 import * as db from '../../utils/db/db';
 import Models from '../Models';
 const insertProject = require('./insertProject.sql');
+const insertProjects = require('./insertProjects.sql');
 const updateProject = require('./updateProject.sql');
 const selectProject = require('./selectProject.sql');
 const selectProjects = require('./selectProjects.sql');
@@ -53,6 +54,19 @@ class Projects extends Models {
 				background_s3key,
 			});
 			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async createProjects(
+		projects?: Projects[],
+	): Promise<Projects[]> {
+		try {
+			const result = await db.execute(this.conn, insertProjects, {
+				projects,
+			});
+			return result
 		} catch (error) {
 			throw error;
 		}

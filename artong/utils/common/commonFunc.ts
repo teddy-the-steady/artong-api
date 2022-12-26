@@ -106,6 +106,12 @@ const putS3Object = async function(
     }
 }
 
+const calculateMinusBetweenTowSetsById = function(setA: [], setB: []): any[] {
+    return setA.filter(
+        (a: { id: string }) => setB.every((b: { id: string }) => a.id !== b.id)
+      );
+  }
+
 export {
     getTotalRows,
     extractTotalRows,
@@ -114,4 +120,5 @@ export {
     getS3ObjectInBuffer,
     getS3ObjectHead,
     putS3Object,
+    calculateMinusBetweenTowSetsById,
 };
