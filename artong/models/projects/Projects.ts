@@ -25,6 +25,7 @@ class Projects extends Models {
 	background_thumbnail_s3key?: string;
 	status?: string;
 	symbol?: string;
+	sns?: object;
 
 	created_at?: Date;
 	updated_at?: Date;
@@ -79,7 +80,8 @@ class Projects extends Models {
 		description?: string,
     	project_s3key?: string,
     	background_s3key?: string,
-		status?: string
+		status?: string,
+		sns?: object,
 	): Promise<Projects>  {
 		try {
 			const result = await db.execute(this.conn, updateProject, {
@@ -89,7 +91,8 @@ class Projects extends Models {
 				description,
 				project_s3key,
 				background_s3key,
-				status
+				status,
+				sns,
 			});
 			return result[0]
 		} catch (error) {
