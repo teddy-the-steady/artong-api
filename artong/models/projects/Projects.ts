@@ -7,11 +7,13 @@ const updateProject = require('./updateProject.sql');
 const selectProject = require('./selectProject.sql');
 const selectProjects = require('./selectProjects.sql');
 const selectProjectsWithAddressArray = require('./selectProjectsWithAddressArray.sql');
+const selectProjectsWithTxHashArray = require('./selectProjectsWithTxHashArray.sql');
 const selectProjectsByCreatorWithAddressArray = require('./selectProjectsByCreatorWithAddressArray.sql');
 const selectProjectsByCreatorWithTxHashArray = require('./selectProjectsByCreatorWithTxHashArray.sql');
 const selectProjectsLikeName = require('./selectProjectsLikeName.sql');
 const selectSubscribedProjectsByMember = require('./selectSubscribedProjectsByMember.sql');
 const updateProjectThumbnailS3keys = require('./updateProjectThumbnailS3keys.sql');
+const updateProjectAddressAndStatus = require('./updateProjectAddressAndStatus.sql');
 
 class Projects extends Models {
 	create_tx_hash?: string;
@@ -100,6 +102,23 @@ class Projects extends Models {
 		}
 	}
 
+	async updateProjectAddressAndStatus(
+		create_tx_hash?: string,
+		address?: string,
+		status?: string,
+	): Promise<Projects>  {
+		try {
+			const result = await db.execute(this.conn, updateProjectAddressAndStatus, {
+				create_tx_hash,
+				address,
+				status,
+			});
+			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	}
+
 	async getProjectWithTxhash(create_tx_hash?: string): Promise<Projects> {
 		try {
 			const result = await db.execute(this.conn, selectProject, {
@@ -147,6 +166,19 @@ class Projects extends Models {
 				this.conn,
 				selectProjectsWithAddressArray,
 				{addressArray, _db_}
+			);
+			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getProjectsWithTxHashArray(txHashArray?: Array<string>, _db_?: string[]): Promise<Projects[]> {
+		try {
+			const result = await db.execute(
+				this.conn,
+				selectProjectsWithTxHashArray,
+				{txHashArray, _db_}
 			);
 			return result
 		} catch (error) {
