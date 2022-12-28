@@ -149,16 +149,11 @@ const getTxReceiptAndUpdateStatus = async function(member_id?: number, txHash?: 
       const address = getProjectAddressFromContractCreatedEvent(txReceipt);
 
       projectModel.address = address;
-      projectModel.member_id = member_id;
       projectModel.status = 'CREATED';
 
-      const result = await projectModel.updateProject(
+      const result = await projectModel.updateProjectAddressAndStatus(
         projectModel.create_tx_hash,
         projectModel.address,
-        projectModel.member_id,
-        projectModel.description,
-        projectModel.project_s3key,
-        projectModel.background_s3key,
         projectModel.status
       );
 
@@ -227,18 +222,15 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
     }
 
     const extractedProjectIds = gqlResult.projects.map((project: { id: string; }) => project.id);
+    const extractedCreateTxHashes = gqlResult.projects.map((project: { txHash: string; }) => project.txHash);
 
     const projectModel = new Projects({}, conn);
-    let projectResult = await projectModel.getProjectsWithAddressArray(extractedProjectIds, _db_);
+    let projectResult = await projectModel.getProjectsWithTxHashArray(extractedCreateTxHashes, _db_);
 
     if (projectResult.length < gqlResult.projects.length) {
       const projects = calculateMinusBetweenTowSetsById(gqlResult.projects, projectResult as any);
       await projectModel.createProjects(projects);
-      projectResult = await projectModel.getProjectsByCreatorWithAddressArray(
-        extractedProjectIds,
-        body.variables.creator,
-        _db_
-      );
+      projectResult = await projectModel.getProjectsWithAddressArray(extractedProjectIds, _db_);
     }
 
     let result = null;
@@ -271,7 +263,7 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
   }
 }
 
-const queryProjectsByCreator = async function(body: any, _db_: string[], pureQuery: string, member: Member) {
+const queryProjectsByCreator = async function(body: any, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -286,20 +278,12 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
     let projectResult = [];
     const projectModel = new Projects({}, conn);
 
-    if (member.wallet_address === body.variables.creator) {
-      projectResult = await projectModel.getProjectsByCreatorWithTxHashArray(
-        extractedCreateTxHashes,
-        member.wallet_address,
-        _db_
-      );
-      projectResult = await getProjectArrayWithStatusUpdatesFromTxReceipts(projectResult);
-    } else {
-      projectResult = await projectModel.getProjectsByCreatorWithAddressArray(
-        extractedProjectIds,
-        body.variables.creator,
-        _db_
-      );
-    }
+    projectResult = await projectModel.getProjectsByCreatorWithTxHashArray(
+      extractedCreateTxHashes,
+      body.variables.creator,
+      _db_
+    );
+    projectResult = await getProjectArrayWithStatusUpdatesFromTxReceipts(projectResult);
 
     if (projectResult.length < gqlResult.projects.length) {
       const projects = calculateMinusBetweenTowSetsById(gqlResult.projects, projectResult as any);
