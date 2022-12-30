@@ -34,6 +34,14 @@ const doFollowMemberOrUndo = async function(body: FollowInfo, member: Member) {
       );
     }
 
+    if (result) {
+      const memberModel = new Member({}, conn);
+      result = await memberModel.getMemberByMemberId(
+        body.targetMemberId,
+        member.id,
+      );
+    }
+
     return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
