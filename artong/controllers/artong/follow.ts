@@ -17,8 +17,8 @@ const doFollowMemberOrUndo = async function(body: FollowInfo, member: Member) {
     }
 
     const followModel = new Follow({
-      followee_id: member.id,
-      follower_id: body.targetMemberId,
+      followee_id: body.targetMemberId,
+      follower_id: member.id,
     }, conn);
 
     let result = null;
