@@ -63,10 +63,14 @@ class Member extends Models implements MemberGroups {
 		}
 	}
 
-	async getMemberByUsername(username?: string): Promise<Member> {
+	async getMemberByUsername(
+		username?: string,
+		member_id?: number,
+	): Promise<Member> {
 		try {
 			const result = await db.execute(this.conn, selectMemberByUsername, {
 				username,
+				member_id,
 			});
 			return result[0]
 		} catch (error) {

@@ -30,7 +30,7 @@ const getMember = async function(pathParameters: any) { // INFO] inner use only
   }
 };
 
-const getMemberByUsername = async function(pathParameters: { id: string }) {
+const getMemberByUsername = async function(pathParameters: { id: string }, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -40,6 +40,7 @@ const getMemberByUsername = async function(pathParameters: { id: string }) {
 
     const result = await memberModel.getMemberByUsername(
       memberModel.username,
+      member.id
     );
     return {data: result}
   } catch (error) {
