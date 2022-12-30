@@ -27,7 +27,7 @@ export async function handler(event: any, context: any, callback: any) {
           else if (req.path.includes('/subscribe'))
             res = await projects.getMemberSubscribedProjects(req.pathParameters, req.queryStringParameters);
           else
-            res = await member.getMemberByUsername(req.pathParameters);
+            res = await member.getMemberByUsername(req.pathParameters, req.member);
         }
         else if (req.path === '/artong/v1/current_member' || req.path === '/artong/v1/current_member/')
           res = { data: req.member };
