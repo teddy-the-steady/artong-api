@@ -15,7 +15,7 @@ const graphql = async function(body: any, member: Member) {
   let result: any;
   if (isDataMergeNecessary) {
     switch (queryName) {
-      case 'Project': result = await projects.queryProject(body, _db_, pureQuery);
+      case 'Project': result = await projects.queryProject(body, _db_, pureQuery, member);
         break;
       case 'Projects': result = await projects.queryProjects(body, _db_, pureQuery);
         break;
