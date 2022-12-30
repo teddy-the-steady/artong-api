@@ -130,10 +130,14 @@ class Projects extends Models {
 		}
 	}
 
-	async getProjectWithAddress(address?: string): Promise<Projects> {
+	async getProjectWithAddress(
+		address?: string,
+		member_id?: number,
+	): Promise<Projects> {
 		try {
 			const result = await db.execute(this.conn, selectProject, {
-				address
+				address,
+				member_id,
 			});
 			return result[0]
 		} catch (error) {
