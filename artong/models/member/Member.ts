@@ -2,6 +2,7 @@ import * as db from '../../utils/db/db';
 import Models from '../Models';
 const selectMember = require('./selectMember.sql');
 const selectMemberByUsername = require('./selectMemberByUsername.sql');
+const selectMemberByMemberId = require('./selectMemberByMemberId.sql');
 const insertMember = require('./insertMember.sql');
 const updateMemberProfileS3keys = require('./updateMemberProfileS3keys.sql');
 const selectMembersWithWalletAddressArray = require('./selectMembersWithWalletAddressArray.sql');
@@ -72,6 +73,22 @@ class Member extends Models implements MemberGroups {
 				username,
 				member_id,
 			});
+			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getMemberByMemberId(
+		member_id?: number,
+		follower_member_id?: number,
+	): Promise<Member> {
+		try {
+			const result = await db.execute(this.conn, selectMemberByMemberId, {
+				member_id,
+				follower_member_id,
+			});
+			console.log(result)
 			return result[0]
 		} catch (error) {
 			throw error;
