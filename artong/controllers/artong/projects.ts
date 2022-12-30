@@ -185,14 +185,14 @@ const getProjectAddressFromContractCreatedEvent = function(txReceipt: any) {
   }
 }
 
-const queryProject = async function(body: any, _db_: string[], pureQuery: string) {
+const queryProject = async function(body: any, _db_: string[], pureQuery: string, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
     const projectModel = new Projects({ address: body.variables.id }, conn);
 
     const [dbResult, gqlResult] = await Promise.all([
-      projectModel.getProjectWithAddress(projectModel.address),
+      projectModel.getProjectWithAddress(projectModel.address, member.id),
       graphqlRequest({query: pureQuery, variables: body.variables})
     ]);
 
