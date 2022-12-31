@@ -236,7 +236,7 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
     let result = null;
 
     if (projectResult.length > 0) {
-      const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(projectResult, 'id'));
+      const merged = _.merge(_.keyBy(gqlResult.projects, 'txHash'), _.keyBy(projectResult, 'create_tx_hash'));
       result = {projects: _.values(merged)};
     } else {
       result = gqlResult;
