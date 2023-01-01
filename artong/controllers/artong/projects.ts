@@ -226,6 +226,7 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
 
     const projectModel = new Projects({}, conn);
     let projectResult = await projectModel.getProjectsWithTxHashArray(extractedCreateTxHashes, _db_);
+    projectResult = await getProjectArrayWithStatusUpdatesFromTxReceipts(projectResult);
 
     if (projectResult.length < gqlResult.projects.length) {
       const projects = calculateMinusBetweenTowSetsById(gqlResult.projects, projectResult as any);
@@ -298,7 +299,7 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
     let result = null;
 
     if (projectResult.length > 0) {
-      const merged = _.merge(_.keyBy(gqlResult.projects, 'id'), _.keyBy(projectResult, 'id'))
+      const merged = _.merge(_.keyBy(gqlResult.projects, 'txHash'), _.keyBy(projectResult, 'create_tx_hash'))
       result = {projects: _.values(merged)};
     } else {
       result = gqlResult
