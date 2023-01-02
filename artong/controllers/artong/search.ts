@@ -45,7 +45,6 @@ const searchMembers = async function(queryStringParameters: any, member: Member)
   const conn: PoolClient = await db.getConnection();
 
   try {
-    console.log('in?')
     const memberModel = new Member({
       username: queryStringParameters.searchWord
     }, conn);
