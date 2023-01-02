@@ -88,7 +88,6 @@ class Member extends Models implements MemberGroups {
 				member_id,
 				follower_member_id,
 			});
-			console.log(result)
 			return result[0]
 		} catch (error) {
 			throw error;
