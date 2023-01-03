@@ -198,8 +198,8 @@ const queryProject = async function(body: any, _db_: string[], pureQuery: string
 
     const memberModel = new Member({}, conn);
     const ownerResult = await memberModel.getMembersWithWalletAddressArray([gqlResult.project.owner]);
-    if (ownerResult) {
-      gqlResult.project.owner = ownerResult;
+    if (ownerResult.length === 1) {
+      gqlResult.project.owner = ownerResult[0];
     }
 
     const contributorsResult = await memberModel.getTop5ContributorsInProject(body.variables.id);
