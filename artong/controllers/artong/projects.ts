@@ -196,6 +196,19 @@ const queryProject = async function(body: any, _db_: string[], pureQuery: string
       graphqlRequest({query: pureQuery, variables: body.variables})
     ]);
 
+    const memberModel = new Member({}, conn);
+    const ownerResult = await memberModel.getMembersWithWalletAddressArray([gqlResult.project.owner]);
+    if (ownerResult) {
+      gqlResult.project.owner = ownerResult;
+    }
+
+    const contributorsResult = await memberModel.getTop5ContributorsInProject(body.variables.id);
+    if (contributorsResult.length > 0) {
+      gqlResult.project.contributors = contributorsResult;
+    } else {
+      gqlResult.project.contributors = [];
+    }
+
     if (dbResult && gqlResult.project) {
       for (let field of _db_) {
         gqlResult.project[field] = (dbResult as any)[field];

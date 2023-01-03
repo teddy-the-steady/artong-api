@@ -12,6 +12,7 @@ const selectProjectContributors = require('./selectProjectContributors.sql');
 const selectFollower = require('./selectFollower.sql');
 const selectFollowing = require('./selectFollowing.sql');
 const selectTop5ContributorsInProjects = require('./selectTop5ContributorsInProjects.sql');
+const selectTop5ContributorsInProject = require('./selectTop5ContributorsInProject.sql');
 
 import {
 	IsEmail,
@@ -88,7 +89,6 @@ class Member extends Models implements MemberGroups {
 				member_id,
 				follower_member_id,
 			});
-			console.log(result)
 			return result[0]
 		} catch (error) {
 			throw error;
@@ -271,6 +271,19 @@ class Member extends Models implements MemberGroups {
 		try {
 			const result = await db.execute(this.conn, selectTop5ContributorsInProjects, {
 				projectAddressArray: projectAddressArray
+			});
+			return result
+		} catch (error) {
+			throw error;
+		}
+	};
+
+	async getTop5ContributorsInProject(
+		projectAddress?: string,
+	): Promise<Member[]> {
+		try {
+			const result = await db.execute(this.conn, selectTop5ContributorsInProject, {
+				projectAddress
 			});
 			return result
 		} catch (error) {
