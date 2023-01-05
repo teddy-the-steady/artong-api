@@ -22,7 +22,7 @@ const requestInit = async function(event: any) {
 
   try {
     result['member'] = {};
-    let memberId: number = 0;
+    let memberId: number|undefined;
     let principalId = null;
     if (process.env.IS_OFFLINE) { // INFO] offline이면 queryStringParameters로 받은 member_id 세팅(없으면 stage는 admin 0)
       memberId = event['queryStringParameters'] && event['queryStringParameters']['member_id'] ? parseInt(event['queryStringParameters']['member_id']) : 0;
@@ -42,7 +42,7 @@ const requestInit = async function(event: any) {
       }
     }
 
-    if (memberId >= 0) {
+    if (memberId && memberId >= 0) {
       const user = await member.getMember({ id: memberId });
       result['member'] = Object.assign(result['member'], user.data);
     }
