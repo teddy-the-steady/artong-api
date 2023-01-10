@@ -83,12 +83,14 @@ class Contents extends Models {
 
 	async updateContentStatus(
 		id?: number,
+		project_address?: string,
 		member_id?: number,
 		status?: string,
 	): Promise<Contents> {
 		try {
 			const result = await db.execute(this.conn, updateContentStatus, {
 				id,
+				project_address,
 				member_id,
 				status,
 			});
