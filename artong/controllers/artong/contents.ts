@@ -345,7 +345,7 @@ const getTobeApprovedContentsInProject = async function(pathParameters: { id: st
       project_address: pathParameters.id,
     }, conn);
 
-    let result = await contentModel.getMintReadyContents(
+    let result = await contentModel.getToBeApprovedContents(
       contentModel.project_address,
       queryStringParameters.start_num,
       queryStringParameters.count_num
