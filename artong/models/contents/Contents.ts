@@ -97,13 +97,11 @@ class Contents extends Models {
 	async getContentById(
 		project_address?: string,
 		id?: number,
-		member_id?: number,
 	): Promise<Contents> {
 		try {
 			const result = await db.execute(this.conn, selectContentById, {
 				project_address,
 				id,
-				member_id,
 			});
 			return result[0]
 		} catch (error) {
@@ -187,10 +185,14 @@ class Contents extends Models {
 		}
 	}
 
-	async getContentVoucherById(id?: number): Promise<Contents> {
+	async getContentVoucherById(
+		id?: number,
+		member_id?: number,
+	): Promise<Contents> {
 		try {
 			const result = await db.execute(this.conn, selectContentVoucherById, {
 				id: id,
+				member_id: member_id,
 			});
 			return result[0]
 		} catch (error) {

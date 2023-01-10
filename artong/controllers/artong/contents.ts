@@ -17,20 +17,18 @@ interface GetContentInfo {
   id: string
   contents_id: string
 }
-const getContent = async function(pathParameters: GetContentInfo, member: Member) {
+const getContent = async function(pathParameters: GetContentInfo) {
   const conn: PoolClient = await db.getConnection();
 
   try {
     const contentModel = new Contents({
       project_address: pathParameters.id,
       id: parseInt(pathParameters.contents_id),
-      member_id: member?.id,
     }, conn);
 
     const contentResult = await contentModel.getContentById(
       contentModel.project_address,
       contentModel.id,
-      contentModel.member_id,
     );
 
     const result = makeMemberInfo([contentResult], [''], 'owner');
@@ -363,16 +361,18 @@ const getTobeApprovedContentsInProject = async function(pathParameters: { id: st
   }
 };
 
-const getContentVoucherById = async function(pathParameters: any) {
+const getContentVoucherById = async function(pathParameters: any, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
     const contentModel = new Contents({
-      id: pathParameters.id
+      id: pathParameters.id,
+      member_id: member?.id
     }, conn)
 
     const result = await contentModel.getContentVoucherById(
-      contentModel.id
+      contentModel.id,
+      contentModel.member_id
     );
 
     return {data: result}

@@ -1,17 +1,12 @@
 SELECT
   id,
-  member_id,
   project_address,
-  name,
-  description,
-  token_id,
-  content_s3key,
-  content_thumbnail_s3key,
-  ipfs_url,
+  {{#exists member_id}}
   (CASE
     WHEN is_redeemed = true THEN null
     ELSE voucher
   END) AS voucher,
+  {{/exists}}
   is_redeemed,
   created_at,
   updated_at
