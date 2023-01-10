@@ -13,6 +13,30 @@ import { File } from '@web-std/file';
 import _ from 'lodash';
 import { ContentsHistory } from '../../models/contentsHistory/ContentsHistory';
 
+interface GetContentInfo {
+  id: string
+  contents_id: string
+}
+const getContent = async function(pathParameters: GetContentInfo) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const contentModel = new Contents({
+      id: parseInt(pathParameters.contents_id),
+      project_address: pathParameters.id
+    }, conn);
+
+    const result = await contentModel.getContentById(
+      contentModel.project_address,
+      contentModel.id,
+    );
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+};
 
 const postContent = async function(body: any, member: Member) {
   const conn: PoolClient = await db.getConnection();
@@ -588,6 +612,7 @@ const makeMemberInfo = function(result: any[], prefix: string[], memberResultNam
 }
 
 export {
+  getContent,
 	postContent,
   uploadToNftStorageAndUpdateContent,
   patchContent,
