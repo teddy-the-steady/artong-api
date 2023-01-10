@@ -27,12 +27,15 @@ const getContent = async function(pathParameters: GetContentInfo, member: Member
       member_id: member?.id,
     }, conn);
 
-    const result = await contentModel.getContentById(
+    const contentResult = await contentModel.getContentById(
       contentModel.project_address,
       contentModel.id,
       contentModel.member_id,
     );
-    return {data: result}
+
+    const result = makeMemberInfo([contentResult], [''], 'owner');
+
+    return {data: result[0]}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
