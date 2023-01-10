@@ -139,6 +139,29 @@ const patchContent = async function(pathParameters: any, body: any) {
   }
 }
 
+const patchContentStatus = async function(pathParameters: {id: string}, body: {status: string}, member: Member) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const contentModel = new Contents({
+      id: parseInt(pathParameters.id),
+      member_id: member.id,
+      status: body.status,
+    }, conn);
+
+    const result = await contentModel.updateContentStatus(
+      contentModel.id,
+      contentModel.member_id,
+      contentModel.status,
+    );
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 const queryToken = async function(body: any, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
@@ -621,6 +644,7 @@ export {
 	postContent,
   uploadToNftStorageAndUpdateContent,
   patchContent,
+  patchContentStatus,
   queryToken,
   queryTokens,
   queryTokensByProject,
