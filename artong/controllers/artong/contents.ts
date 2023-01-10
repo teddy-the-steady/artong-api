@@ -139,18 +139,20 @@ const patchContent = async function(pathParameters: any, body: any) {
   }
 }
 
-const patchContentStatus = async function(pathParameters: {id: string}, body: {status: string}, member: Member) {
+const patchContentStatus = async function(pathParameters: {id: string, contents_id: string}, body: {status: string}, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
     const contentModel = new Contents({
-      id: parseInt(pathParameters.id),
+      id: parseInt(pathParameters.contents_id),
+      project_address: pathParameters.id,
       member_id: member.id,
       status: body.status,
     }, conn);
 
     const result = await contentModel.updateContentStatus(
       contentModel.id,
+      contentModel.project_address,
       contentModel.member_id,
       contentModel.status,
     );
