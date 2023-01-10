@@ -7,6 +7,7 @@ const updateContent = require('./updateContent.sql');
 const updateContentThumbnailS3keys = require('./updateContentThumbnailS3keys.sql');
 const updateContentTokenIds = require('./updateContentTokenIds.sql');
 const selectContent = require('./selectContent.sql');
+const selectContentById = require('./selectContentById.sql');
 const selectMintReadyContents = require('./selectMintReadyContents.sql');
 const selectContentsWithTokenIdArray = require('./selectContentsWithTokenIdArray.sql');
 const selectContentsByProjectWithTokenIdArray = require('./selectContentsByProjectWithTokenIdArray.sql');
@@ -86,6 +87,21 @@ class Contents extends Models {
 			const result = await db.execute(this.conn, selectContent, {
 				project_address,
 				token_id
+			});
+			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getContentById(
+		project_address?: string,
+		id?: number,
+	): Promise<Contents> {
+		try {
+			const result = await db.execute(this.conn, selectContentById, {
+				project_address,
+				id,
 			});
 			return result[0]
 		} catch (error) {
