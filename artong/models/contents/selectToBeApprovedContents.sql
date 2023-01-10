@@ -28,6 +28,18 @@ WHERE 1=1
   AND c.is_redeemed = FALSE
   AND (c.status != 'APPROVED' OR c.status IS NULL)
   AND c.token_id IS NULL
-ORDER BY c.created_at DESC
+
+{{#exists order_by}}
+ORDER BY
+{{/exists}}
+{{#if (eq order_by 'createdAt')}}
+  c.created_at
+{{/if}}
+{{#if (eq order_direction 'desc')}}
+  desc
+{{else if (eq order_direction 'asc')}}
+  asc
+{{/if}}
+
 LIMIT ${count_num}
 OFFSET ${start_num}
