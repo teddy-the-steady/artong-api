@@ -4,6 +4,7 @@ import * as db from '../../utils/db/db';
 import Models from '../Models';
 const insertContent = require('./insertContent.sql');
 const updateContent = require('./updateContent.sql');
+const updateContentStatus = require('./updateContentStatus.sql');
 const updateContentThumbnailS3keys = require('./updateContentThumbnailS3keys.sql');
 const updateContentTokenIds = require('./updateContentTokenIds.sql');
 const selectContent = require('./selectContent.sql');
@@ -73,6 +74,23 @@ class Contents extends Models {
 				is_redeemed,
 				name,
 				description,
+			});
+			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async updateContentStatus(
+		id?: number,
+		member_id?: number,
+		status?: string,
+	): Promise<Contents> {
+		try {
+			const result = await db.execute(this.conn, updateContentStatus, {
+				id,
+				member_id,
+				status,
 			});
 			return result[0]
 		} catch (error) {

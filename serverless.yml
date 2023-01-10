@@ -165,6 +165,11 @@ functions:
         cors: true
         authorizer: ${self:custom.authorizer}
      - http:
+        path: artong/v1/contents/{id}/status
+        method: PATCH
+        cors: true
+        authorizer: ${self:custom.authorizer}
+     - http:
         path: artong/v1/contents/content_thumbnail_s3key
         method: PATCH
         cors: true
