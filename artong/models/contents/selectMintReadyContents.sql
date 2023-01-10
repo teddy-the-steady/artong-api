@@ -26,6 +26,7 @@ WHERE 1=1
   AND c.project_address = ${project_address}
   AND c.is_redeemed = FALSE
   AND (c.status != 'BLOCKED' OR c.status IS NULL)
+  AND c.token_id IS NULL
 ORDER BY c.created_at DESC
 LIMIT ${count_num}
 OFFSET ${start_num}
