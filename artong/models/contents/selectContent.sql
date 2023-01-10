@@ -8,10 +8,6 @@ SELECT
   c.content_s3key,
   c.content_thumbnail_s3key,
   c.ipfs_url,
-  (CASE
-    WHEN c.is_redeemed = true THEN null
-    ELSE c.voucher
-  END) AS voucher,
   c.is_redeemed,
   c.created_at,
   c.updated_at,
