@@ -373,7 +373,9 @@ const getTobeApprovedContentsInProject = async function(pathParameters: { id: st
     let result = await contentModel.getToBeApprovedContents(
       contentModel.project_address,
       queryStringParameters.start_num,
-      queryStringParameters.count_num
+      queryStringParameters.count_num,
+      queryStringParameters.order_by,
+      queryStringParameters.order_direction,
     );
 
     result = makeMemberInfo(result, [''], 'owner');
