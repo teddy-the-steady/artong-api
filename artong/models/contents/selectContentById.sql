@@ -8,12 +8,6 @@ SELECT
   c.content_s3key,
   c.content_thumbnail_s3key,
   c.ipfs_url,
-  {{#exists member_id}}
-  (CASE
-    WHEN c.is_redeemed = true THEN null
-    ELSE c.voucher
-  END) AS voucher,
-  {{/exists}}
   c.voucher -> 'minPrice' -> 'hex' AS price,
   c.is_redeemed,
   c.created_at,
