@@ -41,12 +41,12 @@ export async function handler(event: any, context: any, callback: any) {
           if (req.path.includes('/contents/tobe_approved'))
             res = await contents.getTobeApprovedContentsInProject(req.pathParameters, req.queryStringParameters);
           if (req.pathParameters.contents_id)
-            res = await contents.getContent(req.pathParameters, req.member)
+            res = await contents.getContent(req.pathParameters)
         }
         else if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
           res = await projects.getProjects(req.queryStringParameters);
         else if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters && req.path.includes('/voucher'))
-          res = await contents.getContentVoucherById(req.pathParameters);
+          res = await contents.getContentVoucherById(req.pathParameters, req.member);
         else if (req.path.startsWith('/artong/v1/search/'))
           if (req.path.includes('projects'))
             res = await search.searchProjects(req.queryStringParameters, req.member);
