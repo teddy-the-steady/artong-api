@@ -10,6 +10,7 @@ SELECT
   c.ipfs_url,
   c.voucher -> 'minPrice' -> 'hex' AS price,
   c.is_redeemed,
+  c.status,
   c.created_at,
   c.updated_at,
   p.project_s3key,
