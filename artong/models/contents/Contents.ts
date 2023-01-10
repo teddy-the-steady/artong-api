@@ -9,6 +9,7 @@ const updateContentTokenIds = require('./updateContentTokenIds.sql');
 const selectContent = require('./selectContent.sql');
 const selectContentById = require('./selectContentById.sql');
 const selectMintReadyContents = require('./selectMintReadyContents.sql');
+const selectToBeApprovedContents = require('./selectToBeApprovedContents.sql');
 const selectContentsWithTokenIdArray = require('./selectContentsWithTokenIdArray.sql');
 const selectContentsByProjectWithTokenIdArray = require('./selectContentsByProjectWithTokenIdArray.sql');
 const selectContentsByCreatorWithTokenIdArray = require('./selectContentsByCreatorWithTokenIdArray.sql');
@@ -175,6 +176,23 @@ class Contents extends Models {
 	): Promise<Contents[]> {
 		try {
 			const result = await db.execute(this.conn, selectMintReadyContents, {
+				project_address: project_address,
+				start_num: start_num,
+				count_num: count_num
+			});
+			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getToBeApprovedContents(
+		project_address?: string,
+		start_num?: number,
+		count_num?: number
+	): Promise<Contents[]> {
+		try {
+			const result = await db.execute(this.conn, selectToBeApprovedContents, {
 				project_address: project_address,
 				start_num: start_num,
 				count_num: count_num
