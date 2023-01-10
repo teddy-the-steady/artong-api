@@ -17,18 +17,20 @@ interface GetContentInfo {
   id: string
   contents_id: string
 }
-const getContent = async function(pathParameters: GetContentInfo) {
+const getContent = async function(pathParameters: GetContentInfo, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
     const contentModel = new Contents({
+      project_address: pathParameters.id,
       id: parseInt(pathParameters.contents_id),
-      project_address: pathParameters.id
+      member_id: member?.id,
     }, conn);
 
     const result = await contentModel.getContentById(
       contentModel.project_address,
       contentModel.id,
+      contentModel.member_id,
     );
     return {data: result}
   } catch (error) {
