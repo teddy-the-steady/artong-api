@@ -30,6 +30,9 @@ const getContent = async function(pathParameters: GetContentInfo) {
       contentModel.project_address,
       contentModel.id,
     );
+    if (!contentResult) {
+      return {data: {}}
+    }
 
     const result = makeMemberInfo([contentResult], [''], 'owner');
 
