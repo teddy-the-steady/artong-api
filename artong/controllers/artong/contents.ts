@@ -302,8 +302,14 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
     )
 
     let result: any[] = [];
+    let subgraph_count = 0;
+
     if (contentsResult.length > 0) {
       result = _.map(contentsResult, (content) => {
+        if (content.token_id && content.token_id > 0) {
+          subgraph_count++
+        }
+
         const token = _.find(gqlResult.tokens, {tokenURI: content.ipfs_url})
         if (token) {
           return _.merge(
@@ -319,7 +325,7 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
       result = await memberModel.setOwnerFromMemberListTo(result);
     }
 
-    return {data: {tokens: result}}
+    return {data: {tokens: result}, meta: {subgraph_count: subgraph_count}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
