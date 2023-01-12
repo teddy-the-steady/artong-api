@@ -267,39 +267,59 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
   const conn: PoolClient = await db.getConnection();
 
   try {
-    const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
-    if (gqlResult.tokens.length === 0) {
-      return {data: {tokens: []}}
-    }
+    const [gqlResult, policyResult] = await Promise.all([
+      graphqlRequest({query: pureQuery, variables: body.variables}),
+      await graphqlRequest({
+        query: 'query Project($id: String) { project(id: $id) { policy } }',
+        variables: {id: body.variables.project,}
+      })
+    ]);
 
-    const memberModel = new Member({}, conn);
-    gqlResult.tokens = await memberModel.setOwnerFromMemberListTo(gqlResult.tokens);
-
+    const policy = policyResult.project.policy;
     const contentModel = new Contents({}, conn);
-    const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
+    if (gqlResult.tokens.length > 0) {
+      const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
 
-    let contentResult = await contentModel.getTokensByProjectWithIdArray(
-      extractedTokenIds,
-      body.variables.project,
-      _db_
-    );
-
-    if (contentResult.length < gqlResult.tokens.length) {
-      const tokens = calculateMinusBetweenTowSetsById(gqlResult.tokens, contentResult as any);
-      await contentModel.updateContentTokenIds(tokens);
-      contentResult = await contentModel.getTokensByProjectWithIdArray(
+      const updateCandidates = await contentModel.getTokensByProjectWithIdArray(
         extractedTokenIds,
         body.variables.project,
         _db_
       );
+
+      if (updateCandidates.length < gqlResult.tokens.length) {
+        const tokens = calculateMinusBetweenTowSetsById(gqlResult.tokens, updateCandidates as any);
+        await contentModel.updateContentTokenIds(tokens);
+      }
     }
 
-    if (contentResult.length > 0) {
-      const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
-      return {data: {tokens: _.values(merged)}}
-    } else {
-      return {data: gqlResult}
+    const contentsResult = await contentModel.getContents(
+      body.variables.project,
+      body.variables.start_num,
+      body.variables.first,
+      body.variables.orderBy,
+      body.variables.orderDirection,
+      policy,
+    )
+
+    let result: any[] = [];
+    if (contentsResult.length > 0) {
+      result = _.map(contentsResult, (content) => {
+        const token = _.find(gqlResult.tokens, {tokenURI: content.ipfs_url})
+        if (token) {
+          return _.merge(
+            content,
+            token
+          );
+        } else {
+          return content
+        }
+      });
+
+      const memberModel = new Member({}, conn);
+      result = await memberModel.setOwnerFromMemberListTo(result);
     }
+
+    return {data: {tokens: result}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
