@@ -325,7 +325,7 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
       result = await memberModel.setOwnerFromMemberListTo(result);
     }
 
-    return {data: {tokens: result}, meta: {subgraph_count: subgraph_count}}
+    return {data: {tokens: result, meta: {subgraph_count: subgraph_count}}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
