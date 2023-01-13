@@ -10,7 +10,12 @@ import * as follow from './follow';
 interface PaginationInfo {
 	start_num: number
 	count_num: number
-  }
+}
+
+interface PageAndOrderingInfo extends PaginationInfo {
+	order_by: string
+	order_direction: string
+}
 
 export {
 	member,
@@ -22,4 +27,5 @@ export {
 	offers,
 	follow,
 	PaginationInfo,
+	PageAndOrderingInfo,
 };
