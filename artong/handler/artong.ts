@@ -26,6 +26,8 @@ export async function handler(event: any, context: any, callback: any) {
             res = await member.getMemberFollowerOrFollowing(req.pathParameters, req.queryStringParameters);
           else if (req.path.includes('/subscribe'))
             res = await projects.getMemberSubscribedProjects(req.pathParameters, req.queryStringParameters);
+          else if (req.path.includes('/contents/candidates'))
+            res = await contents.getMemberContentsCandidates(req.pathParameters, req.queryStringParameters);
           else
             res = await member.getMemberByUsername(req.pathParameters, req.member);
         }
@@ -36,8 +38,6 @@ export async function handler(event: any, context: any, callback: any) {
             res = await projects.getProjectWhileUpdatingPendingToCreated(req.pathParameters, req.member);
           if (req.path.includes('/contributors'))
             res = await member.getProjectContributors(req.pathParameters, req.queryStringParameters);
-          if (req.path.includes('/contents/mint_ready'))
-            res = await contents.getMintReadyContentsInProject(req.pathParameters, req.queryStringParameters);
           if (req.path.includes('/contents/tobe_approved'))
             res = await contents.getTobeApprovedContentsInProject(req.pathParameters, req.queryStringParameters);
           if (req.path.includes('/contents/') && req.pathParameters.contents_id)

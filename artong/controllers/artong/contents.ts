@@ -12,6 +12,7 @@ import { NFTStorage } from 'nft.storage';
 import { File } from '@web-std/file';
 import _ from 'lodash';
 import { ContentsHistory } from '../../models/contentsHistory/ContentsHistory';
+import { PaginationInfo } from './index';
 
 interface GetContentInfo {
   id: string
@@ -267,6 +268,7 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
   const conn: PoolClient = await db.getConnection();
 
   try {
+     // TODO] query policy on every req for now. BEST is to listen event in our server and to syncronize with db
     const [gqlResult, policyResult] = await Promise.all([
       graphqlRequest({query: pureQuery, variables: body.variables}),
       await graphqlRequest({
@@ -346,42 +348,6 @@ const patchContentThumbnailS3key = async function(body:any) {
       contentModel.content_s3key,
       contentModel.content_thumbnail_s3key,
     );
-
-    return {data: result}
-  } catch (error) {
-    throw controllerErrorWrapper(error);
-  } finally {
-    db.release(conn);
-  }
-};
-
-const getMintReadyContentsInProject = async function(pathParameters: { id: string }, queryStringParameters: any) {
-  const conn: PoolClient = await db.getConnection();
-
-  try {
-    // TODO] query policy on every req for now. BEST is to listen event in our server and to syncronize with db
-    const policyResult = await graphqlRequest({
-      query: 'query Project($id: String) { project(id: $id) { policy } }',
-      variables: {id: pathParameters.id}
-    });
-    if (!policyResult.project) {
-      return {data: []}
-    }
-    if (policyResult.project.policy === 1) {
-      throw new Unauthorized(NoPermission.message, NoPermission.code);
-    }
-
-    const contentModel = new Contents({
-      project_address: pathParameters.id,
-    }, conn);
-
-    let result = await contentModel.getMintReadyContents(
-      contentModel.project_address,
-      queryStringParameters.start_num,
-      queryStringParameters.count_num
-    );
-
-    result = makeMemberInfo(result, [''], 'owner');
 
     return {data: result}
   } catch (error) {
@@ -672,6 +638,30 @@ const makeMemberInfo = function(result: any[], prefix: string[], memberResultNam
   return result
 }
 
+const getMemberContentsCandidates = async function(pathParameters: {id: string}, queryStringParameters: PaginationInfo) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const contentModel = new Contents({
+      member_id: parseInt(pathParameters.id),
+    }, conn);
+
+    const contentResult = await contentModel.getContentsCandidatesByMember(
+      contentModel.member_id,
+      queryStringParameters.start_num,
+      queryStringParameters.count_num,
+    );
+
+    const result = makeMemberInfo(contentResult, [''], 'owner');
+
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
   getContent,
 	postContent,
@@ -682,10 +672,10 @@ export {
   queryTokens,
   queryTokensByProject,
   patchContentThumbnailS3key,
-  getMintReadyContentsInProject,
   getTobeApprovedContentsInProject,
   getContentVoucherById,
   queryTokensByCreator,
   queryTokensByOwner,
   queryTokenHistory,
+  getMemberContentsCandidates,
 };
