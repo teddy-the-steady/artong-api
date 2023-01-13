@@ -27,7 +27,19 @@ WHERE 1=1
   AND c.member_id = ${member_id}
   AND c.is_redeemed = FALSE
   AND c.token_id IS NULL
-  AND c.status != 'BLOCKED'
--- ORDER BY c.created_at DESC
+  AND (c.status != 'BLOCKED' OR status IS NULL)
+
+{{#exists order_by}}
+ORDER BY
+{{/exists}}
+{{#if (eq order_by 'createdAt')}}
+  c.created_at
+{{/if}}
+{{#if (eq order_direction 'desc')}}
+  desc
+{{else if (eq order_direction 'asc')}}
+  asc
+{{/if}}
+
 LIMIT ${count_num}
 OFFSET ${start_num}
