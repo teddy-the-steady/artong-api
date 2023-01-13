@@ -8,10 +8,11 @@ SELECT
   c.content_s3key,
   c.content_thumbnail_s3key,
   c.ipfs_url,
+  c.voucher -> 'minPrice' -> 'hex' AS price,
   c.is_redeemed,
+  c.status,
   c.created_at,
   c.updated_at,
-  COUNT(*) OVER() AS total,
   m.username,
   m.wallet_address,
   m.email,
@@ -23,10 +24,10 @@ FROM
   contents c
 JOIN member m ON c.member_id = m.id
 WHERE 1=1
-  AND c.project_address = ${project_address}
+  AND c.member_id = ${member_id}
   AND c.is_redeemed = FALSE
-  AND (c.status != 'BLOCKED' OR c.status IS NULL)
   AND c.token_id IS NULL
-ORDER BY c.created_at DESC
+  AND c.status != 'BLOCKED'
+-- ORDER BY c.created_at DESC
 LIMIT ${count_num}
 OFFSET ${start_num}
