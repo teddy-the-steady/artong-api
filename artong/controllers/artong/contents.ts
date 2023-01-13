@@ -4,15 +4,13 @@ import * as db from '../../utils/db/db';
 import getSecretKeys from '../../utils/common/ssmKeys';
 import { getS3ObjectInBuffer, getS3ObjectHead, calculateMinusBetweenTowSetsById } from '../../utils/common/commonFunc';
 import { graphqlRequest } from '../../utils/common/graphqlUtil';
-import { Unauthorized } from '../../utils/error/errors';
-import { NoPermission } from '../../utils/error/errorCodes';
 import { PoolClient } from 'pg';
 import { S3Client } from '@aws-sdk/client-s3';
 import { NFTStorage } from 'nft.storage';
 import { File } from '@web-std/file';
 import _ from 'lodash';
 import { ContentsHistory } from '../../models/contentsHistory/ContentsHistory';
-import { PaginationInfo } from './index';
+import { PageAndOrderingInfo } from './index';
 
 interface GetContentInfo {
   id: string
@@ -357,7 +355,7 @@ const patchContentThumbnailS3key = async function(body:any) {
   }
 };
 
-const getTobeApprovedContentsInProject = async function(pathParameters: { id: string }, queryStringParameters: any) {
+const getTobeApprovedContentsInProject = async function(pathParameters: { id: string }, queryStringParameters: PageAndOrderingInfo) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -638,7 +636,7 @@ const makeMemberInfo = function(result: any[], prefix: string[], memberResultNam
   return result
 }
 
-const getMemberContentsCandidates = async function(pathParameters: {id: string}, queryStringParameters: PaginationInfo) {
+const getMemberContentsCandidates = async function(pathParameters: {id: string}, queryStringParameters: PageAndOrderingInfo) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -650,6 +648,8 @@ const getMemberContentsCandidates = async function(pathParameters: {id: string},
       contentModel.member_id,
       queryStringParameters.start_num,
       queryStringParameters.count_num,
+      queryStringParameters.order_by,
+      queryStringParameters.order_direction,
     );
 
     const result = makeMemberInfo(contentResult, [''], 'owner');
