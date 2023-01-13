@@ -9,7 +9,7 @@ const updateContentThumbnailS3keys = require('./updateContentThumbnailS3keys.sql
 const updateContentTokenIds = require('./updateContentTokenIds.sql');
 const selectContent = require('./selectContent.sql');
 const selectContentById = require('./selectContentById.sql');
-const selectMintReadyContents = require('./selectMintReadyContents.sql');
+const selectContentsCandidiatesByMember = require('./selectContentsCandidiatesByMember.sql');
 const selectToBeApprovedContents = require('./selectToBeApprovedContents.sql');
 const selectContentsWithTokenIdArray = require('./selectContentsWithTokenIdArray.sql');
 const selectContentsByProjectWithTokenIdArray = require('./selectContentsByProjectWithTokenIdArray.sql');
@@ -190,23 +190,6 @@ class Contents extends Models {
 		}
 	}
 
-	async getMintReadyContents(
-		project_address?: string,
-		start_num?: number,
-		count_num?: number
-	): Promise<Contents[]> {
-		try {
-			const result = await db.execute(this.conn, selectMintReadyContents, {
-				project_address: project_address,
-				start_num: start_num,
-				count_num: count_num
-			});
-			return result
-		} catch (error) {
-			throw error;
-		}
-	}
-
 	async getToBeApprovedContents(
 		project_address?: string,
 		start_num?: number,
@@ -308,6 +291,23 @@ class Contents extends Models {
 				order_by,
 				order_direction,
 				policy
+			});
+			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getContentsCandidatesByMember(
+		member_id?: number,
+		start_num?: number,
+		count_num?: number,
+	): Promise<Contents[]> {
+		try {
+			const result = await db.execute(this.conn, selectContentsCandidiatesByMember, {
+				member_id,
+				start_num,
+				count_num,
 			});
 			return result
 		} catch (error) {
