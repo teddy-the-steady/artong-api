@@ -1,5 +1,8 @@
 UPDATE contents AS c SET
-    token_id = a.token_id
+    token_id = a.token_id,
+    is_redeemed = CASE WHEN is_redeemed IS NULL THEN NULL
+                  ELSE TRUE
+                  END
 FROM (VALUES
     {{#each contents}}
       ('{{this.tokenURI}}', {{this.tokenId}})
