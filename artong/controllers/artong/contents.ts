@@ -16,7 +16,7 @@ interface GetContentInfo {
   id: string
   contents_id: string
 }
-const getContent = async function(pathParameters: GetContentInfo) {
+const getContent = async function(pathParameters: GetContentInfo, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -28,6 +28,7 @@ const getContent = async function(pathParameters: GetContentInfo) {
     const contentResult = await contentModel.getContentById(
       contentModel.project_address,
       contentModel.id,
+      member?.id
     );
     if (!contentResult) {
       return {data: {}}
@@ -166,7 +167,7 @@ const patchContentStatus = async function(pathParameters: {id: string, contents_
   }
 }
 
-const queryToken = async function(body: any, _db_: string[], pureQuery: string) {
+const queryToken = async function(body: any, _db_: string[], pureQuery: string, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -176,7 +177,11 @@ const queryToken = async function(body: any, _db_: string[], pureQuery: string) 
     }, conn);
 
     const [dbResult, gqlResult] = await Promise.all([
-      contentsModel.getContent(contentsModel.project_address, contentsModel.token_id),
+      contentsModel.getContent(
+        contentsModel.project_address,
+        contentsModel.token_id,
+        member?.id
+      ),
       graphqlRequest({query: pureQuery, variables: body.variables})
     ]);
 
