@@ -17,15 +17,15 @@ class ContentReactions extends Models {
 	}
 
 	async createContentReaction(
-		reaction_id?: number,
+		reaction_code?: string,
 		content_id?: number,
 		member_id?: number
 	): Promise<ContentReactions> {
 		try {
 			const result = await db.execute(this.conn, insertContentReactions, {
-				reaction_id: reaction_id,
-				content_id: content_id,
-				member_id: member_id
+				reaction_code,
+				content_id,
+				member_id
 			});
 			return result[0]
 		} catch (error) {
