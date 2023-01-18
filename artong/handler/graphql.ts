@@ -21,7 +21,7 @@ const graphql = async function(body: any, member: Member) {
         break;
       case 'ProjectsByCreator': result = await projects.queryProjectsByCreator(body, _db_, pureQuery);
         break;
-      case 'Token': result = await contents.queryToken(body, _db_, pureQuery);
+      case 'Token': result = await contents.queryToken(body, _db_, pureQuery, member);
         break;
       case 'Tokens': result = await contents.queryTokens(body, _db_, pureQuery);
         break;
