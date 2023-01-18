@@ -8,13 +8,12 @@ const postContentReaction = async function(pathParameters: any, body: any, membe
 
   try {
     const reactionModel = new ContentReactions({
-      reaction_id: body.reaction_code,
       content_id: pathParameters.id,
       member_id: member.id,
     }, conn);
 
     const result = await reactionModel.createContentReaction(
-      reactionModel.reaction_id,
+      body.reaction_code,
       reactionModel.content_id,
       reactionModel.member_id
     );
