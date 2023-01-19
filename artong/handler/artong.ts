@@ -26,8 +26,13 @@ export async function handler(event: any, context: any, callback: any) {
             res = await member.getMemberFollowerOrFollowing(req.pathParameters, req.queryStringParameters);
           else if (req.path.includes('/subscribe'))
             res = await projects.getMemberSubscribedProjects(req.pathParameters, req.queryStringParameters);
-          else if (req.path.includes('/contents/candidates'))
-            res = await contents.getMemberContentsCandidates(req.pathParameters, req.queryStringParameters);
+          else if (req.path.includes('/contents')) {
+            if (req.path.includes('/candidates')) {
+              res = await contents.getMemberContentsCandidates(req.pathParameters, req.queryStringParameters);
+            } else if (req.path.includes('/favorites')) {
+              res = await contents.getMemberContentsFavorites(req.pathParameters, req.queryStringParameters);
+            }
+          }
           else
             res = await member.getMemberByUsername(req.pathParameters, req.member);
         }
