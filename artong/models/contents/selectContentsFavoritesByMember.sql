@@ -38,8 +38,8 @@ WHERE 1=1
 {{#exists order_by}}
 ORDER BY
 {{/exists}}
-{{#if (eq order_by 'updatedAt')}}
-  sub.updated_at
+{{#if (eq order_by 'createdAt')}}
+  sub.created_at
 {{/if}}
 {{#if (eq order_direction 'desc')}}
   desc
