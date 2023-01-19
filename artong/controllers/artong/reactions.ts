@@ -12,11 +12,18 @@ const postContentReaction = async function(pathParameters: any, body: any, membe
       member_id: member.id,
     }, conn);
 
-    const result = await reactionModel.createContentReaction(
+    let result = await reactionModel.createContentReaction(
       body.reaction_code,
       reactionModel.content_id,
       reactionModel.member_id
     );
+
+    if (result && ['like', 'unlike'].includes(body.reaction_code.toLowerCase())) {
+      (result as any).total_likes = (await reactionModel.getTotalLikesByContent(
+        result.content_id
+      )).total_likes;
+    }
+
     return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
