@@ -10,6 +10,7 @@ const updateContentTokenIds = require('./updateContentTokenIds.sql');
 const selectContent = require('./selectContent.sql');
 const selectContentById = require('./selectContentById.sql');
 const selectContentsCandidiatesByMember = require('./selectContentsCandidiatesByMember.sql');
+const selectContentsFavoritesByMember = require('./selectContentsFavoritesByMember.sql');
 const selectToBeApprovedContents = require('./selectToBeApprovedContents.sql');
 const selectContentsWithTokenIdArray = require('./selectContentsWithTokenIdArray.sql');
 const selectContentsByProjectWithTokenIdArray = require('./selectContentsByProjectWithTokenIdArray.sql');
@@ -311,6 +312,27 @@ class Contents extends Models {
 	): Promise<Contents[]> {
 		try {
 			const result = await db.execute(this.conn, selectContentsCandidiatesByMember, {
+				member_id,
+				start_num,
+				count_num,
+				order_by,
+				order_direction,
+			});
+			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getContentsFavoritesByMember(
+		member_id?: number,
+		start_num?: number,
+		count_num?: number,
+		order_by?: string,
+		order_direction?: string,
+	): Promise<Contents[]> {
+		try {
+			const result = await db.execute(this.conn, selectContentsFavoritesByMember, {
 				member_id,
 				start_num,
 				count_num,
