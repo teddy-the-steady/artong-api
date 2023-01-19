@@ -667,6 +667,32 @@ const getMemberContentsCandidates = async function(pathParameters: {id: string},
   }
 }
 
+const getMemberContentsFavorites = async function(pathParameters: {id: string}, queryStringParameters: PageAndOrderingInfo) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const contentModel = new Contents({
+      member_id: parseInt(pathParameters.id),
+    }, conn);
+
+    const contentResult = await contentModel.getContentsFavoritesByMember(
+      contentModel.member_id,
+      queryStringParameters.start_num,
+      queryStringParameters.count_num,
+      queryStringParameters.order_by,
+      queryStringParameters.order_direction,
+    );
+
+    const result = makeMemberInfo(contentResult, [''], 'owner');
+
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
   getContent,
 	postContent,
@@ -683,4 +709,5 @@ export {
   queryTokensByOwner,
   queryTokenHistory,
   getMemberContentsCandidates,
+  getMemberContentsFavorites,
 };
