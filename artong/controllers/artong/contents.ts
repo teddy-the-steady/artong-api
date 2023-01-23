@@ -8,7 +8,7 @@ import { PoolClient } from 'pg';
 import { S3Client } from '@aws-sdk/client-s3';
 import { NFTStorage } from 'nft.storage';
 import { File } from '@web-std/file';
-import _ from 'lodash';
+import _, { concat } from 'lodash';
 import { ContentsHistory } from '../../models/contentsHistory/ContentsHistory';
 import { PageAndOrderingInfo } from './index';
 
@@ -675,17 +675,62 @@ const getMemberContentsFavorites = async function(pathParameters: {id: string}, 
       member_id: parseInt(pathParameters.id),
     }, conn);
 
-    const contentResult = await contentModel.getContentsFavoritesByMember(
+    let contentResult = await contentModel.getContentsFavoritesByMember(
       contentModel.member_id,
       queryStringParameters.start_num,
       queryStringParameters.count_num,
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
+    if (contentResult.length === 0) {
+      return {data: []}
+    }
 
-    const result = makeMemberInfo(contentResult, [''], 'owner');
+    const extractedConcatenatedTokenIds = contentResult.reduce((acc, content) => {
+      if (content.project_address && content.token_id) {
+        acc.push(content.project_address.concat(content.token_id.toString()))
+      }
+      return acc
+    }, [] as any);
 
-    return {data: result}
+    if (extractedConcatenatedTokenIds.length > 0) {
+      const gqlResult = await graphqlRequest({
+        query: `query Tokens { tokens(where: {id_in: ${JSON.stringify(extractedConcatenatedTokenIds)}}) { id, owner } }`,
+      });
+
+      if (gqlResult.tokens.length > 0) {
+        const extractedOwners = gqlResult.tokens.reduce((acc: any, value: any) => {
+          if (!acc[value.owner]) {
+            acc[value.owner] = value.owner
+          }
+          return acc
+        }, {});
+
+        const memberModel = new Member({}, conn);
+        const memberResult = await memberModel.getMembersWithWalletAddressArray(Object.keys(extractedOwners));
+
+        const merged = _.map(gqlResult.tokens, function(token) {
+          return _.assign(token, _.find(memberResult, {
+              wallet_address: token.owner
+          }));
+        });
+        const mergedWithOwner = makeMemberInfo(merged, [''], 'owner');
+
+        contentResult = _.map(contentResult, function(content) {
+          if (content.project_address && content.token_id) {
+            return _.assign(content, _.find(mergedWithOwner, {
+              id: content.project_address.concat(content.token_id.toString())
+            }));
+          } else {
+            return content
+          }
+        });
+      }
+    }
+
+    contentResult = makeMemberInfo(contentResult, [''], 'creator');
+
+    return {data: contentResult}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
