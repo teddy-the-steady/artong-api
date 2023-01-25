@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import requestInit from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response';
-import { member, country, reactions, projects, contents, search, follow } from '../controllers/artong/index';
+import { member, country, reactions, projects, contents, search, follow, main } from '../controllers/artong/index';
 import { graphql } from './graphql'
 import { getDbConnentionPool } from '../init';
 import { Pool } from 'pg';
@@ -50,6 +50,8 @@ export async function handler(event: any, context: any, callback: any) {
         }
         else if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
           res = await projects.getProjects(req.queryStringParameters);
+        else if (req.path === '/artong/v1/main/contents' || req.path === '/artong/v1/main/contents/')
+          res = main.getMainContents(req.member);
         else if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters && req.path.includes('/voucher'))
           res = await contents.getContentVoucherById(req.pathParameters, req.member);
         else if (req.path.startsWith('/artong/v1/search/'))
