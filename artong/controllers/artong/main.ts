@@ -20,7 +20,10 @@ const getTop10Contributors = async function() {
 
 const getMainContents = function() {
   const result = {
-    mainToken: '0x1523f96d42d8b66703bdd517e0d7244ca8093bfb1',
+    mainToken: {
+      project_address: '0x1523f96d42d8b66703bdd517e0d7244ca8093bfb',
+      token_id: '1'
+    },
     highlitedProjects: [
       '0xd71b49b0474700984db95c1cc832422f90610481',
       '0x61aa173c27f6a2d0c55632a6c042b6379bad9de7',
