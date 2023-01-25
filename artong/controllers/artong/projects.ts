@@ -88,6 +88,7 @@ const patchProject = async function(pathParameters: { id: string }, body: any, m
       background_s3key: body.background_s3key,
       status: body.status,
       sns: body.sns,
+      slug: body.slug,
     }, conn);
 
     const result = await projectModel.updateProject(
@@ -99,6 +100,7 @@ const patchProject = async function(pathParameters: { id: string }, body: any, m
       projectModel.background_s3key,
       projectModel.status,
       projectModel.sns,
+      projectModel.slug,
     );
     return {data: result}
   } catch (error) {
