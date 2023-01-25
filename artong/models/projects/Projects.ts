@@ -1,6 +1,7 @@
 import { PoolClient } from 'pg';
 import * as db from '../../utils/db/db';
 import Models from '../Models';
+import { IsNotEthereumAddress } from '../../utils/validators/IsNotEthereumAddress';
 const insertProject = require('./insertProject.sql');
 const insertProjects = require('./insertProjects.sql');
 const updateProject = require('./updateProject.sql');
@@ -28,6 +29,7 @@ class Projects extends Models {
 	status?: string;
 	symbol?: string;
 	sns?: object;
+	@IsNotEthereumAddress()
 	slug?: string;
 
 	created_at?: Date;
@@ -133,13 +135,13 @@ class Projects extends Models {
 		}
 	}
 
-	async getProjectWithAddress(
-		address?: string,
+	async getProjectWithAddressOrSlug(
+		addressOrSlug?: string,
 		member_id?: number,
 	): Promise<Projects> {
 		try {
 			const result = await db.execute(this.conn, selectProject, {
-				address,
+				addressOrSlug,
 				member_id,
 			});
 			return result[0]
