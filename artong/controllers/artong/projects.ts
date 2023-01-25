@@ -8,6 +8,7 @@ import _ from 'lodash';
 import { graphqlRequest } from '../../utils/common/graphqlUtil';
 import { calculateMinusBetweenTowSetsById } from '../../utils/common/commonFunc'
 import { PaginationInfo } from './index';
+import validator from '../../utils/validators/common';
 
 interface GetProjectsInfo extends PaginationInfo {
   member_id: number
@@ -90,6 +91,8 @@ const patchProject = async function(pathParameters: { id: string }, body: any, m
       sns: body.sns,
       slug: body.slug,
     }, conn);
+
+    await validator(projectModel);
 
     const result = await projectModel.updateProject(
       projectModel.create_tx_hash,
@@ -191,12 +194,16 @@ const queryProject = async function(body: any, _db_: string[], pureQuery: string
   const conn: PoolClient = await db.getConnection();
 
   try {
-    const projectModel = new Projects({ address: body.variables.id }, conn);
+    const projectModel = new Projects({}, conn);
 
-    const [dbResult, gqlResult] = await Promise.all([
-      projectModel.getProjectWithAddress(projectModel.address, member.id),
-      graphqlRequest({query: pureQuery, variables: body.variables})
-    ]);
+    const dbResult = await projectModel.getProjectWithAddressOrSlug(
+      body.variables.id,
+      member.id
+    );
+    if (!dbResult) {
+      return {data: {project: {}}}
+    }
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: { id: dbResult.address }})
 
     const memberModel = new Member({}, conn);
     const ownerResult = await memberModel.getMembersWithWalletAddressArray([gqlResult.project.owner]);
