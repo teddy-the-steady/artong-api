@@ -209,6 +209,10 @@ functions:
         path: artong/v1/graphql
         method: POST
         cors: true
+     - http:
+        path: artong/v1/main/contents
+        method: GET
+        cors: true
     layers:
      - {Ref: NodeModulesLambdaLayer}
   artong-admin:
