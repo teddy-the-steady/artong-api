@@ -7,6 +7,7 @@ SET
     {{#exists background_s3key}} ,background_s3key = ${background_s3key} {{/exists}}
     {{#exists status}} ,status = ${status} {{/exists}}
     {{#exists sns}} ,sns = ${sns} {{/exists}}
+    {{#exists slug}} ,slug = ${slug} {{/exists}}
 WHERE
     create_tx_hash = ${create_tx_hash}
     AND
