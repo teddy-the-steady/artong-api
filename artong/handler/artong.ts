@@ -50,8 +50,11 @@ export async function handler(event: any, context: any, callback: any) {
         }
         else if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
           res = await projects.getProjects(req.queryStringParameters);
-        else if (req.path === '/artong/v1/main/contents' || req.path === '/artong/v1/main/contents/')
-          res = main.getMainContents(req.member);
+        else if (req.path.startsWith('/artong/v1/main/'))
+          if (req.path.includes('/contents'))
+            res = main.getMainContents();
+          else if (req.path.includes('/contributors'))
+            res = await main.getTop10Contributors();
         else if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters && req.path.includes('/voucher'))
           res = await contents.getContentVoucherById(req.pathParameters, req.member);
         else if (req.path.startsWith('/artong/v1/search/'))
