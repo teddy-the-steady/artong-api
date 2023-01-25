@@ -1,6 +1,24 @@
+import { PoolClient } from 'pg';
 import { Member } from '../../models/index';
+import * as db from '../../utils/db/db';
+import controllerErrorWrapper from '../../utils/error/errorWrapper';
 
-const getMainContents = function(member: Member) {
+const getTop10Contributors = async function() {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const memberModel = new Member({}, conn);
+
+    const result = await memberModel.getTop10Contributors();
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
+const getMainContents = function() {
   const result = {
     mainToken: '0x1523f96d42d8b66703bdd517e0d7244ca8093bfb1',
     highlitedProjects: [
@@ -32,5 +50,6 @@ const getMainContents = function(member: Member) {
 };
 
 export {
+  getTop10Contributors,
   getMainContents,
 };
