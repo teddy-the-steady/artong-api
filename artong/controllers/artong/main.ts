@@ -24,7 +24,7 @@ const getMainContents = function() {
       project_address: '0x1523f96d42d8b66703bdd517e0d7244ca8093bfb',
       token_id: '1'
     },
-    highlitedProjects: [
+    highlightedProjects: [
       '0xd71b49b0474700984db95c1cc832422f90610481',
       '0x61aa173c27f6a2d0c55632a6c042b6379bad9de7',
       '0x439ad432268bac67af3d28863c6408bd9ebc91c2',
