@@ -36,9 +36,9 @@ export async function handler(event: any, context: any, callback: any) {
           else
             res = await member.getMemberByUsername(req.pathParameters, req.member);
         }
-        else if (req.path === '/artong/v1/current_member' || req.path === '/artong/v1/current_member/')
+        if (req.path === '/artong/v1/current_member' || req.path === '/artong/v1/current_member/')
           res = { data: req.member };
-        else if (req.path.startsWith('/artong/v1/projects/') && req.pathParameters) {
+        if (req.path.startsWith('/artong/v1/projects/') && req.pathParameters) {
           if (req.path.includes('/tx_receipt_updated'))
             res = await projects.getProjectWhileUpdatingPendingToCreated(req.pathParameters, req.member);
           if (req.path.includes('/contributors'))
@@ -48,16 +48,16 @@ export async function handler(event: any, context: any, callback: any) {
           if (req.path.includes('/contents/') && req.pathParameters.contents_id)
             res = await contents.getContent(req.pathParameters, req.member)
         }
-        else if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
+        if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
           res = await projects.getProjects(req.queryStringParameters);
-        else if (req.path.startsWith('/artong/v1/main/'))
+        if (req.path.startsWith('/artong/v1/main/'))
           if (req.path.includes('/contents'))
             res = main.getMainContents();
           else if (req.path.includes('/contributors'))
             res = await main.getTop10Contributors();
-        else if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters && req.path.includes('/voucher'))
+        if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters && req.path.includes('/voucher'))
           res = await contents.getContentVoucherById(req.pathParameters, req.member);
-        else if (req.path.startsWith('/artong/v1/search/'))
+        if (req.path.startsWith('/artong/v1/search/'))
           if (req.path.includes('projects'))
             res = await search.searchProjects(req.queryStringParameters, req.member);
           else if (req.path.includes('contents'))
