@@ -211,14 +211,14 @@ const queryProject = async function(body: any, _db_: string[], pureQuery: string
       gqlResult.project.owner = ownerResult[0];
     }
 
-    const contributorsResult = await memberModel.getTop5ContributorsInProject(body.variables.id);
+    const contributorsResult = await memberModel.getTop5ContributorsInProject(dbResult.address);
     if (contributorsResult.length > 0) {
       gqlResult.project.contributors = contributorsResult;
     } else {
       gqlResult.project.contributors = [];
     }
 
-    if (dbResult && gqlResult.project) {
+    if (gqlResult.project) {
       for (let field of _db_) {
         gqlResult.project[field] = (dbResult as any)[field];
       }
