@@ -68,42 +68,41 @@ export async function handler(event: any, context: any, callback: any) {
       case 'POST':
         if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
           res = await member.postMember(req.body);
-        else if (req.path === '/artong/v1/country' || req.path === '/artong/v1/country/')
+        if (req.path === '/artong/v1/country' || req.path === '/artong/v1/country/')
           res = await country.postCountry(req.body, req.member);
-        else if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters && req.path.includes('/reactions'))
+        if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters && req.path.includes('/reactions'))
           res = await reactions.postContentReaction(req.pathParameters, req.body, req.member);
-        else if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
+        if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
           res = await projects.postProject(req.body, req.member);
-        else if (req.path === '/artong/v1/contents' || req.path === '/artong/v1/contents/')
+        if (req.path === '/artong/v1/contents' || req.path === '/artong/v1/contents/')
           res = await contents.postContent(req.body, req.member);
-        else if (req.path === '/artong/v1/contents/storage' || req.path === '/artong/v1/contents/storage/')
+        if (req.path === '/artong/v1/contents/storage' || req.path === '/artong/v1/contents/storage/')
           res = await contents.uploadToNftStorageAndUpdateContent(req.body);
-        else if (req.path === '/artong/v1/follow' || req.path === '/artong/v1/follow/')
+        if (req.path === '/artong/v1/follow' || req.path === '/artong/v1/follow/')
           res = await follow.doFollowMemberOrUndo(req.body, req.member);
-        else if (req.path === '/artong/v1/subscribe' || req.path === '/artong/v1/subscribe/')
+        if (req.path === '/artong/v1/subscribe' || req.path === '/artong/v1/subscribe/')
           res = await follow.doSubsribeProjectOrUndo(req.body, req.member);
-        else if (req.path === '/artong/v1/graphql' || req.path === '/artong/v1/graphql/')
+        if (req.path === '/artong/v1/graphql' || req.path === '/artong/v1/graphql/')
           res = await graphql(req.body, req.member);
         break;
       case 'PATCH':
         if (req.path.startsWith('/artong/v1/members/') && req.path.includes('profile_s3key'))
           res = await member.patchMemberProfileS3key(req.body, req.member);
-        else if (req.path.startsWith('/artong/v1/members/') && req.pathParameters) {
+        if (req.path.startsWith('/artong/v1/members/') && req.pathParameters)
           if (req.path.includes('profile_thumbnail_s3key'))
             res = await member.patchMemberProfileThumbnailS3key(req.pathParameters, req.body);
           else
             res = await member.patchMember(req.body, req.pathParameters, req.member);
-        }
-        else if (req.path.startsWith('/artong/v1/projects/') && req.pathParameters)
+        if (req.path.startsWith('/artong/v1/projects/') && req.pathParameters)
           if (req.path.includes('/contents') && req.path.includes('/status'))
-            res = await contents.patchContentStatus(req.pathParameters, req.body, req.member)
+            res = await contents.patchContentStatus(req.pathParameters, req.body, req.member);
           else
             res = await projects.patchProject(req.pathParameters, req.body, req.member);
-        else if (req.path === '/artong/v1/projects/thumbnail_s3key' || req.path === '/artong/v1/projects/thumbnail_s3key/')
+        if (req.path === '/artong/v1/projects/thumbnail_s3key' || req.path === '/artong/v1/projects/thumbnail_s3key/')
           res = await projects.patchProjectThumbnailS3key(req.body);
-        else if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters)
+        if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters)
           res = await contents.patchContent(req.pathParameters, req.body);
-        else if (req.path === '/artong/v1/contents/content_thumbnail_s3key' || req.path === '/artong/v1/contents/content_thumbnail_s3key/')
+        if (req.path === '/artong/v1/contents/content_thumbnail_s3key' || req.path === '/artong/v1/contents/content_thumbnail_s3key/')
           res = await contents.patchContentThumbnailS3key(req.body);
         break;
       default:
