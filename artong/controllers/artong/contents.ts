@@ -8,7 +8,7 @@ import { PoolClient } from 'pg';
 import { S3Client } from '@aws-sdk/client-s3';
 import { NFTStorage } from 'nft.storage';
 import { File } from '@web-std/file';
-import _, { concat } from 'lodash';
+import _ from 'lodash';
 import { ContentsHistory } from '../../models/contentsHistory/ContentsHistory';
 import { PageAndOrderingInfo } from './index';
 
@@ -167,10 +167,22 @@ const patchContentStatus = async function(pathParameters: {id: string, contents_
   }
 }
 
-const queryToken = async function(body: any, _db_: string[], pureQuery: string, member: Member) {
+interface queryTokenInfo {
+  variables: {id: string}
+  db: {project_address: string, token_id: number}
+}
+const queryToken = async function(body: queryTokenInfo, _db_: string[], pureQuery: string, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
+    if (!isAddress(body.db.project_address)) {
+      const projectModel = new Projects({}, conn);
+      const projectResult = await projectModel.getProjectWithAddressOrSlug(body.db.project_address);
+      if (!projectResult || !projectResult.address) return {data: {token: {}}}
+      body.db.project_address = projectResult.address;
+      body.variables.id = projectResult.address + body.db.token_id;
+    }
+
     const contentsModel = new Contents({
       project_address: body.db.project_address,
       token_id: body.db.token_id
@@ -273,7 +285,7 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
   try {
     if (!isAddress(body.variables.project)) {
       const projectModel = new Projects({}, conn);
-      const projectResult = await projectModel.getProjectWithAddressOrSlug( body.variables.project);
+      const projectResult = await projectModel.getProjectWithAddressOrSlug(body.variables.project);
       if (!projectResult || !projectResult.address) return {data: {tokens:[], meta: {subgraph_count: 0}}}
       body.variables.project = projectResult.address;
     }
@@ -504,10 +516,29 @@ const queryTokensByOwner = async function(body: any, _db_: string[], pureQuery: 
   }
 }
 
-const queryTokenHistory = async function(body: any, _db_: string[], pureQuery: string) {
+interface queryOffersByTokenInfo {
+  variables: {
+    id: string
+    project_address: string
+    token_id: number
+  }
+  pagination: {
+    start_num: number
+    count_num: number
+  }
+}
+const queryTokenHistory = async function(body: queryOffersByTokenInfo, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
+    if (!isAddress(body.variables.project_address)) {
+      const projectModel = new Projects({}, conn);
+      const projectResult = await projectModel.getProjectWithAddressOrSlug(body.variables.project_address);
+      if (!projectResult || !projectResult.address) return {data: {token: {}}}
+      body.variables.project_address = projectResult.address;
+      body.variables.id = projectResult.address + body.variables.token_id;
+    }
+
     const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
     if (!gqlResult.token) {
       return {data: {token: {}}}
