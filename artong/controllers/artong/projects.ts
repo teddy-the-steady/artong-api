@@ -378,8 +378,8 @@ const getTxReceiptsAndUpdateStatus = async function(projectArray: Projects[]): P
   }, [] as any);
 
   if (pendingInfo.length > 0) {
-    return await Promise.all(pendingInfo.map(async (obj: any) => {
-      return await obj.func(obj.params.member_id, obj.params.txHash);
+    return await Promise.all(pendingInfo.map((obj: any) => {
+      return obj.func(obj.params.member_id, obj.params.txHash);
     }));
   }
   return []

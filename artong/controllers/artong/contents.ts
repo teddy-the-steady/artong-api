@@ -274,7 +274,7 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
      // TODO] query policy on every req for now. BEST is to listen event in our server and to syncronize with db
     const [gqlResult, policyResult] = await Promise.all([
       graphqlRequest({query: pureQuery, variables: body.variables}),
-      await graphqlRequest({
+      graphqlRequest({
         query: 'query Project($id: String) { project(id: $id) { policy } }',
         variables: {id: body.variables.project,}
       })
