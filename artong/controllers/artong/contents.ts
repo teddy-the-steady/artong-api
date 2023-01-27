@@ -1,8 +1,8 @@
-import { Contents, Member } from '../../models/index';
+import { Contents, Member, Projects } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import getSecretKeys from '../../utils/common/ssmKeys';
-import { getS3ObjectInBuffer, getS3ObjectHead, calculateMinusBetweenTowSetsById } from '../../utils/common/commonFunc';
+import { getS3ObjectInBuffer, getS3ObjectHead, calculateMinusBetweenTowSetsById, isAddress } from '../../utils/common/commonFunc';
 import { graphqlRequest } from '../../utils/common/graphqlUtil';
 import { PoolClient } from 'pg';
 import { S3Client } from '@aws-sdk/client-s3';
@@ -271,7 +271,14 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
   const conn: PoolClient = await db.getConnection();
 
   try {
-     // TODO] query policy on every req for now. BEST is to listen event in our server and to syncronize with db
+    if (!isAddress(body.variables.project)) {
+      const projectModel = new Projects({}, conn);
+      const projectResult = await projectModel.getProjectWithAddressOrSlug( body.variables.project);
+      if (!projectResult || !projectResult.address) return {data: {tokens:[]}}
+      body.variables.project = projectResult.address;
+    }
+
+    // TODO] query policy on every req for now. BEST is to listen event in our server and to syncronize with db
     const [gqlResult, policyResult] = await Promise.all([
       graphqlRequest({query: pureQuery, variables: body.variables}),
       graphqlRequest({
@@ -279,6 +286,9 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
         variables: {id: body.variables.project,}
       })
     ]);
+    if (gqlResult.tokens.length === 0 || !policyResult.project) {
+      return {data: {tokens:[]}}
+    }
 
     const policy = policyResult.project.policy;
     const contentModel = new Contents({}, conn);
