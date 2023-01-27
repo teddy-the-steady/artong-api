@@ -195,15 +195,17 @@ const queryProject = async function(body: any, _db_: string[], pureQuery: string
 
   try {
     const projectModel = new Projects({}, conn);
-
     const dbResult = await projectModel.getProjectWithAddressOrSlug(
       body.variables.id,
       member.id
     );
     if (!dbResult) {
       return {data: {project: {}}}
+    } else {
+      body.variables.id = dbResult.address;
     }
-    const gqlResult = await graphqlRequest({query: pureQuery, variables: { id: dbResult.address }})
+
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: { id: body.variables.id }});
 
     const memberModel = new Member({}, conn);
     const ownerResult = await memberModel.getMembersWithWalletAddressArray([gqlResult.project.owner]);
@@ -218,7 +220,7 @@ const queryProject = async function(body: any, _db_: string[], pureQuery: string
       gqlResult.project.contributors = [];
     }
 
-    if (dbResult && gqlResult.project) {
+    if (gqlResult.project) {
       for (let field of _db_) {
         gqlResult.project[field] = (dbResult as any)[field];
       }
@@ -378,8 +380,8 @@ const getTxReceiptsAndUpdateStatus = async function(projectArray: Projects[]): P
   }, [] as any);
 
   if (pendingInfo.length > 0) {
-    return await Promise.all(pendingInfo.map(async (obj: any) => {
-      return await obj.func(obj.params.member_id, obj.params.txHash);
+    return await Promise.all(pendingInfo.map((obj: any) => {
+      return obj.func(obj.params.member_id, obj.params.txHash);
     }));
   }
   return []
