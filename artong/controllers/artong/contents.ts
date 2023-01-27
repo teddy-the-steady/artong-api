@@ -274,7 +274,7 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
     if (!isAddress(body.variables.project)) {
       const projectModel = new Projects({}, conn);
       const projectResult = await projectModel.getProjectWithAddressOrSlug( body.variables.project);
-      if (!projectResult || !projectResult.address) return {data: {tokens:[]}}
+      if (!projectResult || !projectResult.address) return {data: {tokens:[], meta: {subgraph_count: 0}}}
       body.variables.project = projectResult.address;
     }
 
@@ -287,7 +287,7 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
       })
     ]);
     if (gqlResult.tokens.length === 0 || !policyResult.project) {
-      return {data: {tokens:[]}}
+      return {data: {tokens:[], meta: {subgraph_count: 0}}}
     }
 
     const policy = policyResult.project.policy;
