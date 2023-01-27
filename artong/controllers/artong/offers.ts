@@ -1,14 +1,32 @@
-import { Member } from '../../models/index';
+import { Member, Projects } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import { graphqlRequest } from '../../utils/common/graphqlUtil';
+import { isAddress } from '../../utils/common/commonFunc';
 import { PoolClient } from 'pg';
 import _ from 'lodash';
 
-const queryOffersByToken = async function(body: any, _db_: string[], pureQuery: string) {
+interface queryOffersByTokenInfo {
+  variables: {
+    id: string
+    project_address: string
+    token_id: number
+    first: number
+    skip: number
+  }
+}
+const queryOffersByToken = async function(body: queryOffersByTokenInfo, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
+    if (!isAddress(body.variables.project_address)) {
+      const projectModel = new Projects({}, conn);
+      const projectResult = await projectModel.getProjectWithAddressOrSlug(body.variables.project_address);
+      if (!projectResult || !projectResult.address) return {data: {token: {}}}
+      body.variables.project_address = projectResult.address;
+      body.variables.id = projectResult.address + body.variables.token_id;
+    }
+
     const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
     if (gqlResult.offers.length === 0) {
       return {data: {offers: []}}
