@@ -1,8 +1,9 @@
 import { PoolClient } from 'pg';
-import { Member } from '../../models/index';
+import { Member, Projects } from '../../models/index';
 import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import validator from '../../utils/validators/common';
+import { isAddress } from '../../utils/common/commonFunc';
 import { PaginationInfo } from './index';
 
 const getMember = async function(pathParameters: any) { // INFO] inner use only
@@ -149,8 +150,14 @@ const getProjectContributors = async function(pathParameters: { id: string }, qu
   const conn: PoolClient = await db.getConnection();
 
   try {
-    const memberModel = new Member({}, conn);
+    if (!isAddress(pathParameters.id)) {
+      const projectModel = new Projects({}, conn);
+      const projectResult = await projectModel.getProjectWithAddressOrSlug(pathParameters.id);
+      if (!projectResult || !projectResult.address) return {data: []}
+      pathParameters.id = projectResult.address;
+    }
 
+    const memberModel = new Member({}, conn);
     const result = await memberModel.getProjectContributors(
       pathParameters.id,
       queryStringParameters.start_num,
