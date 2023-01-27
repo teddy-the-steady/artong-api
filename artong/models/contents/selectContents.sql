@@ -2,6 +2,7 @@ SELECT
   id,
   (SELECT wallet_address FROM member m WHERE m.id = c.member_id) AS owner,
   project_address,
+  (SELECT slug FROM projects p WHERE p.address = ${project_address}),
   name,
   description,
   token_id,
