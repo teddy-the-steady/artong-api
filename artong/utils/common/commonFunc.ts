@@ -5,6 +5,7 @@ import {
     PutObjectCommand
 } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
+import { ethers } from 'ethers';
 import { InternalServerError } from '../error/errors';
 import { AWSError } from '../error/errorCodes';
 
@@ -109,8 +110,12 @@ const putS3Object = async function(
 const calculateMinusBetweenTowSetsById = function(setA: [], setB: []): any[] {
     return setA.filter(
         (a: { id: string }) => setB.every((b: { id: string }) => a.id !== b.id)
-      );
-  }
+    );
+}
+
+const isAddress = function(value: string) {
+    return ethers.utils.isAddress(value);
+}
 
 export {
     getTotalRows,
@@ -121,4 +126,5 @@ export {
     getS3ObjectHead,
     putS3Object,
     calculateMinusBetweenTowSetsById,
+    isAddress,
 };
