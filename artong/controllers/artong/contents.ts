@@ -20,6 +20,13 @@ const getContent = async function(pathParameters: GetContentInfo, member: Member
   const conn: PoolClient = await db.getConnection();
 
   try {
+    if (!isAddress(pathParameters.id)) {
+      const projectModel = new Projects({}, conn);
+      const projectResult = await projectModel.getProjectWithAddressOrSlug(pathParameters.id);
+      if (!projectResult || !projectResult.address) return {data: {}}
+      pathParameters.id = projectResult.address;
+    }
+
     const contentModel = new Contents({
       project_address: pathParameters.id,
       id: parseInt(pathParameters.contents_id),
@@ -167,11 +174,11 @@ const patchContentStatus = async function(pathParameters: {id: string, contents_
   }
 }
 
-interface queryTokenInfo {
+interface QueryTokenInfo {
   variables: {id: string}
   db: {project_address: string, token_id: number}
 }
-const queryToken = async function(body: queryTokenInfo, _db_: string[], pureQuery: string, member: Member) {
+const queryToken = async function(body: QueryTokenInfo, _db_: string[], pureQuery: string, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -516,7 +523,7 @@ const queryTokensByOwner = async function(body: any, _db_: string[], pureQuery: 
   }
 }
 
-interface queryOffersByTokenInfo {
+interface QueryOffersByTokenInfo {
   variables: {
     id: string
     project_address: string
@@ -527,7 +534,7 @@ interface queryOffersByTokenInfo {
     count_num: number
   }
 }
-const queryTokenHistory = async function(body: queryOffersByTokenInfo, _db_: string[], pureQuery: string) {
+const queryTokenHistory = async function(body: QueryOffersByTokenInfo, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {

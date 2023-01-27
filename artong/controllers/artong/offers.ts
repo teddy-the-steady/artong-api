@@ -6,7 +6,7 @@ import { isAddress } from '../../utils/common/commonFunc';
 import { PoolClient } from 'pg';
 import _ from 'lodash';
 
-interface queryOffersByTokenInfo {
+interface QueryOffersByTokenInfo {
   variables: {
     id: string
     project_address: string
@@ -15,7 +15,7 @@ interface queryOffersByTokenInfo {
     skip: number
   }
 }
-const queryOffersByToken = async function(body: queryOffersByTokenInfo, _db_: string[], pureQuery: string) {
+const queryOffersByToken = async function(body: QueryOffersByTokenInfo, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
