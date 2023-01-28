@@ -47,6 +47,7 @@ SELECT
 		WHERE 1=1
 		AND sub.reaction_id = 1
 	) AS total_likes,
+  p.slug,
   p.project_s3key,
   p.project_thumbnail_s3key,
   m.username,
