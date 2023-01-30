@@ -10,24 +10,21 @@ import { calculateMinusBetweenTowSetsById } from '../../utils/common/commonFunc'
 import { PaginationInfo } from './index';
 import validator from '../../utils/validators/common';
 
-interface GetProjectsInfo extends PaginationInfo {
-  member_id: number
-  status: string
+interface GetProjectsInfo {
+  prev_next_count: number
+  basis_project_address: string
 }
-const getProjects = async function(queryStringParameters: GetProjectsInfo) {
+const getProjectsPrevNext = async function(queryStringParameters: GetProjectsInfo) {
   const conn: PoolClient = await db.getConnection();
 
   try {
     const projectModel = new Projects({
-      member_id: queryStringParameters.member_id,
-      status: queryStringParameters.status
+      address: queryStringParameters.basis_project_address
     }, conn)
 
-    const result = await projectModel.getProjects(
-      projectModel.member_id,
-      projectModel.status,
-      queryStringParameters.start_num,
-      queryStringParameters.count_num
+    const result = await projectModel.getProjectsPrevNext(
+      projectModel.address,
+      queryStringParameters.prev_next_count,
     );
     return {data: result}
   } catch (error) {
@@ -442,7 +439,7 @@ const patchProjectThumbnailS3key = async function(body: PatchProjectThumbnailS3k
 }
 
 export {
-  getProjects,
+  getProjectsPrevNext,
 	postProject,
   patchProject,
   getProjectWhileUpdatingPendingToCreated,
