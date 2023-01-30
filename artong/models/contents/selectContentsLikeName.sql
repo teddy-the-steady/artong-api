@@ -1,22 +1,24 @@
 SELECT
-  id,
-  member_id,
-  project_address,
-  name,
-  description,
-  token_id,
-  content_s3key,
-  content_thumbnail_s3key,
-  ipfs_url,
+  c.id,
+  c.member_id,
+  c.project_address,
+  c.name,
+  c.description,
+  c.token_id,
+  c.content_s3key,
+  c.content_thumbnail_s3key,
+  c.ipfs_url,
   (CASE
-    WHEN is_redeemed = true THEN null
-    ELSE voucher
+    WHEN c.is_redeemed = true THEN null
+    ELSE c.voucher
   END) AS voucher,
-  is_redeemed,
-  created_at,
-  updated_at
+  c.is_redeemed,
+  p.slug,
+  c.created_at,
+  c.updated_at
 FROM
-  contents
+  contents c
+JOIN projects p ON c.project_address = p.address
 WHERE 1=1
-  AND name ILIKE '%{{name}}%'
+  AND c.name ILIKE '%{{name}}%'
 LIMIT 5
