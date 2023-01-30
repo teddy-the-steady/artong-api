@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import requestInit from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response';
-import { member, country, reactions, projects, contents, search, follow, main } from '../controllers/artong/index';
+import { member, country, reactions, projects, contents, search, follow, main, report } from '../controllers/artong/index';
 import { graphql } from './graphql'
 import { getDbConnentionPool } from '../init';
 import { Pool } from 'pg';
@@ -82,6 +82,8 @@ export async function handler(event: any, context: any, callback: any) {
           res = await follow.doFollowMemberOrUndo(req.body, req.member);
         if (req.path === '/artong/v1/subscribe' || req.path === '/artong/v1/subscribe/')
           res = await follow.doSubsribeProjectOrUndo(req.body, req.member);
+        if (req.path === '/artong/v1/report' || req.path === '/artong/v1/report/')
+          res = await report.postReport(req.body, req.member);
         if (req.path === '/artong/v1/graphql' || req.path === '/artong/v1/graphql/')
           res = await graphql(req.body, req.member);
         break;

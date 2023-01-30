@@ -5,6 +5,7 @@ import { Projects } from './projects/Projects';
 import { Contents } from './contents/Contents';
 import { Follow } from './follow/Follow';
 import { Subscribe } from './subscribe/Subscribe';
+import { Reports } from './reports/Reports'
 
 export {
 	Member,
@@ -14,4 +15,5 @@ export {
 	Contents,
 	Follow,
 	Subscribe,
+	Reports,
 };
