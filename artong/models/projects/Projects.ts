@@ -6,7 +6,7 @@ const insertProject = require('./insertProject.sql');
 const insertProjects = require('./insertProjects.sql');
 const updateProject = require('./updateProject.sql');
 const selectProject = require('./selectProject.sql');
-const selectProjects = require('./selectProjects.sql');
+const selectProjectsPrevNext = require('./selectProjectsPrevNext.sql');
 const selectProjectsWithAddressArray = require('./selectProjectsWithAddressArray.sql');
 const selectProjectsWithTxHashArray = require('./selectProjectsWithTxHashArray.sql');
 const selectProjectsByCreatorWithAddressArray = require('./selectProjectsByCreatorWithAddressArray.sql');
@@ -150,18 +150,14 @@ class Projects extends Models {
 		}
 	}
 
-	async getProjects(
-		member_id?: number,
-		status?: string,
-		start_num?: number,
-		count_num?: number
+	async getProjectsPrevNext(
+		address?: string,
+		prev_next_count?: number
 	): Promise<Projects[]> {
 		try {
-			const result = await db.execute(this.conn, selectProjects, {
-				member_id,
-				status,
-				start_num,
-				count_num
+			const result = await db.execute(this.conn, selectProjectsPrevNext, {
+				address,
+				prev_next_count,
 			});
 			return result
 		} catch (error) {
