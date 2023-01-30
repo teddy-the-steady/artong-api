@@ -49,7 +49,7 @@ export async function handler(event: any, context: any, callback: any) {
             res = await contents.getContent(req.pathParameters, req.member)
         }
         if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
-          res = await projects.getProjects(req.queryStringParameters);
+          res = await projects.getProjectsPrevNext(req.queryStringParameters);
         if (req.path.startsWith('/artong/v1/main/'))
           if (req.path.includes('/contents'))
             res = main.getMainContents();
