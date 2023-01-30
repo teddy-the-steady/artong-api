@@ -3,6 +3,7 @@ SELECT
   c.{{this}},
 {{/each}}
   CONCAT(project_address,token_id) AS id,
+  p.slug,
   p.project_s3key,
   p.project_thumbnail_s3key
 FROM
