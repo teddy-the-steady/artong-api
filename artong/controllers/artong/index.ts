@@ -7,6 +7,7 @@ import * as search from './search';
 import * as offers from './offers';
 import * as follow from './follow';
 import * as main from './main';
+import * as report from './report';
 
 interface PaginationInfo {
 	start_num: number
@@ -28,6 +29,7 @@ export {
 	offers,
 	follow,
 	main,
+	report,
 	PaginationInfo,
 	PageAndOrderingInfo,
 };

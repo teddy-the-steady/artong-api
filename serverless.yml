@@ -217,6 +217,11 @@ functions:
         path: artong/v1/main/contributors
         method: GET
         cors: true
+     - http:
+        path: artong/v1/report
+        method: POST
+        cors: true
+        authorizer: ${self:custom.authorizer}
     layers:
      - {Ref: NodeModulesLambdaLayer}
   artong-admin:
