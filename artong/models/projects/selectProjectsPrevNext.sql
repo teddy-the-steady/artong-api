@@ -1,18 +1,18 @@
 SELECT * FROM (
     (SELECT
-    create_tx_hash,
-    project_s3key,
-    project_thumbnail_s3key,
-    background_s3key,
-    background_thumbnail_s3key,
-    member_id,
-    address,
-    slug,
-    name,
-    symbol,
-    status,
-    created_at,
-    updated_at
+        create_tx_hash,
+        project_s3key,
+        project_thumbnail_s3key,
+        background_s3key,
+        background_thumbnail_s3key,
+        member_id,
+        address,
+        slug,
+        name,
+        symbol,
+        status,
+        created_at,
+        updated_at
     FROM
         projects
     WHERE 1=1
