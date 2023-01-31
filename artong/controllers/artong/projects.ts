@@ -86,7 +86,7 @@ const patchProject = async function(pathParameters: { id: string }, body: any, m
       background_s3key: body.background_s3key,
       status: body.status,
       sns: body.sns,
-      slug: body.slug,
+      slug: body.slug ? body.slug : null,
     }, conn);
 
     await validator(projectModel);
