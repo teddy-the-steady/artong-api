@@ -20,6 +20,12 @@ export const MARKETPLACE_ABI = [
         name: 'balance',
         type: 'uint256',
       },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'reason',
+        type: 'string',
+      },
     ],
     name: 'ArtongBalanceUpdated',
     type: 'event',
@@ -489,11 +495,6 @@ export const MARKETPLACE_ABI = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '_moment',
-        type: 'uint256',
-      },
-      {
         internalType: 'address',
         name: 'user',
         type: 'address',
@@ -555,6 +556,30 @@ export const MARKETPLACE_ABI = [
       },
     ],
     name: 'getOfferBalance',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_moment',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+    ],
+    name: 'getWithdrawableBalance',
     outputs: [
       {
         internalType: 'uint256',
@@ -989,6 +1014,19 @@ export const FACTORY_ABI = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: 'address',
+        name: 'caller',
+        type: 'address',
+      },
+    ],
+    name: 'Destoried',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: 'address',
         name: 'previousOwner',
@@ -1036,6 +1074,19 @@ export const FACTORY_ABI = [
       },
     ],
     stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'apocalypse',
+        type: 'address',
+      },
+    ],
+    name: 'destroy',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -1318,6 +1369,19 @@ export const ERC721_ABI = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: 'address',
+        name: 'caller',
+        type: 'address',
+      },
+    ],
+    name: 'Destoried',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: 'address',
         name: 'previousOwner',
@@ -1480,6 +1544,19 @@ export const ERC721_ABI = [
       },
     ],
     name: 'burn',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'apocalypse',
+        type: 'address',
+      },
+    ],
+    name: 'destroy',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
