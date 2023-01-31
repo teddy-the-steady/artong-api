@@ -36,16 +36,18 @@ const getProjectsPrevNext = async function(queryStringParameters: GetProjectsInf
 
     const extractedProjectIds = result.map((project: Projects) => project.address) as string[];
 
-    const memberModel = new Member({}, conn);
-    const contributorsResult = await memberModel.getTopContributorsInProjects(extractedProjectIds);
+    if (extractedProjectIds.length > 0) {
+      const memberModel = new Member({}, conn);
+      const contributorsResult = await memberModel.getTopContributorsInProjects(extractedProjectIds);
 
-    if (contributorsResult.length > 0) {
-      const contributorsArrayGroupByProjectAddress = _.groupBy(contributorsResult as any[], c => c.project_address);
-      for (let project of result) {
-        if (contributorsArrayGroupByProjectAddress[project.address as string]) {
-          contributorsArrayGroupByProjectAddress[project.address as string].splice(5)
+      if (contributorsResult.length > 0) {
+        const contributorsArrayGroupByProjectAddress = _.groupBy(contributorsResult as any[], c => c.project_address);
+        for (let project of result) {
+          if (contributorsArrayGroupByProjectAddress[project.address as string]) {
+            contributorsArrayGroupByProjectAddress[project.address as string].splice(5)
+          }
+          (project as any).contributors = contributorsArrayGroupByProjectAddress[project.address as string] || [];
         }
-        (project as any).contributors = contributorsArrayGroupByProjectAddress[project.address as string] || [];
       }
     }
 
@@ -287,16 +289,18 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
       result = gqlResult;
     }
 
-    const memberModel = new Member({}, conn);
-    const contributorsResult = await memberModel.getTopContributorsInProjects(extractedProjectIds);
+    if (extractedProjectIds.length > 0) {
+      const memberModel = new Member({}, conn);
+      const contributorsResult = await memberModel.getTopContributorsInProjects(extractedProjectIds);
 
-    if (contributorsResult.length > 0) {
-      const contributorsArrayGroupByProjectAddress = _.groupBy(contributorsResult as any[], c => c.project_address);
-      for (let index in result.projects) {
-        if (contributorsArrayGroupByProjectAddress[result.projects[index].id]) {
-          contributorsArrayGroupByProjectAddress[result.projects[index].id].splice(5)
+      if (contributorsResult.length > 0) {
+        const contributorsArrayGroupByProjectAddress = _.groupBy(contributorsResult as any[], c => c.project_address);
+        for (let index in result.projects) {
+          if (contributorsArrayGroupByProjectAddress[result.projects[index].id]) {
+            contributorsArrayGroupByProjectAddress[result.projects[index].id].splice(5)
+          }
+          result.projects[index].contributors = contributorsArrayGroupByProjectAddress[result.projects[index].id] || [];
         }
-        result.projects[index].contributors = contributorsArrayGroupByProjectAddress[result.projects[index].id] || [];
       }
     }
 
@@ -349,16 +353,18 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
       result = gqlResult
     }
 
-    const memberModel = new Member({}, conn);
-    const contributorsResult = await memberModel.getTopContributorsInProjects(extractedProjectIds);
+    if (extractedProjectIds.length > 0) {
+      const memberModel = new Member({}, conn);
+      const contributorsResult = await memberModel.getTopContributorsInProjects(extractedProjectIds);
 
-    if (contributorsResult.length > 0) {
-      const contributorsArrayGroupByProjectAddress = _.groupBy(contributorsResult as any[], c => c.project_address);
-      for (let index in result.projects) {
-        if (contributorsArrayGroupByProjectAddress[result.projects[index].id]) {
-          contributorsArrayGroupByProjectAddress[result.projects[index].id].splice(5)
+      if (contributorsResult.length > 0) {
+        const contributorsArrayGroupByProjectAddress = _.groupBy(contributorsResult as any[], c => c.project_address);
+        for (let index in result.projects) {
+          if (contributorsArrayGroupByProjectAddress[result.projects[index].id]) {
+            contributorsArrayGroupByProjectAddress[result.projects[index].id].splice(5)
+          }
+          result.projects[index].contributors = contributorsArrayGroupByProjectAddress[result.projects[index].id] || [];
         }
-        result.projects[index].contributors = contributorsArrayGroupByProjectAddress[result.projects[index].id] || [];
       }
     }
 
