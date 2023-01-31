@@ -2,6 +2,7 @@ import { PoolClient } from 'pg';
 import * as db from '../../utils/db/db';
 import Models from '../Models';
 import { IsNotEthereumAddress } from '../../utils/validators/IsNotEthereumAddress';
+import { IsOptional } from 'class-validator'
 const insertProject = require('./insertProject.sql');
 const insertProjects = require('./insertProjects.sql');
 const updateProject = require('./updateProject.sql');
@@ -30,6 +31,7 @@ class Projects extends Models {
 	symbol?: string;
 	sns?: object;
 	@IsNotEthereumAddress()
+	@IsOptional()
 	slug?: string;
 
 	created_at?: Date;
