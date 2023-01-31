@@ -1,12 +1,12 @@
 import { Projects, Member } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
-import { InfuraProvider, abi } from '../../contracts';
+import { InfuraProvider } from '../../contracts';
 import * as db from '../../utils/db/db';
 import { PoolClient } from 'pg';
 import { ethers } from 'ethers';
 import _ from 'lodash';
 import { graphqlRequest } from '../../utils/common/graphqlUtil';
-import { calculateMinusBetweenTowSetsById } from '../../utils/common/commonFunc'
+import { calculateMinusBetweenTowSetsById, isAddress } from '../../utils/common/commonFunc'
 import { PaginationInfo } from './index';
 import validator from '../../utils/validators/common';
 
@@ -18,6 +18,13 @@ const getProjectsPrevNext = async function(queryStringParameters: GetProjectsInf
   const conn: PoolClient = await db.getConnection();
 
   try {
+    if (!isAddress(queryStringParameters.basis_project_address)) {
+      const projectModel = new Projects({}, conn);
+      const projectResult = await projectModel.getProjectWithAddressOrSlug(queryStringParameters.basis_project_address);
+      if (!projectResult || !projectResult.address) return {data: {}}
+      queryStringParameters.basis_project_address = projectResult.address;
+    }
+
     const projectModel = new Projects({
       address: queryStringParameters.basis_project_address
     }, conn)
