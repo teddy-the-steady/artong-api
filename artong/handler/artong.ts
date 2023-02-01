@@ -30,7 +30,7 @@ export async function handler(event: any, context: any, callback: any) {
             if (req.path.includes('/candidates')) {
               res = await contents.getMemberContentsCandidates(req.pathParameters, req.queryStringParameters);
             } else if (req.path.includes('/favorites')) {
-              res = await contents.getMemberContentsFavorites(req.pathParameters, req.queryStringParameters);
+              res = await contents.getMemberFavoritedContents(req.pathParameters, req.queryStringParameters);
             }
           }
           else
@@ -64,6 +64,8 @@ export async function handler(event: any, context: any, callback: any) {
             res = await search.searchContents(req.queryStringParameters, req.member);
           else if (req.path.includes('members'))
             res = await search.searchMembers(req.queryStringParameters, req.member);
+        if (req.path === '/artong/v1/feed' || req.path === '/artong/v1/feed/')
+          res = await contents.getFeedContents(req.member);
         break;
       case 'POST':
         if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
