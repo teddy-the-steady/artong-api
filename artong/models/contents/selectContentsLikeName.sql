@@ -21,4 +21,9 @@ FROM
 JOIN projects p ON c.project_address = p.address
 WHERE 1=1
   AND c.name ILIKE '%{{name}}%'
+  AND (
+    (is_redeemed = TRUE AND token_id > 0) OR
+    (is_redeemed IS NULL AND token_id > 0) OR
+    (is_redeemed = FALSE AND token_id IS NULL AND c.status = 'APPROVED')
+  )
 LIMIT 5
