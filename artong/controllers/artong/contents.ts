@@ -205,6 +205,7 @@ const queryToken = async function(body: QueryTokenInfo, _db_: string[], pureQuer
     ]);
 
     if (gqlResult.token.project) {
+      gqlResult.token.project['slug'] = (dbResult as any)['slug'];
       gqlResult.token.project['project_s3key'] = (dbResult as any)['project_s3key'];
       gqlResult.token.project['project_thumbnail_s3key'] = (dbResult as any)['project_thumbnail_s3key'];
     }
@@ -715,7 +716,7 @@ const getMemberContentsCandidates = async function(pathParameters: {id: string},
   }
 }
 
-const getMemberContentsFavorites = async function(pathParameters: {id: string}, queryStringParameters: PageAndOrderingInfo) {
+const getMemberFavoritedContents = async function(pathParameters: {id: string}, queryStringParameters: PageAndOrderingInfo) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -723,7 +724,7 @@ const getMemberContentsFavorites = async function(pathParameters: {id: string}, 
       member_id: parseInt(pathParameters.id),
     }, conn);
 
-    let contentResult = await contentModel.getContentsFavoritesByMember(
+    let contentResult = await contentModel.getFavoritedContentsByMember(
       contentModel.member_id,
       queryStringParameters.start_num,
       queryStringParameters.count_num,
@@ -786,6 +787,23 @@ const getMemberContentsFavorites = async function(pathParameters: {id: string}, 
   }
 }
 
+const getFeedContents = async function(member: Member) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const contentModel = new Contents({}, conn);
+
+    const result = await contentModel.getFeedContents(
+      contentModel.member_id,
+    );
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+};
+
 export {
   getContent,
 	postContent,
@@ -802,5 +820,6 @@ export {
   queryTokensByOwner,
   queryTokenHistory,
   getMemberContentsCandidates,
-  getMemberContentsFavorites,
+  getMemberFavoritedContents,
+  getFeedContents,
 };
