@@ -305,7 +305,7 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
         variables: {id: body.variables.project,}
       })
     ]);
-    if (gqlResult.tokens.length === 0 || !policyResult.project) {
+    if (!policyResult.project) {
       return {data: {tokens:[], meta: {subgraph_count: 0}}}
     }
 
