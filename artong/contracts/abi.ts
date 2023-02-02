@@ -1416,6 +1416,37 @@ export const ERC721_ABI = [
       {
         indexed: false,
         internalType: 'address',
+        name: 'creator',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'redeemer',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'price',
+        type: 'uint256',
+      },
+    ],
+    name: 'Redeemed',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
         name: 'minter',
         type: 'address',
       },
@@ -1436,6 +1467,12 @@ export const ERC721_ABI = [
         internalType: 'string',
         name: 'contentUri',
         type: 'string',
+      },
+      {
+        indexed: false,
+        internalType: 'uint16',
+        name: 'tokenRoyalty',
+        type: 'uint16',
       },
     ],
     name: 'TokenMinted',
@@ -1809,6 +1846,11 @@ export const ERC721_ABI = [
             internalType: 'string',
             name: 'contentUri',
             type: 'string',
+          },
+          {
+            internalType: 'uint16',
+            name: 'royalty',
+            type: 'uint16',
           },
           {
             internalType: 'bytes',
