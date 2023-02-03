@@ -9,6 +9,7 @@ SELECT
   c.content_thumbnail_s3key,
   c.ipfs_url,
   c.voucher -> 'minPrice' -> 'hex' AS price,
+  c.voucher -> 'royalty' AS royalty,
   c.is_redeemed,
   c.status,
   c.created_at,
