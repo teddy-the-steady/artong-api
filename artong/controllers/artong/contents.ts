@@ -203,6 +203,15 @@ const queryToken = async function(body: QueryTokenInfo, _db_: string[], pureQuer
       ),
       graphqlRequest({query: pureQuery, variables: body.variables})
     ]);
+    if (!dbResult && !gqlResult.token) {
+      return {data: {token: {}}}
+    }
+    if (!dbResult && gqlResult.token) {
+      return {data: {token: {}}} // TODO] db insert needed
+    }
+    if (dbResult && !gqlResult.token) {
+      return {data: {retry: true}}
+    }
 
     if (gqlResult.token.project) {
       gqlResult.token.project['slug'] = (dbResult as any)['slug'];
@@ -229,12 +238,8 @@ const queryToken = async function(body: QueryTokenInfo, _db_: string[], pureQuer
       }
     }
 
-    if (dbResult && gqlResult.token) {
-      for (let field of _db_) {
-        gqlResult.token[field] = (dbResult as any)[field];
-      }
-    } else {
-      return {data: {token: {}}}
+    for (let field of _db_) {
+      gqlResult.token[field] = (dbResult as any)[field];
     }
 
     return {data: gqlResult}
