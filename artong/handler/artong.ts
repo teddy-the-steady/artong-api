@@ -28,7 +28,7 @@ export async function handler(event: any, context: any, callback: any) {
             res = await projects.getMemberSubscribedProjects(req.pathParameters, req.queryStringParameters);
           else if (req.path.includes('/contents')) {
             if (req.path.includes('/candidates')) {
-              res = await contents.getMemberContentsCandidates(req.pathParameters, req.queryStringParameters);
+              res = await contents.getMemberContentsCandidates(req.pathParameters, req.queryStringParameters, req.member);
             } else if (req.path.includes('/favorites')) {
               res = await contents.getMemberFavoritedContents(req.pathParameters, req.queryStringParameters);
             }
