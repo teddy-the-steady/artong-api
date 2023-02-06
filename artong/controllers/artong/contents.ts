@@ -695,7 +695,7 @@ const makeMemberInfo = function(result: any[], prefix: string[], memberResultNam
   return result
 }
 
-const getMemberContentsCandidates = async function(pathParameters: {id: string}, queryStringParameters: PageAndOrderingInfo) {
+const getMemberContentsCandidates = async function(pathParameters: {id: string}, queryStringParameters: PageAndOrderingInfo, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -705,6 +705,7 @@ const getMemberContentsCandidates = async function(pathParameters: {id: string},
 
     const contentResult = await contentModel.getContentsCandidatesByMember(
       contentModel.member_id,
+      contentModel.member_id === member.id,
       queryStringParameters.start_num,
       queryStringParameters.count_num,
       queryStringParameters.order_by,
@@ -812,6 +813,8 @@ const getFeedContents = async function(queryStringParameters: PageAndOrderingInf
       member.id,
       queryStringParameters.count_num,
       queryStringParameters.start_num,
+      queryStringParameters.order_by,
+      queryStringParameters.order_direction,
     );
     if (contentResult.length === 0) {
       return {data: []}
