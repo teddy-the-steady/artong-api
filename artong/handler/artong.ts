@@ -65,7 +65,7 @@ export async function handler(event: any, context: any, callback: any) {
           else if (req.path.includes('members'))
             res = await search.searchMembers(req.queryStringParameters, req.member);
         if (req.path === '/artong/v1/feed' || req.path === '/artong/v1/feed/')
-          res = await contents.getFeedContents(req.member);
+          res = await contents.getFeedContents(req.queryStringParameters, req.member);
         break;
       case 'POST':
         if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')
