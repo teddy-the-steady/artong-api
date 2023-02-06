@@ -27,7 +27,9 @@ WHERE 1=1
   AND c.member_id = ${member_id}
   AND c.is_redeemed = FALSE
   AND c.token_id IS NULL
-  AND (c.status != 'BLOCKED' OR status IS NULL)
+  {{#if (eq isMember false)}}
+  AND (c.status = 'APPROVED')
+  {{/if}}
 
 {{#exists order_by}}
 ORDER BY
