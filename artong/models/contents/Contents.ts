@@ -306,6 +306,7 @@ class Contents extends Models {
 
 	async getContentsCandidatesByMember(
 		member_id?: number,
+		isMember?: boolean,
 		start_num?: number,
 		count_num?: number,
 		order_by?: string,
@@ -314,6 +315,7 @@ class Contents extends Models {
 		try {
 			const result = await db.execute(this.conn, selectContentsCandidiatesByMember, {
 				member_id,
+				isMember,
 				start_num,
 				count_num,
 				order_by,
@@ -350,12 +352,16 @@ class Contents extends Models {
 		member_id?: number,
 		count_num?: number,
 		start_num?: number,
+		order_by?: string,
+		order_direction?: string,
 	): Promise<Contents[]> {
 		try {
 			const result = await db.execute(this.conn, selectContentsFeed, {
 				member_id,
 				count_num,
 				start_num,
+				order_by,
+				order_direction,
 			});
 			return result
 		} catch (error) {
