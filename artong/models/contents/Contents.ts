@@ -348,10 +348,14 @@ class Contents extends Models {
 
 	async getFeedContents(
 		member_id?: number,
+		count_num?: number,
+		start_num?: number,
 	): Promise<Contents[]> {
 		try {
 			const result = await db.execute(this.conn, selectContentsFeed, {
 				member_id,
+				count_num,
+				start_num,
 			});
 			return result
 		} catch (error) {
