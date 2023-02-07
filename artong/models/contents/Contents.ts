@@ -8,6 +8,7 @@ const updateContentStatus = require('./updateContentStatus.sql');
 const updateContentThumbnailS3keys = require('./updateContentThumbnailS3keys.sql');
 const updateContentTokenIds = require('./updateContentTokenIds.sql');
 const selectContent = require('./selectContent.sql');
+const selectContents = require('./selectContents.sql');
 const selectContentsFeed = require('./selectContentsFeed.sql');
 const selectContentById = require('./selectContentById.sql');
 const selectContentsCandidiatesByMember = require('./selectContentsCandidiatesByMember.sql');
@@ -18,7 +19,7 @@ const selectContentsByProjectWithTokenIdArray = require('./selectContentsByProje
 const selectContentsByCreatorWithTokenIdArray = require('./selectContentsByCreatorWithTokenIdArray.sql');
 const selectContentVoucherById = require('./selectContentVoucherById.sql');
 const selectContentsLikeName = require('./selectContentsLikeName.sql');
-const selectContents = require('./selectContents.sql');
+const selectContentsByProject = require('./selectContentsByProject.sql');
 
 class Contents extends Models {
 	id?: number;
@@ -281,7 +282,7 @@ class Contents extends Models {
 		}
 	}
 
-	async getContents(
+	async getContentsByProject(
 		project_address?: string,
 		start_num?: string,
 		count_num?: string,
@@ -290,7 +291,7 @@ class Contents extends Models {
 		policy?: number,
 	): Promise<Contents[]> {
 		try {
-			const result = await db.execute(this.conn, selectContents, {
+			const result = await db.execute(this.conn, selectContentsByProject, {
 				project_address,
 				start_num,
 				count_num,
@@ -358,6 +359,25 @@ class Contents extends Models {
 		try {
 			const result = await db.execute(this.conn, selectContentsFeed, {
 				member_id,
+				count_num,
+				start_num,
+				order_by,
+				order_direction,
+			});
+			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getContents(
+		count_num?: number,
+		start_num?: number,
+		order_by?: string,
+		order_direction?: string,
+	): Promise<Contents[]> {
+		try {
+			const result = await db.execute(this.conn, selectContents, {
 				count_num,
 				start_num,
 				order_by,
