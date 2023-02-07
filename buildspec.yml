@@ -2,6 +2,8 @@ version: 0.1
 phases:
   install:
     commands:
+      - npm config set sharp_binary_host "https://npmmirror.com/mirrors/sharp"
+      - npm config set sharp_libvips_binary_host "https://npmmirror.com/mirrors/sharp-libvips"
       - npm install
       - npm install -g serverless
       - cd ./node_layers && npm install && cd ..
