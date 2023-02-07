@@ -43,7 +43,7 @@ WHERE
 	AND (
     (c.is_redeemed = TRUE AND c.token_id > 0) OR
     (c.is_redeemed IS NULL AND c.token_id > 0) OR
-    (c.is_redeemed = FALSE AND c.token_id IS NULL AND c.status = 'APPROVED')
+    (c.is_redeemed = FALSE AND c.token_id IS NULL AND (c.status = 'APPROVED' OR status != 'BLOCKED' OR status IS NULL))
   )
 
 {{#exists order_by}}
