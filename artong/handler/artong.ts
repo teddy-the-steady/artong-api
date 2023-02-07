@@ -55,6 +55,8 @@ export async function handler(event: any, context: any, callback: any) {
             res = main.getMainContents();
           else if (req.path.includes('/contributors'))
             res = await main.getTop10Contributors();
+        if (req.path === '/artong/v1/contents' || req.path === '/artong/v1/contents/')
+          res = await contents.getContents(req.queryStringParameters);
         if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters && req.path.includes('/voucher'))
           res = await contents.getContentVoucherById(req.pathParameters, req.member);
         if (req.path.startsWith('/artong/v1/search/'))
