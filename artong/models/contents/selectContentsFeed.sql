@@ -25,7 +25,6 @@ FROM
 JOIN member m ON c.member_id = m.id
 WHERE
 	1 = 1
-	AND c.member_id != ${member_id}
 	AND (
     c.member_id IN (
 			SELECT
