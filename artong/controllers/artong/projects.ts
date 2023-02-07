@@ -229,6 +229,10 @@ const queryProject = async function(body: any, _db_: string[], pureQuery: string
 
     const gqlResult = await graphqlRequest({query: pureQuery, variables: { id: body.variables.id }});
 
+    if (!gqlResult.project) {
+      return {data: {retry: true}}
+    }
+
     const memberModel = new Member({}, conn);
     const ownerResult = await memberModel.getMembersWithWalletAddressArray([gqlResult.project.owner]);
     if (ownerResult.length === 1) {
@@ -242,12 +246,8 @@ const queryProject = async function(body: any, _db_: string[], pureQuery: string
       gqlResult.project.contributors = [];
     }
 
-    if (gqlResult.project) {
-      for (let field of _db_) {
-        gqlResult.project[field] = (dbResult as any)[field];
-      }
-    } else {
-      return {data: {project: {}}}
+    for (let field of _db_) {
+      gqlResult.project[field] = (dbResult as any)[field];
     }
 
     return {data: gqlResult}
