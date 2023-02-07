@@ -160,6 +160,10 @@ functions:
         authorizer: ${self:custom.authorizer}
      - http:
         path: artong/v1/contents
+        method: GET
+        cors: true
+     - http:
+        path: artong/v1/contents
         method: POST
         cors: true
         authorizer: ${self:custom.authorizer}
