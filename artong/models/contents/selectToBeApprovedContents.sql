@@ -7,6 +7,7 @@ SELECT
   c.token_id,
   c.content_s3key,
   c.content_thumbnail_s3key,
+  c.voucher -> 'minPrice' -> 'hex' AS price,
   c.ipfs_url,
   c.is_redeemed,
   c.created_at,
