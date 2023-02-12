@@ -55,16 +55,23 @@ const postContent = async function(body: any, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
+    const policyResult = await graphqlRequest({
+      query: 'query Project($id: String) { project(id: $id) { policy } }',
+      variables: {id: body.project_address}
+    });
+
     const contentModel = new Contents({
       member_id: member.id,
       project_address: body.project_address,
       content_s3key: body.content_s3key,
+      status: policyResult.project.policy === 0 ? 'APPROVED' : undefined,
     }, conn);
 
     const result = await contentModel.createContent(
       contentModel.member_id,
       contentModel.project_address,
-      contentModel.content_s3key
+      contentModel.content_s3key,
+      contentModel.status,
     );
     return {data: result}
   } catch (error) {
@@ -102,7 +109,7 @@ const uploadToNftStorageAndUpdateContent = async function(body: any) {
       description: body.description,
     }, conn);
 
-    await contentModel.updateContent(
+    await contentModel._updateContent(
       contentModel.id,
       contentModel.ipfs_url,
       undefined, undefined, undefined,
@@ -118,7 +125,7 @@ const uploadToNftStorageAndUpdateContent = async function(body: any) {
   }
 };
 
-const patchContent = async function(pathParameters: any, body: any) {
+const patchContent = async function(pathParameters: any, body: any, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -130,6 +137,7 @@ const patchContent = async function(pathParameters: any, body: any) {
       is_redeemed: body.isRedeemed,
       name: body.name,
       description: body.description,
+      member_id: member.id,
     }, conn);
 
     const result = await contentModel.updateContent(
@@ -140,6 +148,7 @@ const patchContent = async function(pathParameters: any, body: any) {
       contentModel.is_redeemed,
       contentModel.name,
       contentModel.description,
+      contentModel.member_id,
     );
     return {data: result}
   } catch (error) {
@@ -700,6 +709,10 @@ const getMemberContentsCandidates = async function(pathParameters: {id: string},
       member_id: parseInt(pathParameters.id),
     }, conn);
 
+    const count_num = parseInt(queryStringParameters.count_num);
+    queryStringParameters.count_num = String(count_num + 1);
+    let hasMoreData = false;
+
     const contentResult = await contentModel.getContentsCandidatesByMember(
       contentModel.member_id,
       contentModel.member_id === member.id,
@@ -709,9 +722,14 @@ const getMemberContentsCandidates = async function(pathParameters: {id: string},
       queryStringParameters.order_direction,
     );
 
+    if (contentResult.length === count_num + 1) {
+      hasMoreData = true;
+      contentResult.length = count_num;
+    }
+
     const result = makeMemberInfo(contentResult, [''], 'owner');
 
-    return {data: result}
+    return {data: result, meta: {hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {

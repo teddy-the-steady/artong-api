@@ -7,7 +7,6 @@ SET
     {{#exists is_redeemed}} ,is_redeemed = ${is_redeemed} {{/exists}}
     {{#exists name}} ,name = ${name} {{/exists}}
     {{#exists description}} ,description = ${description} {{/exists}}
-WHERE 1=1
-    AND id = ${id}
-    AND member_id = ${member_id}
+WHERE
+    id = ${id}
 RETURNING id, project_address, ipfs_url
