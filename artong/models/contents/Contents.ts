@@ -284,8 +284,8 @@ class Contents extends Models {
 
 	async getContentsByProject(
 		project_address?: string,
-		start_num?: string,
-		count_num?: string,
+		start_num?: number,
+		count_num?: number,
 		order_by?: string,
 		order_direction?: string,
 		policy?: number,
