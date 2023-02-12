@@ -160,8 +160,8 @@ const getProjectContributors = async function(pathParameters: { id: string }, qu
     const memberModel = new Member({}, conn);
     const result = await memberModel.getProjectContributors(
       pathParameters.id,
-      queryStringParameters.start_num,
-      queryStringParameters.count_num,
+      parseInt(queryStringParameters.start_num),
+      parseInt(queryStringParameters.count_num),
     );
     return {data: result}
   } catch (error) {
@@ -186,14 +186,14 @@ const getMemberFollowerOrFollowing = async function(pathParameters: { id: string
     if (queryStringParameters.type === 'follower') {
       result = await memberModel.getMemberFollower(
         memberModel.id,
-        queryStringParameters.start_num,
-        queryStringParameters.count_num,
+        parseInt(queryStringParameters.start_num),
+        parseInt(queryStringParameters.count_num),
       );
     } else if (queryStringParameters.type === 'following') {
       result = await memberModel.getMemberFollowing(
         memberModel.id,
-        queryStringParameters.start_num,
-        queryStringParameters.count_num,
+        parseInt(queryStringParameters.start_num),
+        parseInt(queryStringParameters.count_num),
       );
     }
 

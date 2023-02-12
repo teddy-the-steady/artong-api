@@ -10,7 +10,7 @@ import { NFTStorage } from 'nft.storage';
 import { File } from '@web-std/file';
 import _ from 'lodash';
 import { ContentsHistory } from '../../models/contentsHistory/ContentsHistory';
-import { PageAndOrderingInfo } from './index';
+import { PageAndOrderingInfo, PaginationInfo } from './index';
 
 interface GetContentInfo {
   id: string
@@ -405,8 +405,8 @@ const getTobeApprovedContentsInProject = async function(pathParameters: { id: st
 
     let result = await contentModel.getToBeApprovedContents(
       contentModel.project_address,
-      queryStringParameters.start_num,
-      queryStringParameters.count_num,
+      parseInt(queryStringParameters.start_num),
+      parseInt(queryStringParameters.count_num),
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
@@ -529,18 +529,15 @@ const queryTokensByOwner = async function(body: any, _db_: string[], pureQuery: 
   }
 }
 
-interface QueryOffersByTokenInfo {
+interface QueryTokenHistoryInfo {
   variables: {
     id: string
     project_address: string
-    token_id: number
+    token_id: string
   }
-  pagination: {
-    start_num: number
-    count_num: number
-  }
+  pagination: PaginationInfo
 }
-const queryTokenHistory = async function(body: QueryOffersByTokenInfo, _db_: string[], pureQuery: string) {
+const queryTokenHistory = async function(body: QueryTokenHistoryInfo, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -559,7 +556,7 @@ const queryTokenHistory = async function(body: QueryOffersByTokenInfo, _db_: str
 
     const contentsHistoryModel = new ContentsHistory({}, conn);
 
-    if (body.pagination.start_num === 0) {
+    if (parseInt(body.pagination.start_num) === 0) {
       const result = await contentsHistoryModel.getLatestContentsHistory(
         gqlResult.token.project.id,
         gqlResult.token.tokenId
@@ -631,8 +628,8 @@ const queryTokenHistory = async function(body: QueryOffersByTokenInfo, _db_: str
     let result = await contentsHistoryModel.getContentsHistories(
       gqlResult.token.project.id,
       gqlResult.token.tokenId,
-      body.pagination.start_num,
-      body.pagination.count_num,
+      parseInt(body.pagination.start_num),
+      parseInt(body.pagination.count_num),
     );
 
     result = makeMemberInfo(result, ['from_', 'to_'], 'member');
@@ -706,8 +703,8 @@ const getMemberContentsCandidates = async function(pathParameters: {id: string},
     const contentResult = await contentModel.getContentsCandidatesByMember(
       contentModel.member_id,
       contentModel.member_id === member.id,
-      queryStringParameters.start_num,
-      queryStringParameters.count_num,
+      parseInt(queryStringParameters.start_num),
+      parseInt(queryStringParameters.count_num),
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
@@ -732,8 +729,8 @@ const getMemberFavoritedContents = async function(pathParameters: {id: string}, 
 
     let contentResult = await contentModel.getFavoritedContentsByMember(
       contentModel.member_id,
-      queryStringParameters.start_num,
-      queryStringParameters.count_num,
+      parseInt(queryStringParameters.start_num),
+      parseInt(queryStringParameters.count_num),
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
@@ -811,8 +808,8 @@ const getFeedContents = async function(queryStringParameters: PageAndOrderingInf
 
     let contentResult = await contentModel.getFeedContents(
       member.id,
-      queryStringParameters.count_num,
-      queryStringParameters.start_num,
+      parseInt(queryStringParameters.count_num),
+      parseInt(queryStringParameters.start_num),
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
@@ -889,8 +886,8 @@ const getContents = async function(queryStringParameters: PageAndOrderingInfo) {
     const contentModel = new Contents({}, conn);
 
     let contentResult = await contentModel.getContents(
-      queryStringParameters.count_num,
-      queryStringParameters.start_num,
+      parseInt(queryStringParameters.count_num),
+      parseInt(queryStringParameters.start_num),
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
