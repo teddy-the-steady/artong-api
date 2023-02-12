@@ -32,8 +32,6 @@ FROM
 	AND a.reaction_id = 1) sub
 JOIN contents c ON c.id = sub.content_id
 JOIN member m ON c.member_id = m.id
-WHERE 1=1
-  AND (c.status != 'BLOCKED' OR status IS NULL)
 
 {{#exists order_by}}
 ORDER BY
