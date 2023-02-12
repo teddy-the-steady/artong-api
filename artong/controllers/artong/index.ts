@@ -10,8 +10,8 @@ import * as main from './main';
 import * as report from './report';
 
 interface PaginationInfo {
-	start_num: number
-	count_num: number
+	start_num: string
+	count_num: string
 }
 
 interface PageAndOrderingInfo extends PaginationInfo {
