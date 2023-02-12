@@ -423,8 +423,8 @@ const getMemberSubscribedProjects = async function(pathParameters: { id: string 
 
     const result = await projectModel.getMemberSubscribedProjects(
       projectModel.member_id,
-      queryStringParameters.start_num,
-      queryStringParameters.count_num,
+      parseInt(queryStringParameters.start_num),
+      parseInt(queryStringParameters.count_num),
     );
 
     return {data: result}
