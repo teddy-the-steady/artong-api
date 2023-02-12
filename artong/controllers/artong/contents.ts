@@ -10,7 +10,7 @@ import { NFTStorage } from 'nft.storage';
 import { File } from '@web-std/file';
 import _ from 'lodash';
 import { ContentsHistory } from '../../models/contentsHistory/ContentsHistory';
-import { PageAndOrderingInfo } from './index';
+import { PageAndOrderingInfo, PaginationInfo } from './index';
 
 interface GetContentInfo {
   id: string
@@ -55,16 +55,23 @@ const postContent = async function(body: any, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
+    const policyResult = await graphqlRequest({
+      query: 'query Project($id: String) { project(id: $id) { policy } }',
+      variables: {id: body.project_address}
+    });
+
     const contentModel = new Contents({
       member_id: member.id,
       project_address: body.project_address,
       content_s3key: body.content_s3key,
+      status: policyResult.project.policy === 0 ? 'APPROVED' : undefined,
     }, conn);
 
     const result = await contentModel.createContent(
       contentModel.member_id,
       contentModel.project_address,
-      contentModel.content_s3key
+      contentModel.content_s3key,
+      contentModel.status,
     );
     return {data: result}
   } catch (error) {
@@ -102,7 +109,7 @@ const uploadToNftStorageAndUpdateContent = async function(body: any) {
       description: body.description,
     }, conn);
 
-    await contentModel.updateContent(
+    await contentModel._updateContent(
       contentModel.id,
       contentModel.ipfs_url,
       undefined, undefined, undefined,
@@ -118,7 +125,7 @@ const uploadToNftStorageAndUpdateContent = async function(body: any) {
   }
 };
 
-const patchContent = async function(pathParameters: any, body: any) {
+const patchContent = async function(pathParameters: any, body: any, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -130,6 +137,7 @@ const patchContent = async function(pathParameters: any, body: any) {
       is_redeemed: body.isRedeemed,
       name: body.name,
       description: body.description,
+      member_id: member.id,
     }, conn);
 
     const result = await contentModel.updateContent(
@@ -140,6 +148,7 @@ const patchContent = async function(pathParameters: any, body: any) {
       contentModel.is_redeemed,
       contentModel.name,
       contentModel.description,
+      contentModel.member_id,
     );
     return {data: result}
   } catch (error) {
@@ -405,8 +414,8 @@ const getTobeApprovedContentsInProject = async function(pathParameters: { id: st
 
     let result = await contentModel.getToBeApprovedContents(
       contentModel.project_address,
-      queryStringParameters.start_num,
-      queryStringParameters.count_num,
+      parseInt(queryStringParameters.start_num),
+      parseInt(queryStringParameters.count_num),
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
@@ -529,18 +538,15 @@ const queryTokensByOwner = async function(body: any, _db_: string[], pureQuery: 
   }
 }
 
-interface QueryOffersByTokenInfo {
+interface QueryTokenHistoryInfo {
   variables: {
     id: string
     project_address: string
-    token_id: number
+    token_id: string
   }
-  pagination: {
-    start_num: number
-    count_num: number
-  }
+  pagination: PaginationInfo
 }
-const queryTokenHistory = async function(body: QueryOffersByTokenInfo, _db_: string[], pureQuery: string) {
+const queryTokenHistory = async function(body: QueryTokenHistoryInfo, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -559,7 +565,7 @@ const queryTokenHistory = async function(body: QueryOffersByTokenInfo, _db_: str
 
     const contentsHistoryModel = new ContentsHistory({}, conn);
 
-    if (body.pagination.start_num === 0) {
+    if (parseInt(body.pagination.start_num) === 0) {
       const result = await contentsHistoryModel.getLatestContentsHistory(
         gqlResult.token.project.id,
         gqlResult.token.tokenId
@@ -631,8 +637,8 @@ const queryTokenHistory = async function(body: QueryOffersByTokenInfo, _db_: str
     let result = await contentsHistoryModel.getContentsHistories(
       gqlResult.token.project.id,
       gqlResult.token.tokenId,
-      body.pagination.start_num,
-      body.pagination.count_num,
+      parseInt(body.pagination.start_num),
+      parseInt(body.pagination.count_num),
     );
 
     result = makeMemberInfo(result, ['from_', 'to_'], 'member');
@@ -703,18 +709,27 @@ const getMemberContentsCandidates = async function(pathParameters: {id: string},
       member_id: parseInt(pathParameters.id),
     }, conn);
 
+    const count_num = parseInt(queryStringParameters.count_num);
+    queryStringParameters.count_num = String(count_num + 1);
+    let hasMoreData = false;
+
     const contentResult = await contentModel.getContentsCandidatesByMember(
       contentModel.member_id,
       contentModel.member_id === member.id,
-      queryStringParameters.start_num,
-      queryStringParameters.count_num,
+      parseInt(queryStringParameters.start_num),
+      parseInt(queryStringParameters.count_num),
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
 
+    if (contentResult.length === count_num + 1) {
+      hasMoreData = true;
+      contentResult.length = count_num;
+    }
+
     const result = makeMemberInfo(contentResult, [''], 'owner');
 
-    return {data: result}
+    return {data: result, meta: {hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -732,8 +747,8 @@ const getMemberFavoritedContents = async function(pathParameters: {id: string}, 
 
     let contentResult = await contentModel.getFavoritedContentsByMember(
       contentModel.member_id,
-      queryStringParameters.start_num,
-      queryStringParameters.count_num,
+      parseInt(queryStringParameters.start_num),
+      parseInt(queryStringParameters.count_num),
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
@@ -811,8 +826,8 @@ const getFeedContents = async function(queryStringParameters: PageAndOrderingInf
 
     let contentResult = await contentModel.getFeedContents(
       member.id,
-      queryStringParameters.count_num,
-      queryStringParameters.start_num,
+      parseInt(queryStringParameters.count_num),
+      parseInt(queryStringParameters.start_num),
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
@@ -889,8 +904,8 @@ const getContents = async function(queryStringParameters: PageAndOrderingInfo) {
     const contentModel = new Contents({}, conn);
 
     let contentResult = await contentModel.getContents(
-      queryStringParameters.count_num,
-      queryStringParameters.start_num,
+      parseInt(queryStringParameters.count_num),
+      parseInt(queryStringParameters.start_num),
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
