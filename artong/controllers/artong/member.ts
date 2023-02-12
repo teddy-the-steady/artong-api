@@ -161,9 +161,16 @@ const getProjectContributors = async function(pathParameters: { id: string }, qu
     const result = await memberModel.getProjectContributors(
       pathParameters.id,
       parseInt(queryStringParameters.start_num),
-      parseInt(queryStringParameters.count_num),
+      parseInt(queryStringParameters.count_num) + 1,
     );
-    return {data: result}
+
+    let hasMoreData = false;
+    if (result.length === parseInt(queryStringParameters.count_num) + 1) {
+      hasMoreData = true;
+      result.length = parseInt(queryStringParameters.count_num);
+    }
+
+    return {data: result, meta: {hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -182,22 +189,28 @@ const getMemberFollowerOrFollowing = async function(pathParameters: { id: string
       id: parseInt(pathParameters.id),
     }, conn);
 
-    let result = null;
+    let result: Member[] = [];
     if (queryStringParameters.type === 'follower') {
       result = await memberModel.getMemberFollower(
         memberModel.id,
         parseInt(queryStringParameters.start_num),
-        parseInt(queryStringParameters.count_num),
+        parseInt(queryStringParameters.count_num) + 1,
       );
     } else if (queryStringParameters.type === 'following') {
       result = await memberModel.getMemberFollowing(
         memberModel.id,
         parseInt(queryStringParameters.start_num),
-        parseInt(queryStringParameters.count_num),
+        parseInt(queryStringParameters.count_num) + 1,
       );
     }
 
-    return {data: result}
+    let hasMoreData = false;
+    if (result.length === parseInt(queryStringParameters.count_num) + 1) {
+      hasMoreData = true;
+      result.length = parseInt(queryStringParameters.count_num);
+    }
+
+    return {data: result, meta: {hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
