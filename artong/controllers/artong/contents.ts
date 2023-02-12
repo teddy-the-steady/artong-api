@@ -404,14 +404,20 @@ const getTobeApprovedContentsInProject = async function(pathParameters: { id: st
     let result = await contentModel.getToBeApprovedContents(
       contentModel.project_address,
       parseInt(queryStringParameters.start_num),
-      parseInt(queryStringParameters.count_num),
+      parseInt(queryStringParameters.count_num) + 1,
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
 
+    let hasMoreData = false;
+    if (result.length === parseInt(queryStringParameters.count_num) + 1) {
+      hasMoreData = true;
+      result.length = parseInt(queryStringParameters.count_num);
+    }
+
     result = makeMemberInfo(result, [''], 'owner');
 
-    return {data: result}
+    return {data: result, meta: {hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -698,22 +704,19 @@ const getMemberContentsCandidates = async function(pathParameters: {id: string},
       member_id: parseInt(pathParameters.id),
     }, conn);
 
-    const count_num = parseInt(queryStringParameters.count_num);
-    queryStringParameters.count_num = String(count_num + 1);
-    let hasMoreData = false;
-
     const contentResult = await contentModel.getContentsCandidatesByMember(
       contentModel.member_id,
       contentModel.member_id === member.id,
       parseInt(queryStringParameters.start_num),
-      parseInt(queryStringParameters.count_num),
+      parseInt(queryStringParameters.count_num) + 1,
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
 
-    if (contentResult.length === count_num + 1) {
+    let hasMoreData = false;
+    if (contentResult.length === parseInt(queryStringParameters.count_num) + 1) {
       hasMoreData = true;
-      contentResult.length = count_num;
+      contentResult.length = parseInt(queryStringParameters.count_num);
     }
 
     const result = makeMemberInfo(contentResult, [''], 'owner');
@@ -737,12 +740,18 @@ const getMemberFavoritedContents = async function(pathParameters: {id: string}, 
     let contentResult = await contentModel.getFavoritedContentsByMember(
       contentModel.member_id,
       parseInt(queryStringParameters.start_num),
-      parseInt(queryStringParameters.count_num),
+      parseInt(queryStringParameters.count_num) + 1,
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
     if (contentResult.length === 0) {
       return {data: []}
+    }
+
+    let hasMoreData = false;
+    if (contentResult.length === parseInt(queryStringParameters.count_num) + 1) {
+      hasMoreData = true;
+      contentResult.length = parseInt(queryStringParameters.count_num);
     }
 
     const extractedConcatenatedTokenIds = contentResult.reduce((acc, content) => {
@@ -799,7 +808,7 @@ const getMemberFavoritedContents = async function(pathParameters: {id: string}, 
 
     contentResult = makeMemberInfo(contentResult, [''], 'creator');
 
-    return {data: contentResult}
+    return {data: contentResult, meta: {hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -815,13 +824,19 @@ const getFeedContents = async function(queryStringParameters: PageAndOrderingInf
 
     let contentResult = await contentModel.getFeedContents(
       member.id,
-      parseInt(queryStringParameters.count_num),
+      parseInt(queryStringParameters.count_num) + 1,
       parseInt(queryStringParameters.start_num),
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
     if (contentResult.length === 0) {
       return {data: []}
+    }
+
+    let hasMoreData = false;
+    if (contentResult.length === parseInt(queryStringParameters.count_num) + 1) {
+      hasMoreData = true;
+      contentResult.length = parseInt(queryStringParameters.count_num);
     }
 
     const extractedConcatenatedTokenIds = contentResult.reduce((acc, content) => {
@@ -878,7 +893,7 @@ const getFeedContents = async function(queryStringParameters: PageAndOrderingInf
 
     contentResult = makeMemberInfo(contentResult, [''], 'creator');
 
-    return {data: contentResult}
+    return {data: contentResult, meta: {hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -893,13 +908,19 @@ const getContents = async function(queryStringParameters: PageAndOrderingInfo) {
     const contentModel = new Contents({}, conn);
 
     let contentResult = await contentModel.getContents(
-      parseInt(queryStringParameters.count_num),
+      parseInt(queryStringParameters.count_num) + 1,
       parseInt(queryStringParameters.start_num),
       queryStringParameters.order_by,
       queryStringParameters.order_direction,
     );
     if (contentResult.length === 0) {
       return {data: []}
+    }
+
+    let hasMoreData = false;
+    if (contentResult.length === parseInt(queryStringParameters.count_num) + 1) {
+      hasMoreData = true;
+      contentResult.length = parseInt(queryStringParameters.count_num);
     }
 
     const extractedConcatenatedTokenIds = contentResult.reduce((acc, content) => {
@@ -956,7 +977,7 @@ const getContents = async function(queryStringParameters: PageAndOrderingInfo) {
 
     contentResult = makeMemberInfo(contentResult, [''], 'creator');
 
-    return {data: contentResult}
+    return {data: contentResult, meta: {hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
