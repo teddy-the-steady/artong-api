@@ -19,13 +19,8 @@ FROM
 WHERE 1=1
   AND project_address = ${project_address}
   AND (
-    (is_redeemed = TRUE AND token_id > 0) OR
-    (is_redeemed IS NULL AND token_id > 0) OR
-    {{#if (eq policy 1)}}
-      (is_redeemed = FALSE AND token_id IS NULL AND status = 'APPROVED')
-    {{else}}
-      (is_redeemed = FALSE AND token_id IS NULL AND (status != 'BLOCKED' OR status IS NULL))
-    {{/if}}
+    c.token_id > 0 OR
+    c.status = 'APPROVED'
   )
 
 {{#exists order_by}}
