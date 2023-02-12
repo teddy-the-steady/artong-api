@@ -4,6 +4,7 @@ import * as db from '../../utils/db/db';
 import Models from '../Models';
 const insertContent = require('./insertContent.sql');
 const updateContent = require('./updateContent.sql');
+const _updateContent = require('./_updateContent.sql');
 const updateContentStatus = require('./updateContentStatus.sql');
 const updateContentThumbnailS3keys = require('./updateContentThumbnailS3keys.sql');
 const updateContentTokenIds = require('./updateContentTokenIds.sql');
@@ -47,12 +48,14 @@ class Contents extends Models {
 		member_id?: number,
 		project_address?: string,
 		content_s3key?: string,
+		status?: string,
 	): Promise<Contents> {
 		try {
 			const result = await db.execute(this.conn, insertContent, {
 				member_id,
 				project_address,
 				content_s3key,
+				status,
 			});
 			return result[0]
 		} catch (error) {
@@ -68,9 +71,36 @@ class Contents extends Models {
 		is_redeemed?: boolean,
 		name?: string,
 		description?: string,
+		member_id?: number,
 	): Promise<Contents> {
 		try {
 			const result = await db.execute(this.conn, updateContent, {
+				id,
+				ipfs_url,
+				token_id,
+				voucher,
+				is_redeemed,
+				name,
+				description,
+				member_id,
+			});
+			return result[0]
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async _updateContent(
+		id?: number,
+		ipfs_url?: string,
+		token_id?: number,
+		voucher?: object,
+		is_redeemed?: boolean,
+		name?: string,
+		description?: string,
+	): Promise<Contents> {
+		try {
+			const result = await db.execute(this.conn, _updateContent, {
 				id,
 				ipfs_url,
 				token_id,
@@ -284,8 +314,8 @@ class Contents extends Models {
 
 	async getContentsByProject(
 		project_address?: string,
-		start_num?: string,
-		count_num?: string,
+		start_num?: number,
+		count_num?: number,
 		order_by?: string,
 		order_direction?: string,
 		policy?: number,
