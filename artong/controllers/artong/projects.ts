@@ -424,10 +424,16 @@ const getMemberSubscribedProjects = async function(pathParameters: { id: string 
     const result = await projectModel.getMemberSubscribedProjects(
       projectModel.member_id,
       parseInt(queryStringParameters.start_num),
-      parseInt(queryStringParameters.count_num),
+      parseInt(queryStringParameters.count_num) + 1,
     );
 
-    return {data: result}
+    let hasMoreData = false;
+    if (result.length === parseInt(queryStringParameters.count_num) + 1) {
+      hasMoreData = true;
+      result.length = parseInt(queryStringParameters.count_num);
+    }
+
+    return {data: result, meta: {hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
