@@ -4,12 +4,12 @@ app: artong-api
 provider:
   name: aws
   runtime: nodejs16.x
-  stage: stage
+  stage: prod
   region: ap-northeast-2
   environment:
     ENV: ${self:provider.stage}
     NODE_PATH: './:/opt/node_modules'
-    S3_BUCKET: 'artong-stage-image163347-stage'
+    S3_BUCKET: 'artong-prod-image213636-prod'
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
