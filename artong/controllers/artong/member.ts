@@ -189,7 +189,7 @@ const getMemberFollowerOrFollowing = async function(pathParameters: { id: string
         queryStringParameters.start_num,
         queryStringParameters.count_num,
       );
-    } else {
+    } else if (queryStringParameters.type === 'following') {
       result = await memberModel.getMemberFollowing(
         memberModel.id,
         queryStringParameters.start_num,
