@@ -8,6 +8,9 @@ class Reports extends Models {
 	member_id?: number;
 	description?: string;
 	category?: string;
+	project_address?: string;
+	contents_id?: number;
+	member_id_reported?: number;
 
 	created_at?: Date;
 	updated_at?: Date;
@@ -19,14 +22,20 @@ class Reports extends Models {
 
 	async createReport(
 		description?: string,
+		project_address?: string,
+		contents_id?: number,
+		member_id_reported?: number,
 		category?: string,
-		member_id?: number
+		member_id?: number,
 	): Promise<Reports> {
 		try {
 			const result = await db.execute(this.conn, insertReport, {
 				description,
+				project_address,
+				contents_id,
+				member_id_reported,
 				category,
-				member_id
+				member_id,
 			});
 			return result[0]
 		} catch (error) {
