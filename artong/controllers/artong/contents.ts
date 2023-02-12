@@ -55,6 +55,7 @@ const postContent = async function(body: any, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
+    // TODO] query policy on every req for now. BEST is to listen event in our server and to syncronize with db
     const policyResult = await graphqlRequest({
       query: 'query Project($id: String) { project(id: $id) { policy } }',
       variables: {id: body.project_address}
@@ -312,19 +313,8 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
       body.variables.project = projectResult.address;
     }
 
-    // TODO] query policy on every req for now. BEST is to listen event in our server and to syncronize with db
-    const [gqlResult, policyResult] = await Promise.all([
-      graphqlRequest({query: pureQuery, variables: body.variables}),
-      graphqlRequest({
-        query: 'query Project($id: String) { project(id: $id) { policy } }',
-        variables: {id: body.variables.project,}
-      })
-    ]);
-    if (!policyResult.project) {
-      return {data: {tokens:[], meta: {subgraph_count: 0}}}
-    }
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
 
-    const policy = policyResult.project.policy;
     const contentModel = new Contents({}, conn);
     if (gqlResult.tokens.length > 0) {
       const extractedTokenIds = gqlResult.tokens.map((token: { tokenId: string; }) => parseInt(token.tokenId));
@@ -347,7 +337,6 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
       body.variables.first,
       body.variables.orderBy,
       body.variables.orderDirection,
-      policy,
     )
 
     let result: any[] = [];

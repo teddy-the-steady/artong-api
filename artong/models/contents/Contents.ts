@@ -318,7 +318,6 @@ class Contents extends Models {
 		count_num?: number,
 		order_by?: string,
 		order_direction?: string,
-		policy?: number,
 	): Promise<Contents[]> {
 		try {
 			const result = await db.execute(this.conn, selectContentsByProject, {
@@ -327,7 +326,6 @@ class Contents extends Models {
 				count_num,
 				order_by,
 				order_direction,
-				policy
 			});
 			return result
 		} catch (error) {
