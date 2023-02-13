@@ -10,7 +10,7 @@ import { NFTStorage } from 'nft.storage';
 import { File } from '@web-std/file';
 import _ from 'lodash';
 import { ContentsHistory } from '../../models/contentsHistory/ContentsHistory';
-import { PageAndOrderingInfo, PaginationInfo } from './index';
+import { PageAndOrderingInfo, PaginationInfo, GqlPageAndOrderingInfo } from './index';
 
 interface GetContentInfo {
   id: string
@@ -260,13 +260,24 @@ const queryToken = async function(body: QueryTokenInfo, _db_: string[], pureQuer
   }
 }
 
-const queryTokens = async function(body: any, _db_: string[], pureQuery: string) {
+const queryTokens = async function(body: {variables: GqlPageAndOrderingInfo}, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
-    const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: {
+      first: body.variables.first + 1,
+      skip: body.variables.skip,
+      orderBy: body.variables.orderBy,
+      orderDirection: body.variables.orderDirection,
+    }});
     if (gqlResult.tokens.length === 0) {
       return {data: {tokens: []}}
+    }
+
+    let hasMoreData = false;
+    if (gqlResult.tokens.length === body.variables.first + 1) {
+      hasMoreData = true;
+      gqlResult.tokens.length = body.variables.first;
     }
 
     const memberModel = new Member({}, conn);
@@ -291,9 +302,9 @@ const queryTokens = async function(body: any, _db_: string[], pureQuery: string)
 
     if (contentResult.length > 0) {
       const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
-      return {data: {tokens: _.values(merged)}}
+      return {data: {tokens: _.values(merged)}, meta: {hasMoreData: hasMoreData}}
     } else {
-      return {data: gqlResult}
+      return {data: gqlResult, meta: {hasMoreData: hasMoreData}}
     }
   } catch (error) {
     throw controllerErrorWrapper(error);
@@ -302,14 +313,18 @@ const queryTokens = async function(body: any, _db_: string[], pureQuery: string)
   }
 }
 
-const queryTokensByProject = async function(body: any, _db_: string[], pureQuery: string) {
+interface TokensByProjectInfo extends GqlPageAndOrderingInfo {
+  project: string
+  start_num: number
+}
+const queryTokensByProject = async function(body: {variables: TokensByProjectInfo}, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
     if (!isAddress(body.variables.project)) {
       const projectModel = new Projects({}, conn);
       const projectResult = await projectModel.getProjectWithAddressOrSlug(body.variables.project);
-      if (!projectResult || !projectResult.address) return {data: {tokens:[], meta: {subgraph_count: 0}}}
+      if (!projectResult || !projectResult.address) return {data: {tokens:[], meta: {subgraph_count: 0, hasMoreData: false}}}
       body.variables.project = projectResult.address;
     }
 
@@ -334,10 +349,16 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
     const contentsResult = await contentModel.getContentsByProject(
       body.variables.project,
       body.variables.start_num,
-      body.variables.first,
+      body.variables.first + 1,
       body.variables.orderBy,
       body.variables.orderDirection,
     )
+
+    let hasMoreData = false;
+    if (contentsResult.length === body.variables.first + 1) {
+      hasMoreData = true;
+      contentsResult.length = body.variables.first;
+    }
 
     let result: any[] = [];
     let subgraph_count = 0;
@@ -363,7 +384,7 @@ const queryTokensByProject = async function(body: any, _db_: string[], pureQuery
       result = await memberModel.setOwnerFromMemberListTo(result);
     }
 
-    return {data: {tokens: result, meta: {subgraph_count: subgraph_count}}}
+    return {data: {tokens: result, meta: {subgraph_count: subgraph_count, hasMoreData: hasMoreData}}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -447,13 +468,28 @@ const getContentVoucherById = async function(pathParameters: any, member: Member
   }
 };
 
-const queryTokensByCreator = async function(body: any, _db_: string[], pureQuery: string) {
+interface TokensByCreatorInfo extends GqlPageAndOrderingInfo {
+  creator: string
+}
+const queryTokensByCreator = async function(body: {variables: TokensByCreatorInfo}, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
-    const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: {
+      first: body.variables.first + 1,
+      skip: body.variables.skip,
+      creator: body.variables.creator,
+      orderBy: body.variables.orderBy,
+      orderDirection: body.variables.orderDirection,
+    }});
     if (gqlResult.tokens.length === 0) {
       return {data: {tokens: []}}
+    }
+
+    let hasMoreData = false;
+    if (gqlResult.tokens.length === body.variables.first + 1) {
+      hasMoreData = true;
+      gqlResult.tokens.length = body.variables.first;
     }
 
     const memberModel = new Member({}, conn);
@@ -480,9 +516,9 @@ const queryTokensByCreator = async function(body: any, _db_: string[], pureQuery
 
     if (contentResult.length > 0) {
       const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
-      return {data: {tokens: _.values(merged)}}
+      return {data: {tokens: _.values(merged)}, meta: {hasMoreData: hasMoreData}}
     } else {
-      return {data: gqlResult}
+      return {data: gqlResult, meta: {hasMoreData: hasMoreData}}
     }
   } catch (error) {
     throw controllerErrorWrapper(error);
@@ -491,13 +527,28 @@ const queryTokensByCreator = async function(body: any, _db_: string[], pureQuery
   }
 }
 
-const queryTokensByOwner = async function(body: any, _db_: string[], pureQuery: string) {
+interface TokensByOwnerInfo extends GqlPageAndOrderingInfo {
+  owner: string
+}
+const queryTokensByOwner = async function(body: {variables: TokensByOwnerInfo}, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
-    const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: {
+      first: body.variables.first + 1,
+      skip: body.variables.skip,
+      owner: body.variables.owner,
+      orderBy: body.variables.orderBy,
+      orderDirection: body.variables.orderDirection,
+    }});
     if (gqlResult.tokens.length === 0) {
       return {data: {tokens: []}}
+    }
+
+    let hasMoreData = false;
+    if (gqlResult.tokens.length === body.variables.first + 1) {
+      hasMoreData = true;
+      gqlResult.tokens.length = body.variables.first;
     }
 
     const memberModel = new Member({}, conn);
@@ -522,9 +573,9 @@ const queryTokensByOwner = async function(body: any, _db_: string[], pureQuery: 
 
     if (contentResult.length > 0) {
       const merged = _.merge(_.keyBy(gqlResult.tokens, 'id'), _.keyBy(contentResult, 'id'))
-      return {data: {tokens: _.values(merged)}}
+      return {data: {tokens: _.values(merged)}, meta: {hasMoreData: hasMoreData}}
     } else {
-      return {data: gqlResult}
+      return {data: gqlResult, meta: {hasMoreData: hasMoreData}}
     }
   } catch (error) {
     throw controllerErrorWrapper(error);
@@ -633,12 +684,18 @@ const queryTokenHistory = async function(body: QueryTokenHistoryInfo, _db_: stri
       gqlResult.token.project.id,
       gqlResult.token.tokenId,
       parseInt(body.pagination.start_num),
-      parseInt(body.pagination.count_num),
+      parseInt(body.pagination.count_num) + 1,
     );
+
+    let hasMoreData = false;
+    if (result.length === parseInt(body.pagination.count_num) + 1) {
+      hasMoreData = true;
+      result.length = parseInt(body.pagination.count_num);
+    }
 
     result = makeMemberInfo(result, ['from_', 'to_'], 'member');
 
-    return {data: result}
+    return {data: result, meta: {hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {

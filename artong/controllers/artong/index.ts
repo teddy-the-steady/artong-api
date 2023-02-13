@@ -19,6 +19,16 @@ interface PageAndOrderingInfo extends PaginationInfo {
 	order_direction: string
 }
 
+interface GqlPaginationInfo {
+	first: number
+	skip: number
+}
+
+interface GqlPageAndOrderingInfo extends GqlPaginationInfo {
+	orderBy: string
+	orderDirection: string
+}
+
 export {
 	member,
 	country,
@@ -32,4 +42,5 @@ export {
 	report,
 	PaginationInfo,
 	PageAndOrderingInfo,
+	GqlPageAndOrderingInfo
 };
