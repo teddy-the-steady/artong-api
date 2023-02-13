@@ -153,7 +153,7 @@ const getProjectContributors = async function(pathParameters: { id: string }, qu
     if (!isAddress(pathParameters.id)) {
       const projectModel = new Projects({}, conn);
       const projectResult = await projectModel.getProjectWithAddressOrSlug(pathParameters.id);
-      if (!projectResult || !projectResult.address) return {data: []}
+      if (!projectResult || !projectResult.address) return {data: [], meta: {hasMoreData: false}}
       pathParameters.id = projectResult.address;
     }
 
