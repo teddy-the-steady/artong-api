@@ -271,7 +271,7 @@ const queryTokens = async function(body: {variables: GqlPageAndOrderingInfo}, _d
       orderDirection: body.variables.orderDirection,
     }});
     if (gqlResult.tokens.length === 0) {
-      return {data: {tokens: []}}
+      return {data: {tokens: []}, meta: {hasMoreData: false}}
     }
 
     let hasMoreData = false;
@@ -483,7 +483,7 @@ const queryTokensByCreator = async function(body: {variables: TokensByCreatorInf
       orderDirection: body.variables.orderDirection,
     }});
     if (gqlResult.tokens.length === 0) {
-      return {data: {tokens: []}}
+      return {data: {tokens: []}, meta: {hasMoreData: false}}
     }
 
     let hasMoreData = false;
@@ -542,7 +542,7 @@ const queryTokensByOwner = async function(body: {variables: TokensByOwnerInfo}, 
       orderDirection: body.variables.orderDirection,
     }});
     if (gqlResult.tokens.length === 0) {
-      return {data: {tokens: []}}
+      return {data: {tokens: []}, meta: {hasMoreData: false}}
     }
 
     let hasMoreData = false;
@@ -599,14 +599,14 @@ const queryTokenHistory = async function(body: QueryTokenHistoryInfo, _db_: stri
     if (!isAddress(body.variables.project_address)) {
       const projectModel = new Projects({}, conn);
       const projectResult = await projectModel.getProjectWithAddressOrSlug(body.variables.project_address);
-      if (!projectResult || !projectResult.address) return {data: {token: {}}}
+      if (!projectResult || !projectResult.address) return {data: {token: {}}, meta: {hasMoreData: false}}
       body.variables.project_address = projectResult.address;
       body.variables.id = projectResult.address + body.variables.token_id;
     }
 
     const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
     if (!gqlResult.token) {
-      return {data: {token: {}}}
+      return {data: {token: {}}, meta: {hasMoreData: false}}
     }
 
     const contentsHistoryModel = new ContentsHistory({}, conn);
@@ -802,7 +802,7 @@ const getMemberFavoritedContents = async function(pathParameters: {id: string}, 
       queryStringParameters.order_direction,
     );
     if (contentResult.length === 0) {
-      return {data: []}
+      return {data: [], meta: {hasMoreData: false}}
     }
 
     let hasMoreData = false;
@@ -887,7 +887,7 @@ const getFeedContents = async function(queryStringParameters: PageAndOrderingInf
       queryStringParameters.order_direction,
     );
     if (contentResult.length === 0) {
-      return {data: []}
+      return {data: [], meta: {hasMoreData: false}}
     }
 
     let hasMoreData = false;
@@ -971,7 +971,7 @@ const getContents = async function(queryStringParameters: PageAndOrderingInfo) {
       queryStringParameters.order_direction,
     );
     if (contentResult.length === 0) {
-      return {data: []}
+      return {data: [], meta: {hasMoreData: false}}
     }
 
     let hasMoreData = false;
