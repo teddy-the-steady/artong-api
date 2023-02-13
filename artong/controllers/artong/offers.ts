@@ -30,7 +30,7 @@ const queryOffersByToken = async function(body: {variables: QueryOffersByTokenIn
       id: body.variables.id,
     }});
     if (gqlResult.offers.length === 0) {
-      return {data: {offers: []}}
+      return {data: {offers: []}, meta: {hasMoreData: false}}
     }
 
     let hasMoreData = false;
