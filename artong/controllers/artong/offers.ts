@@ -5,17 +5,14 @@ import { graphqlRequest } from '../../utils/common/graphqlUtil';
 import { isAddress } from '../../utils/common/commonFunc';
 import { PoolClient } from 'pg';
 import _ from 'lodash';
+import { GqlPageAndOrderingInfo } from './index';
 
-interface QueryOffersByTokenInfo {
-  variables: {
-    id: string
-    project_address: string
-    token_id: number
-    first: number
-    skip: number
-  }
+interface QueryOffersByTokenInfo extends GqlPageAndOrderingInfo {
+  id: string
+  project_address: string
+  token_id: number
 }
-const queryOffersByToken = async function(body: QueryOffersByTokenInfo, _db_: string[], pureQuery: string) {
+const queryOffersByToken = async function(body: {variables: QueryOffersByTokenInfo}, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -27,15 +24,25 @@ const queryOffersByToken = async function(body: QueryOffersByTokenInfo, _db_: st
       body.variables.id = projectResult.address + body.variables.token_id;
     }
 
-    const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: {
+      first: body.variables.first + 1,
+      skip: body.variables.skip,
+      id: body.variables.id,
+    }});
     if (gqlResult.offers.length === 0) {
       return {data: {offers: []}}
+    }
+
+    let hasMoreData = false;
+    if (gqlResult.offers.length === body.variables.first + 1) {
+      hasMoreData = true;
+      gqlResult.offers.length = body.variables.first;
     }
 
     const memberModel = new Member({}, conn);
     gqlResult.offers = await memberModel.setSenderFromMemberListTo(gqlResult.offers);
 
-    return {data: gqlResult}
+    return {data: gqlResult, meta: {hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
