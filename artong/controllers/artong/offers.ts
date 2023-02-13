@@ -19,7 +19,7 @@ const queryOffersByToken = async function(body: {variables: QueryOffersByTokenIn
     if (!isAddress(body.variables.project_address)) {
       const projectModel = new Projects({}, conn);
       const projectResult = await projectModel.getProjectWithAddressOrSlug(body.variables.project_address);
-      if (!projectResult || !projectResult.address) return {data: {token: {}}, meta: {hasMoreData: false}}
+      if (!projectResult || !projectResult.address) return {data: {offers: []}, meta: {hasMoreData: false}}
       body.variables.project_address = projectResult.address;
       body.variables.id = projectResult.address + body.variables.token_id;
     }
