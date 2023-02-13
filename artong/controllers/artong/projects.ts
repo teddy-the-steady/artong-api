@@ -269,7 +269,7 @@ const queryProjects = async function(body: {variables: GqlPageAndOrderingInfo}, 
       orderDirection: body.variables.orderDirection,
     }});
     if (gqlResult.projects.length === 0) {
-      return {data: {projects: []}}
+      return {data: {projects: []}, meta: {hasMoreData: false}}
     }
 
     let hasMoreData = false;
@@ -338,7 +338,7 @@ const queryProjectsByCreator = async function(body: {variables: ProjectsByCreato
       creator: body.variables.creator,
     }});
     if (gqlResult.projects.length === 0) {
-      return {data: {projects: []}}
+      return {data: {projects: []}, meta: {hasMoreData: false}}
     }
 
     let hasMoreData = false;
