@@ -324,7 +324,7 @@ const queryTokensByProject = async function(body: {variables: TokensByProjectInf
     if (!isAddress(body.variables.project)) {
       const projectModel = new Projects({}, conn);
       const projectResult = await projectModel.getProjectWithAddressOrSlug(body.variables.project);
-      if (!projectResult || !projectResult.address) return {data: {tokens:[], meta: {subgraph_count: 0, hasMoreData: false}}}
+      if (!projectResult || !projectResult.address) return {data: {tokens:[]}, meta: {subgraph_count: 0, hasMoreData: false}}
       body.variables.project = projectResult.address;
     }
 
@@ -384,7 +384,7 @@ const queryTokensByProject = async function(body: {variables: TokensByProjectInf
       result = await memberModel.setOwnerFromMemberListTo(result);
     }
 
-    return {data: {tokens: result, meta: {subgraph_count: subgraph_count, hasMoreData: hasMoreData}}}
+    return {data: {tokens: result}, meta: {subgraph_count: subgraph_count, hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
