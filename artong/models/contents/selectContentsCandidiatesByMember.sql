@@ -28,7 +28,7 @@ WHERE 1=1
   AND c.is_redeemed = FALSE
   AND c.token_id IS NULL
   {{#if (eq isMember false)}}
-  AND (c.status = 'APPROVED')
+  AND (c.is_redeemed IS NOT NULL AND c.status = 'APPROVED')
   {{/if}}
 
 {{#exists order_by}}

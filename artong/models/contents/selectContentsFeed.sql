@@ -42,7 +42,7 @@ WHERE
   )
 	AND (
     c.token_id > 0 OR
-    c.status = 'APPROVED'
+    (c.is_redeemed IS NOT NULL AND c.status = 'APPROVED')
   )
 
 {{#exists order_by}}
