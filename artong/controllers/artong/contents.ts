@@ -260,16 +260,24 @@ const queryToken = async function(body: QueryTokenInfo, _db_: string[], pureQuer
   }
 }
 
-const queryTokens = async function(body: {variables: GqlPageAndOrderingInfo}, _db_: string[], pureQuery: string) {
+interface QueryTokensInfo extends GqlPageAndOrderingInfo {
+  idArray: string[]
+}
+const queryTokens = async function(body: {variables: QueryTokensInfo}, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
-    const gqlResult = await graphqlRequest({query: pureQuery, variables: {
-      first: body.variables.first + 1,
-      skip: body.variables.skip,
-      orderBy: body.variables.orderBy,
-      orderDirection: body.variables.orderDirection,
-    }});
+    const gqlResult = await graphqlRequest({
+      query: pureQuery,
+      variables: body.variables.idArray ?
+        body.variables :
+        {
+          first: body.variables.first + 1,
+          skip: body.variables.skip,
+          orderBy: body.variables.orderBy,
+          orderDirection: body.variables.orderDirection,
+        }
+    });
     if (gqlResult.tokens.length === 0) {
       return {data: {tokens: []}, meta: {hasMoreData: false}}
     }

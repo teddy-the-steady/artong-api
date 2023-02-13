@@ -258,16 +258,24 @@ const queryProject = async function(body: any, _db_: string[], pureQuery: string
   }
 }
 
-const queryProjects = async function(body: {variables: GqlPageAndOrderingInfo}, _db_: string[], pureQuery: string) {
+interface QueryProjectsInfo extends GqlPageAndOrderingInfo {
+  idArray: string[]
+}
+const queryProjects = async function(body: {variables: QueryProjectsInfo}, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
-    const gqlResult = await graphqlRequest({query: pureQuery, variables: {
-      first: body.variables.first + 1,
-      skip: body.variables.skip,
-      orderBy: body.variables.orderBy,
-      orderDirection: body.variables.orderDirection,
-    }});
+    const gqlResult = await graphqlRequest({
+      query: pureQuery,
+      variables: body.variables.idArray ?
+        body.variables :
+        {
+          first: body.variables.first + 1,
+          skip: body.variables.skip,
+          orderBy: body.variables.orderBy,
+          orderDirection: body.variables.orderDirection,
+        }
+    });
     if (gqlResult.projects.length === 0) {
       return {data: {projects: []}, meta: {hasMoreData: false}}
     }
