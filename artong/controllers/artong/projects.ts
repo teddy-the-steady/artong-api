@@ -7,7 +7,7 @@ import { ethers } from 'ethers';
 import _ from 'lodash';
 import { graphqlRequest } from '../../utils/common/graphqlUtil';
 import { calculateMinusBetweenTowSetsById, isAddress } from '../../utils/common/commonFunc'
-import { PaginationInfo } from './index';
+import { PaginationInfo, GqlPageAndOrderingInfo } from './index';
 import validator from '../../utils/validators/common';
 
 interface GetProjectsInfo {
@@ -258,13 +258,24 @@ const queryProject = async function(body: any, _db_: string[], pureQuery: string
   }
 }
 
-const queryProjects = async function(body: any, _db_: string[], pureQuery: string) {
+const queryProjects = async function(body: {variables: GqlPageAndOrderingInfo}, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
-    const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: {
+      first: body.variables.first + 1,
+      skip: body.variables.skip,
+      orderBy: body.variables.orderBy,
+      orderDirection: body.variables.orderDirection,
+    }});
     if (gqlResult.projects.length === 0) {
       return {data: {projects: []}}
+    }
+
+    let hasMoreData = false;
+    if (gqlResult.projects.length === body.variables.first + 1) {
+      hasMoreData = true;
+      gqlResult.projects.length = body.variables.first;
     }
 
     const extractedProjectIds = gqlResult.projects.map((project: { id: string; }) => project.id);
@@ -304,7 +315,7 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
       }
     }
 
-    return {data: result}
+    return {data: result, meta: {hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -312,13 +323,28 @@ const queryProjects = async function(body: any, _db_: string[], pureQuery: strin
   }
 }
 
-const queryProjectsByCreator = async function(body: any, _db_: string[], pureQuery: string) {
+interface ProjectsByCreatorInfo extends GqlPageAndOrderingInfo {
+  creator: string
+}
+const queryProjectsByCreator = async function(body: {variables: ProjectsByCreatorInfo}, _db_: string[], pureQuery: string) {
   const conn: PoolClient = await db.getConnection();
 
   try {
-    const gqlResult = await graphqlRequest({query: pureQuery, variables: body.variables});
+    const gqlResult = await graphqlRequest({query: pureQuery, variables: {
+      first: body.variables.first + 1,
+      skip: body.variables.skip,
+      orderBy: body.variables.orderBy,
+      orderDirection: body.variables.orderDirection,
+      creator: body.variables.creator,
+    }});
     if (gqlResult.projects.length === 0) {
       return {data: {projects: []}}
+    }
+
+    let hasMoreData = false;
+    if (gqlResult.projects.length === body.variables.first + 1) {
+      hasMoreData = true;
+      gqlResult.projects.length = body.variables.first;
     }
 
     const extractedProjectIds = gqlResult.projects.map((project: { id: string; }) => project.id);
@@ -368,7 +394,7 @@ const queryProjectsByCreator = async function(body: any, _db_: string[], pureQue
       }
     }
 
-    return {data: result}
+    return {data: result, meta: {hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
