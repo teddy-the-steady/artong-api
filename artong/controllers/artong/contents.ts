@@ -426,6 +426,13 @@ const getTobeApprovedContentsInProject = async function(pathParameters: { id: st
   const conn: PoolClient = await db.getConnection();
 
   try {
+    if (!isAddress(pathParameters.id)) {
+      const projectModel = new Projects({}, conn);
+      const projectResult = await projectModel.getProjectWithAddressOrSlug(pathParameters.id);
+      if (!projectResult || !projectResult.address) return {data: {}, meta: {hasMoreData: false}}
+      pathParameters.id = projectResult.address;
+    }
+
     const contentModel = new Contents({
       project_address: pathParameters.id,
     }, conn);

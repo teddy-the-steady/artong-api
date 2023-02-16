@@ -129,14 +129,16 @@ const patchMember = async function(body: any, pathParameters: any, member: Membe
   try {
     const memberModel = new Member({
       id: pathParameters.id,
-      username: body.username ? body.username : null,
-      introduction: body.introduction,
+      username: body?.username,
+      introduction: body?.introduction,
     }, conn);
 
     const result = await memberModel.updateMember(
       memberModel.id,
       memberModel.username,
       memberModel.introduction,
+      body.iso_code_2,
+      body.language_code,
     );
     return {data: result}
   } catch (error) {
