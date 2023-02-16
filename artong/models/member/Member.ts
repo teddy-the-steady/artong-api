@@ -43,6 +43,7 @@ class Member extends Models implements MemberGroups {
 	@IsUUID()
 	@IsOptional()
 	principal_id?: string;
+	language_id?: number;
 
 	created_at?: Date;
 	updated_at?: Date;
@@ -189,12 +190,16 @@ class Member extends Models implements MemberGroups {
 		id?: number,
 		username?: string,
 		introduction?: string,
+		iso_code_2?: string,
+		language_code?: string,
 	) {
 		try {
 			const result = await db.execute(this.conn, updateMember, {
-				id: id,
-				username: username,
-				introduction: introduction,
+				id,
+				username,
+				introduction,
+				iso_code_2,
+				language_code,
 			});
 			return result[0]
 		} catch (error) {
