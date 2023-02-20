@@ -36,7 +36,7 @@ const getMemberByUsername = async function(pathParameters: { id: string }, membe
 
   try {
     const memberModel = new Member({
-      username: pathParameters.id
+      username: decodeURIComponent(pathParameters.id)
     }, conn);
 
     const result = await memberModel.getMemberByUsername(
