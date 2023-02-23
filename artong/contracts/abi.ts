@@ -925,6 +925,11 @@ export const FACTORY_ABI = [
         name: '_platformFee',
         type: 'uint16',
       },
+      {
+        internalType: 'address',
+        name: '_beacon',
+        type: 'address',
+      },
     ],
     stateMutability: 'nonpayable',
     type: 'constructor',
@@ -1014,19 +1019,6 @@ export const FACTORY_ABI = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
-        internalType: 'address',
-        name: 'caller',
-        type: 'address',
-      },
-    ],
-    name: 'Destoried',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
         indexed: true,
         internalType: 'address',
         name: 'previousOwner',
@@ -1041,6 +1033,25 @@ export const FACTORY_ABI = [
     ],
     name: 'OwnershipTransferred',
     type: 'event',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'clonedContracts',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [
@@ -1077,51 +1088,6 @@ export const FACTORY_ABI = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'apocalypse',
-        type: 'address',
-      },
-    ],
-    name: 'destroy',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'tokenContractAddress',
-        type: 'address',
-      },
-    ],
-    name: 'disableTokenContract',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'exists',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [],
     name: 'feeRecipient',
     outputs: [
@@ -1136,12 +1102,12 @@ export const FACTORY_ABI = [
   },
   {
     inputs: [],
-    name: 'marketplace',
+    name: 'getClonedContracts',
     outputs: [
       {
-        internalType: 'address',
+        internalType: 'address[]',
         name: '',
-        type: 'address',
+        type: 'address[]',
       },
     ],
     stateMutability: 'view',
@@ -1149,12 +1115,12 @@ export const FACTORY_ABI = [
   },
   {
     inputs: [],
-    name: 'maxAmount',
+    name: 'marketplace',
     outputs: [
       {
-        internalType: 'uint256',
+        internalType: 'address',
         name: '',
-        type: 'uint256',
+        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -1184,32 +1150,6 @@ export const FACTORY_ABI = [
       },
     ],
     stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'policy',
-    outputs: [
-      {
-        internalType: 'enum Policy',
-        name: '',
-        type: 'uint8',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'tokenContractAddress',
-        type: 'address',
-      },
-    ],
-    name: 'registerTokenContract',
-    outputs: [],
-    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -1275,47 +1215,6 @@ export const FACTORY_ABI = [
 
 export const ERC721_ABI = [
   {
-    inputs: [
-      {
-        internalType: 'string',
-        name: '_name',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: '_symbol',
-        type: 'string',
-      },
-      {
-        internalType: 'address',
-        name: '_marketplace',
-        type: 'address',
-      },
-      {
-        internalType: 'uint16',
-        name: '_platformFee',
-        type: 'uint16',
-      },
-      {
-        internalType: 'address payable',
-        name: '_feeReceipient',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '_maxAmount',
-        type: 'uint256',
-      },
-      {
-        internalType: 'enum Policy',
-        name: '_policy',
-        type: 'uint8',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -1370,12 +1269,12 @@ export const ERC721_ABI = [
     inputs: [
       {
         indexed: false,
-        internalType: 'address',
-        name: 'caller',
-        type: 'address',
+        internalType: 'uint8',
+        name: 'version',
+        type: 'uint8',
       },
     ],
-    name: 'Destoried',
+    name: 'Initialized',
     type: 'event',
   },
   {
@@ -1586,19 +1485,6 @@ export const ERC721_ABI = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'apocalypse',
-        type: 'address',
-      },
-    ],
-    name: 'destroy',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [],
     name: 'feeReceipient',
     outputs: [
@@ -1641,6 +1527,54 @@ export const ERC721_ABI = [
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: '_name',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: '_symbol',
+        type: 'string',
+      },
+      {
+        internalType: 'address',
+        name: '_marketplace',
+        type: 'address',
+      },
+      {
+        internalType: 'uint16',
+        name: '_platformFee',
+        type: 'uint16',
+      },
+      {
+        internalType: 'address payable',
+        name: '_feeReceipient',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_maxAmount',
+        type: 'uint256',
+      },
+      {
+        internalType: 'enum Policy',
+        name: '_policy',
+        type: 'uint8',
+      },
+      {
+        internalType: 'address',
+        name: 'newOwner',
+        type: 'address',
+      },
+    ],
+    name: 'initialize',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
