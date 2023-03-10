@@ -21,21 +21,21 @@ const getTop10Contributors = async function() {
 const getMainContents = function() {
   const result = {
     mainToken: {
-      project_address: '0xffcc9cbf76ddbb240ba8e614e10f3863ba10a8e4',
-      token_id: '1'
+      project_address: '0xeb629c752200c6a58947b7887e3a1e9beb0245f1',
+      token_id: '2'
     },
     highlightedProjects: [
-      '0xffcc9cbf76ddbb240ba8e614e10f3863ba10a8e4',
-      '0x9c202218148cfdff5e1e18f0c6a30d011de5c1ac',
-      '0x52234011cf229f16bbd2ff191c2627275de87870',
-      '0x6b426ca2327c72089d192bbf3eb43abfc438975d',
-      '0x0670eec8053e401c4bb5e89fb70be8508f01a054',
+      '0xeb629c752200c6a58947b7887e3a1e9beb0245f1',
+      '0x31739f4598411143b279cd0b6cb714a360b90178',
+      '0x0ff3495df6131426bc6bc28397459ff13113157e',
+      '0x90b8bbf892a205cd9ac774e9d910a68c42bfced5',
     ],
     artongsPick: [
-      '0x0670eec8053e401c4bb5e89fb70be8508f01a0541',
-      '0xffcc9cbf76ddbb240ba8e614e10f3863ba10a8e41',
-      '0x6b426ca2327c72089d192bbf3eb43abfc438975d1',
-      '0xffcc9cbf76ddbb240ba8e614e10f3863ba10a8e42',
+      '0x0ff3495df6131426bc6bc28397459ff13113157e1',
+      '0x31739f4598411143b279cd0b6cb714a360b901781',
+      '0xeb629c752200c6a58947b7887e3a1e9beb0245f11',
+      '0xeb629c752200c6a58947b7887e3a1e9beb0245f12',
+      '0xeb629c752200c6a58947b7887e3a1e9beb0245f13',
     ]
   }
   return {data: result}
