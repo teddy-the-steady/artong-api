@@ -129,7 +129,7 @@ const patchMember = async function(body: any, pathParameters: any, member: Membe
   try {
     const memberModel = new Member({
       id: pathParameters.id,
-      username: body?.username.trim() !== '' ? body?.username.trim() : undefined,
+      username: body.username ? body.username.trim() : undefined,
       introduction: body?.introduction,
     }, conn);
 
