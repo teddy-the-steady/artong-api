@@ -9,5 +9,5 @@ phases:
       - cd ./node_layers && npm install && cd ..
   build:
     commands:
-      - serverless create_domain
-      - serverless deploy --stage $ENV --s3_bucket $S3_BUCKET
+      - serverless create_domain --stage $ENV --param="s3_bucket=$S3_BUCKET"
+      - serverless deploy --stage $ENV --param="s3_bucket=$S3_BUCKET"
