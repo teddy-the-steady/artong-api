@@ -10,4 +10,4 @@ phases:
   build:
     commands:
       - serverless create_domain
-      - serverless deploy
+      - serverless deploy --stage $ENV --s3_bucket $S3_BUCKET
