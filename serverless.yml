@@ -48,7 +48,7 @@ plugins:
   - serverless-add-api-key
 
 custom:
-  authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-prod-authorizer
+  authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-${opt:stage}-authorizer
   customDomain:
     domainName: api.4rtong.com
     stage: ${opt:stage}
