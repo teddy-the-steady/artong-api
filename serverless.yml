@@ -4,12 +4,11 @@ app: artong-api
 provider:
   name: aws
   runtime: nodejs16.x
-  stage: prod
   region: ap-northeast-2
   environment:
-    ENV: ${self:provider.stage}
+    ENV: ${opt:stage}
     NODE_PATH: './:/opt/node_modules'
-    S3_BUCKET: 'artong-prod-image213636-prod'
+    S3_BUCKET: ${param:s3_bucket}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -49,11 +48,11 @@ plugins:
   - serverless-add-api-key
 
 custom:
-  authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-prod-authorizer
+  authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-${opt:stage}-authorizer
   customDomain:
     domainName: api.4rtong.com
-    stage: ${self:provider.stage}
-    basePath: ${self:provider.stage}
+    stage: ${opt:stage}
+    basePath: ${opt:stage}
     certificateName: '*.4rtong.com'
     createRoute53Record: true
     endpointType: 'edge'
@@ -61,7 +60,7 @@ custom:
   webpack:
     includeModules: true
   apiKeys:
-    - name: artongApiKey-${self:provider.stage}
+    - name: artongApiKey-${opt:stage}
 
 functions:
   artong:
