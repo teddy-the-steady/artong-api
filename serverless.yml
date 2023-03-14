@@ -4,12 +4,11 @@ app: artong-api
 provider:
   name: aws
   runtime: nodejs16.x
-  stage: stage
   region: ap-northeast-2
   environment:
-    ENV: ${self:provider.stage}
+    ENV: ${opt:stage}
     NODE_PATH: './:/opt/node_modules'
-    S3_BUCKET: 'artong-stage-image163347-stage'
+    S3_BUCKET: ${opt:s3_bucket}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -52,8 +51,8 @@ custom:
   authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-prod-authorizer
   customDomain:
     domainName: api.4rtong.com
-    stage: ${self:provider.stage}
-    basePath: ${self:provider.stage}
+    stage: ${opt:stage}
+    basePath: ${opt:stage}
     certificateName: '*.4rtong.com'
     createRoute53Record: true
     endpointType: 'edge'
@@ -61,7 +60,7 @@ custom:
   webpack:
     includeModules: true
   apiKeys:
-    - name: artongApiKey-${self:provider.stage}
+    - name: artongApiKey-${opt:stage}
 
 functions:
   artong:
