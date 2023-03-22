@@ -1,10 +1,14 @@
 import { PoolClient } from "pg";
 import Models from "../Models";
 import * as db from "../../utils/db/db";
+import { CreateNotificationDto } from "../../controllers/artong/notification/notification.dto";
 const insertNotification = require("./insertNotification.sql");
 
-type NotificationCategory = "like";
-export class Notification extends Models {
+const NotificationCategory = {
+  LIKE: "LIKE",
+};
+type NotificationCategory = keyof typeof NotificationCategory;
+class Notification extends Models {
   id?: number;
   category!: NotificationCategory;
   sender_id?: number;
@@ -20,24 +24,14 @@ export class Notification extends Models {
     Object.assign(this, data);
   }
 
-  async createNotification(
-    category: NotificationCategory,
-    sender_id: number,
-    receiver_id: number,
-    content: string,
-    redirect_on_click?: string
-  ) {
+  async createNotification(data: CreateNotificationDto) {
     try {
-      const result = await db.execute(this.conn, insertNotification, {
-        category,
-        sender_id,
-        receiver_id,
-        content,
-        redirect_on_click,
-      });
+      const result = await db.execute(this.conn, insertNotification, data);
       return result[0];
     } catch (error) {
       throw error;
     }
   }
 }
+
+export { Notification, NotificationCategory };
