@@ -19,9 +19,10 @@ const updateProfileThumbnail = async function(s3: any) {
 
     const imageType = typeMatch[1].toLowerCase();
     if (imageType != 'jpg' && imageType != 'jpeg' && imageType != 'png') {
-      await axios.patch(`/members/${srcKey.split('/')[2]}/profile_thumbnail_s3key`, {
+      const result = await axios.patch(`/members/${srcKey.split('/')[2]}/profile_thumbnail_s3key`, {
         profile_thumbnail_s3key: null
       });
+      console.log(result)
       console.log(`Unsupported image type: ${imageType}`);
       return
     }
