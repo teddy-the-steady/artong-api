@@ -8,7 +8,7 @@ import * as offers from "./offers";
 import * as follow from "./follow";
 import * as main from "./main";
 import * as report from "./report";
-import * as notification from "./notification/notification";
+import * as notification from "./notification";
 
 interface PaginationInfo {
   start_num: string;
