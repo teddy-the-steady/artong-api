@@ -1,10 +1,12 @@
 import { PoolClient } from "pg";
-import { CreateNotificationDto } from "./notification.dto";
-import * as db from "../../../utils/db/db";
-import { Notification } from "../../../models/notification/Notification";
-import controllerErrorWrapper from "../../../utils/error/errorWrapper";
+import * as db from "../../utils/db/db";
+import { Notification } from "../../models/notification/Notification";
+import controllerErrorWrapper from "../../utils/error/errorWrapper";
 
-const postNotification = async function (body: CreateNotificationDto) {
+interface INotification {
+  type: string;
+}
+const postNotification = async function (body: INotification) {
   const conn: PoolClient = await db.getConnection();
 
   try {
