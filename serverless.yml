@@ -26,12 +26,9 @@ provider:
     - Effect: "Allow"
       Action:
         - "sqs:CreateQueue"
-        - "sqs:DeleteQueue"
         - "sqs:GetQueueAttributes"
-        - "sqs:SetQueueAttributes"
         - "sqs:SendMessage"
         - "sqs:ReceiveMessage"
-        - "sqs:DeleteMessage"
       Resource:
         Fn::GetAtt: [NotificationQueue, Arn]
   vpc:
