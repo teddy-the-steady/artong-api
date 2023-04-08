@@ -8,7 +8,7 @@ provider:
   environment:
     ENV: ${opt:stage}
     NODE_PATH: "./:/opt/node_modules"
-    S3_BUCKET: ${param:s3_bucket, 'null'}
+    S3_BUCKET: ${param:s3_bucket}
     NOTIFICATION_QUEUE_NAME: artong-notification-queue
   iamRoleStatements:
     - Effect: "Allow"
