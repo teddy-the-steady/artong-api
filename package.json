@@ -15,7 +15,7 @@
     "@types/sharp": "^0.31.0",
     "@web-std/file": "^3.0.2",
     "aws-lambda": "^1.0.7",
-    "aws-sdk": "^2.1348.0",
+    "aws-sdk": "^2.1353.0",
     "axios": "^0.21.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
