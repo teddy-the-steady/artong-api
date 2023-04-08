@@ -1,4 +1,4 @@
-version: 0.2
+version: 0.1
 phases:
   install:
     commands:
@@ -11,10 +11,3 @@ phases:
     commands:
       - serverless create_domain --stage $ENV --param="s3_bucket=$S3_BUCKET"
       - serverless deploy --stage $ENV --param="s3_bucket=$S3_BUCKET"
-
-artifacts:
-  type: zip
-  files:
-    - "**/*"
-  discard-paths: yes
-  ArtifactsOverride: CODEPIPELINE
