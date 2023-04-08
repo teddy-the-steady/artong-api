@@ -14,6 +14,6 @@ export async function handler(event: SQSEvent) {
   //   const message = record.body
   //   // const receiveMessage = notificationModel.recvMessage(message)
   //   console.log('receiveMessage===>',message)
-    
+    //
   // }
 }
