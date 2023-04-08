@@ -51,5 +51,3 @@
 - 기능:
   - 프로젝트 CRUD
   - 다음 프로젝트 미리보기 (getProjectsPrevNext())
-
-# notification.ts
