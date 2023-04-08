@@ -1,13 +1,19 @@
 import { PoolClient } from "pg";
 import Models from "../Models";
+import {SQS} from 'aws-sdk'
 import * as db from "../../utils/db/db";
-import { CreateNotificationDto } from "../../controllers/artong/notification/notification.dto";
-const insertNotification = require("./insertNotification.sql");
-
+const sqs = new SQS({region: 'ap-northeast-2'})
 const NotificationCategory = {
   LIKE: "LIKE",
 };
 type NotificationCategory = keyof typeof NotificationCategory;
+type MessageBody = {
+  category: string;
+  sender_id: string;
+  receiver_id: number;
+  redirect_on_click: string;
+  content: string;
+}
 class Notification extends Models {
   id?: number;
   category!: NotificationCategory;
@@ -24,13 +30,21 @@ class Notification extends Models {
     Object.assign(this, data);
   }
 
-  async createNotification(data: CreateNotificationDto) {
-    try {
-      const result = await db.execute(this.conn, insertNotification, data);
-      return result[0];
-    } catch (error) {
-      throw error;
+  sendMessage(messageBody: MessageBody) {
+    const params: SQS.SendMessageRequest={
+      MessageBody: `${messageBody}`,
+      QueueUrl: process.env.NOTIFICATION_QUEUE_URL ?? ''
     }
+
+    try {
+      sqs.sendMessage(params)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  recvMessage(message: MessageBody) {
+
   }
 }
 
