@@ -305,4 +305,4 @@ resources:
     NotificationQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: ${self:provider.environment.NOTIFICATION_QUEUE_NAME}
+        QueueName: artong-notification-queue
