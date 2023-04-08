@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import requestInit from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response';
-import { member, country, reactions, projects, contents, search, follow, main, report, notification } from '../controllers/artong/index';
+import { member, country, reactions, projects, contents, search, follow, main, report } from '../controllers/artong/index';
 import { graphql } from './graphql'
 import { getDbConnentionPool } from '../init';
 import { Pool } from 'pg';
@@ -90,8 +90,6 @@ export async function handler(event: any, context: any, callback: any) {
           res = await report.postReport(req.body, req.member);
         if (req.path === '/artong/v1/graphql' || req.path === '/artong/v1/graphql/')
           res = await graphql(req.body, req.member);
-        if (req.path === '/artong/v1/notification' || req.path === '/artong/v1/notification/')
-          res = await notification.postNotification(req.body);
         break;
       case 'PATCH':
         if (req.path.startsWith('/artong/v1/members/') && req.path.includes('profile_s3key'))
