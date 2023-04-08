@@ -17,5 +17,5 @@ export {
 	Follow,
 	Subscribe,
 	Reports,
-	Notification
+	Notification,
 };
