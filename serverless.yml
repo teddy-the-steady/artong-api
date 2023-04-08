@@ -25,7 +25,7 @@ provider:
         - "arn:aws:ssm:ap-northeast-2:821343553435:parameter/*"
     - Effect: "Allow"
       Action:
-        - "sqs:createQueue"
+        - "sqs:CreateQueue"
         - "sqs:sendMessage"
         - "sqs:receiveMessage"
       Resource:
