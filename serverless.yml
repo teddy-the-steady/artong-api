@@ -25,12 +25,12 @@ provider:
         - "arn:aws:ssm:ap-northeast-2:821343553435:parameter/*"
     - Effect: "Allow"
       Action:
-        - "sqs:CreateQueue",
-        - "sqs:DeleteQueue",
-        - "sqs:GetQueueAttributes",
-        - "sqs:SetQueueAttributes",
-        - "sqs:SendMessage",
-        - "sqs:ReceiveMessage",
+        - "sqs:CreateQueue"
+        - "sqs:DeleteQueue"
+        - "sqs:GetQueueAttributes"
+        - "sqs:SetQueueAttributes"
+        - "sqs:SendMessage"
+        - "sqs:ReceiveMessage"
         - "sqs:DeleteMessage"
       Resource:
         Fn::GetAtt: [NotificationQueue, Arn]
