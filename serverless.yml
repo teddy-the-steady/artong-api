@@ -12,24 +12,24 @@ provider:
       NOTIFICATION_QUEUE_NAME: "artong-notification-queue"
    iamRoleStatements:
       - Effect: "Allow"
-         Action:
-            - "s3:PutObject"
-            - "s3:GetObject"
-            - "s3:ListBucket"
-         Resource:
-            - "arn:aws:s3:::${self:provider.environment.S3_BUCKET}"
-            - "arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*"
+            Action:
+               - "s3:PutObject"
+               - "s3:GetObject"
+               - "s3:ListBucket"
+            Resource:
+               - "arn:aws:s3:::${self:provider.environment.S3_BUCKET}"
+               - "arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*"
       - Effect: "Allow"
-         Action:
-            - "ssm:GetParameters"
-         Resource:
-            - "arn:aws:ssm:ap-northeast-2:821343553435:parameter/*"
+            Action:
+               - "ssm:GetParameters"
+            Resource:
+               - "arn:aws:ssm:ap-northeast-2:821343553435:parameter/*"
       - Effect: "Allow"
-         Action:
-            - "sqs:sendMessage"
-            - "sqs:receiveMessage"
-         Resource:
-            Fn::GetAtt: [NotificationQueue, Arn]
+            Action:
+               - "sqs:sendMessage"
+               - "sqs:receiveMessage"
+            Resource:
+               Fn::GetAtt: [NotificationQueue, Arn]
    vpc:
       securityGroupIds:
          - sg-07149fcb367dc482b
