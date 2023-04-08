@@ -1,11 +1,10 @@
-import { SQSEvent } from 'aws-lambda';
 import { Pool, PoolClient } from 'pg';
 import * as db from '../utils/db/db';
 import { Notification } from '../models';
 import { getDbConnentionPool } from '../init';
 export let dbConnectionPool: Pool;
 
-export async function handler(event: SQSEvent) {
+export async function handler(event: any) {
   // dbConnectionPool = await getDbConnentionPool();
   // const conn: PoolClient = await db.getConnection();
   // const notificationModel = new Notification({},conn)
