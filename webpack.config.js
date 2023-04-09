@@ -1,7 +1,7 @@
 const path = require('path');
 const slsw = require('serverless-webpack');
 const isLocal = slsw.lib.webpack.isLocal;
-// const ENV = slsw.lib.serverless.service.provider.environment
+const ENV = slsw.lib.serverless.service.provider.environment
 const { IgnorePlugin, ProvidePlugin } = require('webpack');
 const { StatsWriterPlugin } = require("webpack-stats-plugin")
 
