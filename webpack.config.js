@@ -50,6 +50,5 @@ module.exports = {
   ],
   externals: {
     'sharp': 'commonjs sharp',
-    'aws-sdk': 'aws-sdk',
   },
 }
