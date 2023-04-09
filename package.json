@@ -12,6 +12,8 @@
     "@types/pg": "^7.14.10",
     "@types/sharp": "^0.31.0",
     "@web-std/file": "^3.0.2",
+    "@webpack-cli/generators": "^3.0.1",
+    "aws-sdk": "^2.1353.0",
     "axios": "^0.21.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
@@ -29,7 +31,8 @@
     "serverless-webpack": "^5.9.0",
     "ts-loader": "^8.0.17",
     "typescript": "^3.9.9",
-    "webpack": "^5.23.0"
+    "webpack": "^5.23.0",
+    "webpack-stats-plugin": "^1.1.1"
   },
   "scripts": {
     "test": "test"
@@ -41,6 +44,7 @@
   "author": "jeonth",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-sqs": "^3.309.0",
     "sharp": "^0.31.1"
   }
 }
