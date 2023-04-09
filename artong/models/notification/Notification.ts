@@ -1,7 +1,7 @@
 import { PoolClient } from "pg";
 import Models from "../Models";
-import {SQS} from 'aws-sdk'
 import * as db from "../../utils/db/db";
+import { SQS, SendMessageRequest } from "@aws-sdk/client-sqs";
 const sqs = new SQS({region: 'ap-northeast-2'})
 const NotificationCategory = {
   LIKE: "LIKE",
@@ -31,7 +31,7 @@ class Notification extends Models {
   }
 
   sendMessage(messageBody: MessageBody) {
-    const params: SQS.SendMessageRequest={
+    const params: SendMessageRequest={
       MessageBody: `${messageBody}`,
       QueueUrl: process.env.NOTIFICATION_QUEUE_URL ?? ''
     }
