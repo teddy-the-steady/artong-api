@@ -1,8 +1,9 @@
 const path = require('path');
 const slsw = require('serverless-webpack');
 const isLocal = slsw.lib.webpack.isLocal;
-const ENV = slsw.lib.serverless.service.provider.environment
+// const ENV = slsw.lib.serverless.service.provider.environment
 const { IgnorePlugin, ProvidePlugin } = require('webpack');
+const { StatsWriterPlugin } = require("webpack-stats-plugin")
 
 module.exports = {
   mode: isLocal || ENV !== 'prod' ? 'development' : 'production',
@@ -14,7 +15,7 @@ module.exports = {
     filename: 'artong/handler/[name].js',
     path: path.resolve(__dirname, 'dist')
   } : null,
-	module: {
+  module: {
     rules: [
       {
         test: /\.tsx?$/,
@@ -34,17 +35,21 @@ module.exports = {
       },
     ]
   },
-	resolve: {
+  resolve: {
     extensions: ['.tsx', '.ts', '.js']
   },
   plugins: [
-    new IgnorePlugin({resourceRegExp: /^pg-native$/}),
+    new IgnorePlugin({ resourceRegExp: /^pg-native$/ }),
     new ProvidePlugin({
       WebSocket: 'ws',
       fetch: ['node-fetch', 'default'],
     }),
+    new StatsWriterPlugin({
+      filename: "stats.json" // Default
+    })
   ],
   externals: {
     'sharp': 'commonjs sharp',
+    'aws-sdk': 'aws-sdk',
   },
 }
