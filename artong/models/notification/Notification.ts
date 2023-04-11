@@ -2,16 +2,16 @@ import { PoolClient } from "pg";
 import Models from "../Models";
 import * as db from "../../utils/db/db";
 import { SQS, SendMessageRequest } from "@aws-sdk/client-sqs";
+
+const insertNotification = require('./insertNotification.sql')
+
 const sqs = new SQS({region: 'ap-northeast-2'})
-const NotificationCategory = {
-  LIKE: "LIKE",
-};
-type NotificationCategory = keyof typeof NotificationCategory;
+type NotificationCategory = 'LIKE'
 type MessageBody = {
-  category: string;
-  sender_id: string;
+  category: NotificationCategory;
+  sender_id: number;
   receiver_id: number;
-  redirect_on_click: string;
+  redirect_on_click?: string;
   content: string;
 }
 class Notification extends Models {
@@ -20,7 +20,7 @@ class Notification extends Models {
   sender_id?: number;
   receiver_id?: number;
   read_at?: Date;
-  redirect_on_click?: string;
+  redirect_on_click?: string | null;
   content?: string;
   created_at?: Date;
   updated_at?: Date;
@@ -30,14 +30,24 @@ class Notification extends Models {
     Object.assign(this, data);
   }
 
+  async createNotification (messageBody: MessageBody) {
+    try{
+      const result = await db.execute(this.conn, insertNotification, messageBody)
+      
+      return result[0]
+    } catch(error){
+      throw error
+    } 
+  }
+
   sendMessage(messageBody: MessageBody) {
     const params: SendMessageRequest={
-      MessageBody: `${messageBody}`,
-      QueueUrl: process.env.NOTIFICATION_QUEUE_URL ?? ''
+      MessageBody: JSON.stringify(messageBody),
+      QueueUrl: process.env.NOTIFICATION_QUEUE_URL ?? 'artong-notification-queue'
     }
 
     try {
-      sqs.sendMessage(params)
+      return sqs.sendMessage(params)
     } catch (error) {
       throw error
     }
