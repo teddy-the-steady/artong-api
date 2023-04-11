@@ -1,9 +1,12 @@
 import { PoolClient } from 'pg';
-import { ContentReactions, Member } from '../../models/index';
+import { ContentReactions, Member, Notification } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 
-const postContentReaction = async function(pathParameters: any, body: any, member: Member) {
+interface ReactionBody {
+  reaction_code: string;
+}
+const postContentReaction = async function(pathParameters: any, body: ReactionBody, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -17,11 +20,17 @@ const postContentReaction = async function(pathParameters: any, body: any, membe
       reactionModel.content_id,
       reactionModel.member_id
     );
+    
+    if (result.content_id && isValidReaction(body.reaction_code)) {
+      (result as any).total_likes = await getTotalLikes(reactionModel, result.content_id)
+    }
 
-    if (result && ['like', 'unlike'].includes(body.reaction_code.toLowerCase())) {
-      (result as any).total_likes = (await reactionModel.getTotalLikesByContent(
-        result.content_id
-      )).total_likes;
+    if(member.id && result.member_id && isLike(body.reaction_code)) {
+      const notificationModel = new Notification({}, conn)
+      const content = `${member.username}님이 좋아요를 눌렀습니다.`
+
+      // TODO] redirect_url 추가 방식 고려
+      notificationModel.sendMessage({category: 'LIKE', sender_id: member.id, receiver_id: result.member_id, content})
     }
 
     return {data: result}
@@ -31,6 +40,13 @@ const postContentReaction = async function(pathParameters: any, body: any, membe
     db.release(conn);
   }
 }
+
+const getTotalLikes = async (model:ContentReactions, content_id:number) => {
+  return (await model.getTotalLikesByContent(content_id)).total_likes;
+}
+
+const isValidReaction=(reaction_code: string) => ['LIKE', 'UNLIKE'].includes(reaction_code.toUpperCase());
+const isLike = (reaction_code: string) => reaction_code.toUpperCase() === 'LIKE';
 
 export {
   postContentReaction,
