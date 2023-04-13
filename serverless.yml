@@ -170,6 +170,10 @@ functions:
           method: GET
           cors: true
       - http:
+          path: artong/v1/contents/artongs_pick
+          method: POST
+          cors: true
+      - http:
           path: artong/v1/contents
           method: POST
           cors: true
