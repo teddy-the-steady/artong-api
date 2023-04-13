@@ -30,13 +30,7 @@ const getMainContents = function() {
       '0x0ff3495df6131426bc6bc28397459ff13113157e',
       '0x90b8bbf892a205cd9ac774e9d910a68c42bfced5',
     ],
-    artongsPick: [
-      '0x0ff3495df6131426bc6bc28397459ff13113157e1',
-      '0x31739f4598411143b279cd0b6cb714a360b901781',
-      '0xeb629c752200c6a58947b7887e3a1e9beb0245f11',
-      '0xeb629c752200c6a58947b7887e3a1e9beb0245f12',
-      '0xeb629c752200c6a58947b7887e3a1e9beb0245f13',
-    ]
+    artongsPick: [936,937,960]
   }
   return {data: result}
 };
