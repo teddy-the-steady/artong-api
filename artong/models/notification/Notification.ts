@@ -1,14 +1,16 @@
-import { PoolClient } from "pg";
-import Models from "../Models";
-import * as db from "../../utils/db/db";
 import { SQS, SendMessageRequest } from "@aws-sdk/client-sqs";
+import { IsDate, IsEnum, IsInt, IsOptional, IsString } from "class-validator";
+import { PoolClient } from "pg";
+import * as db from "../../utils/db/db";
+import Models from "../Models";
 
 const insertNotification = require('./insertNotification.sql')
 
 const sqs = new SQS({region: 'ap-northeast-2'})
-type NotificationCategory = 'LIKE'
+const NotificationType = { LIKE: 'LIKE', }
+type NotificationType = keyof typeof NotificationType
 type MessageBody = {
-  category: NotificationCategory;
+  type: NotificationType;
   sender_id: number;
   receiver_id: number;
   redirect_on_click?: string;
@@ -16,15 +18,28 @@ type MessageBody = {
   content_id: number;
 }
 class Notification extends Models {
-  id?: number;
-  category!: NotificationCategory;
-  sender_id?: number;
-  receiver_id?: number;
+  @IsInt()
+  id!: number;
+  @IsEnum(NotificationType)
+  category!: NotificationType;
+  @IsInt()
+  sender_id!: number;
+  @IsInt()
+  receiver_id!: number;
+  @IsDate()
+  @IsOptional()
   read_at?: Date;
+  @IsString()
+  @IsOptional()
   redirect_on_click?: string | null;
-  content?: string;
-  created_at?: Date;
-  updated_at?: Date;
+  @IsString()
+  @IsOptional()
+  content!: string;
+  @IsDate()
+  created_at!: Date;
+  @IsDate()
+  @IsOptional()
+  updated_at?: Date | null;
   
   constructor(data: Partial<Notification> = {}, conn: PoolClient) {
     super(conn);
@@ -59,4 +74,5 @@ class Notification extends Models {
   }
 }
 
-export { Notification, NotificationCategory };
+export { Notification, NotificationType as NotificationCategory };
+
