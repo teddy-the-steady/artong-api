@@ -12,7 +12,8 @@ type MessageBody = {
   sender_id: number;
   receiver_id: number;
   redirect_on_click?: string;
-  content: string;
+  message: string;
+  content_id: number;
 }
 class Notification extends Models {
   id?: number;
