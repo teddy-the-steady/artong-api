@@ -6,7 +6,9 @@ const validator = async function(input: any) {
   try {
     await validateOrReject(input);
   } catch (error) {
-    throw new BadRequest(error.toString(), ValidationError.code);
+    if(error instanceof Error){
+      throw new BadRequest(error.toString(), ValidationError.code);
+    }
   }
 }
 
