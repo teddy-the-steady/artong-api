@@ -32,10 +32,10 @@ const postContentReaction = async function(pathParameters: any, body: ReactionBo
       const message = `${member.username}님이 좋아요를 눌렀습니다.`
 
       notificationModel.sendMessage({
-        category: 'LIKE',
+        type: 'LIKE',
         sender_id: member.id, 
         receiver_id: result.member_id, 
-        message: message, 
+        message, 
         content_id: result.content_id
       })
     }
