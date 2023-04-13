@@ -1,15 +1,21 @@
 import { PoolClient } from 'pg';
 import * as db from '../../utils/db/db';
 import Models from '../Models';
+import { IsDate, IsInt, IsOptional } from 'class-validator';
 const insertContentReactions = require('./insertContentReactions.sql')
 const selectTotalLikesByContent = require('./selectTotalLikesByContent.sql')
 
 class ContentReactions extends Models {
-	reaction_id?: number;
-	content_id?: number;
-	member_id?: number;
-
-	created_at?: Date;
+	@IsInt()
+	reaction_id!: number;
+	@IsInt()
+	content_id!: number;
+	@IsInt()
+	member_id!: number;
+	@IsDate()
+	created_at!: Date;
+	@IsDate()
+	@IsOptional()
 	updated_at?: Date;
 
 	constructor(data: Partial<ContentReactions> = {}, conn: PoolClient) {
@@ -18,9 +24,9 @@ class ContentReactions extends Models {
 	}
 
 	async createContentReaction(
-		reaction_code?: string,
-		content_id?: number,
-		member_id?: number
+		reaction_code: string,
+		content_id: number,
+		member_id: number
 	): Promise<ContentReactions> {
 		try {
 			const result = await db.execute(this.conn, insertContentReactions, {
@@ -35,7 +41,7 @@ class ContentReactions extends Models {
 	}
 
 	async getTotalLikesByContent(
-		content_id?: number,
+		content_id: number,
 	): Promise<{ total_likes: string }> {
 		try {
 			const result = await db.execute(this.conn, selectTotalLikesByContent, {
