@@ -28,10 +28,7 @@ const getMainContents = function() {
       '0x289f3a6d113ea55ea81f121c802dc7ca7c9455a7',
       '0x9579daec07b696ffcd0b36e62266684aec9d02e8',
     ],
-    artongsPick: [
-      '0x9579daec07b696ffcd0b36e62266684aec9d02e81',
-      '0x289f3a6d113ea55ea81f121c802dc7ca7c9455a71',
-    ]
+    artongsPick: [895, 894, 861, 892, 899, 884]
   }
   return {data: result}
 };
