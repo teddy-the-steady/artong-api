@@ -59,9 +59,9 @@ class Notification extends Models {
   sendMessage(messageBody: MessageBody) {
     const params: SendMessageRequest={
       MessageBody: JSON.stringify(messageBody),
-      QueueUrl: process.env.NOTIFICATION_QUEUE_URL ?? 'artong-notification-queue'
+      QueueUrl: process.env.NOTIFICATION_QUEUE_URL 
     }
-
+    
     try {
       return sqs.sendMessage(params)
     } catch (error) {
