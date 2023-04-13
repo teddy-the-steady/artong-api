@@ -55,10 +55,11 @@ export async function handler(event: any, context: any, callback: any) {
             res = main.getMainContents();
           else if (req.path.includes('/contributors'))
             res = await main.getTop10Contributors();
-        if (req.path === '/artong/v1/contents' || req.path === '/artong/v1/contents/')
-          res = await contents.getContents(req.queryStringParameters);
-        if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters && req.path.includes('/voucher'))
-          res = await contents.getContentVoucherById(req.pathParameters, req.member);
+        if (req.path.startsWith('/artong/v1/contents'))
+          if (req.pathParameters && req.path.includes('/voucher'))
+            res = await contents.getContentVoucherById(req.pathParameters, req.member);
+          else
+            res = await contents.getContents(req.queryStringParameters);
         if (req.path.startsWith('/artong/v1/search/'))
           if (req.path.includes('projects'))
             res = await search.searchProjects(req.queryStringParameters, req.member);
@@ -78,8 +79,11 @@ export async function handler(event: any, context: any, callback: any) {
           res = await reactions.postContentReaction(req.pathParameters, req.body, req.member);
         if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
           res = await projects.postProject(req.body, req.member);
-        if (req.path === '/artong/v1/contents' || req.path === '/artong/v1/contents/')
-          res = await contents.postContent(req.body, req.member);
+        if (req.path.startsWith('/artong/v1/contents'))
+          if (req.path.includes('/artongs_pick'))
+            res = await contents.getContentsPick(req.body);
+          else
+            res = await contents.postContent(req.body, req.member);
         if (req.path === '/artong/v1/contents/storage' || req.path === '/artong/v1/contents/storage/')
           res = await contents.uploadToNftStorageAndUpdateContent(req.body);
         if (req.path === '/artong/v1/follow' || req.path === '/artong/v1/follow/')
