@@ -2,7 +2,7 @@ import { PoolClient } from 'pg';
 import { ContentReactions, Member, Notification } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
-
+import validator from '../../utils/validators/common';
 interface ReactionBody {
   reaction_code: string;
 }
@@ -15,6 +15,8 @@ const postContentReaction = async function(pathParameters: any, body: ReactionBo
       member_id: member.id,
     }, conn);
 
+    await validator(reactionModel)
+
     let result = await reactionModel.createContentReaction(
       body.reaction_code,
       reactionModel.content_id,
@@ -25,12 +27,17 @@ const postContentReaction = async function(pathParameters: any, body: ReactionBo
       (result as any).total_likes = await getTotalLikes(reactionModel, result.content_id)
     }
 
-    if(member.id && result.member_id && isLike(body.reaction_code)) {
+    if(isLike(body.reaction_code)) {
       const notificationModel = new Notification({}, conn)
-      const content = `${member.username}님이 좋아요를 눌렀습니다.`
+      const message = `${member.username}님이 좋아요를 눌렀습니다.`
 
-      // TODO] redirect_url 추가 방식 고려
-      notificationModel.sendMessage({category: 'LIKE', sender_id: member.id, receiver_id: result.member_id, content})
+      notificationModel.sendMessage({
+        category: 'LIKE',
+        sender_id: member.id, 
+        receiver_id: result.member_id, 
+        message: message, 
+        content_id: result.content_id
+      })
     }
 
     return {data: result}
