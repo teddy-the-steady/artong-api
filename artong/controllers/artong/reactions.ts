@@ -23,7 +23,7 @@ const postContentReaction = async function(pathParameters: any, body: ReactionBo
       reactionModel.member_id
     );
     
-    if (result.content_id && isValidReaction(body.reaction_code)) {
+    if (isValidReaction(body.reaction_code)) {
       (result as any).total_likes = await getTotalLikes(reactionModel, result.content_id)
     }
 
