@@ -9,6 +9,7 @@ provider:
     ENV: ${opt:stage}
     NODE_PATH: "./:/opt/node_modules"
     S3_BUCKET: ${param:s3_bucket}
+    NOTIFICATION_QUEUE_URL: { Ref: NotificationQueue }
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -273,6 +274,14 @@ functions:
           existing: true
     layers:
       - { Ref: NodeModulesLambdaLayer }
+  notification:
+    handler: artong/handler/notification.handler
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - NotificationQueue
+              - Arn
 
 resources:
   Resources:
