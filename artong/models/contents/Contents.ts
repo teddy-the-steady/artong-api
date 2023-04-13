@@ -10,6 +10,7 @@ const updateContentThumbnailS3keys = require('./updateContentThumbnailS3keys.sql
 const updateContentTokenIds = require('./updateContentTokenIds.sql');
 const selectContent = require('./selectContent.sql');
 const selectContents = require('./selectContents.sql');
+const selectContentsWithIdArray = require('./selectContentsWithIdArray.sql');
 const selectContentsFeed = require('./selectContentsFeed.sql');
 const selectContentById = require('./selectContentById.sql');
 const selectContentsCandidiatesByMember = require('./selectContentsCandidiatesByMember.sql');
@@ -410,6 +411,19 @@ class Contents extends Models {
 				start_num,
 				order_by,
 				order_direction,
+			});
+			return result
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getContentsWithIdArray(
+		idArray?: number[]
+	): Promise<Contents[]> {
+		try {
+			const result = await db.execute(this.conn, selectContentsWithIdArray, {
+				idArray,
 			});
 			return result
 		} catch (error) {
