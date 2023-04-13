@@ -19,7 +19,8 @@ import {
 	IsEmail,
 	IsOptional,
 	IsUUID,
-	IsEthereumAddress
+	IsEthereumAddress,
+	IsInt
 } from 'class-validator'
 import { PoolClient } from 'pg';
 
@@ -28,7 +29,8 @@ interface MemberGroups {
 }
 
 class Member extends Models implements MemberGroups {
-	id?: number;
+	@IsInt()
+	id!: number;
 	@IsEmail()
 	@IsOptional()
 	email?: string;
