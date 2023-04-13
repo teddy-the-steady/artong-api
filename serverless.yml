@@ -9,7 +9,7 @@ provider:
     ENV: ${opt:stage}
     NODE_PATH: "./:/opt/node_modules"
     S3_BUCKET: ${param:s3_bucket}
-    NOTIFICATION_QUEUE_URL: { Ref: NotificationQueue }
+    NOTIFICATION_QUEUE_URL: artong-notification-queue
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -30,6 +30,7 @@ provider:
         - "sqs:GetQueueAttributes"
         - "sqs:SendMessage"
         - "sqs:ReceiveMessage"
+        - "sqs:GetQueueUrl"
       Resource:
         Fn::GetAtt: [NotificationQueue, Arn]
   vpc:
