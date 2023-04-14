@@ -75,17 +75,17 @@ export async function handler(event: any, context: any, callback: any) {
           res = await member.postMember(req.body);
         if (req.path === '/artong/v1/country' || req.path === '/artong/v1/country/')
           res = await country.postCountry(req.body, req.member);
-        if (req.path.startsWith('/artong/v1/contents/') && req.pathParameters && req.path.includes('/reactions'))
-          res = await reactions.postContentReaction(req.pathParameters, req.body, req.member);
-        if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
-          res = await projects.postProject(req.body, req.member);
         if (req.path.startsWith('/artong/v1/contents'))
           if (req.path.includes('/artongs_pick'))
             res = await contents.getContentsPick(req.body);
+          else if (req.path.includes('/storage'))
+            res = await contents.uploadToNftStorageAndUpdateContent(req.body);
+          else if (req.pathParameters && req.path.includes('/reactions'))
+            res = await reactions.postContentReaction(req.pathParameters, req.body, req.member);
           else
             res = await contents.postContent(req.body, req.member);
-        if (req.path === '/artong/v1/contents/storage' || req.path === '/artong/v1/contents/storage/')
-          res = await contents.uploadToNftStorageAndUpdateContent(req.body);
+        if (req.path === '/artong/v1/projects' || req.path === '/artong/v1/projects/')
+          res = await projects.postProject(req.body, req.member);
         if (req.path === '/artong/v1/follow' || req.path === '/artong/v1/follow/')
           res = await follow.doFollowMemberOrUndo(req.body, req.member);
         if (req.path === '/artong/v1/subscribe' || req.path === '/artong/v1/subscribe/')
