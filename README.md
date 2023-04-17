@@ -15,7 +15,7 @@ etc
 ## Dev commands(로컬에 개발서버 run)
 
 ```
-sls offline --noAuth --stage dev --param="s3_bucket=null"
+sls offline --noAuth --stage stage --param="s3_bucket=null"
 ```
 ***
 ## Cloudwatch Log 확인하기
