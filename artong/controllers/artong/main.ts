@@ -25,12 +25,12 @@ const getMainContents = function() {
       token_id: '1'
     },
     highlightedProjects: [
-      '0xc50622bfebf35ad374eda660b47d2b91c911439c',
-      '0xf86cd8128025545ea113ec2440ee023a286f5320',
       '0x289f3a6d113ea55ea81f121c802dc7ca7c9455a7',
       '0x9579daec07b696ffcd0b36e62266684aec9d02e8',
+      '0xc50622bfebf35ad374eda660b47d2b91c911439c',
+      '0xf86cd8128025545ea113ec2440ee023a286f5320',
     ],
-    artongsPick: [903, 902, 895, 894, 861, 892, 899, 884]
+    artongsPick: [895, 894, 861, 892, 899, 884, 903, 902]
   }
   return {data: result}
 };
