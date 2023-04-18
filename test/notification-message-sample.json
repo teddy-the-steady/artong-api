@@ -3,9 +3,7 @@
     {
       "messageId": "19dd0b57-b21e-4ac1-bd88-01bbb068cb78",
       "receiptHandle": "MessageReceiptHandle",
-      "body": {
-        "category": "LIKE"
-      },
+      "body": "{ \"type\": \"LIKE\", \"sender_id\": 315, \"receiver_id\": 315, \"message\": \"tedd님이 좋아요를 눌렀습니다.\", \"content_id\": 937 }",
       "attributes": {
         "ApproximateReceiveCount": "1",
         "SentTimestamp": "1523232000000",
