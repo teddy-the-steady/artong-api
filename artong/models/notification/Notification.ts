@@ -69,8 +69,8 @@ class Notification extends Models {
     }
   }
 
-  recvMessage(message: MessageBody) {
-
+  async recvLike(messageBody: MessageBody) {
+    return await this.createNotification(messageBody)
   }
 }
 
