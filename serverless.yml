@@ -286,6 +286,7 @@ functions:
             Fn::GetAtt:
               - NotificationQueue
               - Arn
+          batchSize: 10
 
 resources:
   Resources:
