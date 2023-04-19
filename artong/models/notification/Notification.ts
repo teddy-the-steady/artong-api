@@ -10,11 +10,11 @@ const sqs = new SQS({region: 'ap-northeast-2'})
 const NotificationType = { LIKE: 'LIKE', }
 type NotificationType = keyof typeof NotificationType
 type MessageBody = {
-  type: NotificationType;
+  noti_type: NotificationType;
   sender_id: number;
   receiver_id: number;
   redirect_on_click?: string;
-  message: string;
+  noti_message: string;
   content_id: number;
 }
 class Notification extends Models {
