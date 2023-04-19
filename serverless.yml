@@ -30,6 +30,7 @@ provider:
         - "sqs:ReceiveMessage"
         - "sqs:GetQueueAttributes"
         - "sqs:DeleteQueue"
+        - "sqs:DeleteMessage"
       Resource:
         Fn::GetAtt: [NotificationQueue, Arn]
   vpc:
