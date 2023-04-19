@@ -288,6 +288,7 @@ functions:
               - NotificationQueue
               - Arn
           batchSize: 10
+          maximumBatchingWindow: 60
 
 resources:
   Resources:
