@@ -1057,6 +1057,81 @@ const getContents = async function(queryStringParameters: PageAndOrderingInfo) {
   }
 };
 
+const getContentsPick = async function(body: {ids: number[]}) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const contentModel = new Contents({}, conn);
+
+    let contentResult = await contentModel.getContentsWithIdArray(
+      body.ids,
+    );
+    if (contentResult.length === 0) {
+      return {data: [], meta: {hasMoreData: false}}
+    }
+
+    const extractedConcatenatedTokenIds = contentResult.reduce((acc, content) => {
+      if (content.project_address && content.token_id) {
+        acc.push(content.project_address.concat(content.token_id.toString()))
+      }
+      return acc
+    }, [] as any);
+
+    if (extractedConcatenatedTokenIds.length > 0) {
+      const gqlResult = await graphqlRequest({
+        query: `query Tokens { tokens(where: {id_in: ${JSON.stringify(extractedConcatenatedTokenIds)}}) {
+          id,
+          owner,
+          listings (orderBy: createdAt, orderDirection: desc, first: 1) {
+            id
+            from
+            price
+            eventType
+            createdAt
+          }
+        }}`,
+      });
+
+      if (gqlResult.tokens.length > 0) {
+        const extractedOwners = gqlResult.tokens.reduce((acc: any, value: any) => {
+          if (!acc[value.owner]) {
+            acc[value.owner] = value.owner
+          }
+          return acc
+        }, {});
+
+        const memberModel = new Member({}, conn);
+        const memberResult = await memberModel.getMembersWithWalletAddressArray(Object.keys(extractedOwners));
+
+        const merged = _.map(gqlResult.tokens, function(token) {
+          return _.assign(token, _.find(memberResult, {
+              wallet_address: token.owner
+          }));
+        });
+        const mergedWithOwner = makeMemberInfo(merged, [''], 'owner');
+
+        contentResult = _.map(contentResult, function(content) {
+          if (content.project_address && content.token_id) {
+            return _.assign(content, _.find(mergedWithOwner, {
+              id: content.project_address.concat(content.token_id.toString())
+            }));
+          } else {
+            return content
+          }
+        });
+      }
+    }
+
+    contentResult = makeMemberInfo(contentResult, [''], 'creator');
+
+    return {data: contentResult, meta: {hasMoreData: false}}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+};
+
 export {
   getContent,
 	postContent,
@@ -1076,4 +1151,5 @@ export {
   getMemberFavoritedContents,
   getFeedContents,
   getContents,
+  getContentsPick,
 };
