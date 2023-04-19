@@ -9,7 +9,7 @@ const insertNotification = require('./insertNotification.sql')
 const sqs = new SQS({region: 'ap-northeast-2'})
 const NotificationType = { LIKE: 'LIKE', }
 type NotificationType = keyof typeof NotificationType
-type MessageBody = {
+export type MessageBody = {
   noti_type: NotificationType;
   sender_id: number;
   receiver_id: number;
