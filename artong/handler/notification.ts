@@ -11,7 +11,7 @@ export async function handler(event: SQSEvent) {
   notiPool = await getDbConnentionPool();
   const conn: PoolClient = await db.getNotiConnection();
   const notificationModel = new Notification({},conn)
-  //
+  //test
   for (const record of event.Records) {
     const message: MessageBody = JSON.parse(record.body)
     if (message.noti_type === 'LIKE') {
