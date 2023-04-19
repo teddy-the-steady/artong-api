@@ -26,8 +26,9 @@ provider:
         - "arn:aws:ssm:ap-northeast-2:821343553435:parameter/*"
     - Effect: "Allow"
       Action:
-        - "sqs:sendMessage"
-        - "sqs:receiveMessage"
+        - "sqs:SendMessage"
+        - "sqs:ReceiveMessage"
+        - "sqs:GetQueueAttributes"
       Resource:
         Fn::GetAtt: [NotificationQueue, Arn]
   vpc:
