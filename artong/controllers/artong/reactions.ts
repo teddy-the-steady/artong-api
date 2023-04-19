@@ -29,13 +29,13 @@ const postContentReaction = async function(pathParameters: any, body: ReactionBo
 
     if(isLike(body.reaction_code)) {
       const notificationModel = new Notification({}, conn)
-      const message = `${member.username}님이 좋아요를 눌렀습니다.`
+      const noti_message = `${member.username}님이 좋아요를 눌렀습니다.`
 
       notificationModel.sendMessage({
-        type: 'LIKE',
+        noti_type: 'LIKE',
         sender_id: member.id, 
         receiver_id: result.member_id, 
-        message, 
+        noti_message, 
         content_id: result.content_id
       })
     }
