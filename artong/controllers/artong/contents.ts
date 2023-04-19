@@ -392,11 +392,7 @@ const queryTokensByProject = async function(body: {variables: TokensByProjectInf
       result = await memberModel.setOwnerFromMemberListTo(result);
     }
 
-    return {data: {tokens: result}, meta: {
-      subgraph_count: subgraph_count,
-      hasMoreData: hasMoreData,
-      total: result.length > 0 ? parseInt(result[0].total) : 0
-    }}
+    return {data: {tokens: result}, meta: {subgraph_count: subgraph_count, hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {
@@ -457,10 +453,7 @@ const getTobeApprovedContentsInProject = async function(pathParameters: { id: st
 
     result = makeMemberInfo(result, [''], 'owner');
 
-    return {data: result, meta: {
-      hasMoreData: hasMoreData,
-      total: result.length > 0 ? parseInt((result[0] as any).total) : 0
-    }}
+    return {data: result, meta: {hasMoreData: hasMoreData}}
   } catch (error) {
     throw controllerErrorWrapper(error);
   } finally {

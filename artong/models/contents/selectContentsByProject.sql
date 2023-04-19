@@ -13,8 +13,7 @@ SELECT
   status,
   CASE WHEN token_id > 0 THEN NULL ELSE voucher -> 'minPrice' -> 'hex' END AS price,
   created_at,
-  updated_at,
-  COUNT(*) OVER() AS total
+  updated_at
 FROM
   contents c
 WHERE 1=1
