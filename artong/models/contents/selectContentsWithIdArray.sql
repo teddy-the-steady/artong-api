@@ -35,3 +35,5 @@ WHERE
       {{#unless @last}},{{/unless}}
     {{/each}}
   )
+
+ORDER BY c.created_at DESC
