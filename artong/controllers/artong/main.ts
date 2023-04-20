@@ -21,7 +21,7 @@ const getTop10Contributors = async function() {
 const getMainContents = function() {
   const result = {
     mainToken: {
-      project_address: '0x289f3a6d113ea55ea81f121c802dc7ca7c9455a7',
+      project_address: '0xf86cd8128025545ea113ec2440ee023a286f5320',
       token_id: '1'
     },
     highlightedProjects: [
@@ -30,7 +30,7 @@ const getMainContents = function() {
       '0xc50622bfebf35ad374eda660b47d2b91c911439c',
       '0xf86cd8128025545ea113ec2440ee023a286f5320',
     ],
-    artongsPick: [895, 894, 861, 892, 899, 884, 903, 902]
+    artongsPick: [892, 895, 884, 903, 922, 1078]
   }
   return {data: result}
 };
