@@ -279,16 +279,16 @@ functions:
           existing: true
     layers:
       - { Ref: NodeModulesLambdaLayer }
-  notification:
-    handler: artong/handler/notification.handler
-    events:
-      - sqs:
-          arn:
-            Fn::GetAtt:
-              - NotificationQueue
-              - Arn
-          batchSize: 10
-          maximumBatchingWindow: 60
+  # notification:
+  #   handler: artong/handler/notification.handler
+  #   events:
+  #     - sqs:
+  #         arn:
+  #           Fn::GetAtt:
+  #             - NotificationQueue
+  #             - Arn
+  #         batchSize: 10
+  #         maximumBatchingWindow: 60
 
 resources:
   Resources:
