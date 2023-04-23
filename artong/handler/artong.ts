@@ -79,7 +79,7 @@ export async function handler(event: any, context: any, callback: any) {
           if (req.path.includes('/artongs_pick'))
             res = await contents.getContentsPick(req.body);
           else if (req.path.includes('/storage'))
-            res = await contents.uploadToNftStorageAndUpdateContent(req.body);
+            res = await contents.uploadToNftStorageAndUpdateContent(req.body, req.member);
           else if (req.pathParameters && req.path.includes('/reactions'))
             res = await reactions.postContentReaction(req.pathParameters, req.body, req.member);
           else
