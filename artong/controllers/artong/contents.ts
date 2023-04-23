@@ -1,4 +1,4 @@
-import { Contents, Member, Projects } from '../../models/index';
+import { Contents, Member, Notification, Projects } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import getSecretKeys from '../../utils/common/ssmKeys';
@@ -11,6 +11,7 @@ import { File } from '@web-std/file';
 import _ from 'lodash';
 import { ContentsHistory } from '../../models/contentsHistory/ContentsHistory';
 import { PageAndOrderingInfo, PaginationInfo, GqlPageAndOrderingInfo } from './index';
+import { MessageBody } from '../../models/notification/Notification';
 
 interface GetContentInfo {
   id: string
@@ -82,7 +83,7 @@ const postContent = async function(body: any, member: Member) {
   }
 };
 
-const uploadToNftStorageAndUpdateContent = async function(body: any) {
+const uploadToNftStorageAndUpdateContent = async function(body: any, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
@@ -110,13 +111,30 @@ const uploadToNftStorageAndUpdateContent = async function(body: any) {
       description: body.description,
     }, conn);
 
-    await contentModel._updateContent(
+    const content = await contentModel._updateContent(
       contentModel.id,
       contentModel.ipfs_url,
       undefined, undefined, undefined,
       contentModel.name,
       contentModel.description,
     );
+
+    const projectModel = new Projects({}, conn)
+    const project = await projectModel.getProjectWithAddressOrSlug(content.project_address)
+    
+    if (project.member_id && project.member_id !== member.id) {
+      const notificationModel = new Notification({}, conn);
+  
+      const messageBody: MessageBody = {
+        content_id: body.content_id,
+        noti_message: `${member.username}님이 ${project.name} 프로젝트에 콘텐츠를 업로드했습니다.`,
+        noti_type: 'CONTRIBUTE',
+        receiver_id: project.member_id,
+        sender_id: member.id,
+      }
+
+      notificationModel.sendMessage(messageBody)
+    }
 
     return {data: metadata}
   } catch (error) {
