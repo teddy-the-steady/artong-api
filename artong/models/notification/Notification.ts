@@ -7,7 +7,7 @@ import Models from "../Models";
 const insertNotification = require('./insertNotification.sql')
 
 const sqs = new SQS({region: 'ap-northeast-2'})
-const NotificationType = { LIKE: 'LIKE', }
+const NotificationType = { LIKE: 'LIKE', CONTRIBUTE: 'CONTRIBUTE' }
 type NotificationType = keyof typeof NotificationType
 export type MessageBody = {
   noti_type: NotificationType;
