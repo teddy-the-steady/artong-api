@@ -194,6 +194,17 @@ const patchContentStatus = async function(pathParameters: {id: string, contents_
       contentModel.member_id,
       contentModel.status,
     );
+    
+    const notificationModel = new Notification({}, conn);
+    const messageBody:MessageBody = {
+      content_id: result.id!,
+      noti_message: `${member.username}님이 ${result.name} 컨텐츠를 승인하였습니다.`,
+      noti_type: 'CONTRIBUTE_APPROVE',
+      receiver_id: result.member_id!,
+      sender_id: member.id,
+    }
+    notificationModel.sendMessage(messageBody)
+
     return {data: result}
   } catch (error) {
     throw controllerErrorWrapper(error);
