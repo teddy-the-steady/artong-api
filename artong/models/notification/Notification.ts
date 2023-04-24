@@ -69,7 +69,7 @@ class Notification extends Models {
     }
   }
 
-  async recvLike(messageBody: MessageBody) {
+  async receiveMessage(messageBody: MessageBody) {
     return await this.createNotification(messageBody)
   }
 }
