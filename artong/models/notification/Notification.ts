@@ -15,13 +15,13 @@ export type MessageBody = {
   receiver_id: number;
   redirect_on_click?: string;
   noti_message: string;
-  content_id: number;
+  content_id?: number| null;
 }
 class Notification extends Models {
   @IsInt()
   id!: number;
   @IsEnum(NotificationType)
-  category!: NotificationType;
+  noti_type!: NotificationType;
   @IsInt()
   sender_id!: number;
   @IsInt()
@@ -34,7 +34,10 @@ class Notification extends Models {
   redirect_on_click?: string | null;
   @IsString()
   @IsOptional()
-  content!: string;
+  noti_message!: string;
+  @IsInt()
+  @IsOptional()
+  content_id?: number | null;
   @IsDate()
   created_at!: Date;
   @IsDate()
