@@ -15,7 +15,7 @@ export async function handler(event: SQSEvent) {
   for (const record of event.Records) {
     const message: MessageBody = JSON.parse(record.body)
     if (message.noti_type === 'LIKE') {
-      notificationModel.recvLike(message)
-    }
+      notificationModel.receiveMessage(message)
+    } 
   }
 }
