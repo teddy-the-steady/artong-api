@@ -3,12 +3,12 @@ import { IsDate, IsEnum, IsInt, IsOptional, IsString } from "class-validator";
 import { PoolClient } from "pg";
 import * as db from "../../utils/db/db";
 import Models from "../Models";
+import { NotificationType } from "./notification.type";
 
 const insertNotification = require('./insertNotification.sql')
 
 const sqs = new SQS({region: 'ap-northeast-2'})
-const NotificationType = { LIKE: 'LIKE', CONTRIBUTE: 'CONTRIBUTE', CONTRIBUTE_APPROVE: 'CONTRIBUTE_APPROVE' }
-type NotificationType = keyof typeof NotificationType
+
 export type MessageBody = {
   noti_type: NotificationType;
   sender_id: number;
@@ -74,5 +74,5 @@ class Notification extends Models {
   }
 }
 
-export { Notification, NotificationType as NotificationCategory };
+export { Notification};
 
