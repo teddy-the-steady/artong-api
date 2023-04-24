@@ -1,8 +1,9 @@
-import { Member, Follow, Subscribe } from '../../models/index';
+import { Member, Follow, Subscribe, Notification } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import { PoolClient } from 'pg';
 import { BadRequest } from '../../utils/error/errors';
+import { MessageBody } from '../../models/notification/Notification';
 
 interface FollowInfo {
   isFollowRequest: boolean
@@ -27,6 +28,15 @@ const doFollowMemberOrUndo = async function(body: FollowInfo, member: Member) {
         followModel.followee_id,
         followModel.follower_id
       );
+
+      const notificationModel = new Notification({}, conn);
+      const messageBody: MessageBody= {
+        noti_type:'FOLLOW_MEMBER',
+        noti_message: `${member.username}님이 회원님을 팔로우하기 시작했습니다.`,
+        receiver_id: body.targetMemberId,
+        sender_id: member.id,
+      }
+      notificationModel.sendMessage(messageBody)
     } else {
       result = await followModel.deleteFollow(
         followModel.followee_id,
