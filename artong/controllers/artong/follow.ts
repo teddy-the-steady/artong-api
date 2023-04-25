@@ -63,6 +63,8 @@ const doFollowMemberOrUndo = async function(body: FollowInfo, member: Member) {
 interface SubscribeInfo {
   isSubscribeRequest: boolean
   targetProjectAddress: string
+  targetProjectName: string
+  targetProjectOwner: string
 }
 const doSubsribeProjectOrUndo = async function(body: SubscribeInfo, member: Member) {
   const conn: PoolClient = await db.getConnection();
