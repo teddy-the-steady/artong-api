@@ -64,7 +64,7 @@ interface SubscribeInfo {
   isSubscribeRequest: boolean
   targetProjectAddress: string
   targetProjectName: string
-  targetProjectOwner: string
+  targetProjectOwnerId:number
 }
 const doSubsribeProjectOrUndo = async function(body: SubscribeInfo, member: Member) {
   const conn: PoolClient = await db.getConnection();
@@ -81,6 +81,17 @@ const doSubsribeProjectOrUndo = async function(body: SubscribeInfo, member: Memb
         subscribeModel.member_id,
         subscribeModel.project_address
       );
+
+      const notificationModel = new Notification({}, conn);
+      const messageBody: MessageBody = {
+        noti_type: 'FOLLOW_PROJECT',
+        noti_message: `${member.username}님이 ${body.targetProjectName} 프로젝트를 팔로우하기 시작했습니다.`,
+        receiver_id: body.targetProjectOwnerId,
+        sender_id: member.id,
+        content_id: null,
+      }
+
+      notificationModel.sendMessage(messageBody)
     } else {
       result = await subscribeModel.deleteSubscribe(
         subscribeModel.member_id,
