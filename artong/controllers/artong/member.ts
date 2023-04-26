@@ -3,8 +3,9 @@ import { Member, Projects } from '../../models/index';
 import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import validator from '../../utils/validators/common';
-import { isAddress } from '../../utils/common/commonFunc';
+import { isAddress, generateRandom } from '../../utils/common/commonFunc';
 import { PaginationInfo } from './index';
+import smtp from '../../utils/common/email'
 
 const getMember = async function(pathParameters: any) { // INFO] inner use only
   const conn: PoolClient = await db.getConnection();
@@ -220,6 +221,48 @@ const getMemberFollowerOrFollowing = async function(pathParameters: { id: string
   }
 }
 
+const sendEmailVerification = async function (body: {email: string}) {
+  try {
+    const random = generateRandom(111111, 999999);
+
+    const mailOptions = {
+      from: "4rtong@naver.com",
+      to: body.email,
+      subject: "[알통]메일 인증번호 입니다",
+      text: `6자리 숫자를 입력해주세요: ${random}`
+    };
+
+    const transporter = await smtp();
+    await transporter.sendMail(mailOptions);
+
+    return {data: random}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  }
+}
+
+const verifyEmail = async function (member: Member) {
+  const conn: PoolClient = await db.getConnection();
+
+  try {
+    const memberModel = new Member({
+      id: member.id
+    }, conn);
+
+    const result = await memberModel.updateMember(
+      memberModel.id,
+      undefined, undefined, undefined, undefined,
+      true,
+    );
+
+    return {data: result}
+  } catch (error) {
+    throw controllerErrorWrapper(error);
+  } finally {
+    db.release(conn);
+  }
+}
+
 export {
   getMember,
   getMemberByUsername,
@@ -229,4 +272,6 @@ export {
   patchMember,
   getProjectContributors,
   getMemberFollowerOrFollowing,
+  sendEmailVerification,
+  verifyEmail,
 };
