@@ -244,6 +244,16 @@ functions:
           method: GET
           cors: true
           authorizer: ${self:custom.authorizer}
+      - http:
+          path: artong/v1/send/email_verification
+          method: POST
+          cors: true
+          authorizer: ${self:custom.authorizer}
+      - http:
+          path: artong/v1/verify/email
+          method: POST
+          cors: true
+          authorizer: ${self:custom.authorizer}
     layers:
       - { Ref: NodeModulesLambdaLayer }
   artong-admin:
