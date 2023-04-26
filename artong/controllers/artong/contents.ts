@@ -1,7 +1,7 @@
 import { Contents, Member, Notification, Projects } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
-import getSecretKeys from '../../utils/common/ssmKeys';
+import { getNftStorageKey } from '../../utils/common/ssmKeys';
 import { getS3ObjectInBuffer, getS3ObjectHead, calculateMinusBetweenTowSetsById, isAddress } from '../../utils/common/commonFunc';
 import { graphqlRequest } from '../../utils/common/graphqlUtil';
 import { PoolClient } from 'pg';
@@ -94,7 +94,7 @@ const uploadToNftStorageAndUpdateContent = async function(body: any, member: Mem
     const fileName = body.imageKey.substring(body.imageKey.lastIndexOf('/') + 1, body.imageKey.length)
     const file = new File([image], fileName, { type: head.ContentType })
 
-    const keys = await getSecretKeys();
+    const keys = await getNftStorageKey();
     const nftStorageApiKey = keys[`/nftStorage/${process.env.ENV}/apikey`];
 
     const storage = new NFTStorage({ token: nftStorageApiKey });
