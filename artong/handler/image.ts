@@ -1,11 +1,11 @@
 import { profile, content, project } from '../controllers/image/index';
 import { InternalServerError } from '../utils/error/errors';
-import getSecretKeys from '../utils/common/ssmKeys';
+import { getApiKey } from '../utils/common/ssmKeys';
 import axios from 'axios';
 
 axios.defaults.baseURL = `https://api.4rtong.com/${process.env.ENV}/artong/v1`;
 const setApiKey = async function() {
-  return await getSecretKeys();
+  return await getApiKey();
 };
 let initKeys: any = null;
 
