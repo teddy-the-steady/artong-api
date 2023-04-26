@@ -19,6 +19,7 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
       notificationModel.receiveMessage(message)
     }
   } catch(error) {
+    console.error('notification handler error', error)
     throw new InternalServerError(error, null)
   }
 }
