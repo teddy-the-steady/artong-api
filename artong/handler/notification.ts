@@ -9,6 +9,7 @@ import { errorResponse } from '../utils/http/response';
 export let notiPool: Pool;
 
 export async function handler(event: SQSEvent, context: AWSLambda.Context, callback: AWSLambda.Callback) {
+  console.log(event)
   notiPool = await getDbConnentionPool();
   const conn: PoolClient = await db.getNotiConnection();
   const notificationModel = new Notification({},conn)
@@ -18,6 +19,7 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
       notificationModel.receiveMessage(message)
     }
   } catch(error) {
+    console.log(error)
     errorResponse(event, error, callback)
   }
 }
