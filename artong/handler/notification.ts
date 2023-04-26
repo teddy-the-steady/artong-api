@@ -4,12 +4,12 @@ import { Notification } from '../models';
 import { getDbConnentionPool } from '../init';
 import { SQSEvent } from 'aws-lambda';
 import { MessageBody } from '../models/notification/Notification';
-import { errorResponse } from '../utils/http/response';
+import { InternalServerError } from '../utils/error/errors';
 
 export let notiPool: Pool;
 
 export async function handler(event: SQSEvent, context: AWSLambda.Context, callback: AWSLambda.Callback) {
-  console.log(event)
+  console.log(event.Records)
   notiPool = await getDbConnentionPool();
   const conn: PoolClient = await db.getNotiConnection();
   const notificationModel = new Notification({},conn)
@@ -19,7 +19,6 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
       notificationModel.receiveMessage(message)
     }
   } catch(error) {
-    console.log(error)
-    errorResponse(event, error, callback)
+    throw new InternalServerError(error, null)
   }
 }
