@@ -92,6 +92,10 @@ export async function handler(event: any, context: any, callback: any) {
           res = await follow.doSubsribeProjectOrUndo(req.body, req.member);
         if (req.path === '/artong/v1/report' || req.path === '/artong/v1/report/')
           res = await report.postReport(req.body, req.member);
+        if (req.path === '/artong/v1/send/email_verification' || req.path === '/artong/v1/send/email_verification/')
+          res = await member.sendEmailVerification(req.body);
+        if (req.path === '/artong/v1/verify/email' || req.path === '/artong/v1/verify/email/')
+          res = await member.verifyEmail(req.member);
         if (req.path === '/artong/v1/graphql' || req.path === '/artong/v1/graphql/')
           res = await graphql(req.body, req.member);
         break;
