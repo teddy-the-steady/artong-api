@@ -4,6 +4,8 @@ import { PoolClient } from "pg";
 import * as db from "../../utils/db/db";
 import Models from "../Models";
 import { NotificationType } from "./notification.type";
+import { DBError } from "../../utils/error/errorCodes";
+import { InternalServerError } from "../../utils/error/errors";
 
 const insertNotification = require('./insertNotification.sql')
 
@@ -55,7 +57,7 @@ class Notification extends Models {
       
       return result[0]
     } catch(error){
-      throw error
+      throw new InternalServerError(error, null)
     } 
   }
 
