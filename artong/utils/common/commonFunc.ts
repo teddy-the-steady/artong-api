@@ -117,6 +117,11 @@ const isAddress = function(value: string) {
     return ethers.utils.isAddress(value);
 }
 
+const generateRandom = function (min: number, max: number) {
+    const ranNum = Math.floor(Math.random()*(max-min+1)) + min;
+    return ranNum;
+}
+
 export {
     getTotalRows,
     extractTotalRows,
@@ -127,4 +132,5 @@ export {
     putS3Object,
     calculateMinusBetweenTowSetsById,
     isAddress,
+    generateRandom,
 };
