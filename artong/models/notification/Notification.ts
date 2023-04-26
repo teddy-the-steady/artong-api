@@ -76,6 +76,7 @@ class Notification extends Models {
   }
 
   async receiveMessage(messageBody: MessageBody) {
+    console.log('parsed message', messageBody)
     return await this.createNotification(messageBody)
   }
 }
