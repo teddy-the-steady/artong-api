@@ -16,7 +16,8 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
   try {
     for (const record of event.Records) {
       const message: MessageBody = JSON.parse(record.body)
-      notificationModel.receiveMessage(message)
+      await notificationModel.receiveMessage(message)
+      return {data: 'success'}
     }
   } catch(error) {
     console.error('notification handler error', error)
