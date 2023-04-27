@@ -95,7 +95,7 @@ export async function handler(event: any, context: any, callback: any) {
         if (req.path === '/artong/v1/send/email_verification' || req.path === '/artong/v1/send/email_verification/')
           res = await member.sendEmailVerification(req.body);
         if (req.path === '/artong/v1/verify/email' || req.path === '/artong/v1/verify/email/')
-          res = await member.verifyEmail(req.member);
+          res = await member.verifyEmail(req.body, req.member);
         if (req.path === '/artong/v1/graphql' || req.path === '/artong/v1/graphql/')
           res = await graphql(req.body, req.member);
         break;
