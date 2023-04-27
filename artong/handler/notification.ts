@@ -13,13 +13,14 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
   notiPool = await getDbConnentionPool();
   const conn: PoolClient = await db.getNotiConnection();
   const notificationModel = new Notification({},conn)
+
   try {
     for (const record of event.Records) {
       const message: MessageBody = JSON.parse(record.body)
       await notificationModel.receiveMessage(message)
       return {data: 'success'}
     }
-  } catch(error) {
+  } catch (error) {
     console.error('notification handler error', error)
     throw new InternalServerError(error, null)
   }
