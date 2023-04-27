@@ -241,18 +241,21 @@ const sendEmailVerification = async function (body: {email: string}) {
   }
 }
 
-const verifyEmail = async function (member: Member) {
+const verifyEmail = async function (body: {email: string}, member: Member) {
   const conn: PoolClient = await db.getConnection();
 
   try {
     const memberModel = new Member({
-      id: member.id
+      id: member.id,
+      email: body.email,
     }, conn);
+
+    await validator(memberModel);
 
     const result = await memberModel.updateMember(
       memberModel.id,
       undefined, undefined, undefined, undefined,
-      true,
+      memberModel.email,
     );
 
     return {data: result}

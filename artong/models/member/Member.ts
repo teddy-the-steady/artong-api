@@ -46,7 +46,6 @@ class Member extends Models implements MemberGroups {
 	@IsOptional()
 	principal_id?: string;
 	language_id?: number;
-	email_verified?: boolean;
 
 	created_at?: Date;
 	updated_at?: Date;
@@ -195,7 +194,7 @@ class Member extends Models implements MemberGroups {
 		introduction?: string,
 		iso_code_2?: string,
 		language_code?: string,
-		email_verified?: boolean,
+		email?: string,
 	) {
 		try {
 			const result = await db.execute(this.conn, updateMember, {
@@ -204,7 +203,7 @@ class Member extends Models implements MemberGroups {
 				introduction,
 				iso_code_2,
 				language_code,
-				email_verified,
+				email,
 			});
 			return result[0]
 		} catch (error) {
