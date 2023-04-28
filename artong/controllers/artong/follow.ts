@@ -88,7 +88,6 @@ const doSubsribeProjectOrUndo = async function(body: SubscribeInfo, member: Memb
         noti_message: `${member.username}님이 ${body.targetProjectName} 프로젝트를 팔로우하기 시작했습니다.`,
         receiver_id: body.targetProjectOwnerId,
         sender_id: member.id,
-        content_id: null,
       }
 
       notificationModel.sendMessage(messageBody)
