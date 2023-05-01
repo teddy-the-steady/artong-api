@@ -301,6 +301,17 @@ functions:
               - Arn
           batchSize: 10
           maximumBatchingWindow: 62
+  connect:
+    handler: artong/handler/socket.connect
+    events:
+      - websocket:
+          route: $connect
+          authorizer: ${self:custom.authorizer}
+  disconnect:
+    handler: artong/handler/socket.disconnect
+    events:
+      - websocket:
+          route: $disconnect
 
 resources:
   Resources:
