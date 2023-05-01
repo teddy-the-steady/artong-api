@@ -10,6 +10,7 @@ provider:
     NODE_PATH: "./:/opt/node_modules"
     S3_BUCKET: ${param:s3_bucket}
     NOTIFICATION_QUEUE_URL: artong-notification-queue
+    VIPS_DISC_THRESHOLD: 750m
   iamRoleStatements:
     - Effect: "Allow"
       Action:
