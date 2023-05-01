@@ -9,6 +9,7 @@ provider:
     ENV: ${opt:stage}
     NODE_PATH: './:/opt/node_modules'
     S3_BUCKET: ${param:s3_bucket}
+    VIPS_DISC_THRESHOLD: 750m
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
