@@ -258,6 +258,7 @@ functions:
      - {Ref: NodeModulesLambdaLayer}
   image:
     handler: artong/handler/image.handler
+    timeout: 30
     events:
      - s3:
         bucket: ${self:provider.environment.S3_BUCKET}
