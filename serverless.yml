@@ -306,7 +306,6 @@ functions:
     events:
       - websocket:
           route: $connect
-          authorizer: ${self:custom.authorizer}
   disconnect:
     handler: artong/handler/socket.disconnect
     events:
