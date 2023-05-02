@@ -9,6 +9,7 @@ module.exports = {
   mode: isLocal || ENV !== 'prod' ? 'development' : 'production',
   entry: isLocal ? {
     artong: path.join(__dirname, 'artong/handler/artong.ts'),
+    socket: path.join(__dirname, 'artong/handler/socket.ts'),
   } : null,
   output: isLocal ? {
     libraryTarget: 'commonjs',
