@@ -30,6 +30,7 @@ interface MemberGroups {
 
 class Member extends Models implements MemberGroups {
 	@IsInt()
+	@IsOptional()
 	id!: number;
 	@IsEmail()
 	@IsOptional()
