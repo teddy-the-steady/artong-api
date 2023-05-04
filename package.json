@@ -51,6 +51,7 @@
   "dependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "^3.321.1",
     "@aws-sdk/client-sqs": "^3.309.0",
+    "serverless-websockets-plugin": "^1.0.0",
     "sharp": "^0.31.1"
   }
 }
