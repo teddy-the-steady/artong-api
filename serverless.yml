@@ -37,26 +37,6 @@ provider:
         - "sqs:DeleteMessage"
       Resource:
         Fn::GetAtt: [NotificationQueue, Arn]
-    - Effect: "Allow"
-      Action:
-        - "execute-api:ManageConnections"
-      Resource:
-        - "arn:aws:execute-api:*:*:**/@connections/*"
-    - Effect: "Allow"
-      Action:
-        - "dynamodb:PutItem"
-        - "dynamodb:GetItem"
-        - "dynamodb:UpdateItem"
-        - "dynamodb:DeleteItem"
-        - "dynamodb:BatchGetItem"
-        - "dynamodb:BatchWriteItem"
-        - "dynamodb:Query"
-      Resource:
-        - Fn::GetAtt: [ApplicationDynamoDBTable, Arn]
-        - Fn::Join:
-            - "/"
-            - - Fn::GetAtt: [ApplicationDynamoDBTable, Arn]
-              - "*"
   vpc:
     securityGroupIds:
       - sg-07149fcb367dc482b
@@ -80,7 +60,6 @@ plugins:
   - serverless-offline
   - serverless-domain-manager
   - serverless-add-api-key
-  # - serverless-websockets-plugin
 
 custom:
   authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-${opt:stage}-authorizer
@@ -362,16 +341,3 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: artong-notification-queue
-    ApplicationDynamoDBTable:
-      Type: AWS::DynamoDB::Table
-      TableName: SocketConnection
-      Properties:
-        BillingMode: PAY_PER_REQUEST
-        StreamSpecification:
-          StreamViewType: NEW_AND_OLD_IMAGES
-        AttributeDefinitions:
-          - AttributeName: ConnectionId
-            AttributeType: S
-        KeySchema:
-          - AttributeName: ConnectionId
-            KeyType: HASH
