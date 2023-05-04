@@ -4,12 +4,9 @@ import {APIGatewayProxyWebsocketEventV2} from 'aws-lambda'
 const connect = async (event: APIGatewayProxyWebsocketEventV2) => {
   const { requestContext:{ domainName, stage, connectionId, connectedAt,routeKey } } = event
   try {
-    // TODO] endpoint 확인
-    const client = new ApiGatewayManagementApiClient({
-      region: 'ap-northeast-2',
-      endpoint: 'http://localhost:3001'
-    })
+    const endpoint = process.env.IS_OFFLINE ? `http://localhost:3001` : `https://${domainName}/${stage}`
 
+    const client = new ApiGatewayManagementApiClient({ region: 'ap-northeast-2', endpoint })
     const encoder = new TextEncoder()
 
     const postCommand = new PostToConnectionCommand({
@@ -19,7 +16,7 @@ const connect = async (event: APIGatewayProxyWebsocketEventV2) => {
 
     await client.send(postCommand)
   } catch (error) {
-    return {statusCode: 5011}
+    return {statusCode: 500}
   }
   return {statusCode: 200}
 }
