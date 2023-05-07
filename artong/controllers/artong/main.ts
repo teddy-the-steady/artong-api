@@ -21,7 +21,7 @@ const getTop10Contributors = async function() {
 const getMainContents = function() {
   const result = {
     mainToken: {
-      project_address: '0xf86cd8128025545ea113ec2440ee023a286f5320',
+      project_address: '0x1dfb68c77a7ef6a8a2ff5488844553b6134f9b67',
       token_id: '1'
     },
     highlightedProjects: [
