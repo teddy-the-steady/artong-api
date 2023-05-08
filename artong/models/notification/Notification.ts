@@ -79,6 +79,10 @@ class Notification extends Models {
     console.log('parsed message', messageBody)
     return await this.createNotification(messageBody)
   }
+
+  async getNotificationList() {
+    return 'allow'
+  }
 }
 
 export { Notification};
