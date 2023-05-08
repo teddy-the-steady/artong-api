@@ -11,8 +11,6 @@ provider:
     S3_BUCKET: ${param:s3_bucket}
     NOTIFICATION_QUEUE_URL: artong-notification-queue
     VIPS_DISC_THRESHOLD: 750m
-    APPLICATION_TABLE:
-      Ref: ApplicationDynamoDBTable
   websocketApiRouteSelectionExpression: $request.body.action
   iamRoleStatements:
     - Effect: "Allow"
