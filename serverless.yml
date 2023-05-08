@@ -11,7 +11,7 @@ provider:
     S3_BUCKET: ${param:s3_bucket}
     NOTIFICATION_QUEUE_URL: artong-notification-queue
     VIPS_DISC_THRESHOLD: 750m
-  websocketApiRouteSelectionExpression: $request.body.action
+  websocketsApiRouteSelectionExpression: $request.body.action
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -306,14 +306,14 @@ functions:
     handler: artong/handler/socket.connectionManager
     events:
       - websocket:
-          routeKey: $connect
+          route: $connect
+          authorizer: ${self:custom.authorizer}
       - websocket:
-          routeKey: $disconnect
-  sendMessage:
-    handler: artong/handler/socket.sendMessage
+          route: $disconnect
+  defaultHandler:
+    handler: artong/handler/socket.defaultHandler
     events:
-      - websocket:
-          routeKey: sendMessage
+      - websocket: $default
 
 resources:
   Resources:
