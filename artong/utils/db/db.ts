@@ -5,6 +5,7 @@ import { DBError, UniqueValueDuplicated } from '../error/errorCodes';
 import { replaceAll } from '../common/commonFunc';
 import { PoolClient } from 'pg';
 import { notiPool } from '../../handler/notification';
+import { socketPool } from '../../handler/socket';
 
 const getConnection = async function(): Promise<PoolClient> {
   try {
@@ -18,6 +19,15 @@ const getConnection = async function(): Promise<PoolClient> {
 const getNotiConnection = async function() : Promise<PoolClient> {
   try{
     const conn = await notiPool.connect();
+    return conn
+  } catch(error){
+    throw new InternalServerError(error, DBError.code)
+  }
+}
+
+const getSocketConnection = async function() : Promise<PoolClient> {
+  try{
+    const conn = await socketPool.connect();
     return conn
   } catch(error){
     throw new InternalServerError(error, DBError.code)
@@ -85,6 +95,7 @@ const rollBack = async function(conn: PoolClient) {
 export { // TODO] 여기 함수들 Models.ts 로 넣는게 어떨지?
   getConnection,
   getNotiConnection,
+  getSocketConnection,
   release,
   execute,
   beginTransaction,
