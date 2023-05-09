@@ -37,7 +37,8 @@
     "ts-loader": "^8.0.17",
     "typescript": "^3.9.9",
     "webpack": "^5.23.0",
-    "webpack-stats-plugin": "^1.1.1"
+    "webpack-stats-plugin": "^1.1.1",
+    "ws": "^8.13.0"
   },
   "scripts": {
     "test": "test"
