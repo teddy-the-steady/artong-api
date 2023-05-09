@@ -4,7 +4,7 @@ const socket = new WebSocket('ws://localhost:3001')
 
 socket.on("open", () => {
   const identifierMessage = {
-    userId: 315
+    connectorId: 315
   }
 
   socket.send(JSON.stringify(identifierMessage))
