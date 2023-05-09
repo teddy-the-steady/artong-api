@@ -6,7 +6,19 @@ const NotificationType = {
   FOLLOW_PROJECT: 'FOLLOW_PROJECT',
 }
 type NotificationType = keyof typeof NotificationType
-
+type MessageBody = {
+  noti_type: NotificationType;
+  sender_id: number;
+  receiver_id: number;
+  redirect_on_click?: string;
+  noti_message: string;
+  content_id?: number| null;
+}
+type SocketBody = {
+  connectorId: number;
+}
 export {
+  SocketBody,
+  MessageBody,
   NotificationType
 }
