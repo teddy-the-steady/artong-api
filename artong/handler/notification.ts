@@ -4,7 +4,7 @@ import { Notification } from '../models';
 import { getDbConnentionPool } from '../init';
 import { SQSEvent } from 'aws-lambda';
 import { InternalServerError } from '../utils/error/errors';
-import { MessageBody } from '../models/notification/notification.type';
+import { QueueBody } from '../models/notification/notification.type';
 
 export let notiPool: Pool;
 
@@ -16,7 +16,7 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
 
   try {
     for (const record of event.Records) {
-      const message: MessageBody = JSON.parse(record.body)
+      const message: QueueBody= JSON.parse(record.body)
       await notificationModel.subQueue(message)
       return {data: 'success'}
     }
