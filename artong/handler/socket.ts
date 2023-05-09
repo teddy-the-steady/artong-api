@@ -48,10 +48,7 @@ const defaultHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
   try {
     await notificationModel.sendNotificationsToClient(endpoint,connectionId, notifications)
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify(notifications)
-    }
+    return { statusCode: 200 }
   } catch (error) {
     throw new InternalServerError(error, null)
   } finally {
