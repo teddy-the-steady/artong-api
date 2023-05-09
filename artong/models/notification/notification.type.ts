@@ -6,7 +6,7 @@ const NotificationType = {
   FOLLOW_PROJECT: 'FOLLOW_PROJECT',
 }
 type NotificationType = keyof typeof NotificationType
-type MessageBody = {
+type QueueBody = {
   noti_type: NotificationType;
   sender_id: number;
   receiver_id: number;
@@ -19,6 +19,6 @@ type SocketBody = {
 }
 export {
   SocketBody,
-  MessageBody,
+  QueueBody,
   NotificationType
 }
