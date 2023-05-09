@@ -3,10 +3,12 @@ import { IsDate, IsEnum, IsInt, IsOptional, IsString } from "class-validator";
 import { PoolClient } from "pg";
 import * as db from "../../utils/db/db";
 import Models from "../Models";
-import { MessageBody, NotificationType } from "./notification.type";
+import { NotificationType, QueueBody } from "./notification.type";
 import { InternalServerError } from "../../utils/error/errors";
+import { ApiGatewayManagementApi } from "@aws-sdk/client-apigatewaymanagementapi";
 
 const insertNotification = require('./insertNotification.sql')
+const selectNotifications = require('./selectNotifications.sql')
 
 const sqs = new SQS({region: 'ap-northeast-2'})
 class Notification extends Models {
@@ -41,9 +43,9 @@ class Notification extends Models {
     Object.assign(this, data);
   }
 
-  async createNotification (messageBody: MessageBody) {
+  async createNotification (body:QueueBody) {
     try{
-      const result = await db.execute(this.conn, insertNotification, messageBody)
+      const result = await db.execute(this.conn, insertNotification, body)
       
       return result[0]
     } catch(error){
@@ -52,9 +54,17 @@ class Notification extends Models {
     } 
   }
 
-  pubQueue(messageBody: MessageBody) {
+  async selectNotifications(connectorId: number) {
+    try{
+      return await db.execute(this.conn, selectNotifications,{connectorId})
+    } catch(error){
+      throw new InternalServerError(error, null)
+    } 
+  }
+
+  pubQueue(body: QueueBody) {
     const params: SendMessageRequest={
-      MessageBody: JSON.stringify(messageBody),
+      MessageBody: JSON.stringify(body),
       QueueUrl: process.env.NOTIFICATION_QUEUE_URL 
     }
     
@@ -65,11 +75,26 @@ class Notification extends Models {
     }
   }
 
-  async subQueue(messageBody: MessageBody) {
-    console.log('parsed message', messageBody)
-    return await this.createNotification(messageBody)
+  async subQueue(body:QueueBody) {
+    return await this.createNotification(body)
+  }
+
+  
+
+  async sendNotificationsToClient(endpoint: string, connectionId: string, payload: {}[]) {
+    const apiGatewayManagementApi = new ApiGatewayManagementApi({ apiVersion: '2018-11-29', endpoint })
+    const encoder = new TextEncoder()
+
+    try{
+      return await apiGatewayManagementApi.postToConnection({
+        ConnectionId: connectionId,
+        Data: encoder.encode(JSON.stringify(payload))
+      })
+    }catch(error){
+      throw new InternalServerError(error, null)
+    }
   }
 }
 
-export { Notification};
+export { Notification };
 
