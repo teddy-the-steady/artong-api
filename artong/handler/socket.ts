@@ -7,6 +7,7 @@ export let socketPool: Pool;
 
 const connectionManager = async (event: APIGatewayProxyWebsocketEventV2, context:AWSLambda.Context) => {
   const { requestContext:{ eventType} } = event
+  
   if(eventType === 'CONNECT') {
     connect(event, context)
     return {
@@ -14,7 +15,8 @@ const connectionManager = async (event: APIGatewayProxyWebsocketEventV2, context
       body: 'connected'
     }
   } else if(eventType ==='DISCONNECT') {
-    disconnect(event)
+    return disconnect(event)
+    
   }
 }
 
@@ -22,6 +24,7 @@ const connect = async (event: APIGatewayProxyWebsocketEventV2, context: AWSLambd
   socketPool= await getDbConnentionPool();
   const conn: PoolClient = await db.getSocketConnection();
   const notificationModel = new Notification({},conn)
+
   try{
     const result = await notificationModel.getNotificationList()
     return
