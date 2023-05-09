@@ -9,3 +9,7 @@ socket.on("open", () => {
 
   socket.send(JSON.stringify(identifierMessage))
 })
+
+socket.on("message", (data) => {
+  console.log(JSON.parse(data))
+})
