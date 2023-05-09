@@ -36,7 +36,7 @@ const doFollowMemberOrUndo = async function(body: FollowInfo, member: Member) {
         receiver_id: body.targetMemberId,
         sender_id: member.id,
       }
-      notificationModel.sendMessage(messageBody)
+      notificationModel.pubQueue(messageBody)
     } else {
       result = await followModel.deleteFollow(
         followModel.followee_id,
@@ -90,7 +90,7 @@ const doSubsribeProjectOrUndo = async function(body: SubscribeInfo, member: Memb
         sender_id: member.id,
       }
 
-      notificationModel.sendMessage(messageBody)
+      notificationModel.pubQueue(messageBody)
     } else {
       result = await subscribeModel.deleteSubscribe(
         subscribeModel.member_id,
