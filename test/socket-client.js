@@ -4,7 +4,6 @@ const socket = new WebSocket('ws://localhost:3001')
 
 socket.on("open", () => {
   const identifierMessage = {
-    type: 'IDENTIFIER',
     userId: 315
   }
 
