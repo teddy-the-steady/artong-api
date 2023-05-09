@@ -11,7 +11,7 @@ import { File } from '@web-std/file';
 import _ from 'lodash';
 import { ContentsHistory } from '../../models/contentsHistory/ContentsHistory';
 import { PageAndOrderingInfo, PaginationInfo, GqlPageAndOrderingInfo } from './index';
-import { MessageBody } from '../../models/notification/Notification';
+import { MessageBody } from '../../models/notification/notification.type';
 
 interface GetContentInfo {
   id: string
