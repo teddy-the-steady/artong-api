@@ -11,7 +11,7 @@ import { File } from '@web-std/file';
 import _ from 'lodash';
 import { ContentsHistory } from '../../models/contentsHistory/ContentsHistory';
 import { PageAndOrderingInfo, PaginationInfo, GqlPageAndOrderingInfo } from './index';
-import { MessageBody } from '../../models/notification/notification.type';
+import { QueueBody } from '../../models/notification/notification.type';
 
 interface GetContentInfo {
   id: string
@@ -125,7 +125,7 @@ const uploadToNftStorageAndUpdateContent = async function(body: any, member: Mem
     if (project.member_id && project.member_id !== member.id) {
       const notificationModel = new Notification({}, conn);
   
-      const messageBody: MessageBody = {
+      const queueBody: QueueBody= {
         content_id: body.content_id,
         noti_message: `${member.username}님이 ${project.name} 프로젝트에 콘텐츠를 업로드했습니다.`,
         noti_type: 'CONTRIBUTE',
@@ -133,7 +133,7 @@ const uploadToNftStorageAndUpdateContent = async function(body: any, member: Mem
         sender_id: member.id,
       }
 
-      notificationModel.pubQueue(messageBody)
+      notificationModel.pubQueue(queueBody)
     }
 
     return {data: metadata}
@@ -196,14 +196,14 @@ const patchContentStatus = async function(pathParameters: {id: string, contents_
     );
     
     const notificationModel = new Notification({}, conn);
-    const messageBody:MessageBody = {
+    const queueBody:QueueBody= {
       content_id: result.id!,
       noti_message: `${member.username}님이 ${result.name} 컨텐츠를 승인하였습니다.`,
       noti_type: 'CONTRIBUTE_APPROVE',
       receiver_id: result.member_id!,
       sender_id: member.id,
     }
-    notificationModel.pubQueue(messageBody)
+    notificationModel.pubQueue(queueBody)
 
     return {data: result}
   } catch (error) {
