@@ -133,7 +133,7 @@ const uploadToNftStorageAndUpdateContent = async function(body: any, member: Mem
         sender_id: member.id,
       }
 
-      notificationModel.sendMessage(messageBody)
+      notificationModel.pubQueue(messageBody)
     }
 
     return {data: metadata}
@@ -203,7 +203,7 @@ const patchContentStatus = async function(pathParameters: {id: string, contents_
       receiver_id: result.member_id!,
       sender_id: member.id,
     }
-    notificationModel.sendMessage(messageBody)
+    notificationModel.pubQueue(messageBody)
 
     return {data: result}
   } catch (error) {

@@ -3,22 +3,12 @@ import { IsDate, IsEnum, IsInt, IsOptional, IsString } from "class-validator";
 import { PoolClient } from "pg";
 import * as db from "../../utils/db/db";
 import Models from "../Models";
-import { NotificationType } from "./notification.type";
-import { DBError } from "../../utils/error/errorCodes";
+import { MessageBody, NotificationType } from "./notification.type";
 import { InternalServerError } from "../../utils/error/errors";
 
 const insertNotification = require('./insertNotification.sql')
 
 const sqs = new SQS({region: 'ap-northeast-2'})
-
-export type MessageBody = {
-  noti_type: NotificationType;
-  sender_id: number;
-  receiver_id: number;
-  redirect_on_click?: string;
-  noti_message: string;
-  content_id?: number| null;
-}
 class Notification extends Models {
   @IsInt()
   id!: number;
@@ -62,7 +52,7 @@ class Notification extends Models {
     } 
   }
 
-  sendMessage(messageBody: MessageBody) {
+  pubQueue(messageBody: MessageBody) {
     const params: SendMessageRequest={
       MessageBody: JSON.stringify(messageBody),
       QueueUrl: process.env.NOTIFICATION_QUEUE_URL 
@@ -75,13 +65,9 @@ class Notification extends Models {
     }
   }
 
-  async receiveMessage(messageBody: MessageBody) {
+  async subQueue(messageBody: MessageBody) {
     console.log('parsed message', messageBody)
     return await this.createNotification(messageBody)
-  }
-
-  async getNotificationList() {
-    return 'allow'
   }
 }
 
