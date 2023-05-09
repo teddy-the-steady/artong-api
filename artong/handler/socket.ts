@@ -57,7 +57,6 @@ const defaultHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
   } finally {
     db.release(conn)
   }
-
 }
 
 export {
