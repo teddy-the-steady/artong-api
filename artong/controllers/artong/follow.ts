@@ -3,7 +3,7 @@ import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import { PoolClient } from 'pg';
 import { BadRequest } from '../../utils/error/errors';
-import { MessageBody } from '../../models/notification/Notification';
+import { MessageBody } from '../../models/notification/notification.type';
 
 interface FollowInfo {
   isFollowRequest: boolean
@@ -30,7 +30,7 @@ const doFollowMemberOrUndo = async function(body: FollowInfo, member: Member) {
       );
 
       const notificationModel = new Notification({}, conn);
-      const messageBody: MessageBody= {
+      const messageBody: MessageBody = {
         noti_type:'FOLLOW_MEMBER',
         noti_message: `${member.username}님이 회원님을 팔로우하기 시작했습니다.`,
         receiver_id: body.targetMemberId,
