@@ -7,10 +7,7 @@ const NotificationType = {
 }
 type NotificationType = keyof typeof NotificationType
 
-type SocketBody = {
-  connectorId: number;
-}
+
 export {
-  SocketBody,
   NotificationType
 }
