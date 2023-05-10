@@ -4,7 +4,7 @@ import { Pool, PoolClient } from 'pg';
 import { Notification } from '../models';
 import { getDbConnentionPool } from '../init';
 import { InternalServerError } from '../utils/error/errors';
-import { SocketBody } from '../models/socket/socket.type';
+import { CreateSocketConnectionBody, SocketBody } from '../models/socket/socket.type';
 import { Socket } from '../models/socket/Socket';
 export let socketPool: Pool;
 
@@ -48,8 +48,13 @@ const defaultHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
   const endpoint = process.env.IS_OFFLINE? 'http://localhost:3001': `https://${domainName}/${stage}`
 
   try {
-    const socket = new Socket({connectorId, connectionId}, conn)
-
+    const socket = new Socket({}, conn)
+    const data: CreateSocketConnectionBody = {
+      connectionId,
+      connectorId,
+      created_at: new Date()
+    }
+    await socket.createSocketConnection(data)
     await socket.sendMessageToClient(endpoint,connectionId, notifications)
 
     return { statusCode: 200 }
