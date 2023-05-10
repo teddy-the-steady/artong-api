@@ -309,10 +309,6 @@ functions:
           route: $connect
       - websocket:
           route: $disconnect
-  defaultHandler:
-    handler: artong/handler/socket.defaultHandler
-    events:
-      - websocket: $default
   socketInitHandler:
     handler: artong/handler/socket.initHandler
     events:
