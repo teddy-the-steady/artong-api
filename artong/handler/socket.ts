@@ -41,8 +41,8 @@ const defaultHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
   const conn: PoolClient = await db.getSocketConnection();
   const notificationModel = new Notification({},conn)
 
-  const { body, requestContext:{domainName,stage,connectionId} } = event
-  const { connectorId }= JSON.parse(body ?? '') as SocketBody
+  const { body, requestContext:{ domainName, stage, connectionId } } = event
+  const { data: { connectorId }}= JSON.parse(body ?? '') as SocketBody
 
   const notifications = await notificationModel.selectNotifications(connectorId)
   const endpoint = process.env.IS_OFFLINE? 'http://localhost:3001': `https://${domainName}/${stage}`
