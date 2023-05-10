@@ -3,14 +3,14 @@ import { IsDate, IsEnum, IsInt, IsOptional, IsString } from "class-validator";
 import { PoolClient } from "pg";
 import * as db from "../../utils/db/db";
 import Models from "../Models";
-import { NotificationType, QueueBody } from "./notification.type";
+import { NotificationType} from "./notification.type";
 import { InternalServerError } from "../../utils/error/errors";
 import { ApiGatewayManagementApi } from "@aws-sdk/client-apigatewaymanagementapi";
+import { NotificationQueueBody } from "../queue/queue.type";
 
 const insertNotification = require('./insertNotification.sql')
 const selectNotifications = require('./selectNotifications.sql')
 
-const sqs = new SQS({region: 'ap-northeast-2'})
 class Notification extends Models {
   @IsInt()
   id!: number;
@@ -43,7 +43,7 @@ class Notification extends Models {
     Object.assign(this, data);
   }
 
-  async createNotification (body:QueueBody) {
+  async createNotification (body:NotificationQueueBody) {
     try{
       const result = await db.execute(this.conn, insertNotification, body)
       
@@ -60,39 +60,6 @@ class Notification extends Models {
     } catch(error){
       throw new InternalServerError(error, null)
     } 
-  }
-
-  pubQueue(body: QueueBody) {
-    const params: SendMessageRequest={
-      MessageBody: JSON.stringify(body),
-      QueueUrl: process.env.NOTIFICATION_QUEUE_URL 
-    }
-    
-    try {
-      return sqs.sendMessage(params)
-    } catch (error) {
-      throw error
-    }
-  }
-
-  async subQueue(body:QueueBody) {
-    return await this.createNotification(body)
-  }
-
-  
-
-  async sendNotificationsToClient(endpoint: string, connectionId: string, payload: {}[]) {
-    const apiGatewayManagementApi = new ApiGatewayManagementApi({ apiVersion: '2018-11-29', endpoint })
-    const encoder = new TextEncoder()
-
-    try{
-      return await apiGatewayManagementApi.postToConnection({
-        ConnectionId: connectionId,
-        Data: encoder.encode(JSON.stringify(payload))
-      })
-    }catch(error){
-      throw new InternalServerError(error, null)
-    }
   }
 }
 
