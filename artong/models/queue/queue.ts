@@ -1,6 +1,7 @@
 import { SQS, SendMessageRequest } from "@aws-sdk/client-sqs";
 
 const sqs = new SQS({region: 'ap-northeast-2'})
+
 class Queue{
   pubMessage<T>(body: T) {
     const params: SendMessageRequest={
