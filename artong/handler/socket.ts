@@ -47,7 +47,7 @@ const defaultHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
   const endpoint = process.env.IS_OFFLINE? 'http://localhost:3001': `https://${domainName}/${stage}`
 
   try {
-    await notificationModel.sendNotificationsToClient(endpoint,connectionId, notifications)
+    await sendMessageToClient(endpoint,connectionId, notifications)
 
     return { statusCode: 200 }
   } catch (error) {
@@ -58,7 +58,7 @@ const defaultHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
 }
 
 
-const sendNotificationsToClient = async (endpoint: string, connectionId: string, payload: {}[]) => {
+const sendMessageToClient = async (endpoint: string, connectionId: string, payload: {}[]) => {
     const apiGatewayManagementApi = new ApiGatewayManagementApi({ apiVersion: '2018-11-29', endpoint })
     const encoder = new TextEncoder()
 
@@ -76,5 +76,6 @@ export {
   connect,
   disconnect,
   connectionManager,
-  defaultHandler
+  defaultHandler,
+  sendMessageToClient
 }
