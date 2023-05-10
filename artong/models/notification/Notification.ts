@@ -1,11 +1,9 @@
-import { SQS, SendMessageRequest } from "@aws-sdk/client-sqs";
 import { IsDate, IsEnum, IsInt, IsOptional, IsString } from "class-validator";
 import { PoolClient } from "pg";
 import * as db from "../../utils/db/db";
 import Models from "../Models";
 import { NotificationType} from "./notification.type";
 import { InternalServerError } from "../../utils/error/errors";
-import { ApiGatewayManagementApi } from "@aws-sdk/client-apigatewaymanagementapi";
 import { NotificationQueueBody } from "../queue/queue.type";
 
 const insertNotification = require('./insertNotification.sql')
