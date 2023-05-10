@@ -3,11 +3,13 @@ import * as db from '../utils/db/db';
 import { Pool, PoolClient } from 'pg';
 import { Notification } from '../models';
 import { getDbConnentionPool } from '../init';
-import { SocketBody } from '../models/notification/notification.type';
 import { InternalServerError } from '../utils/error/errors';
 import { ApiGatewayManagementApi } from '@aws-sdk/client-apigatewaymanagementapi';
 export let socketPool: Pool;
 
+type SocketBody = {
+  connectorId: number;
+}
 const connectionManager = async (event: APIGatewayProxyWebsocketEventV2, context:AWSLambda.Context) => {
   const { requestContext:{ eventType} } = event
   
@@ -77,5 +79,6 @@ export {
   disconnect,
   connectionManager,
   defaultHandler,
-  sendMessageToClient
+  sendMessageToClient,
+  SocketBody
 }
