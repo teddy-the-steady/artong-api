@@ -4,12 +4,11 @@ import { Pool, PoolClient } from 'pg';
 import { Notification } from '../models';
 import { getDbConnentionPool } from '../init';
 import { InternalServerError } from '../utils/error/errors';
-import { ApiGatewayManagementApi } from '@aws-sdk/client-apigatewaymanagementapi';
+import { SocketBody } from '../models/socket/socket.type';
+import { Socket } from '../models/socket/Socket';
 export let socketPool: Pool;
 
-type SocketBody = {
-  connectorId: number;
-}
+
 const connectionManager = async (event: APIGatewayProxyWebsocketEventV2, context:AWSLambda.Context) => {
   const { requestContext:{ eventType} } = event
   
@@ -49,7 +48,9 @@ const defaultHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
   const endpoint = process.env.IS_OFFLINE? 'http://localhost:3001': `https://${domainName}/${stage}`
 
   try {
-    await sendMessageToClient(endpoint,connectionId, notifications)
+    const socket = new Socket({connectorId, connectionId}, conn)
+
+    await socket.sendMessageToClient(endpoint,connectionId, notifications)
 
     return { statusCode: 200 }
   } catch (error) {
@@ -60,25 +61,10 @@ const defaultHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
 }
 
 
-const sendMessageToClient = async (endpoint: string, connectionId: string, payload: {}[]) => {
-    const apiGatewayManagementApi = new ApiGatewayManagementApi({ apiVersion: '2018-11-29', endpoint })
-    const encoder = new TextEncoder()
-
-    try{
-      return await apiGatewayManagementApi.postToConnection({
-        ConnectionId: connectionId,
-        Data: encoder.encode(JSON.stringify(payload))
-      })
-    }catch(error){
-      throw new InternalServerError(error, null)
-    }
-  }
 
 export {
   connect,
   disconnect,
   connectionManager,
   defaultHandler,
-  sendMessageToClient,
-  SocketBody
 }
