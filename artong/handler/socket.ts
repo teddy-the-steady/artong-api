@@ -34,9 +34,9 @@ const disconnect = async () => {
 }
 
 /**
- * @description default handler for websocket
+ * @description Init handler for websocket
  */
-const defaultHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
+const initHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
   socketPool= await getDbConnentionPool();
   const conn: PoolClient = await db.getSocketConnection();
   const notificationModel = new Notification({},conn)
@@ -71,5 +71,5 @@ export {
   connect,
   disconnect,
   connectionManager,
-  defaultHandler,
+  initHandler,
 }
