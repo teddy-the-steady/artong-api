@@ -1,14 +1,19 @@
 import { PoolClient } from "pg";
 import Models from "../Models";
-import { IsInt, IsString } from "class-validator";
+import * as db from "../../utils/db/db";
+import { IsDate, IsInt, IsString } from "class-validator";
 import { ApiGatewayManagementApi } from "@aws-sdk/client-apigatewaymanagementapi";
 import { InternalServerError } from "../../utils/error/errors";
+import { CreateSocketConnectionBody } from "./socket.type";
 
+const insertSocketConnection = require('./insertSocketConnection.sql')
 class Socket extends Models {
   @IsInt()
   connectorId!: number;
   @IsString()
   connectionId!: string;
+  @IsDate()
+  created_at!: Date;
 
   constructor(data: Partial<Socket> = {}, conn: PoolClient) {
     super(conn);
@@ -27,9 +32,19 @@ class Socket extends Models {
       }catch(error){
         throw new InternalServerError(error, null)
       }
+  }
+
+  async createSocketConnection(data: CreateSocketConnectionBody) {
+    try {
+      const result = await db.execute(this.conn,insertSocketConnection, data)
+
+      return result[0]
+    } catch (error) {
+      throw new InternalServerError(error, null)
     }
+  }
 }
 
 export {
-  Socket 
+  Socket
 }
