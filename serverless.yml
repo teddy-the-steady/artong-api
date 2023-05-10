@@ -313,6 +313,11 @@ functions:
     handler: artong/handler/socket.defaultHandler
     events:
       - websocket: $default
+  socketInitHandler:
+    handler: artong/handler/socket.initHandler
+    events:
+      - websocket:
+          route: init
 
 resources:
   Resources:
