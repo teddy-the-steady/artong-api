@@ -4,7 +4,7 @@ import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 
 const getTop10Contributors = async function() {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const memberModel = new Member({}, conn);

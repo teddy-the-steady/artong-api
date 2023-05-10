@@ -11,7 +11,7 @@ interface PostReportInfo {
   category: string
 }
 const postReport = async function(body: PostReportInfo, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const reportModel = new Reports({

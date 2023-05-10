@@ -8,7 +8,7 @@ import { PaginationInfo } from './index';
 import smtp from '../../utils/common/email'
 
 const getMember = async function(pathParameters: any) { // INFO] inner use only
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const id = typeof pathParameters.id === 'string' && pathParameters.id.includes('-')?
@@ -33,7 +33,7 @@ const getMember = async function(pathParameters: any) { // INFO] inner use only
 };
 
 const getMemberByUsername = async function(pathParameters: { id: string }, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const memberModel = new Member({
@@ -57,7 +57,7 @@ interface MemberInfo {
   principal_id: string
 }
 const postMember = async function(body: MemberInfo) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const memberModel = new Member({
@@ -82,7 +82,7 @@ const postMember = async function(body: MemberInfo) {
 };
 
 const patchMemberProfileS3key = async function(body: any, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const memberModel = new Member({
@@ -103,7 +103,7 @@ const patchMemberProfileS3key = async function(body: any, member: Member) {
 };
 
 const patchMemberProfileThumbnailS3key = async function(pathParameters: any, body: any) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const memberModel = new Member({
@@ -125,7 +125,7 @@ const patchMemberProfileThumbnailS3key = async function(pathParameters: any, bod
 };
 
 const patchMember = async function(body: any, pathParameters: any, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const memberModel = new Member({
@@ -150,7 +150,7 @@ const patchMember = async function(body: any, pathParameters: any, member: Membe
 }
 
 const getProjectContributors = async function(pathParameters: { id: string }, queryStringParameters: PaginationInfo) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     if (!isAddress(pathParameters.id)) {
@@ -185,7 +185,7 @@ interface MemberFollowInfo extends PaginationInfo {
   type: 'follower' | 'following'
 }
 const getMemberFollowerOrFollowing = async function(pathParameters: { id: string }, queryStringParameters: MemberFollowInfo) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const memberModel = new Member({
@@ -242,7 +242,7 @@ const sendEmailVerification = async function (body: {email: string}) {
 }
 
 const verifyEmail = async function (body: {email: string}, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const memberModel = new Member({

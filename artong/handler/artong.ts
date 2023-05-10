@@ -6,15 +6,15 @@ import { graphql } from './graphql'
 import { getDbConnentionPool } from '../init';
 import { Pool } from 'pg';
 
-export let dbConnectionPool: Pool;
+export let artongPool: Pool;
 
 export async function handler(event: any, context: any, callback: any) {
   context.callbackWaitsForEmptyEventLoop = false;
   let res: any = {};
 
   try {
-    if (!dbConnectionPool) {
-      dbConnectionPool = await getDbConnentionPool();
+    if (!artongPool) {
+      artongPool = await getDbConnentionPool();
     }
     const req = await requestInit(event);
     console.log(req);

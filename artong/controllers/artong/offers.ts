@@ -13,7 +13,7 @@ interface QueryOffersByTokenInfo extends GqlPageAndOrderingInfo {
   token_id: number
 }
 const queryOffersByToken = async function(body: {variables: QueryOffersByTokenInfo}, _db_: string[], pureQuery: string) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     if (!isAddress(body.variables.project_address)) {

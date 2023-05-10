@@ -7,7 +7,7 @@ interface ReactionBody {
   reaction_code: string;
 }
 const postContentReaction = async function(pathParameters: any, body: ReactionBody, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const reactionModel = new ContentReactions({

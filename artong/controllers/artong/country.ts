@@ -8,7 +8,7 @@ import { PoolClient } from 'pg';
 
 const postCountry = async function(body: any, member: Member) {
   if (!hasBOPermission(member.memberGroups)) throw new Forbidden(NoPermission.message, NoPermission.code);
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const countryModel = new Country({
