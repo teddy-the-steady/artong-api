@@ -1,4 +1,5 @@
 type SocketBody = {
+  action: string;
   connectorId: number;
 }
 type CreateSocketConnectionBody = {
