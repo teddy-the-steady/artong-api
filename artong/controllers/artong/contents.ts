@@ -18,7 +18,7 @@ interface GetContentInfo {
   contents_id: string
 }
 const getContent = async function(pathParameters: GetContentInfo, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     if (!isAddress(pathParameters.id)) {
@@ -53,7 +53,7 @@ const getContent = async function(pathParameters: GetContentInfo, member: Member
 };
 
 const postContent = async function(body: any, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     // TODO] query policy on every req for now. BEST is to listen event in our server and to syncronize with db
@@ -84,7 +84,7 @@ const postContent = async function(body: any, member: Member) {
 };
 
 const uploadToNftStorageAndUpdateContent = async function(body: any, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const client = new S3Client({ region: 'ap-northeast-2' });
@@ -145,7 +145,7 @@ const uploadToNftStorageAndUpdateContent = async function(body: any, member: Mem
 };
 
 const patchContent = async function(pathParameters: any, body: any, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const contentModel = new Contents({
@@ -178,7 +178,7 @@ const patchContent = async function(pathParameters: any, body: any, member: Memb
 }
 
 const patchContentStatus = async function(pathParameters: {id: string, contents_id: string}, body: {status: string}, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const contentModel = new Contents({
@@ -218,7 +218,7 @@ interface QueryTokenInfo {
   db: {project_address: string, token_id: number}
 }
 const queryToken = async function(body: QueryTokenInfo, _db_: string[], pureQuery: string, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     if (!isAddress(body.db.project_address)) {
@@ -293,7 +293,7 @@ interface QueryTokensInfo extends GqlPageAndOrderingInfo {
   idArray: string[]
 }
 const queryTokens = async function(body: {variables: QueryTokensInfo}, _db_: string[], pureQuery: string) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const gqlResult = await graphqlRequest({
@@ -355,7 +355,7 @@ interface TokensByProjectInfo extends GqlPageAndOrderingInfo {
   start_num: number
 }
 const queryTokensByProject = async function(body: {variables: TokensByProjectInfo}, _db_: string[], pureQuery: string) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     if (!isAddress(body.variables.project)) {
@@ -430,7 +430,7 @@ const queryTokensByProject = async function(body: {variables: TokensByProjectInf
 }
 
 const patchContentThumbnailS3key = async function(body:any) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const contentModel = new Contents({
@@ -452,7 +452,7 @@ const patchContentThumbnailS3key = async function(body:any) {
 };
 
 const getTobeApprovedContentsInProject = async function(pathParameters: { id: string }, queryStringParameters: PageAndOrderingInfo) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     if (!isAddress(pathParameters.id)) {
@@ -491,7 +491,7 @@ const getTobeApprovedContentsInProject = async function(pathParameters: { id: st
 };
 
 const getContentVoucherById = async function(pathParameters: any, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const contentModel = new Contents({
@@ -516,7 +516,7 @@ interface TokensByCreatorInfo extends GqlPageAndOrderingInfo {
   creator: string
 }
 const queryTokensByCreator = async function(body: {variables: TokensByCreatorInfo}, _db_: string[], pureQuery: string) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const gqlResult = await graphqlRequest({query: pureQuery, variables: {
@@ -575,7 +575,7 @@ interface TokensByOwnerInfo extends GqlPageAndOrderingInfo {
   owner: string
 }
 const queryTokensByOwner = async function(body: {variables: TokensByOwnerInfo}, _db_: string[], pureQuery: string) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const gqlResult = await graphqlRequest({query: pureQuery, variables: {
@@ -637,7 +637,7 @@ interface QueryTokenHistoryInfo {
   pagination: PaginationInfo
 }
 const queryTokenHistory = async function(body: QueryTokenHistoryInfo, _db_: string[], pureQuery: string) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     if (!isAddress(body.variables.project_address)) {
@@ -798,7 +798,7 @@ const makeMemberInfo = function(result: any[], prefix: string[], memberResultNam
 }
 
 const getMemberContentsCandidates = async function(pathParameters: {id: string}, queryStringParameters: PageAndOrderingInfo, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const contentModel = new Contents({
@@ -831,7 +831,7 @@ const getMemberContentsCandidates = async function(pathParameters: {id: string},
 }
 
 const getMemberFavoritedContents = async function(pathParameters: {id: string}, queryStringParameters: PageAndOrderingInfo) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const contentModel = new Contents({
@@ -918,7 +918,7 @@ const getMemberFavoritedContents = async function(pathParameters: {id: string}, 
 }
 
 const getFeedContents = async function(queryStringParameters: PageAndOrderingInfo, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const contentModel = new Contents({}, conn);
@@ -1003,7 +1003,7 @@ const getFeedContents = async function(queryStringParameters: PageAndOrderingInf
 };
 
 const getContents = async function(queryStringParameters: PageAndOrderingInfo) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const contentModel = new Contents({}, conn);
@@ -1087,7 +1087,7 @@ const getContents = async function(queryStringParameters: PageAndOrderingInfo) {
 };
 
 const getContentsPick = async function(body: {ids: number[]}) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const contentModel = new Contents({}, conn);

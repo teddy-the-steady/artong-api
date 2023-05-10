@@ -4,7 +4,7 @@ import * as db from '../../utils/db/db';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 
 const searchProjects = async function(queryStringParameters: any, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const projectModel = new Projects({
@@ -23,7 +23,7 @@ const searchProjects = async function(queryStringParameters: any, member: Member
 };
 
 const searchContents = async function(queryStringParameters: any, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const contentModel = new Contents({
@@ -42,7 +42,7 @@ const searchContents = async function(queryStringParameters: any, member: Member
 };
 
 const searchMembers = async function(queryStringParameters: any, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const memberModel = new Member({

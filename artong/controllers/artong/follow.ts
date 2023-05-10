@@ -10,7 +10,7 @@ interface FollowInfo {
   targetMemberId: number
 }
 const doFollowMemberOrUndo = async function(body: FollowInfo, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     if (member.id === body.targetMemberId) {
@@ -67,7 +67,7 @@ interface SubscribeInfo {
   targetProjectOwnerId:number
 }
 const doSubsribeProjectOrUndo = async function(body: SubscribeInfo, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const subscribeModel = new Subscribe({

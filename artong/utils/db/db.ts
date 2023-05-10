@@ -1,5 +1,5 @@
 import handlebars from 'handlebars';
-import { dbConnectionPool } from '../../handler/artong';
+import { artongPool } from '../../handler/artong';
 import { BadRequest, InternalServerError } from '../error/errors';
 import { DBError, UniqueValueDuplicated } from '../error/errorCodes';
 import { replaceAll } from '../common/commonFunc';
@@ -7,9 +7,9 @@ import { PoolClient } from 'pg';
 import { notiPool } from '../../handler/notification';
 import { socketPool } from '../../handler/socket';
 
-const getConnection = async function(): Promise<PoolClient> {
+const getArtongConnection = async function(): Promise<PoolClient> {
   try {
-    const conn = await dbConnectionPool.connect();
+    const conn = await artongPool.connect();
     return conn
   } catch (error) {
     throw new InternalServerError(error, DBError.code);
@@ -93,7 +93,7 @@ const rollBack = async function(conn: PoolClient) {
 }
 
 export { // TODO] 여기 함수들 Models.ts 로 넣는게 어떨지?
-  getConnection,
+  getArtongConnection,
   getNotiConnection,
   getSocketConnection,
   release,

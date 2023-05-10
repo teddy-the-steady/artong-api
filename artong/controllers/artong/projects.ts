@@ -15,7 +15,7 @@ interface GetProjectsInfo {
   basis_project_address: string
 }
 const getProjectsPrevNext = async function(queryStringParameters: GetProjectsInfo) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     if (!isAddress(queryStringParameters.basis_project_address)) {
@@ -68,7 +68,7 @@ interface PostProjectInfo {
   background_s3key: string
 }
 const postProject = async function(body: PostProjectInfo, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const projectModel = new Projects({
@@ -99,7 +99,7 @@ const postProject = async function(body: PostProjectInfo, member: Member) {
 };
 
 const patchProject = async function(pathParameters: { id: string }, body: any, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const projectModel = new Projects({
@@ -136,7 +136,7 @@ const patchProject = async function(pathParameters: { id: string }, body: any, m
 };
 
 const getProjectWhileUpdatingPendingToCreated = async function(pathParameters: { id: string }, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const projectModel = new Projects({
@@ -164,7 +164,7 @@ const getProjectWhileUpdatingPendingToCreated = async function(pathParameters: {
 };
 
 const getTxReceiptAndUpdateStatus = async function(member_id?: number, txHash?: string) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const projectModel = new Projects({
@@ -213,7 +213,7 @@ const getProjectAddressFromContractCreatedEvent = function(txReceipt: any) {
 }
 
 const queryProject = async function(body: any, _db_: string[], pureQuery: string, member: Member) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const projectModel = new Projects({}, conn);
@@ -262,7 +262,7 @@ interface QueryProjectsInfo extends GqlPageAndOrderingInfo {
   idArray: string[]
 }
 const queryProjects = async function(body: {variables: QueryProjectsInfo}, _db_: string[], pureQuery: string) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const gqlResult = await graphqlRequest({
@@ -335,7 +335,7 @@ interface ProjectsByCreatorInfo extends GqlPageAndOrderingInfo {
   creator: string
 }
 const queryProjectsByCreator = async function(body: {variables: ProjectsByCreatorInfo}, _db_: string[], pureQuery: string) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const gqlResult = await graphqlRequest({query: pureQuery, variables: {
@@ -448,7 +448,7 @@ const getTxReceiptsAndUpdateStatus = async function(projectArray: Projects[]): P
 }
 
 const getMemberSubscribedProjects = async function(pathParameters: { id: string }, queryStringParameters: PaginationInfo) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const projectModel = new Projects({
@@ -482,7 +482,7 @@ interface PatchProjectThumbnailS3keyInfo {
   background_thumbnail_s3key: string
 }
 const patchProjectThumbnailS3key = async function(body: PatchProjectThumbnailS3keyInfo) {
-  const conn: PoolClient = await db.getConnection();
+  const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const projectModel = new Projects({
