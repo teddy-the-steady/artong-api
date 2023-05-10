@@ -3,6 +3,8 @@ import { ContentReactions, Member, Notification } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import validator from '../../utils/validators/common';
+import { Queue } from '../../models/queue/queue';
+import { NotificationQueueBody } from '../../models/queue/queue.type';
 interface ReactionBody {
   reaction_code: string;
 }
@@ -28,16 +30,17 @@ const postContentReaction = async function(pathParameters: any, body: ReactionBo
     }
 
     if(isLike(body.reaction_code)) {
-      const notificationModel = new Notification({}, conn)
+      const queueModel = new Queue()
       const noti_message = `${member.username}님이 좋아요를 눌렀습니다.`
-
-      notificationModel.pubQueue({
+      const message: NotificationQueueBody= {
         noti_type: 'LIKE',
         sender_id: member.id, 
         receiver_id: result.member_id, 
         noti_message, 
         content_id: result.content_id
-      })
+      }
+
+      queueModel.pubMessage(message)
     }
 
     return {data: result}

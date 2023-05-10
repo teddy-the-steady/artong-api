@@ -3,7 +3,8 @@ import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import { PoolClient } from 'pg';
 import { BadRequest } from '../../utils/error/errors';
-import { QueueBody } from '../../models/notification/notification.type';
+import { Queue } from '../../models/queue/queue';
+import { NotificationQueueBody } from '../../models/queue/queue.type';
 
 interface FollowInfo {
   isFollowRequest: boolean
@@ -29,14 +30,15 @@ const doFollowMemberOrUndo = async function(body: FollowInfo, member: Member) {
         followModel.follower_id
       );
 
-      const notificationModel = new Notification({}, conn);
-      const queueBody: QueueBody = {
+      const queueModel = new Queue();
+      const message: NotificationQueueBody = {
         noti_type:'FOLLOW_MEMBER',
         noti_message: `${member.username}님이 회원님을 팔로우하기 시작했습니다.`,
         receiver_id: body.targetMemberId,
         sender_id: member.id,
       }
-      notificationModel.pubQueue(queueBody)
+
+      queueModel.pubMessage(message)
     } else {
       result = await followModel.deleteFollow(
         followModel.followee_id,
@@ -82,15 +84,15 @@ const doSubsribeProjectOrUndo = async function(body: SubscribeInfo, member: Memb
         subscribeModel.project_address
       );
 
-      const notificationModel = new Notification({}, conn);
-      const queueBody: QueueBody = {
+      const queueModel= new Queue();
+      const message: NotificationQueueBody= {
         noti_type: 'FOLLOW_PROJECT',
         noti_message: `${member.username}님이 ${body.targetProjectName} 프로젝트를 팔로우하기 시작했습니다.`,
         receiver_id: body.targetProjectOwnerId,
         sender_id: member.id,
       }
 
-      notificationModel.pubQueue(queueBody)
+      queueModel.pubMessage(message)
     } else {
       result = await subscribeModel.deleteSubscribe(
         subscribeModel.member_id,
