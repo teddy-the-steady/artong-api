@@ -1,11 +1,9 @@
 INSERT INTO socket_connection (
   connection_id,
-  connector_id,
-  created_at
+  connector_id
   )
 VALUES (
-  ${connection_id},
-  ${connector_id},
-  ${created_at}
+  ${connectionId},
+  ${connectorId}
   )
 RETURNING *

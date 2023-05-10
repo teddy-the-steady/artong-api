@@ -7,7 +7,6 @@ type SocketBody = {
 type CreateSocketConnectionBody = {
   connectorId: number; 
   connectionId: string; 
-  created_at: Date;
 }
 
 export {

@@ -39,21 +39,16 @@ const disconnect = async () => {
 const initHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
   socketPool= await getDbConnentionPool();
   const conn: PoolClient = await db.getSocketConnection();
-  const notificationModel = new Notification({},conn)
-
+  
   const { body, requestContext:{ domainName, stage, connectionId } } = event
   const { data: { connectorId }}= JSON.parse(body ?? '') as SocketBody
-
+  const notificationModel = new Notification({},conn)
   const notifications = await notificationModel.selectNotifications(connectorId)
   const endpoint = process.env.IS_OFFLINE? 'http://localhost:3001': `https://${domainName}/${stage}`
 
   try {
     const socket = new Socket({}, conn)
-    const data: CreateSocketConnectionBody = {
-      connectionId,
-      connectorId,
-      created_at: new Date()
-    }
+    const data: CreateSocketConnectionBody = { connectionId, connectorId }
     await socket.createSocketConnection(data)
     await socket.sendMessageToClient(endpoint,connectionId, notifications)
 

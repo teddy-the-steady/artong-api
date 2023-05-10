@@ -12,8 +12,6 @@ class Socket extends Models {
   connectorId!: number;
   @IsString()
   connectionId!: string;
-  @IsDate()
-  created_at!: Date;
 
   constructor(data: Partial<Socket> = {}, conn: PoolClient) {
     super(conn);
