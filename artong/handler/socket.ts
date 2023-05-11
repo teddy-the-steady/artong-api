@@ -44,11 +44,12 @@ const initHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
   const { data: { connectorId }}= JSON.parse(body ?? '') as SocketBody
   const notificationModel = new Notification({},conn)
   const notifications = await notificationModel.selectNotifications(connectorId)
-  const endpoint = process.env.IS_OFFLINE? 'http://localhost:3001': `https://${domainName}/${stage}`
-
+  
   try {
     const socket = new Socket({}, conn)
+    const endpoint = socket.generateEndpoint(domainName, stage)
     const data: CreateSocketConnectionBody = { connectionId, connectorId, domainName, stage }
+
     await socket.createSocketConnection(data)
     await socket.sendMessageToClient(endpoint,connectionId, notifications)
 
