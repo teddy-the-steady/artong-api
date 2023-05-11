@@ -23,7 +23,7 @@ class Socket extends Models {
     Object.assign(this, data);
   }
 
-  async sendMessageToClient(endpoint: string, connectionId: string, payload: {}[]) {
+  async sendMessageToClient(endpoint: string, connectionId: string, payload: {data: {} | {}[]}) {
       const apiGatewayManagementApi = new ApiGatewayManagementApi({ apiVersion: '2018-11-29', endpoint })
       const encoder = new TextEncoder()
 
