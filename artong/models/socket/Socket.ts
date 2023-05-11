@@ -56,6 +56,10 @@ class Socket extends Models {
       throw new InternalServerError(error, null)
     }
   }
+
+  generateEndpoint(domainName: string, stage: string) {
+    return process.env.IS_OFFLINE? 'http://localhost:3001' : `https://${domainName}/${stage}`
+  }
 }
 
 export {
