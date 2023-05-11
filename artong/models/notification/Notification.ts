@@ -52,7 +52,7 @@ class Notification extends Models {
     } 
   }
 
-  async selectNotifications(connectorId: number) {
+  async selectNotifications(connectorId: number):Promise<Notification[]> {
     try{
       return await db.execute(this.conn, selectNotifications,{connectorId})
     } catch(error){
