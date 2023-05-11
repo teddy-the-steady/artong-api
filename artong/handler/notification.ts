@@ -30,7 +30,6 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
       connection.connection_id && await socket.sendMessageToClient(endpoint, connection.connection_id, { data: message})
     }
   } catch (error) {
-    console.error('notification handler error', error)
     throw new InternalServerError(error, null)
   }
 }
