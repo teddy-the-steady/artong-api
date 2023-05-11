@@ -6,10 +6,15 @@ type SocketBody = {
 }
 type CreateSocketConnectionBody = {
   connectorId: number; 
-  connectionId: string; 
+  connectionId: string;
+  domainName: string;
+  stage: string;
 }
-
+type SelectSocketConnecitonBody = {
+  connectorId: number;
+}
 export {
   SocketBody,
-  CreateSocketConnectionBody
+  CreateSocketConnectionBody,
+  SelectSocketConnecitonBody
 }
