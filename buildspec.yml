@@ -8,7 +8,7 @@ phases:
       - npm config set sharp_libvips_binary_host "https://npmmirror.com/mirrors/sharp-libvips"
       - npm install
       - npm install -g serverless
-      - cd ./node_layers && npm install && cd ..
+      - cd ./node_layers/nodejs && npm install && cd ../..
   build:
     commands:
       - serverless create_domain --stage $ENV --param="s3_bucket=$S3_BUCKET"
