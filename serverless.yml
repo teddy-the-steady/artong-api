@@ -59,7 +59,18 @@ custom:
     endpointType: 'edge'
     securityPolicy: tls_1_2
   webpack:
-    includeModules: true
+    excludeRegex: \.ts|test|\.map
+    packagerOptions:
+      scripts:
+        - npx rimraf "node_modules/aws-sdk"
+        - npx rimraf "node_modules/@types"
+    includeModules:
+      forceExclude:
+        - pg
+        - handlebars
+        - axios
+        - aws-sdk
+        - '@aws-sdk/client-s3'
   apiKeys:
     - name: artongApiKey-${opt:stage}
 
