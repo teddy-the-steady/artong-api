@@ -3,7 +3,8 @@ const slsw = require('serverless-webpack');
 const isLocal = slsw.lib.webpack.isLocal;
 const ENV = slsw.lib.serverless.service.provider.environment
 const { IgnorePlugin, ProvidePlugin } = require('webpack');
-const { StatsWriterPlugin } = require("webpack-stats-plugin")
+const { StatsWriterPlugin } = require("webpack-stats-plugin");
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
   mode: isLocal || ENV !== 'prod' ? 'development' : 'production',
@@ -49,7 +50,11 @@ module.exports = {
       filename: "stats.json" // Default
     })
   ],
-  externals: {
-    'sharp': 'commonjs sharp',
-  },
+  externalsPresets: { node: true },
+  externals: [
+    {
+      'sharp': 'commonjs sharp',
+    },
+    nodeExternals()
+  ]
 }
