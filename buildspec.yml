@@ -2,6 +2,7 @@ version: 0.1
 phases:
   install:
     commands:
+      - node -v
       - npm config set fetch-retry-mintimeout 20000
       - npm config set fetch-retry-maxtimeout 120000
       - npm config set sharp_binary_host "https://npmmirror.com/mirrors/sharp"
