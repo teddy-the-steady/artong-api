@@ -44,9 +44,9 @@ provider:
 
 package:
   individually: true
-  exclude:
-    - node_layers/**
-    - node_modules/**
+  # exclude:
+  #   - node_layers/**
+  #   - node_modules/**
 
 layers:
   NodeModules:
