@@ -43,7 +43,7 @@ provider:
       - subnet-091d67b7e5ec421bb
 
 package:
-  individually: true
+  individually: false
   exclude:
     - node_layers/**
     - node_modules/**
