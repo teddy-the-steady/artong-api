@@ -7,7 +7,6 @@ provider:
   region: ap-northeast-2
   environment:
     ENV: ${opt:stage}
-    NODE_PATH: "./:/opt/node_modules"
     S3_BUCKET: ${param:s3_bucket}
     NOTIFICATION_QUEUE_URL: artong-notification-queue
     VIPS_DISC_THRESHOLD: 750m
@@ -49,7 +48,7 @@ package:
     - node_modules/**
 
 layers:
-  commonLibs:
+  NodeModules:
     path: node_layers
     description: "includes pg, handlebars, axios, @aws-sdk/client-s3"
 
@@ -270,7 +269,7 @@ functions:
           cors: true
           authorizer: ${self:custom.authorizer}
     layers:
-      - { Ref: CommonLibsLambdaLayer }
+      - { Ref: NodeModulesLambdaLayer }
   artong-admin:
     handler: artong/handler/artong.handler
     events:
@@ -280,7 +279,7 @@ functions:
           cors: true
           authorizer: ${self:custom.authorizer}
     layers:
-      - { Ref: CommonLibsLambdaLayer }
+      - { Ref: NodeModulesLambdaLayer }
   image:
     handler: artong/handler/image.handler
     timeout: 30
@@ -304,7 +303,7 @@ functions:
             - prefix: public/project/
           existing: true
     layers:
-      - { Ref: CommonLibsLambdaLayer }
+      - { Ref: NodeModulesLambdaLayer }
   notification:
     handler: artong/handler/notification.handler
     events:
@@ -315,8 +314,6 @@ functions:
               - Arn
           batchSize: 10
           maximumBatchingWindow: 62
-    layers:
-      - { Ref: CommonLibsLambdaLayer }
   connectionManager:
     handler: artong/handler/socket.connectionManager
     events:
@@ -324,15 +321,11 @@ functions:
           route: $connect
       - websocket:
           route: $disconnect
-    layers:
-      - { Ref: CommonLibsLambdaLayer }
   socketInitHandler:
     handler: artong/handler/socket.initHandler
     events:
       - websocket:
           route: init
-    layers:
-      - { Ref: CommonLibsLambdaLayer }
 
 resources:
   Resources:
