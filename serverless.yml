@@ -6,9 +6,9 @@ provider:
   runtime: nodejs16.x
   region: ap-northeast-2
   environment:
-    ENV: ${opt:stage}
+    # ENV: ${opt:stage}
     NODE_PATH: "./:/opt/node_modules"
-    S3_BUCKET: ${param:s3_bucket}
+    # S3_BUCKET: ${param:s3_bucket}
     NOTIFICATION_QUEUE_URL: artong-notification-queue
     VIPS_DISC_THRESHOLD: 750m
   websocketsApiRouteSelectionExpression: $request.body.action
@@ -18,9 +18,9 @@ provider:
         - "s3:PutObject"
         - "s3:GetObject"
         - "s3:ListBucket"
-      Resource:
-        - "arn:aws:s3:::${self:provider.environment.S3_BUCKET}"
-        - "arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*"
+      # Resource:
+      #   - "arn:aws:s3:::${self:provider.environment.S3_BUCKET}"
+      #   - "arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*"
     - Effect: "Allow"
       Action:
         - "ssm:GetParameters"
@@ -60,23 +60,32 @@ plugins:
   - serverless-add-api-key
 
 custom:
-  authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-${opt:stage}-authorizer
-  customDomain:
-    domainName: api.4rtong.com
-    stage: ${opt:stage}
-    basePath: ${opt:stage}
-    certificateName: "*.4rtong.com"
-    createRoute53Record: true
-    endpointType: "edge"
-    securityPolicy: tls_1_2
+  # authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-${opt:stage}-authorizer
+  # customDomain:
+  #   domainName: api.4rtong.com
+  #   stage: ${opt:stage}
+  #   basePath: ${opt:stage}
+  #   certificateName: "*.4rtong.com"
+  #   createRoute53Record: true
+  #   endpointType: "edge"
+  #   securityPolicy: tls_1_2
   webpack:
-    excludeRegex: \.ts
+    excludeRegex: \.ts|test|\.map
     packagerOptions:
       scripts:
-        - npx rimraf "node_modules/@types"
         - npx rimraf "node_modules/aws-sdk"
-  apiKeys:
-    - name: artongApiKey-${opt:stage}
+        - npx rimraf "node_modules/@types"
+    includeModules:
+      forceExclude:
+        - pg
+        - handlebars
+        - axios
+        - aws-sdk
+        - '@aws-sdk/client-s3'
+        - '@aws-sdk/client-sqs'
+        - '@aws-sdk/client-apigatewaymanagementapi'
+  # apiKeys:
+  #   - name: artongApiKey-${opt:stage}
 
 functions:
   artong:
@@ -91,7 +100,7 @@ functions:
           path: artong/v1/current_member
           method: GET
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/member
           method: POST
@@ -100,12 +109,12 @@ functions:
           path: artong/v1/members/profile_s3key
           method: PATCH
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/members/{id}
           method: PATCH
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/members/{id}/profile_thumbnail_s3key
           method: PATCH
@@ -135,17 +144,17 @@ functions:
           path: artong/v1/projects
           method: POST
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/projects/{id} # INFO] id: txHash
           method: PATCH
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/projects/{id}/tx_receipt_updated # INFO] id: txHash
           method: GET
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/projects/{id}/contents/tobe_approved
           method: GET
@@ -158,7 +167,7 @@ functions:
           path: artong/v1/projects/{id}/contents/{contents_id}/status
           method: PATCH
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/projects/{id}/contributors
           method: GET
@@ -172,7 +181,7 @@ functions:
           path: artong/v1/contents/{id}/voucher
           method: GET
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/contents
           method: GET
@@ -185,17 +194,17 @@ functions:
           path: artong/v1/contents
           method: POST
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/contents/storage
           method: POST
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/contents/{id}
           method: PATCH
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/contents/content_thumbnail_s3key
           method: PATCH
@@ -205,7 +214,7 @@ functions:
           path: artong/v1/contents/{id}/reactions
           method: POST
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/search/projects
           method: GET
@@ -222,12 +231,12 @@ functions:
           path: artong/v1/follow
           method: POST
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/subscribe
           method: POST
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/graphql
           method: POST
@@ -244,22 +253,22 @@ functions:
           path: artong/v1/report
           method: POST
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/feed
           method: GET
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/send/email_verification
           method: POST
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       - http:
           path: artong/v1/verify/email
           method: POST
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
     layers:
       - { Ref: NodeModulesLambdaLayer }
   artong-admin:
@@ -269,7 +278,7 @@ functions:
           path: artong/v1/country
           method: POST
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
     layers:
       - { Ref: NodeModulesLambdaLayer }
   image:
@@ -277,19 +286,19 @@ functions:
     timeout: 30
     events:
       - s3:
-          bucket: ${self:provider.environment.S3_BUCKET}
+          # bucket: ${self:provider.environment.S3_BUCKET}
           event: s3:ObjectCreated:*
           rules:
             - prefix: public/profile/
           existing: true
       - s3:
-          bucket: ${self:provider.environment.S3_BUCKET}
+          # bucket: ${self:provider.environment.S3_BUCKET}
           event: s3:ObjectCreated:*
           rules:
             - prefix: public/nft/
           existing: true
       - s3:
-          bucket: ${self:provider.environment.S3_BUCKET}
+          # bucket: ${self:provider.environment.S3_BUCKET}
           event: s3:ObjectCreated:*
           rules:
             - prefix: public/project/
