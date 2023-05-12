@@ -3,6 +3,7 @@ const slsw = require('serverless-webpack');
 const isLocal = slsw.lib.webpack.isLocal;
 const ENV = slsw.lib.serverless.service.provider.environment
 const { IgnorePlugin, ProvidePlugin } = require('webpack');
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
   mode: isLocal || ENV !== 'prod' ? 'development' : 'production',
@@ -14,7 +15,7 @@ module.exports = {
     filename: 'artong/handler/[name].js',
     path: path.resolve(__dirname, 'dist')
   } : null,
-	module: {
+  module: {
     rules: [
       {
         test: /\.tsx?$/,
@@ -34,17 +35,21 @@ module.exports = {
       },
     ]
   },
-	resolve: {
+  resolve: {
     extensions: ['.tsx', '.ts', '.js']
   },
   plugins: [
-    new IgnorePlugin({resourceRegExp: /^pg-native$/}),
+    new IgnorePlugin({ resourceRegExp: /^pg-native$/ }),
     new ProvidePlugin({
       WebSocket: 'ws',
       fetch: ['node-fetch', 'default'],
     }),
   ],
-  externals: {
-    'sharp': 'commonjs sharp',
-  },
+  externalsPresets: { node: true },
+  externals: [
+    {
+      'sharp': 'commonjs sharp',
+    },
+    nodeExternals()
+  ]
 }
