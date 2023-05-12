@@ -44,12 +44,12 @@ provider:
 
 package:
   individually: true
-  # exclude:
-  #   - node_layers/**
-  #   - node_modules/**
+  exclude:
+    - node_layers/**
+    - node_modules/**
 
 layers:
-  NodeModules:
+  commonLibs:
     path: node_layers
     description: "includes pg, handlebars, axios, @aws-sdk/client-s3"
 
@@ -270,7 +270,7 @@ functions:
           cors: true
           authorizer: ${self:custom.authorizer}
     layers:
-      - { Ref: NodeModulesLambdaLayer }
+      - { Ref: CommonLibsLambdaLayer }
   artong-admin:
     handler: artong/handler/artong.handler
     events:
@@ -280,7 +280,7 @@ functions:
           cors: true
           authorizer: ${self:custom.authorizer}
     layers:
-      - { Ref: NodeModulesLambdaLayer }
+      - { Ref: CommonLibsLambdaLayer }
   image:
     handler: artong/handler/image.handler
     timeout: 30
@@ -304,7 +304,7 @@ functions:
             - prefix: public/project/
           existing: true
     layers:
-      - { Ref: NodeModulesLambdaLayer }
+      - { Ref: CommonLibsLambdaLayer }
   notification:
     handler: artong/handler/notification.handler
     events:
@@ -315,6 +315,8 @@ functions:
               - Arn
           batchSize: 10
           maximumBatchingWindow: 62
+    layers:
+      - { Ref: CommonLibsLambdaLayer }
   connectionManager:
     handler: artong/handler/socket.connectionManager
     events:
@@ -322,11 +324,15 @@ functions:
           route: $connect
       - websocket:
           route: $disconnect
+    layers:
+      - { Ref: CommonLibsLambdaLayer }
   socketInitHandler:
     handler: artong/handler/socket.initHandler
     events:
       - websocket:
           route: init
+    layers:
+      - { Ref: CommonLibsLambdaLayer }
 
 resources:
   Resources:
