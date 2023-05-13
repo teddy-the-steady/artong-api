@@ -19,7 +19,6 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
   const socket = new Socket({}, conn)
 
   try {
-    
     for (const record of event.Records) {
       const message: NotificationQueueBody= JSON.parse(record.body)
       const {receiver_id} = message
