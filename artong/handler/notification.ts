@@ -14,10 +14,11 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
   console.log(event.Records)
   notiPool = await getDbConnentionPool();
   
+  const conn: PoolClient = await db.getNotiConnection();
+  const notificationModel = new Notification({},conn)
+  const socket = new Socket({}, conn)
+
   try {
-    const conn: PoolClient = await db.getNotiConnection();
-    const notificationModel = new Notification({},conn)
-    const socket = new Socket({}, conn)
     
     for (const record of event.Records) {
       const message: NotificationQueueBody= JSON.parse(record.body)
@@ -32,6 +33,6 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
   } catch (error) {
     throw new InternalServerError(error, null)
   } finally {
-    db.release(notiPool)
+    db.release(conn)
   }
 }
