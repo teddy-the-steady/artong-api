@@ -4,7 +4,6 @@ import { Notification } from '../models';
 import { getDbConnentionPool } from '../init';
 import { SQSEvent } from 'aws-lambda';
 import { InternalServerError } from '../utils/error/errors';
-import { } from '../models/notification/notification.type';
 import { NotificationQueueBody } from '../models/queue/queue.type';
 import { Socket } from '../models/socket/Socket';
 
