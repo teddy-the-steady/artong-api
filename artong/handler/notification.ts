@@ -31,5 +31,7 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
     }
   } catch (error) {
     throw new InternalServerError(error, null)
+  } finally {
+    db.release(notiPool)
   }
 }
