@@ -4,6 +4,7 @@ import { getDBKeys } from './utils/common/ssmKeys';
 
 const getDbConnentionPool = async function(): Promise<Pool> {
   const keys = await getDBKeys();
+  console.log(keys[`/db/${process.env.ENV}/host`], keys[`/db/${process.env.ENV}/database`])
   return new Pool({
     host: process.env.IS_OFFLINE? 'localhost' : keys[`/db/${process.env.ENV}/host`],
     user: keys[`/db/${process.env.ENV}/user`],
