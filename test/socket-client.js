@@ -1,6 +1,6 @@
 // Excute command: node test/socket-client.js
 const WebSocket = require('ws')
-const socket = new WebSocket('ws://localhost:3001')
+const socket = new WebSocket('wss://staging-artong.com')
 
 socket.on("open", () => {
   const identifierMessage = {
@@ -15,4 +15,12 @@ socket.on("open", () => {
 
 socket.on("message", (data) => {
   console.log(JSON.parse(data))
+})
+
+socket.on("error", (error) => {
+  console.log("error", error)
+})
+
+socket.on("close", () => {
+  console.log("close")
 })
