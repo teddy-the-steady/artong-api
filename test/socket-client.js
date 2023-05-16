@@ -3,6 +3,7 @@ const WebSocket = require('ws')
 const socket = new WebSocket('wss://staging-artong.com')
 
 socket.on("open", () => {
+  console.log("open")
   const identifierMessage = {
     action: 'init',
     data: {
