@@ -11,4 +11,4 @@ dist
 stats.json
 
 # Test directory
-.test
+test

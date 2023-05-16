@@ -1,6 +1,6 @@
 // Excute command: node test/socket-client.js
 const WebSocket = require('ws')
-const socket = new WebSocket('wss://staging-artong.com')
+const socket = new WebSocket('ws://localhost:3001')
 
 socket.on("open", () => {
   const identifierMessage = {
@@ -9,7 +9,6 @@ socket.on("open", () => {
       connectorId: 315
     }
   }
-
   socket.send(JSON.stringify(identifierMessage))
 })
 
