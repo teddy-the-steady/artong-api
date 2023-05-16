@@ -20,17 +20,17 @@ const connectionManager = async (event: APIGatewayProxyWebsocketEventV2, context
 }
 
 const connect = async () => {
-  return {
+  return JSON.stringify({
     statusCode: 200,
-    body: JSON.stringify({message: 'Artong hola!'})
-  }
+    body: {message: 'Artong hola!'}
+  })
 }
 
 const disconnect = async () => {
-  return {
+  return JSON.stringify({
     statusCode: 200,
-    body: JSON.stringify({message:'Artong adios!'})
-  }
+    body: {message:'Artong adios!'}
+  })
 }
 
 /**
