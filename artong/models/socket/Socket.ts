@@ -47,9 +47,9 @@ class Socket extends Models {
     }
   }
 
-  async selectSocketConnection(data: SelectSocketConnecitonBody): Promise<Socket> {
+  async selectSocketConnection({connectorId}: SelectSocketConnecitonBody): Promise<Socket> {
     try {
-      const result = await db.execute(this.conn,selectSocketConnection, data)
+      const result = await db.execute(this.conn,selectSocketConnection, { connectorId })
 
       return result[0]
     } catch (error) { 
