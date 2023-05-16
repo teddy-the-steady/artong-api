@@ -9,3 +9,6 @@ jspm_packages
 dist
 .webpack
 stats.json
+
+# Test directory
+.test

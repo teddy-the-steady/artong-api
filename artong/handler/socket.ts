@@ -52,8 +52,6 @@ const initHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
 
     await socket.createSocketConnection(data)
     await socket.sendMessageToClient(endpoint,connectionId, {data: notifications})
-
-    return { statusCode: 200 }
   } catch (error) {
     throw new InternalServerError(error, null)
   } finally {
