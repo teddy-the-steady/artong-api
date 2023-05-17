@@ -1,15 +1,13 @@
 // Excute command: node test/socket-client.js
 const WebSocket = require('ws')
-const socket = new WebSocket('wss://staging-artong.com')
+const socket = new WebSocket('wss://yyhdnvomg3.execute-api.ap-northeast-2.amazonaws.com/stage')
 
 socket.on("open", () => {
-  console.log("open")
   const identifierMessage = {
     action: 'init',
-    data: {
-      connectorId: 315
-    }
+    data: { connectorId: 315 }
   }
+
   socket.send(JSON.stringify(identifierMessage))
 })
 

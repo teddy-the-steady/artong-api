@@ -10,6 +10,7 @@ provider:
     S3_BUCKET: ${param:s3_bucket}
     NOTIFICATION_QUEUE_URL: artong-notification-queue
     VIPS_DISC_THRESHOLD: 750m
+    WEBSOCKET_URL: wss://yyhdnvomg3.execute-api.ap-northeast-2.amazonaws.com/${opt:stage}
   websocketsApiRouteSelectionExpression: $request.body.action
   iamRoleStatements:
     - Effect: "Allow"
