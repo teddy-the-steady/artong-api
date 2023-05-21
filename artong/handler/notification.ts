@@ -24,7 +24,7 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
 
       await notificationModel.createNotification(message)
       const connection = await socket.selectSocketConnection({connectorId: receiver_id})
-      const endpoint = socket.generateEndpoint(connection.domain_name, connection.stage)
+      const endpoint = socket.getEndpoint(connection.domain_name, connection.stage)
 
       connection.connection_id && 
       endpoint && 
