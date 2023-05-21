@@ -15,7 +15,7 @@ const connectionManager = async (event: APIGatewayProxyWebsocketEventV2, context
   if(eventType === 'CONNECT') {
     return connect(event)
   } else if(eventType ==='DISCONNECT') {
-    return disconnect()
+    return disconnect(event)
   }
 }
 
@@ -30,7 +30,7 @@ const connect = async (event: APIGatewayProxyWebsocketEventV2) => {
   
   try {
     const socket = new Socket({}, conn)
-    const endpoint = socket.generateEndpoint(domainName, stage)
+    const endpoint = socket.getEndpoint(domainName, stage)
     const data: CreateSocketConnectionBody = { connectionId, connectorId, domainName, stage }
 
     await socket.createSocketConnection(data)
@@ -46,10 +46,24 @@ const connect = async (event: APIGatewayProxyWebsocketEventV2) => {
   }
 }
 
-const disconnect = async () => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify({message:'Artong adios!'})
+const disconnect = async (event: APIGatewayProxyWebsocketEventV2) => {
+  socketPool= await getDbConnentionPool();
+  const conn: PoolClient = await db.getSocketConnection();
+
+  const { requestContext: { connectionId, domainName, stage } } = event
+  
+  try {
+    const socket = new Socket({}, conn)
+    const endpoint = socket.getEndpoint(domainName, stage)
+
+    endpoint && 
+    await socket.deleteSocketConnection(connectionId)
+
+    return { statusCode: 200 }
+  } catch (error) {
+    throw new InternalServerError(error, null)
+  } finally {
+    db.release(conn)
   }
 }
 
