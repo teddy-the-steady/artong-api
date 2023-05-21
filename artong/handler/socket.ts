@@ -20,29 +20,9 @@ const connectionManager = async (event: APIGatewayProxyWebsocketEventV2, context
 }
 
 const connect = async (event: APIGatewayProxyWebsocketEventV2) => {
-  socketPool= await getDbConnentionPool();
-  const conn: PoolClient = await db.getSocketConnection();
-  
-  const { body, requestContext:{ domainName, stage, connectionId } } = event
-  const { data: { connectorId }}= JSON.parse(body ?? '') as SocketBody
-  const notificationModel = new Notification({},conn)
-  const notifications = await notificationModel.selectNotifications(connectorId)
-  
-  try {
-    const socket = new Socket({}, conn)
-    const endpoint = socket.getEndpoint(domainName, stage)
-    const data: CreateSocketConnectionBody = { connectionId, connectorId, domainName, stage }
-
-    await socket.createSocketConnection(data)
-
-    endpoint &&
-    await socket.sendMessageToClient(endpoint,connectionId, {data: notifications})
-
-    return { statusCode: 200 }
-  } catch (error) {
-    throw new InternalServerError(error, null)
-  } finally {
-    db.release(conn)
+  return {
+    statusCode: 200,
+    body: JSON.stringify({message: 'Artong hola!'})
   }
 }
 
@@ -71,30 +51,30 @@ const disconnect = async (event: APIGatewayProxyWebsocketEventV2) => {
  * @description Init handler for websocket
  */
 const initHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
-  // socketPool= await getDbConnentionPool();
-  // const conn: PoolClient = await db.getSocketConnection();
+  socketPool= await getDbConnentionPool();
+  const conn: PoolClient = await db.getSocketConnection();
   
-  // const { body, requestContext:{ domainName, stage, connectionId } } = event
-  // const { data: { connectorId }}= JSON.parse(body ?? '') as SocketBody
-  // const notificationModel = new Notification({},conn)
-  // const notifications = await notificationModel.selectNotifications(connectorId)
+  const { body, requestContext:{ domainName, stage, connectionId } } = event
+  const { data: { connectorId }}= JSON.parse(body ?? '') as SocketBody
+  const notificationModel = new Notification({},conn)
+  const notifications = await notificationModel.selectNotifications(connectorId)
   
-  // try {
-  //   const socket = new Socket({}, conn)
-  //   const endpoint = socket.generateEndpoint(domainName, stage)
-  //   const data: CreateSocketConnectionBody = { connectionId, connectorId, domainName, stage }
+  try {
+    const socket = new Socket({}, conn)
+    const endpoint = socket.getEndpoint(domainName, stage)
+    const data: CreateSocketConnectionBody = { connectionId, connectorId, domainName, stage }
 
-  //   await socket.createSocketConnection(data)
+    await socket.createSocketConnection(data)
 
-  //   endpoint &&
-  //   await socket.sendMessageToClient(endpoint,connectionId, {data: notifications})
+    endpoint &&
+    await socket.sendMessageToClient(endpoint,connectionId, {data: notifications})
 
-  //   return { statusCode: 200 }
-  // } catch (error) {
-  //   throw new InternalServerError(error, null)
-  // } finally {
-  //   db.release(conn)
-  // }
+    return { statusCode: 200 }
+  } catch (error) {
+    throw new InternalServerError(error, null)
+  } finally {
+    db.release(conn)
+  }
 }
 
 
