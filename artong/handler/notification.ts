@@ -26,7 +26,9 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
       const connection = await socket.selectSocketConnection({connectorId: receiver_id})
       const endpoint = socket.generateEndpoint(connection.domain_name, connection.stage)
 
-      connection.connection_id && await socket.sendMessageToClient(endpoint, connection.connection_id, { data: message})
+      connection.connection_id && 
+      endpoint && 
+      await socket.sendMessageToClient(endpoint, connection.connection_id, { data: message})
     }
   } catch (error) {
     throw new InternalServerError(error, null)
