@@ -8,6 +8,7 @@ import { CreateSocketConnectionBody, SelectSocketConnecitonBody } from "./socket
 
 const insertSocketConnection = require('./insertSocketConnection.sql')
 const selectSocketConnection = require('./selectSocketConnection.sql')
+const deleteSocketConnection = require('./deleteSocketConnection.sql')
 class Socket extends Models {
   @IsInt()
   connector_id!: number;
@@ -47,6 +48,16 @@ class Socket extends Models {
     }
   }
 
+  async deleteSocketConnection(connectionId: string) {
+    try {
+      const result = await db.execute(this.conn, deleteSocketConnection, { connectionId })
+
+      return result[0]
+    } catch (error) {
+      throw new InternalServerError(error, null)
+    }
+  }
+
   async selectSocketConnection({connectorId}: SelectSocketConnecitonBody): Promise<Socket> {
     try {
       const result = await db.execute(this.conn,selectSocketConnection, { connectorId })
@@ -57,7 +68,7 @@ class Socket extends Models {
     }
   }
 
-  generateEndpoint(domainName: string, stage: string) {
+  getEndpoint(domainName: string, stage: string) {
     return process.env.IS_OFFLINE? 'http://localhost:3001' : process.env.WEBSOCKET_URL
   }
 }
