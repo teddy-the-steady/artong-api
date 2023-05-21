@@ -13,30 +13,13 @@ const connectionManager = async (event: APIGatewayProxyWebsocketEventV2, context
   const { requestContext:{ eventType} } = event
   
   if(eventType === 'CONNECT') {
-    return connect()
+    return connect(event)
   } else if(eventType ==='DISCONNECT') {
     return disconnect()
   }
 }
 
-const connect = async () => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify({message: 'Artong hola!'})
-  }
-}
-
-const disconnect = async () => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify({message:'Artong adios!'})
-  }
-}
-
-/**
- * @description Init handler for websocket
- */
-const initHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
+const connect = async (event: APIGatewayProxyWebsocketEventV2) => {
   socketPool= await getDbConnentionPool();
   const conn: PoolClient = await db.getSocketConnection();
   
@@ -61,6 +44,43 @@ const initHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
   } finally {
     db.release(conn)
   }
+}
+
+const disconnect = async () => {
+  return {
+    statusCode: 200,
+    body: JSON.stringify({message:'Artong adios!'})
+  }
+}
+
+/**
+ * @description Init handler for websocket
+ */
+const initHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
+  // socketPool= await getDbConnentionPool();
+  // const conn: PoolClient = await db.getSocketConnection();
+  
+  // const { body, requestContext:{ domainName, stage, connectionId } } = event
+  // const { data: { connectorId }}= JSON.parse(body ?? '') as SocketBody
+  // const notificationModel = new Notification({},conn)
+  // const notifications = await notificationModel.selectNotifications(connectorId)
+  
+  // try {
+  //   const socket = new Socket({}, conn)
+  //   const endpoint = socket.generateEndpoint(domainName, stage)
+  //   const data: CreateSocketConnectionBody = { connectionId, connectorId, domainName, stage }
+
+  //   await socket.createSocketConnection(data)
+
+  //   endpoint &&
+  //   await socket.sendMessageToClient(endpoint,connectionId, {data: notifications})
+
+  //   return { statusCode: 200 }
+  // } catch (error) {
+  //   throw new InternalServerError(error, null)
+  // } finally {
+  //   db.release(conn)
+  // }
 }
 
 
