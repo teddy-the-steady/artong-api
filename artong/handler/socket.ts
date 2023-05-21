@@ -58,10 +58,14 @@ const initHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
   const { data: { connectorId }}= JSON.parse(body ?? '') as SocketBody
   const notificationModel = new Notification({},conn)
   const notifications = await notificationModel.selectNotifications(connectorId)
-  
+  console.log("domainName", domainName)
+  console.log("stage", stage)
+  console.log("notifications", notifications)
+  console.log("body", body)
   try {
     const socket = new Socket({}, conn)
     const endpoint = socket.getEndpoint(domainName, stage)
+    console.log("endpoint", endpoint)
     const data: CreateSocketConnectionBody = { connectionId, connectorId, domainName, stage }
 
     await socket.createSocketConnection(data)
