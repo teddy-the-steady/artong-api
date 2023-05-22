@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import requestInit from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response';
-import { member, country, reactions, projects, contents, search, follow, main, report } from '../controllers/artong/index';
+import { member, country, reactions, projects, contents, search, follow, main, report, notification } from '../controllers/artong/index';
 import { graphql } from './graphql'
 import { getDbConnentionPool } from '../init';
 import { Pool } from 'pg';
@@ -118,6 +118,8 @@ export async function handler(event: any, context: any, callback: any) {
           res = await contents.patchContent(req.pathParameters, req.body, req.member);
         if (req.path === '/artong/v1/contents/content_thumbnail_s3key' || req.path === '/artong/v1/contents/content_thumbnail_s3key/')
           res = await contents.patchContentThumbnailS3key(req.body);
+        if(req.path === '/artong/v1/notification/read' || req.path === '/artong/v1/notification/read/')
+          res = await notification.readNotifications(req.body);
         break;
       default:
         console.error('METHOD undefined');
