@@ -3,12 +3,13 @@ const WebSocket = require('ws')
 const socket = new WebSocket('wss://yyhdnvomg3.execute-api.ap-northeast-2.amazonaws.com/stage')
 
 socket.on("open", () => {
-  const identifierMessage = {
-    action: 'init',
-    data: { connectorId: 315 }
-  }
+  console.log("connected")
+  // const identifierMessage = {
+  //   action: 'init',
+  //   data: { connectorId: 315 }
+  // }
 
-  socket.send(JSON.stringify(identifierMessage))
+  // socket.send(JSON.stringify(identifierMessage))
 })
 
 socket.on("message", (data) => {
