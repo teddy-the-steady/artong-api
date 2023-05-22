@@ -32,7 +32,7 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
           const apigatewaymanagementapi = socket.getApiGatewayManagementApi({domainName, stage})
           const encoder = new TextEncoder()
 
-          apigatewaymanagementapi.postToConnection({
+          await apigatewaymanagementapi.postToConnection({
             ConnectionId: connection_id,
             Data: encoder.encode(JSON.stringify({ data: message }))
           })
