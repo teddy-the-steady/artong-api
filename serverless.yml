@@ -265,6 +265,11 @@ functions:
           method: POST
           cors: true
           authorizer: ${self:custom.authorizer}
+      - http:
+          path: artong/v1/notification/read
+          method: PATCH
+          cors: true
+          authorizer: ${self:custom.authorizer}
     layers:
       - { Ref: NodeModulesLambdaLayer }
   artong-admin:

@@ -8,6 +8,7 @@ import { NotificationQueueBody } from "../queue/queue.type";
 
 const insertNotification = require('./insertNotification.sql')
 const selectNotifications = require('./selectNotifications.sql')
+const updateNotifications = require('./updateNotifications.sql')
 
 class Notification extends Models {
   @IsInt()
@@ -58,6 +59,17 @@ class Notification extends Models {
     } catch(error){
       throw new InternalServerError(error, null)
     } 
+  }
+
+  async readNotifications(notificationIds: number[]) {
+    try{
+      return await db.execute(this.conn, updateNotifications, { 
+        readAt: new Date(), 
+        notificationIds
+      })
+    } catch(error) {
+      throw new InternalServerError(error,null)
+    }
   }
 }
 
