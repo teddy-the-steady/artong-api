@@ -24,19 +24,6 @@ class Socket extends Models {
     Object.assign(this, data);
   }
 
-  async sendMessageToClient(endpoint: string, connectionId: string, payload: {data: {} | {}[]}) {
-      const apiGatewayManagementApi = new ApiGatewayManagementApi({ apiVersion: '2018-11-29', endpoint })
-      const encoder = new TextEncoder()
-
-      try{
-        return await apiGatewayManagementApi.postToConnection({
-          ConnectionId: connectionId,
-          Data: encoder.encode(JSON.stringify(payload))
-        })
-      }catch(error){
-        throw new InternalServerError(error, null)
-      }
-  }
 
   async createSocketConnection(data: CreateSocketConnectionBody) {
     try {
@@ -68,8 +55,11 @@ class Socket extends Models {
     }
   }
 
-  getEndpoint(domainName: string, stage: string) {
-  return process.env.IS_OFFLINE? 'http://localhost:3001' : `https://${domainName}/${stage}`
+  getApiGatewayManagementApi({domainName, stage}: {domainName: string, stage: string}) {
+    const endpoint = process.env.IS_OFFLINE? 'http://localhost:3001' : `https://${domainName}/${stage}`;
+    const apiVersion = '2018-11-29';
+    
+    return new ApiGatewayManagementApi({ apiVersion, endpoint })
   }
 }
 

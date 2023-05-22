@@ -23,12 +23,15 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
       const {receiver_id} = message
 
       await notificationModel.createNotification(message)
-      const connection = await socket.selectSocketConnection({connectorId: receiver_id})
-      const endpoint = socket.getEndpoint(connection.domain_name, connection.stage)
 
-      connection.connection_id && 
-      endpoint && 
-      await socket.sendMessageToClient(endpoint, connection.connection_id, { data: message})
+      const {domain_name: domainName, stage, connection_id}= await socket.selectSocketConnection({connectorId: receiver_id})
+      const apigatewaymanagementapi = socket.getApiGatewayManagementApi({domainName, stage})
+      const encoder = new TextEncoder()
+
+      apigatewaymanagementapi.postToConnection({
+        ConnectionId: connection_id,
+        Data: encoder.encode(JSON.stringify({ data: message }))
+      })
     }
   } catch (error) {
     throw new InternalServerError(error, null)

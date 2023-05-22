@@ -30,13 +30,11 @@ const disconnect = async (event: APIGatewayProxyWebsocketEventV2) => {
   socketPool= await getDbConnentionPool();
   const conn: PoolClient = await db.getSocketConnection();
 
-  const { requestContext: { connectionId, domainName, stage } } = event
+  const { requestContext: { connectionId, } } = event
   
   try {
     const socket = new Socket({}, conn)
-    const endpoint = socket.getEndpoint(domainName, stage)
 
-    endpoint && 
     await socket.deleteSocketConnection(connectionId)
 
     return { statusCode: 200 }
@@ -58,20 +56,19 @@ const initHandler = async (event: APIGatewayProxyWebsocketEventV2) => {
   const { data: { connectorId }}= JSON.parse(body ?? '') as SocketBody
   const notificationModel = new Notification({},conn)
   const notifications = await notificationModel.selectNotifications(connectorId)
-  console.log("domainName", domainName)
-  console.log("stage", stage)
-  console.log("notifications", notifications)
-  console.log("body", body)
+
   try {
     const socket = new Socket({}, conn)
-    const endpoint = socket.getEndpoint(domainName, stage)
-    console.log("endpoint", endpoint)
+    const apigatewaymanagementapi = socket.getApiGatewayManagementApi({domainName, stage})
+    const encoder = new TextEncoder()
     const data: CreateSocketConnectionBody = { connectionId, connectorId, domainName, stage }
 
     await socket.createSocketConnection(data)
 
-    endpoint &&
-    await socket.sendMessageToClient(endpoint,connectionId, {data: notifications})
+    await apigatewaymanagementapi.postToConnection({
+      ConnectionId: connectionId,
+      Data: encoder.encode(JSON.stringify({ data: notifications }))
+    })
 
     return { statusCode: 200 }
   } catch (error) {
