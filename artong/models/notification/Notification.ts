@@ -64,7 +64,8 @@ class Notification extends Models {
   async readNotifications(notificationIds: number[]) {
     try{
       return await db.execute(this.conn, updateNotifications, { 
-        readAt: new Date(), 
+        readAt: new Date(),
+        updatedAt: new Date(), 
         notificationIds
       })
     } catch(error) {
