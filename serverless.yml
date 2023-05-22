@@ -325,6 +325,7 @@ functions:
           route: $connect
       - websocket:
           route: $disconnect
+    authorizer: ${self:custom.authorizer}
     layers:
       - { Ref: NodeModulesLambdaLayer }
   socketInitHandler:
@@ -332,6 +333,7 @@ functions:
     events:
       - websocket:
           route: init # {action: 'init'}
+    authorizer: ${self:custom.authorizer}
     layers:
       - { Ref: NodeModulesLambdaLayer }
 
