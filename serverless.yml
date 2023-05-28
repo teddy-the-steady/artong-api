@@ -323,15 +323,9 @@ functions:
     events:
       - websocket:
           route: $connect
+          authorizer: ${self:custom.authorizer}
       - websocket:
           route: $disconnect
-    layers:
-      - { Ref: NodeModulesLambdaLayer }
-  socketInitHandler:
-    handler: artong/handler/socket.initHandler
-    events:
-      - websocket:
-          route: init # {action: 'init'}
     layers:
       - { Ref: NodeModulesLambdaLayer }
 
