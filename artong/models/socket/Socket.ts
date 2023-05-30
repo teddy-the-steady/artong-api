@@ -10,15 +10,6 @@ const insertSocketConnection = require('./insertSocketConnection.sql')
 const selectSocketConnection = require('./selectSocketConnection.sql')
 const deleteSocketConnection = require('./deleteSocketConnection.sql')
 class Socket extends Models {
-  @IsInt()
-  connector_id!: number;
-  @IsString()
-  connection_id!: string;
-  @IsString()
-  domain_name!: string;
-  @IsString()
-  stage!: string;
-
   constructor(data: Partial<Socket> = {}, conn: PoolClient) {
     super(conn);
     Object.assign(this, data);
