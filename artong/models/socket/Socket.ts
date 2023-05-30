@@ -1,9 +1,9 @@
-import { PoolClient } from "pg";
-import Models from "../Models";
-import * as db from "../../utils/db/db";
-import { IsDate, IsInt, IsString } from "class-validator";
 import { ApiGatewayManagementApi } from "@aws-sdk/client-apigatewaymanagementapi";
+import { IsInt, IsString } from "class-validator";
+import { PoolClient } from "pg";
+import * as db from "../../utils/db/db";
 import { InternalServerError } from "../../utils/error/errors";
+import Models from "../Models";
 import { CreateSocketConnectionBody, SelectSocketConnecitonBody } from "./socket.type";
 
 const insertSocketConnection = require('./insertSocketConnection.sql')
@@ -65,4 +65,4 @@ class Socket extends Models {
 
 export {
   Socket
-}
+};
