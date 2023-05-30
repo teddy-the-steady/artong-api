@@ -28,7 +28,7 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
         const {domain_name: domainName, stage, connection_id} = await socket.selectSocketConnection({connectorId: receiver_id})
 
         // Send notification to receiver if receiver is online
-        if(connection_id) {
+        if(connection_id && domainName && stage) {
           const apigatewaymanagementapi = socket.getApiGatewayManagementApi({domainName, stage})
           const encoder = new TextEncoder()
 

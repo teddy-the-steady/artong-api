@@ -10,6 +10,11 @@ const insertSocketConnection = require('./insertSocketConnection.sql')
 const selectSocketConnection = require('./selectSocketConnection.sql')
 const deleteSocketConnection = require('./deleteSocketConnection.sql')
 class Socket extends Models {
+  connector_id?: number;
+  connection_id?: string;
+  domain_name?: string;
+  stage?: string;
+
   constructor(data: Partial<Socket> = {}, conn: PoolClient) {
     super(conn);
     Object.assign(this, data);
@@ -38,7 +43,7 @@ class Socket extends Models {
 
   async selectSocketConnection({connectorId}: SelectSocketConnecitonBody): Promise<Socket> {
     try {
-      const result = await db.execute(this.conn,selectSocketConnection, { connectorId })
+      const result = await db.execute(this.conn, selectSocketConnection, { connectorId })
 
       return result[0]
     } catch (error) { 
