@@ -5,6 +5,7 @@ import { member, country, reactions, projects, contents, search, follow, main, r
 import { graphql } from './graphql'
 import { getDbConnentionPool } from '../init';
 import { Pool } from 'pg';
+import * as db from '../utils/db/db';
 
 export let artongPool: Pool;
 
@@ -16,7 +17,8 @@ export async function handler(event: any, context: any, callback: any) {
     if (!artongPool) {
       artongPool = await getDbConnentionPool();
     }
-    const req = await requestInit(event);
+    const conn = await db.getArtongConnection()
+    const req = await requestInit(event, conn);
     console.log(req);
 
     switch (req.httpMethod) {

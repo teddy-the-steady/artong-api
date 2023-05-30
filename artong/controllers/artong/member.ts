@@ -7,8 +7,7 @@ import { isAddress, generateRandom } from '../../utils/common/commonFunc';
 import { PaginationInfo } from './index';
 import smtp from '../../utils/common/email'
 
-const getMember = async function(pathParameters: any) { // INFO] inner use only
-  const conn: PoolClient = await db.getArtongConnection();
+const getMember = async function(pathParameters: any, conn:PoolClient) { // INFO] inner use only
 
   try {
     const id = typeof pathParameters.id === 'string' && pathParameters.id.includes('-')?
