@@ -2,12 +2,13 @@ import { BadRequest } from '../error/errors';
 import { SyntaxError } from '../error/errorCodes';
 import { member } from '../../controllers/artong';
 import controllerErrorWrapper from '../error/errorWrapper';
+import { PoolClient } from 'pg';
 
-const requestInit = async function(event: any) {
+const requestInit = async function(event: any, conn: PoolClient) {
   let result: any = {};
 
   result['httpMethod'] = event['httpMethod'];
-  result['path'] = event['path'].substring(event['path'].indexOf('/artong'));
+  result['path'] = event['path'] ? event['path'].substring(event['path'].indexOf('/artong')) : '';
   result['queryStringParameters'] = event['queryStringParameters'];
   result['pathParameters'] = event['pathParameters'];
 
@@ -16,7 +17,7 @@ const requestInit = async function(event: any) {
     try {
       result.body = JSON.parse(result.body);
     } catch(error){
-      throw new BadRequest(error.toString(), SyntaxError);
+      throw new BadRequest(String(error), SyntaxError);
     }
   }
 
@@ -43,12 +44,12 @@ const requestInit = async function(event: any) {
     }
 
     if (memberId && memberId >= 0) {
-      const user = await member.getMember({ id: memberId });
+      const user = await member.getMember({ id: memberId }, conn);
       result['member'] = Object.assign(result['member'], user.data);
     }
 
     if (principalId) {
-      const user = await member.getMember({ id: principalId });
+      const user = await member.getMember({ id: principalId }, conn);
       result['member'] = Object.assign(result['member'], user.data);
     }
   } catch (error) {
