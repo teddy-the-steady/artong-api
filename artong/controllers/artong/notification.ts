@@ -1,11 +1,26 @@
 import { PoolClient } from 'pg';
+import { Member, Notification } from '../../models';
 import * as db from '../../utils/db/db';
-import { Notification } from '../../models';
-import { InternalServerError } from '../../utils/error/errors';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 
 interface ReadNotifications {
   notificationIds: number[]
+}
+
+const getNotifications = async function (member: Member) {
+  const conn: PoolClient = await db.getArtongConnection();
+
+  try {
+    const notificationModel = new Notification({}, conn);
+
+    const result = await notificationModel.selectNotifications(member.id);
+
+    return { data: result }
+  } catch (error) {
+    controllerErrorWrapper(error)
+  } finally {
+    db.release(conn);
+  }
 }
 
 const readNotifications = async function (body: ReadNotifications) {
@@ -25,5 +40,6 @@ const readNotifications = async function (body: ReadNotifications) {
 }
 
 export {
+  getNotifications,
   readNotifications
-}
+};
