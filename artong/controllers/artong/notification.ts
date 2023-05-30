@@ -13,8 +13,9 @@ const getNotifications = async function (member: Member) {
   try {
     const notificationModel = new Notification({}, conn);
 
-    const result = await notificationModel.selectNotifications(member.id);
+    if(!member.id) return { data: [] }
 
+    const result = await notificationModel.selectNotifications(member.id);
     return { data: result }
   } catch (error) {
     controllerErrorWrapper(error)
