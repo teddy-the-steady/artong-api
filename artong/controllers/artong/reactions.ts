@@ -25,11 +25,11 @@ const postContentReaction = async function(pathParameters: any, body: ReactionBo
       reactionModel.member_id
     );
     
-    if (isValidReaction(body.reaction_code)) {
+    if (result.content_id && isValidReaction(body.reaction_code)) {
       (result as any).total_likes = await getTotalLikes(reactionModel, result.content_id)
     }
 
-    if(isLike(body.reaction_code)) {
+    if(isLike(body.reaction_code) && member.id && result.member_id) {
       const queueModel = new Queue()
       const noti_message = `${member.username}님이 좋아요를 눌렀습니다.`
       const message: NotificationQueueBody= {
