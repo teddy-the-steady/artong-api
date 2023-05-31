@@ -328,7 +328,7 @@ functions:
     events:
       - websocket:
           route: $connect
-          authorizer: ${self:custom.authorizer}
+          authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-stage-authorizer
       - websocket:
           route: $disconnect
     layers:
