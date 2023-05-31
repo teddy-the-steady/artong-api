@@ -328,9 +328,9 @@ functions:
     events:
       - websocket:
           route: $connect
-          authorizer: ${self:custom.authorizer}
-      - websocket:
-          route: $disconnect
+      #     authorizer: ${self:custom.authorizer}
+      # - websocket:
+      #     route: $disconnect
     layers:
       - { Ref: NodeModulesLambdaLayer }
 
