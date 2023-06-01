@@ -323,16 +323,16 @@ functions:
           maximumBatchingWindow: 62
     layers:
       - { Ref: NodeModulesLambdaLayer }
-  # connectionManager:
-  #   handler: artong/handler/socket.connectionManager
-  #   events:
-  #     - websocket:
-  #         route: $connect
-  #         authorizer: ${self:custom.authorizer}
-  #     - websocket:
-  #         route: $disconnect
-  #   layers:
-  #     - { Ref: NodeModulesLambdaLayer }
+  connectionManager:
+    handler: artong/handler/socket.connectionManager
+    events:
+      - websocket:
+          route: $connect
+          authorizer: ${self:custom.authorizer}
+      - websocket:
+          route: $disconnect
+    layers:
+      - { Ref: NodeModulesLambdaLayer }
 
 resources:
   Resources:
@@ -358,3 +358,10 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: artong-notification-queue
+    LambdaFunctionPermission:
+      Type: AWS::Lambda::Permission
+      Properties:
+        Action: lambda:InvokeFunction
+        Principal: apigateway.amazonaws.com
+        FunctionName: !Ref ConnectionManagerLambdaFunction
+      DependsOn: MyWebSocket
