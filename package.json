@@ -26,6 +26,7 @@
     "serverless-domain-manager": "^6.0.2",
     "serverless-offline": "^8.8.0",
     "serverless-webpack": "^5.9.0",
+    "serverless-websockets-plugin": "^1.0.0",
     "ts-loader": "^8.0.17",
     "typescript": "^3.9.9",
     "webpack": "^5.23.0",
