@@ -324,16 +324,16 @@ functions:
           maximumBatchingWindow: 62
     layers:
       - { Ref: NodeModulesLambdaLayer }
-  connectionManager:
-    handler: artong/handler/socket.connectionManager
-    events:
-      - websocket:
-          route: $connect
-          authorizer: ${self:custom.authorizer}
-      - websocket:
-          route: $disconnect
-    layers:
-      - { Ref: NodeModulesLambdaLayer }
+  # connectionManager:
+  #   handler: artong/handler/socket.connectionManager
+  #   events:
+  #     - websocket:
+  #         route: $connect
+  #         authorizer: ${self:custom.authorizer}
+  #     - websocket:
+  #         route: $disconnect
+  #   layers:
+  #     - { Ref: NodeModulesLambdaLayer }
 
 resources:
   Resources:
