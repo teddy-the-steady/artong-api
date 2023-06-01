@@ -330,7 +330,7 @@ functions:
       - websocket:
           routeKey: $connect
           authorizer:
-            arn: ${self:custom.authorizer}
+            name: wallet-login-triggers-${opt:stage}-authorizer
       - websocket:
           routeKey: $disconnect
     layers:
