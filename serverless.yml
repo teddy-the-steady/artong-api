@@ -54,6 +54,7 @@ plugins:
   - serverless-offline
   - serverless-domain-manager
   - serverless-add-api-key
+  - serverless-websockets-plugin
 
 custom:
   authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-${opt:stage}-authorizer
@@ -328,7 +329,7 @@ functions:
     events:
       - websocket:
           route: $connect
-          # authorizer: ${self:custom.authorizer}
+          authorizer: ${self:custom.authorizer}
       - websocket:
           route: $disconnect
     layers:
@@ -358,9 +359,3 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: artong-notification-queue
-    LambdaFunctionPermission:
-      Type: AWS::Lambda::Permission
-      Properties:
-        Action: lambda:InvokeFunction
-        Principal: apigateway.amazonaws.com
-        FunctionName: !Ref ConnectionManagerLambdaFunction
