@@ -10,7 +10,8 @@ provider:
     S3_BUCKET: ${param:s3_bucket}
     NOTIFICATION_QUEUE_URL: artong-notification-queue
     VIPS_DISC_THRESHOLD: 750m
-  websocketsApiRouteSelectionExpression: $request.body.action
+  # websocketsApiName: custom-websockets-api-name
+  # websocketsApiRouteSelectionExpression: $request.body.action
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -358,9 +359,16 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: artong-notification-queue
+    MyWebSocket:
+      Type: AWS::ApiGatewayV2::Api
+      Properties:
+        Name: ArtongWs
+        ProtocolType: WEBSOCKET
+        RouteSelectionExpression: $request.body.action
     LambdaFunctionPermission:
       Type: AWS::Lambda::Permission
       Properties:
         Action: lambda:InvokeFunction
         Principal: apigateway.amazonaws.com
-        FunctionName: !Ref ConnectionManagerLambdaFunction
+        FunctionName: '*'
+      DependsOn: ArtongWs
