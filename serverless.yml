@@ -370,5 +370,5 @@ resources:
       Properties:
         Action: lambda:InvokeFunction
         Principal: apigateway.amazonaws.com
-        FunctionName: '*'
+        FunctionName: arn:aws:lambda:ap-northeast-2:821343553435:function:*
       DependsOn: ArtongWs
