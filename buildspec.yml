@@ -7,7 +7,7 @@ phases:
       - npm config set sharp_binary_host "https://npmmirror.com/mirrors/sharp"
       - npm config set sharp_libvips_binary_host "https://npmmirror.com/mirrors/sharp-libvips"
       - npm install
-      - npm install -g serverless
+      - npm install -g serverless@3.28
       - cd ./node_layers/nodejs && npm install && cd ../..
   build:
     commands:
