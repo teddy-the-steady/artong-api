@@ -40,7 +40,12 @@ const readNotifications = async function (body: ReadNotifications) {
   }
 }
 
+const receiveWebhook = async function (body: any) {
+  console.log(body)
+}
+
 export {
   getNotifications,
-  readNotifications
+  readNotifications,
+  receiveWebhook
 };

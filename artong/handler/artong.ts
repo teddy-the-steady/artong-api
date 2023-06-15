@@ -102,6 +102,8 @@ export async function handler(event: any, context: any, callback: any) {
           res = await member.verifyEmail(req.body, req.member);
         if (req.path === '/artong/v1/graphql' || req.path === '/artong/v1/graphql/')
           res = await graphql(req.body, req.member);
+        if (req.path === '/artong/v1/alchemy/webhook' || req.path === '/artong/v1/alchemy/webhook')
+          res = await notification.receiveWebhook(req.body);
         break;
       case 'PATCH':
         if (req.path.startsWith('/artong/v1/members/') && req.path.includes('profile_s3key'))
