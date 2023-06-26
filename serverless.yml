@@ -270,7 +270,7 @@ functions:
           path: artong/v1/alchemy/webhook
           method: POST
           cors: true
-          authorizer: ${self:custom.authorizer}
+          # authorizer: ${self:custom.authorizer}
       #- http:
       #path: artong/v1/notification/get
       #method: GET
