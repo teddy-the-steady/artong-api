@@ -334,8 +334,8 @@ functions:
     events:
       - websocket:
           route: $connect
-          # authorizer:
-          #   arn: ${self:custom.authorizer}
+          authorizer:
+            arn: ${self:custom.authorizer}
       - websocket:
           route: $disconnect
     layers:
