@@ -33,13 +33,13 @@ const doFollowMemberOrUndo = async function(body: FollowInfo, member: Member) {
       if(member.id) {
         const queueModel = new Queue();
         const message: NotificationQueueBody = {
-          noti_type:'FOLLOW_MEMBER',
-          noti_message: `${member.username}님이 회원님을 팔로우하기 시작했습니다.`,
+          category:'FOLLOW_MEMBER',
+          message: `${member.username}님이 회원님을 팔로우하기 시작했습니다.`,
           receiver_id: body.targetMemberId,
           sender_id: member.id,
         }
 
-        queueModel.pubMessage(message)
+        queueModel.publishNotification(message)
       }
     } else {
       result = await followModel.deleteFollow(
@@ -89,13 +89,13 @@ const doSubsribeProjectOrUndo = async function(body: SubscribeInfo, member: Memb
       if(member.id) {
         const queueModel= new Queue();
         const message: NotificationQueueBody= {
-          noti_type: 'FOLLOW_PROJECT',
-          noti_message: `${member.username}님이 ${body.targetProjectName} 프로젝트를 팔로우하기 시작했습니다.`,
+          category: 'FOLLOW_PROJECT',
+          message: `${member.username}님이 ${body.targetProjectName} 프로젝트를 팔로우하기 시작했습니다.`,
           receiver_id: body.targetProjectOwnerId,
           sender_id: member.id,
         }
 
-        queueModel.pubMessage(message)
+        queueModel.publishNotification(message)
       }
     } else {
       result = await subscribeModel.deleteSubscribe(

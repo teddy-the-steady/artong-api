@@ -1,8 +1,9 @@
-import { NotificationType } from "../notification/notification.type";
+import { NotificationCategory } from "../notification/notification.type";
 
 type NotificationQueueBody = {
-  noti_type: NotificationType;
+  category: NotificationCategory;
   sender_id: number;
+  message: string;
   receiver_id: number;
   redirect_on_click?: string;
   content_id?: number| null;

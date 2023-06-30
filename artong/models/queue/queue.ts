@@ -3,7 +3,7 @@ import { SQS, SendMessageRequest } from "@aws-sdk/client-sqs";
 const sqs = new SQS({region: 'ap-northeast-2'})
 
 class Queue{
-  pubMessage<T>(body: T) {
+  publishNotification<T>(body: T) {
     const params: SendMessageRequest={
       MessageBody: JSON.stringify(body),
       QueueUrl: process.env.NOTIFICATION_QUEUE_URL 
