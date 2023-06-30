@@ -3,7 +3,7 @@ import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import { PoolClient } from 'pg';
 import { BadRequest } from '../../utils/error/errors';
-import { Queue } from '../../models/queue/queue';
+import { Queue } from '../../models/queue/Queue';
 import { NotificationQueueBody } from '../../models/queue/queue.type';
 
 interface FollowInfo {

@@ -5,7 +5,6 @@ type NotificationQueueBody = {
   sender_id: number;
   receiver_id: number;
   redirect_on_click?: string;
-  noti_message: string;
   content_id?: number| null;
 }
 

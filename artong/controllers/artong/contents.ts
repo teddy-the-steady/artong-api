@@ -11,7 +11,7 @@ import { File } from '@web-std/file';
 import _ from 'lodash';
 import { ContentsHistory } from '../../models/contentsHistory/ContentsHistory';
 import { PageAndOrderingInfo, PaginationInfo, GqlPageAndOrderingInfo } from './index';
-import { Queue } from '../../models/queue/queue';
+import { Queue } from '../../models/queue/Queue';
 import { NotificationQueueBody } from '../../models/queue/queue.type';
 
 interface GetContentInfo {

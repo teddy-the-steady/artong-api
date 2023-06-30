@@ -3,7 +3,7 @@ import { ContentReactions, Member, Notification } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import validator from '../../utils/validators/common';
-import { Queue } from '../../models/queue/queue';
+import { Queue } from '../../models/queue/Queue';
 import { NotificationQueueBody } from '../../models/queue/queue.type';
 interface ReactionBody {
   reaction_code: string;
