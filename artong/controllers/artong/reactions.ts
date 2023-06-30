@@ -31,16 +31,16 @@ const postContentReaction = async function(pathParameters: any, body: ReactionBo
 
     if(isLike(body.reaction_code) && member.id && result.member_id) {
       const queueModel = new Queue()
-      const noti_message = `${member.username}님이 좋아요를 눌렀습니다.`
-      const message: NotificationQueueBody= {
-        noti_type: 'LIKE',
+      const message = `${member.username}님이 좋아요를 눌렀습니다.`
+      const notification: NotificationQueueBody= {
+        category: 'LIKE',
         sender_id: member.id, 
         receiver_id: result.member_id, 
-        noti_message, 
+        message, 
         content_id: result.content_id
       }
 
-      queueModel.pubMessage(message)
+      queueModel.publishNotification(notification)
     }
 
     return {data: result}
