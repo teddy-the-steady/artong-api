@@ -7,16 +7,21 @@ interface ReadNotifications {
   notificationIds: number[]
 }
 
-const getNotifications = async function (member: Member) {
+const getNotifications = async function (member: Member, skip?: number, take?: number) {
   const conn: PoolClient = await db.getArtongConnection();
 
   try {
     const notificationModel = new Notification({}, conn);
 
-    if(!member.id) return { data: [] }
+    if(!member.id) return [] 
 
-    const result = await notificationModel.selectNotifications(member.id);
-    return { data: result }
+    const notifications = await notificationModel.selectNotificationsByMemberPK(member.id, skip, take);
+    
+    return await Promise.all(
+      notifications.map(async (notification)=>{
+        return notification.id && await notificationModel.notificationWrapper(notification.id) 
+      })
+    )
   } catch (error) {
     controllerErrorWrapper(error)
   } finally {

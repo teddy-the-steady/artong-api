@@ -33,8 +33,7 @@ const doFollowMemberOrUndo = async function(body: FollowInfo, member: Member) {
       if(member.id) {
         const queueModel = new Queue();
         const message: NotificationQueueBody = {
-          category:'FOLLOW_MEMBER',
-          message: `${member.username}님이 회원님을 팔로우하기 시작했습니다.`,
+          topic:'FOLLOW_MEMBER',
           receiver_id: body.targetMemberId,
           sender_id: member.id,
         }
@@ -89,8 +88,7 @@ const doSubsribeProjectOrUndo = async function(body: SubscribeInfo, member: Memb
       if(member.id) {
         const queueModel= new Queue();
         const message: NotificationQueueBody= {
-          category: 'FOLLOW_PROJECT',
-          message: `${member.username}님이 ${body.targetProjectName} 프로젝트를 팔로우하기 시작했습니다.`,
+          topic: 'FOLLOW_PROJECT',
           receiver_id: body.targetProjectOwnerId,
           sender_id: member.id,
         }
