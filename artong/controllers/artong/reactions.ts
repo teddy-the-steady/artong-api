@@ -33,10 +33,9 @@ const postContentReaction = async function(pathParameters: any, body: ReactionBo
       const queueModel = new Queue()
       const message = `${member.username}님이 좋아요를 눌렀습니다.`
       const notification: NotificationQueueBody= {
-        category: 'LIKE',
+        topic: 'LIKE',
         sender_id: member.id, 
         receiver_id: result.member_id, 
-        message, 
         content_id: result.content_id
       }
 
