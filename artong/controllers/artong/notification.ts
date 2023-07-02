@@ -15,13 +15,15 @@ const getNotifications = async function (member: Member, skip?: number, take?: n
 
     if(!member.id) return [] 
 
-    const notifications = await notificationModel.selectNotificationsByMemberPK(member.id, skip, take);
+    const result = await notificationModel.selectNotificationsByMemberPK(member.id, skip, take);
     
-    return await Promise.all(
-      notifications.map(async (notification)=>{
+    const notifications = await Promise.all(
+      result.map(async (notification)=>{
         return notification.id && await notificationModel.notificationWrapper(notification.id) 
       })
     )
+
+    return { data: notifications}
   } catch (error) {
     controllerErrorWrapper(error)
   } finally {
