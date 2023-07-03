@@ -1,6 +1,10 @@
 const receive = async function (body: any) {
-  console.log("원문:",body)
-  console.log("이벤트:",body.event.data.block)
+  const logs = body.event.data.block.logs
+  if(logs instanceof Array) {
+    logs.map((log)=>{
+      console.log("트랜잭션 발생!!",log.transaction)
+    })
+  }
 }
 
 export {
