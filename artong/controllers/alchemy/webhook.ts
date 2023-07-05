@@ -1,11 +1,15 @@
 const receive = async function (body: any) {
   const logs = body.event.data.block.logs
   if(logs instanceof Array) {
+    console.log('logs===>',logs)
     logs.map((log)=>{
-      console.log("트랜잭션 발생!!",log.transaction)
+      console.log("log transaction===>",log.transaction)
+
       log.transaction.logs.map((subLog: any)=>{
+        console.log("subLog", subLog)
+
         subLog.topics.map((topic: any)=>{
-          console.log("토픽", topic)
+          console.log("topic", topic)
         })
       })
     })
