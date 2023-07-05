@@ -49,6 +49,12 @@ Default region name: ap-northeast-2
 $ utern /aws/lambda/artong-api-stage-artong
 ```
 
+로그스트림, 로그 그룹 제외하여 보기
+
+```
+$ utern --no-log-stream --no-log-group /aws/lambda/artong-api-stage-artong
+```
+
 ## 개발전용 람다 간편 업로드
 
 ```
