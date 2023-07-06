@@ -1,5 +1,6 @@
 const receive = async function (body: any) {
   const logs = body.event.data.block.logs
+  console.log("알케미 웹훅", body)
   if(logs instanceof Array) {
     console.log('logs===>',logs)
     logs.map((log)=>{
