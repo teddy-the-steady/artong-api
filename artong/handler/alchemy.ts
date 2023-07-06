@@ -24,7 +24,7 @@ export function handler(event: APIGatewayProxyEvent): APIGatewayProxyResult {
   }
 
   return {
-    statusCode: 200,
+    statusCode: 201,
     body: 'OK',
   }
 }
