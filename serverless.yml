@@ -267,11 +267,6 @@ functions:
           cors: true
           authorizer: ${self:custom.authorizer}
       - http:
-          path: artong/v1/alchemy/webhook
-          method: POST
-          cors: true
-          # authorizer: ${self:custom.authorizer}
-      - http:
           path: artong/v1/notification/get
           method: GET
           cors: true
@@ -281,6 +276,16 @@ functions:
           method: PATCH
           cors: true
           authorizer: ${self:custom.authorizer}
+    layers:
+      - { Ref: NodeModulesLambdaLayer }
+  alchemy:
+    handler: artong/handler/alchemy.handler
+    timeout: 30
+    events:
+      - http:
+          path: artong/v1/alchemy/webhook
+          method: POST
+          cors: true
     layers:
       - { Ref: NodeModulesLambdaLayer }
   artong-admin:
@@ -317,6 +322,7 @@ functions:
           existing: true
     layers:
       - { Ref: NodeModulesLambdaLayer }
+
   notification:
     handler: artong/handler/notification.handler
     events:
