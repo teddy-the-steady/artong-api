@@ -5,7 +5,7 @@ export function handler(event: APIGatewayProxyEvent): APIGatewayProxyResult {
   const logs = body.event.data.block.logs
 
   try{
-    if (body.event.data.block.logs) {
+    if (logs instanceof Array && logs.length > 0) {
       console.log("알케미 이벤트데이터블록로그", body.event.data.block.logs)
       console.log("알케미 from", body.event.data.block.logs.transaction.from)
       console.log("알케미 to", body.event.data.block.logs.transaction.to)
