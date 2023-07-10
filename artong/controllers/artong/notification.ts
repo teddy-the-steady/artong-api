@@ -7,7 +7,7 @@ interface ReadNotifications {
   notificationIds: number[]
 }
 
-const getNotifications = async function (member: Member, skip?: number, take?: number) {
+const getNotifications = async function (member: Member, page?:number) {
   const conn: PoolClient = await db.getArtongConnection();
 
   try {
@@ -15,7 +15,7 @@ const getNotifications = async function (member: Member, skip?: number, take?: n
 
     if(!member.id) return [] 
 
-    const result = await notificationModel.selectNotificationsByMemberPK(member.id, skip, take);
+    const result = await notificationModel.selectNotificationsByMemberPK(member.id, page);
     
     const notifications = await Promise.all(
       result.map(async (notification)=>{

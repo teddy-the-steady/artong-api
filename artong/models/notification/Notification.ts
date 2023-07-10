@@ -38,7 +38,10 @@ class Notification extends Models {
     } 
   }
 
-  async selectNotificationsByMemberPK(memberId: number, skip?:number, take?: number):Promise<Notification[]> {
+  async selectNotificationsByMemberPK(memberId: number, page: number = 1):Promise<Notification[]> {
+    const take = 10
+    const skip = (page-1) * take
+
     try {
       const result = await db.execute(this.conn, selectNotifications,{ 
         memberId,
