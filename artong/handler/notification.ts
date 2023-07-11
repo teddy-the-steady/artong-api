@@ -25,7 +25,9 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
 
         await notificationModel.createNotification(message)
 
-        const { domain_name, stage, connection_id} = await socket.selectSocketConnection({connectorId: receiver_id})
+        const socketConnection = await socket.selectSocketConnection({connectorId: receiver_id})
+        console.log("socketConnection", socketConnection)
+        const { connection_id, domain_name, stage } = socketConnection
 
         // Send notification to receiver if receiver is online
         if(connection_id && domain_name && stage) {
