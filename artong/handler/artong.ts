@@ -72,7 +72,7 @@ export async function handler(event: any, context: any, callback: any) {
         if (req.path === '/artong/v1/feed' || req.path === '/artong/v1/feed/')
           res = await contents.getFeedContents(req.queryStringParameters, req.member);
         if (req.path === '/artong/v1/notification/get' || req.path === '/artong/v1/notification/get/')
-          res = await notification.getNotifications(req.member)
+          res = await notification.getNotifications(req.member, req.queryStringParameters)
         break;
       case 'POST':
         if (req.path === '/artong/v1/member' || req.path === '/artong/v1/member/')

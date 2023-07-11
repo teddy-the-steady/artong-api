@@ -6,8 +6,11 @@ import controllerErrorWrapper from '../../utils/error/errorWrapper';
 interface ReadNotifications {
   notificationIds: number[]
 }
+interface GetNotificationsQueryParameter {
+  page?: number
+}
 
-const getNotifications = async function (member: Member, page?:number) {
+const getNotifications = async function (member: Member, { page = 1 }:GetNotificationsQueryParameter) {
   const conn: PoolClient = await db.getArtongConnection();
 
   try {
