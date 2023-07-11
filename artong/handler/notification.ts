@@ -18,10 +18,9 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
   const socket = new Socket({}, conn)
 
   try {
-    await Promise.all(
-      event.Records.map(async (record)=>{
-        const message: NotificationQueueBody= JSON.parse(record.body)
-        const {receiver_id} = message
+    for await(const record of event.Records) {
+      const message: NotificationQueueBody= JSON.parse(record.body)
+        const { receiver_id } = message
 
         await notificationModel.createNotification(message)
 
@@ -37,9 +36,8 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
             Data: encoder.encode(JSON.stringify({ data: message }))
           })
         }
-      })
-    )
-    
+    }
+
     callback(null, {
       statusCode: 201,
       body: 'OK'
