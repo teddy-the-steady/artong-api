@@ -39,6 +39,11 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
         }
       })
     )
+    
+    callback(null, {
+      statusCode: 201,
+      body: 'OK'
+    })
   } catch (error) {
     throw new InternalServerError(error, null)
   } finally {
