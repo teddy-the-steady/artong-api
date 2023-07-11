@@ -27,9 +27,17 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
 
         const socketConnection = await socket.selectSocketConnection({connectorId: receiver_id})
         console.log("socketConnection", socketConnection)
-        const { connection_id, domain_name, stage } = socketConnection
 
         // Send notification to receiver if receiver is online
+        if(!socketConnection) {
+          callback(null, {
+            statusCode: 201,
+            body: 'OK'
+          })
+          return
+        }
+
+        const { connection_id, domain_name, stage } = socketConnection
         if(connection_id && domain_name && stage) {
           const apigatewaymanagementapi = socket.getApiGatewayManagementApi({domainName: domain_name, stage})
           const encoder = new TextEncoder()
@@ -41,10 +49,6 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
         }
     }
 
-    callback(null, {
-      statusCode: 201,
-      body: 'OK'
-    })
   } catch (error) {
     throw new InternalServerError(error, null)
   } finally {
