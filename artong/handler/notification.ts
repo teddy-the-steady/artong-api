@@ -19,6 +19,7 @@ export async function handler(event: SQSEvent, context: AWSLambda.Context, callb
 
   try {
     for await(const record of event.Records) {
+      console.log("Notification Record:", record)
       const message: NotificationQueueBody= JSON.parse(record.body)
         const { receiver_id } = message
 
