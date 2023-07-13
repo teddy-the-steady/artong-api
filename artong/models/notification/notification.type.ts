@@ -29,11 +29,16 @@ type NotificationWrapper = {
   to: {
     member: NotificationReceiver; 
   }
-  content: {
+  content?: {
     id: number;
     name: string;
     content_thumbnail_s3key: string;
-  } | null;
+    project: {
+      name: string;
+      address: string;
+      project_thumbnail_s3key: string;
+    }
+  }
 }
 
 export {
