@@ -10,9 +10,10 @@ WITH inserted AS (
 	DO UPDATE
 	SET
 		updated_at = now()
-	RETURNING *)
+	RETURNING *
+)
 SELECT 
 	c.member_id as member_id,
 	c.id as content_id,
 from inserted i
-join contents c on c.id = i.content_id
+join contents c on c.id = ${content_id}
