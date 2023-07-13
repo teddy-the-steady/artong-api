@@ -1,5 +1,5 @@
 import { PoolClient } from 'pg';
-import { ContentReactions, Member, Notification } from '../../models/index';
+import { ContentReactions, Member } from '../../models/index';
 import controllerErrorWrapper from '../../utils/error/errorWrapper';
 import * as db from '../../utils/db/db';
 import validator from '../../utils/validators/common';
@@ -29,13 +29,12 @@ const postContentReaction = async function(pathParameters: any, body: ReactionBo
       (result as any).total_likes = await getTotalLikes(reactionModel, result.content_id)
     }
 
-    if(isLike(body.reaction_code) && member.id && result.member_id) {
+    if(isLike(body.reaction_code) && member.id && result.member_id ) {
       const queueModel = new Queue()
-      const message = `${member.username}님이 좋아요를 눌렀습니다.`
       const notification: NotificationQueueBody= {
         topic: 'LIKE',
         sender_id: member.id, 
-        receiver_id: result.member_id, 
+        receiver_id: result.member_id,
         content_id: result.content_id
       }
 

@@ -33,7 +33,6 @@ class Notification extends Models {
       
       return result[0]
     } catch(error){
-      console.error('create notification error', error)
       throw new InternalServerError(error, null)
     } 
   }
