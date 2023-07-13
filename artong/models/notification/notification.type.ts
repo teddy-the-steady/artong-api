@@ -31,6 +31,7 @@ type NotificationWrapper = {
   }
   content: {
     id: number;
+    name: string;
     content_thumbnail_s3key: string;
   } | null;
 }

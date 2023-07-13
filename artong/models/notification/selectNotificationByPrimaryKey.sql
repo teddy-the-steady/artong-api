@@ -8,6 +8,7 @@ SELECT
   n.created_at,
   content_id,
   c.content_thumbnail_s3key as content_thumbnail_s3key,
+  c.name as content_name,
   sender.username as sender_username,
   sender.profile_thumbnail_s3key as sender_profile_thumbnail_s3key,
   receiver.username as receiver_username,
