@@ -97,11 +97,16 @@ class Notification extends Models {
           profile_thumbnail_s3key: notification.receiver_profile_thumbnail_s3key
         }
       },
-      content: notification.content_id ? {
+      content: {
         id: notification.content_id,
         name: notification.content_name,
         content_thumbnail_s3key: notification.content_thumbnail_s3key,
-      } : null
+        project:{
+          name: notification.project_name,
+          address: notification.project_address,
+          project_thumbnail_s3key: notification.project_thumbnail_s3key
+        }
+      } 
     }
   }
 }
