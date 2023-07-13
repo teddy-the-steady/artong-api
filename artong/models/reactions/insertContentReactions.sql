@@ -14,6 +14,6 @@ WITH inserted AS (
 )
 SELECT 
 	c.member_id as member_id,
-	c.id as content_id,
-from inserted i
-join contents c on c.id = ${content_id}
+	c.id as content_id
+FROM inserted i
+JOIN contents c on c.id = i.content_id
