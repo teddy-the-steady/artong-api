@@ -99,6 +99,7 @@ class Notification extends Models {
       },
       content: notification.content_id ? {
         id: notification.content_id,
+        name: notification.content_name,
         content_thumbnail_s3key: notification.content_thumbnail_s3key,
       } : null
     }

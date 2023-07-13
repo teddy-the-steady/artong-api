@@ -195,12 +195,12 @@ const patchContentStatus = async function(pathParameters: {id: string, contents_
       contentModel.status,
     );
     
-    if(member.id) {
+    if(member.id && result.member_id) {
       const queueModel= new Queue();
       const message:NotificationQueueBody= {
-        content_id: result.id!,
+        content_id: result.id,
         topic: 'CONTRIBUTE_APPROVE',
-        receiver_id: result.member_id!,
+        receiver_id: result.member_id,
         sender_id: member.id,
       }
 
