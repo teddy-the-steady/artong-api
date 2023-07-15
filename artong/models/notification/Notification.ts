@@ -17,7 +17,6 @@ class Notification extends Models {
   sender_id!: number;
   topic!: NotificationTopic;
   content_id?: number;
-  redirect_on_click?: string;
   read_at?: Date;
   created_at!: Date;
   updated_at?: Date;
@@ -80,7 +79,6 @@ class Notification extends Models {
     return {
       id,
       topic: notification.topic,
-      redirect_on_click: notification.redirect_on_click,
       read_at: notification.read_at,
       created_at: notification.created_at,
       from: {
@@ -99,12 +97,15 @@ class Notification extends Models {
       },
       content: {
         id: notification.content_id,
+        tokenId: notification.token_id,
         name: notification.content_name,
         content_thumbnail_s3key: notification.content_thumbnail_s3key,
+        redeem: notification.redeem,
         project:{
           name: notification.project_name,
           address: notification.project_address,
-          project_thumbnail_s3key: notification.project_thumbnail_s3key
+          project_thumbnail_s3key: notification.project_thumbnail_s3key,
+          slug: notification.slug
         }
       } 
     }
