@@ -20,7 +20,6 @@ type NotificationReceiver = {
 type NotificationWrapper = {
   id: number;
   topic: NotificationTopic;
-  redirect_on_click?: string;
   read_at?: Date;
   created_at: Date;
   from : {
@@ -31,12 +30,15 @@ type NotificationWrapper = {
   }
   content?: {
     id: number;
+    tokenId: string;
     name: string;
     content_thumbnail_s3key: string;
+    redeem: boolean;
     project: {
       name: string;
       address: string;
       project_thumbnail_s3key: string;
+      slug: string;
     }
   }
 }
