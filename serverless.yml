@@ -267,12 +267,12 @@ functions:
           cors: true
           authorizer: ${self:custom.authorizer}
       - http:
-          path: artong/v1/notification/get
+          path: artong/v1/notifications
           method: GET
           cors: true
           authorizer: ${self:custom.authorizer}
       - http:
-          path: artong/v1/notification/read
+          path: artong/v1/notification
           method: PATCH
           cors: true
           authorizer: ${self:custom.authorizer}

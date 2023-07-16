@@ -71,7 +71,7 @@ export async function handler(event: any, context: any, callback: any) {
             res = await search.searchMembers(req.queryStringParameters, req.member);
         if (req.path === '/artong/v1/feed' || req.path === '/artong/v1/feed/')
           res = await contents.getFeedContents(req.queryStringParameters, req.member);
-        if (req.path === '/artong/v1/notification/get' || req.path === '/artong/v1/notification/get/')
+        if (req.path === '/artong/v1/notifications' || req.path === '/artong/v1/notifications/')
           res = await notification.getNotifications(req.member, req.queryStringParameters)
         break;
       case 'POST':
@@ -122,7 +122,7 @@ export async function handler(event: any, context: any, callback: any) {
           res = await contents.patchContent(req.pathParameters, req.body, req.member);
         if (req.path === '/artong/v1/contents/content_thumbnail_s3key' || req.path === '/artong/v1/contents/content_thumbnail_s3key/')
           res = await contents.patchContentThumbnailS3key(req.body);
-        if(req.path === '/artong/v1/notification/read' || req.path === '/artong/v1/notification/read/')
+        if(req.path === '/artong/v1/notification' || req.path === '/artong/v1/notification/')
           res = await notification.readNotifications(req.body);
         break;
       default:
