@@ -367,10 +367,6 @@ resources:
         ResponseType: DEFAULT_5XX
         RestApiId:
           Ref: "ApiGatewayRestApi"
-    # NotificationQueue:
-    #   Type: AWS::SQS::Queue
-    #   Properties:
-    #     QueueName: artong-notification-queue
     NotificationQueue:
       Type: AWS::SQS::Queue
       Properties:
