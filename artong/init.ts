@@ -2,7 +2,7 @@ import { Pool } from 'pg';
 import handlebars from 'handlebars';
 import { getDBKeys } from './utils/common/ssmKeys';
 
-const getDbConnentionPool = async function(): Promise<Pool> {
+const getDbConnectionPool = async function(): Promise<Pool> {
   const keys = await getDBKeys();
   return new Pool({
     host: process.env.IS_OFFLINE? 'localhost' : keys[`/db/${process.env.ENV}/host`],
@@ -49,6 +49,6 @@ handlebars.registerHelper({
 }); 
 
 export {
-  getDbConnentionPool,
+  getDbConnectionPool,
   ALLOWED_ORIGINS,
 };

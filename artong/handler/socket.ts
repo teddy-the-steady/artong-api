@@ -1,7 +1,7 @@
 import { APIGatewayProxyWebsocketEventV2, Callback } from 'aws-lambda'
 import * as db from '../utils/db/db';
 import { Pool, PoolClient } from 'pg';
-import { getDbConnentionPool } from '../init';
+import { getDbConnectionPool } from '../init';
 import { InternalServerError } from '../utils/error/errors';
 import { Socket } from '../models/socket/Socket';
 import requestInit from '../utils/http/request';
@@ -24,7 +24,10 @@ const connectionManager = async (event: APIGatewayProxyWebsocketEventV2, context
 }
 
 const initConnection = async (event: APIGatewayProxyWebsocketEventV2) => {
-  socketPool= await getDbConnentionPool();
+  if (!socketPool) {
+    socketPool= await getDbConnectionPool();
+  }
+  
   const conn: PoolClient = await db.getSocketConnection();
   const { requestContext:{ domainName, stage, connectionId } } = event
 
@@ -42,7 +45,10 @@ const initConnection = async (event: APIGatewayProxyWebsocketEventV2) => {
 }
 
 const disposalConnection = async (event: APIGatewayProxyWebsocketEventV2) => {
-  socketPool= await getDbConnentionPool();
+  if (!socketPool) {
+    socketPool= await getDbConnectionPool();
+  }
+  
   const conn: PoolClient = await db.getSocketConnection();
 
   const { requestContext: { connectionId } } = event

@@ -1,7 +1,7 @@
 import { Pool, PoolClient } from 'pg';
 import * as db from '../utils/db/db';
 import { Notification } from '../models';
-import { getDbConnentionPool } from '../init';
+import { getDbConnectionPool } from '../init';
 import { SQSEvent } from 'aws-lambda';
 import { InternalServerError } from '../utils/error/errors';
 import { NotificationQueueBody } from '../models/queue/queue.type';
@@ -11,7 +11,9 @@ export let notiPool: Pool;
 
 export async function handler(event: SQSEvent, context: AWSLambda.Context, callback: AWSLambda.Callback) {
   console.log(event.Records)
-  notiPool = await getDbConnentionPool();
+  if (!notiPool) {
+    notiPool = await getDbConnectionPool();
+  }
   
   const conn: PoolClient = await db.getNotiConnection();
   const notificationModel = new Notification({},conn)
