@@ -3,7 +3,7 @@ import requestInit from '../utils/http/request';
 import { successResponse, errorResponse } from '../utils/http/response';
 import { member, country, reactions, projects, contents, search, follow, main, report, notification } from '../controllers/artong/index';
 import { graphql } from './graphql'
-import { getDbConnentionPool } from '../init';
+import { getDbConnectionPool } from '../init';
 import { Pool } from 'pg';
 import * as db from '../utils/db/db';
 
@@ -15,7 +15,7 @@ export async function handler(event: any, context: any, callback: any) {
 
   try {
     if (!artongPool) {
-      artongPool = await getDbConnentionPool();
+      artongPool = await getDbConnectionPool();
     }
     const conn = await db.getArtongConnection()
     const req = await requestInit(event, conn);
