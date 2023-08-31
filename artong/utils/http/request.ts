@@ -4,7 +4,7 @@ import { member } from '../../controllers/artong';
 import controllerErrorWrapper from '../error/errorWrapper';
 import { PoolClient } from 'pg';
 
-const requestInit = async function(event: any, conn: PoolClient) {
+const requestInit = async function(event: any) {
   let result: any = {};
 
   result['httpMethod'] = event['httpMethod'];
@@ -44,12 +44,12 @@ const requestInit = async function(event: any, conn: PoolClient) {
     }
 
     if (memberId && memberId >= 0) {
-      const user = await member.getMember({ id: memberId }, conn);
+      const user = await member.getMember({ id: memberId });
       result['member'] = Object.assign(result['member'], user.data);
     }
 
     if (principalId) {
-      const user = await member.getMember({ id: principalId }, conn);
+      const user = await member.getMember({ id: principalId });
       result['member'] = Object.assign(result['member'], user.data);
     }
   } catch (error) {
