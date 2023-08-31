@@ -32,7 +32,7 @@ const initConnection = async (event: APIGatewayProxyWebsocketEventV2) => {
   const { requestContext:{ domainName, stage, connectionId } } = event
 
   try {
-    const req = await requestInit(event, conn)
+    const req = await requestInit(event)
     const connectorId = req.member.id
     
     const socket = new Socket({}, conn)
