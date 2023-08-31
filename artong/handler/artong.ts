@@ -17,8 +17,7 @@ export async function handler(event: any, context: any, callback: any) {
     if (!artongPool) {
       artongPool = await getDbConnectionPool();
     }
-    const conn = await db.getArtongConnection()
-    const req = await requestInit(event, conn);
+    const req = await requestInit(event);
     console.log(req);
 
     switch (req.httpMethod) {
