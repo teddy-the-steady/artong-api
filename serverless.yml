@@ -285,7 +285,10 @@ functions:
           path: artong/v1/country
           method: POST
           cors: true
-          authorizer: ${self:custom.authorizer}
+          authorizers:
+            customAuthorizer:
+              type: request
+              functionArn: ${self:custom.authorizer}
     layers:
       - { Ref: NodeModulesLambdaLayer }
   image:
