@@ -41,6 +41,11 @@ provider:
     subnetIds:
       - subnet-0285f180e2f0c6ec0
       - subnet-091d67b7e5ec421bb
+  httpApi:
+    cors: true
+    customAuthorizer:
+      type: request
+      functionArn: ${self:custom.authorizer}
 
 package:
   individually: true
@@ -282,13 +287,11 @@ functions:
     handler: artong/handler/artong.handler
     events:
       - httpApi:
-          path: artong/v1/country
+          path: /artong/v1/country
           method: POST
-          cors: true
-          authorizers:
-            customAuthorizer:
-              type: request
-              functionArn: ${self:custom.authorizer}
+          # cors: true
+          authorizer:
+            name: customAuthorizer:
     layers:
       - { Ref: NodeModulesLambdaLayer }
   image:
