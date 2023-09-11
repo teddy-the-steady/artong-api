@@ -281,7 +281,7 @@ functions:
   artong-admin:
     handler: artong/handler/artong.handler
     events:
-      - http:
+      - httpApi:
           path: artong/v1/country
           method: POST
           cors: true
