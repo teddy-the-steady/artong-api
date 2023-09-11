@@ -291,7 +291,7 @@ functions:
           method: POST
           # cors: true
           authorizer:
-            name: customAuthorizer:
+            name: customAuthorizer
     layers:
       - { Ref: NodeModulesLambdaLayer }
   image:
