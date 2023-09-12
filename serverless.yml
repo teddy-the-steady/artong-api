@@ -76,6 +76,7 @@ custom:
 functions:
   artong:
     handler: artong/handler/artong.handler
+    provisionedConcurrency: 1
     timeout: 30
     events:
       - http:
