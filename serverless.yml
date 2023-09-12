@@ -55,7 +55,6 @@ plugins:
   - serverless-offline
   - serverless-domain-manager
   - serverless-add-api-key
-  - serverless-plugin-warmup
 
 custom:
   authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-${opt:stage}-authorizer
@@ -87,7 +86,6 @@ custom:
 
 functions:
   artong:
-    warmup: true
     handler: artong/handler/artong.handler
     timeout: 30
     events:
