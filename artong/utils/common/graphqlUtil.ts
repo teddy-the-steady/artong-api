@@ -10,6 +10,7 @@ const graphqlRequest = async function(body: any) {
       method: 'POST',
       data: body
     });
+    console.log(result)
 
     if (result.status === 200 && result.data.errors) {
       throw new BadRequest(result.data.errors, null)
