@@ -7,11 +7,9 @@ import { graphqlRequest, parseGraphqlQuery, parse_db_data } from '../utils/commo
 const graphql = async function(body: any, member: Member) {
   const parsed = parse(body.query);
   const queryName = (parsed.definitions[0] as any).name.value;
-  console.log('(body.query:', body.query)
+
   const pureQuery = parseGraphqlQuery(body.query);
-  console.log('pureQuery:', pureQuery)
   const _db_ = parse_db_data(body.query);
-  console.log('_db_:', _db_)
   const isDataMergeNecessary = _db_.length > 0;
 
   let result: any;
