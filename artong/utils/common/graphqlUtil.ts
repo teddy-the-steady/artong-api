@@ -1,26 +1,21 @@
 import axios from 'axios';
-import { BadRequest, InternalServerError } from '../error/errors';
-import { SubgraphError } from '../error/errorCodes';
+import { InternalServerError } from '../error/errors';
 
 const graphqlRequest = async function(body: any) {
-  try {
-    const result = await axios({
-      url: '/api/f7711f02a833125382dd8d8c6fbc4a74/subgraphs/id/4AUJwh4YwE6sHjcQXEKQCiTuCmRBwFhBwRjGxn7wZwze',
-      baseURL: 'https://gateway.thegraph.com',
-      method: 'POST',
-      data: body
-    });
-    console.log(result.data)
-    console.log(result.data.data)
+  const result = await axios({
+    url: '/api/f7711f02a833125382dd8d8c6fbc4a74/subgraphs/id/4AUJwh4YwE6sHjcQXEKQCiTuCmRBwFhBwRjGxn7wZwze',
+    baseURL: 'https://gateway.thegraph.com',
+    method: 'POST',
+    data: body
+  });
+  console.log(result.data)
+  console.log(result.data.data)
 
-    if (result.status === 200 && result.data.errors) {
-      throw new BadRequest(result.data.errors, null)
-    }
-
-    return result.data.data
-  } catch (error) {
-    throw new InternalServerError(error, SubgraphError);
+  if (result.status === 200 && result.data.errors) {
+    throw new InternalServerError(result.data.errors[0].message, null)
   }
+
+  return result.data.data
 }
 
 const parseGraphqlQuery = function (query: string): string {
