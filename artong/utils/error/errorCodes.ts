@@ -7,6 +7,7 @@ const DBError = {code: 5100, message: 'DB Error'};
 const UpdateFailed = {code: 5101, message: 'Update failed'}; // db 업데이트 실패
 const DBSyntaxError = {code: 5102, message: 'DB Syntax error'};
 const AWSError = 5200; // AWS 관련 에러
+const SubgraphError = 5300;
 
 export {
     UnknownError,
@@ -18,4 +19,5 @@ export {
     UpdateFailed,
     DBSyntaxError,
     AWSError,
+    SubgraphError,
 };

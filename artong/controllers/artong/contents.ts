@@ -1078,24 +1078,19 @@ const getContentsPick = async function(body: {ids: number[]}) {
     }, [] as any);
 
     if (extractedConcatenatedTokenIds.length > 0) {
-      let gqlResult = null;
-      try {
-        gqlResult = await graphqlRequest({
-          query: `query Tokens { tokens(where: {id_in: ${JSON.stringify(extractedConcatenatedTokenIds)}}) {
-            id,
-            owner,
-            listings (orderBy: createdAt, orderDirection: desc, first: 1) {
-              id
-              from
-              price
-              eventType
-              createdAt
-            }
-          }}`,
-        });
-      } catch (error) {
-        console.log(error)
-      }
+      const gqlResult = await graphqlRequest({
+        query: `query Tokens { tokens(where: {id_in: ${JSON.stringify(extractedConcatenatedTokenIds)}}) {
+          id,
+          owner,
+          listings (orderBy: createdAt, orderDirection: desc, first: 1) {
+            id
+            from
+            price
+            eventType
+            createdAt
+          }
+        }}`,
+      });
 
       if (gqlResult.tokens.length > 0) {
         const extractedOwners = gqlResult.tokens.reduce((acc: any, value: any) => {
