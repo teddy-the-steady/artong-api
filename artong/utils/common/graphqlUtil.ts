@@ -1,19 +1,24 @@
 import axios from 'axios';
-import { BadRequest } from '../error/errors';
+import { BadRequest, InternalServerError } from '../error/errors';
+import { SubgraphError } from '../error/errorCodes';
 
 const graphqlRequest = async function(body: any) {
-  const result = await axios({
-    url: '/api/f7711f02a833125382dd8d8c6fbc4a74/subgraphs/id/4AUJwh4YwE6sHjcQXEKQCiTuCmRBwFhBwRjGxn7wZwze',
-    baseURL: 'https://gateway.thegraph.com',
-    method: 'POST',
-    data: body
-  });
+  try {
+    const result = await axios({
+      url: '/api/f7711f02a833125382dd8d8c6fbc4a74/subgraphs/id/4AUJwh4YwE6sHjcQXEKQCiTuCmRBwFhBwRjGxn7wZwze',
+      baseURL: 'https://gateway.thegraph.com',
+      method: 'POST',
+      data: body
+    });
 
-  if (result.status === 200 && result.data.errors) {
-    throw new BadRequest(result.data.errors, null)
+    if (result.status === 200 && result.data.errors) {
+      throw new BadRequest(result.data.errors, null)
+    }
+
+    return result.data.data
+  } catch (error) {
+    throw new InternalServerError(error, SubgraphError);
   }
-
-  return result.data.data
 }
 
 const parseGraphqlQuery = function (query: string): string {
