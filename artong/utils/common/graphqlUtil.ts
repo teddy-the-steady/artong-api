@@ -3,8 +3,8 @@ import { InternalServerError } from '../error/errors';
 
 const graphqlRequest = async function(body: any) {
   const result = await axios({
-    url: '/api/f7711f02a833125382dd8d8c6fbc4a74/subgraphs/id/4AUJwh4YwE6sHjcQXEKQCiTuCmRBwFhBwRjGxn7wZwze',
-    baseURL: 'https://gateway.thegraph.com',
+    url: '/api/f7711f02a833125382dd8d8c6fbc4a74/subgraphs/id/5K6GxU7J8FvD3cAtK7RR2QgRxe4vSQTabkSqjEAnGm2f',
+    baseURL: 'https://gateway-arbitrum.network.thegraph.com',
     method: 'POST',
     data: body
   });
