@@ -13,6 +13,8 @@ import { ContentsHistory } from '../../models/contentsHistory/ContentsHistory';
 import { PageAndOrderingInfo, PaginationInfo, GqlPageAndOrderingInfo } from './index';
 import { Queue } from '../../models/queue/Queue';
 import { NotificationQueueBody } from '../../models/queue/queue.type';
+import { AWSError } from '../../utils/error/errorCodes';
+import { InternalServerError } from '../../utils/error/errors';
 
 interface GetContentInfo {
   id: string
@@ -96,7 +98,10 @@ const uploadToNftStorageAndUpdateContent = async function(body: any, member: Mem
     const file = new File([image], fileName, { type: head.ContentType })
 
     const keys = await getNftStorageKey();
+    if (!keys) throw new InternalServerError('SSM key error', AWSError);
+
     const nftStorageApiKey = keys[`/nftStorage/${process.env.ENV}/apikey`];
+    if (!nftStorageApiKey) throw new InternalServerError('nftStorage key missing from SSM', AWSError);
 
     const storage = new NFTStorage({ token: nftStorageApiKey });
     const metadata = await storage.store({
