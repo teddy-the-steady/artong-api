@@ -70,6 +70,7 @@ custom:
         - axios
         - aws-sdk
         - '@aws-sdk/client-s3'
+        - '@aws-sdk/client-ssm'
   apiKeys:
     - name: artongApiKey-${opt:stage}
 
