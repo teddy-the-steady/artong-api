@@ -1,9 +1,13 @@
 import { Pool } from 'pg';
 import handlebars from 'handlebars';
 import { getDBKeys } from './utils/common/ssmKeys';
+import { InternalServerError } from './utils/error/errors';
+import { AWSError } from './utils/error/errorCodes';
 
 const getDbConnectionPool = async function(): Promise<Pool> {
   const keys = await getDBKeys();
+  if (!keys) throw new InternalServerError('SSM key error', AWSError);
+
   return new Pool({
     host: process.env.IS_OFFLINE? 'localhost' : keys[`/db/${process.env.ENV}/host`],
     user: keys[`/db/${process.env.ENV}/user`],
