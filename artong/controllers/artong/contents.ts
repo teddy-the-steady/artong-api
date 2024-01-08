@@ -11,6 +11,8 @@ import { File } from '@web-std/file';
 import _ from 'lodash';
 import { ContentsHistory } from '../../models/contentsHistory/ContentsHistory';
 import { PageAndOrderingInfo, PaginationInfo, GqlPageAndOrderingInfo } from './index';
+import { AWSError } from '../../utils/error/errorCodes';
+import { InternalServerError } from '../../utils/error/errors';
 
 interface GetContentInfo {
   id: string
@@ -94,7 +96,10 @@ const uploadToNftStorageAndUpdateContent = async function(body: any) {
     const file = new File([image], fileName, { type: head.ContentType })
 
     const keys = await getNftStorageKey();
+    if (!keys) throw new InternalServerError('SSM key error', AWSError);
+
     const nftStorageApiKey = keys[`/nftStorage/${process.env.ENV}/apikey`];
+    if (!nftStorageApiKey) throw new InternalServerError('nftStorage key missing from SSM', AWSError);
 
     const storage = new NFTStorage({ token: nftStorageApiKey });
     const metadata = await storage.store({
