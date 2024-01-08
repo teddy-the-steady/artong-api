@@ -3,7 +3,7 @@ app: artong-api
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs16.x
   region: ap-northeast-2
   environment:
     ENV: ${opt:stage}
