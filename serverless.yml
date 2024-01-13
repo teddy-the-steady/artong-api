@@ -93,7 +93,7 @@ custom:
     - name: artongApiKey-${opt:stage}
   warmup:
     default:
-      enabled: prod
+      enabled: 'prod'
       role: IamRoleLambdaExecution
       events:
         - schedule: cron(0/5 * ? * SAT-SUN *)
