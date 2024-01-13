@@ -35,6 +35,11 @@ provider:
         - "sqs:DeleteMessage"
       Resource:
         Fn::GetAtt: [NotificationQueue, Arn]
+    - Effect: "Allow"
+      Action:
+        - "lambda:InvokeFunction"
+      Resource:
+        - "arn:aws:ssm:ap-northeast-2:821343553435:function/*"
   vpc:
     securityGroupIds:
       - sg-07149fcb367dc482b
@@ -89,6 +94,7 @@ custom:
   warmup:
     default:
       enabled: prod
+      role: IamRoleLambdaExecution
       events:
         - schedule: cron(0/5 * ? * SAT-SUN *)
 
