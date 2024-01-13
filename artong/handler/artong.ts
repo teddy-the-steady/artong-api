@@ -13,11 +13,6 @@ export async function handler(event: any, context: any, callback: any) {
   context.callbackWaitsForEmptyEventLoop = false;
   let res: any = {};
 
-  if (event.source === 'serverless-plugin-warmup') {
-    console.log('WarmUp - Lambda is warm!');
-    return 'Lambda is warm!';
-  }
-
   try {
     if (!artongPool) {
       artongPool = await getDbConnectionPool();

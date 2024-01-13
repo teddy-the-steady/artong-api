@@ -8,7 +8,6 @@
   },
   "devDependencies": {
     "@aws-sdk/client-apigatewaymanagementapi": "^3.321.1",
-    "@aws-sdk/client-lambda": "^3.490.0",
     "@aws-sdk/client-s3": "^3.181.0",
     "@aws-sdk/client-sqs": "^3.309.0",
     "@aws-sdk/client-ssm": "^3.490.0",
@@ -28,7 +27,6 @@
     "serverless-add-api-key": "^4.2.1",
     "serverless-domain-manager": "^6.0.2",
     "serverless-offline": "^8.8.0",
-    "serverless-plugin-warmup": "^8.3.0",
     "serverless-webpack": "^5.9.0",
     "ts-loader": "^8.0.17",
     "typescript": "^3.9.9",
