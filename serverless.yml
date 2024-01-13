@@ -97,6 +97,7 @@ custom:
       role: IamRoleLambdaExecution
       events:
         - schedule: cron(0/5 * ? * SAT-SUN *)
+      concurrency: 6
 
 functions:
   artong:
