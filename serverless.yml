@@ -60,7 +60,7 @@ plugins:
   - serverless-offline
   - serverless-domain-manager
   - serverless-add-api-key
-  # - serverless-plugin-warmup
+  - serverless-plugin-warmup
 
 custom:
   authorizer: arn:aws:lambda:ap-northeast-2:821343553435:function:wallet-login-triggers-${opt:stage}-authorizer
@@ -91,12 +91,12 @@ custom:
         - "@aws-sdk/client-lambda"
   apiKeys:
     - name: artongApiKey-${opt:stage}
-  # warmup:
-  #   default:
-  #     enabled: prod
-  #     role: IamRoleLambdaExecution
-  #     events:
-  #       - schedule: cron(0/5 * ? * SAT-SUN *)
+  warmup:
+    default:
+      enabled: prod
+      role: IamRoleLambdaExecution
+      events:
+        - schedule: cron(0/5 * ? * SAT-SUN *)
 
 functions:
   artong:
@@ -292,9 +292,9 @@ functions:
           authorizer: ${self:custom.authorizer}
     layers:
       - { Ref: NodeModulesLambdaLayer }
-    # warmup:
-    #   default:
-    #     enabled: ${opt:stage}
+    warmup:
+      default:
+        enabled: ${opt:stage}
   artong-admin:
     handler: artong/handler/artong.handler
     events:
