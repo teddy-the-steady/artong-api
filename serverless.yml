@@ -266,7 +266,7 @@ functions:
     layers:
      - {Ref: NodeModulesLambdaLayer}
     warmup:
-      name: default
+      default:
         enabled: prod
   artong-admin:
     handler: artong/handler/artong.handler
