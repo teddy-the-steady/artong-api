@@ -35,6 +35,11 @@ provider:
         - "sqs:DeleteMessage"
       Resource:
         Fn::GetAtt: [NotificationQueue, Arn]
+    - Effect: "Allow"
+      Action:
+        - "lambda:InvokeFunction"
+      Resource:
+        - "arn:aws:lambda:ap-northeast-2:821343553435:function/*"
   vpc:
     securityGroupIds:
       - sg-07149fcb367dc482b
