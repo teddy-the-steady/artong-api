@@ -85,7 +85,7 @@ custom:
       role: IamRoleLambdaExecution
       events:
         - schedule: rate(5 minutes)
-      concurrency: 6
+      concurrency: 5
 
 functions:
   artong:
