@@ -84,7 +84,7 @@ custom:
     default:
       role: IamRoleLambdaExecution
       events:
-        - schedule: cron(0/5 * ? * SAT-SUN *)
+        - schedule: rate(5 minutes)
       concurrency: 6
 
 functions:
