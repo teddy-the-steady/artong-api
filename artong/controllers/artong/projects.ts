@@ -9,6 +9,9 @@ import { graphqlRequest } from '../../utils/common/graphqlUtil';
 import { calculateMinusBetweenTowSetsById, isAddress } from '../../utils/common/commonFunc'
 import { PaginationInfo, GqlPageAndOrderingInfo } from './index';
 import validator from '../../utils/validators/common';
+import { getInfuraKey } from '../../utils/common/ssmKeys';
+import { InternalServerError } from '../../utils/error/errors';
+import { AWSError } from '../../utils/error/errorCodes';
 
 interface GetProjectsInfo {
   prev_next_count: number
@@ -171,7 +174,11 @@ const getTxReceiptAndUpdateStatus = async function(member_id?: number, txHash?: 
       create_tx_hash: txHash
     }, conn);
 
-    const txReceipt = await InfuraProvider.provider.getTransactionReceipt(txHash);
+    const infuraKeys = await getInfuraKey();
+    if (!infuraKeys) throw new InternalServerError('SSM key error', AWSError);
+
+    const infuraProvider = new InfuraProvider(infuraKeys[`/infura/${process.env.ENV}/key`]);
+    const txReceipt = await infuraProvider.provider.getTransactionReceipt(txHash);
     if (txReceipt) {
       const address = getProjectAddressFromContractCreatedEvent(txReceipt);
 
