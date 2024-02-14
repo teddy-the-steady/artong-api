@@ -3,6 +3,7 @@ const ValidationError = {code: 4000, message: 'Data invalid'} // validation 오�
 const UniqueValueDuplicated = {code: 4001, message: 'Unique value duplicated'}; // 유니크 값 중복 발생
 const SyntaxError: number = 4002; // Syntax 에러
 const NoPermission = {code: 4003, message: 'No permission to perform this action'}; // 권한 에러
+const RequiredConditionInsufficient = 4004; // not enough to run this action
 const DBError = {code: 5100, message: 'DB Error'};
 const UpdateFailed = {code: 5101, message: 'Update failed'}; // db 업데이트 실패
 const DBSyntaxError = {code: 5102, message: 'DB Syntax error'};
@@ -15,6 +16,7 @@ export {
     UniqueValueDuplicated,
     SyntaxError,
     NoPermission,
+    RequiredConditionInsufficient,
     DBError,
     UpdateFailed,
     DBSyntaxError,

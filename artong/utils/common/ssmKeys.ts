@@ -69,6 +69,23 @@ const getSmtpKeys = async function(){
   }
 }
 
+const getInfuraKey = async function(){
+  const getInfuraKeysCommand = new GetParametersCommand({
+    Names: [
+      `/infura/${process.env.ENV}/key`,
+    ],
+    WithDecryption: true
+  });
+
+  try {
+    const keys = await ssm.send(getInfuraKeysCommand);
+    return formatKeys(keys.Parameters);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
 interface Ikeys {
   [key: string]: string | undefined;
 }
@@ -87,4 +104,5 @@ export {
   getApiKey,
   getNftStorageKey,
   getSmtpKeys,
+  getInfuraKey,
 }

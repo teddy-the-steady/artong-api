@@ -1,14 +1,22 @@
 import { ethers } from 'ethers'
+import { getInfuraKey } from '../utils/common/ssmKeys';
+import { InternalServerError } from '../utils/error/errors';
+import { RequiredConditionInsufficient } from '../utils/error/errorCodes';
 
-class InfuraProvider {
+export default class InfuraProvider {
   provider: any
 
-  constructor() {
+  constructor(infuraKey: string | undefined) {
+    if (!infuraKey) {
+      throw new InternalServerError(
+        'Infura key not provided',
+        RequiredConditionInsufficient
+      )
+    }
+
     this.provider = new ethers.providers.InfuraProvider(
       process.env.ENV === 'prod'? 'homestead' : 'goerli',
-      process.env.ENV === 'prod'? 'ae3e3f39ab144c7b9a0ef19d3ff80aa9' : 'c60789555fff407eabc1c2bfa1330684',
+      infuraKey
     )
   }
 }
-
-export default new InfuraProvider()
