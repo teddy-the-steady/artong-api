@@ -51,4 +51,4 @@ serverless deploy function -f <functionName>
 find ./<service> -name "*.js" -exec rm -rf {} \;
 ```
 
-[![Demo Video](https://youtube.com)](https://www.youtube.com/watch?v=1sRYNAZ-u64)
+[![므나X알통](http://img.youtube.com/vi/1sRYNAZ-u64/0.jpg)](https://youtu.be/1sRYNAZ-u64)
